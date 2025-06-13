@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import '../service/auth-service.dart';
 import 'main_screen.dart';
@@ -34,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
     });
     try {
       final response = await loginWeb(email, password);
-      // handle success, e.g. navigate to main screen
       setState(() {
         _loading = false;
         _error = null;
@@ -50,7 +48,6 @@ class _LoginPageState extends State<LoginPage> {
       });
       log('Login error: $e');
     }
-
   }
 
   @override
@@ -58,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF0F0C1D),
       body: Center(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

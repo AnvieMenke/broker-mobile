@@ -8,13 +8,13 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
+            languageVersion = JavaLanguageVersion.of(17)
         }
     }
 
@@ -34,7 +34,7 @@ android {
 }
 
 kotlin {
-    jvmToolchain(21) // ✅ This goes **outside** the `android {}` block
+    jvmToolchain(17) // ✅ This goes **outside** the `android {}` block
 }
 
 flutter {
