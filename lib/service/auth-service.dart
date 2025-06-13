@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'package:grpc/grpc_web.dart';
+import 'dart:developer';
+import 'package:grpc/grpc.dart';
+import 'package:grpc/grpc_connection_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -9,15 +11,19 @@ import 'package:broker_mobile/proto/usrpb/useraccess.pb.dart';
 import 'package:broker_mobile/proto/usrpb/useraccess.pbgrpc.dart';
 
 import '../google/protobuf/empty.pb.dart';
-
 import '../src/common/auth_interceptor.dart';
+import '../src/common/grpc_client.dart'; // Use only this for gRPC
 
 const _tokenKey = 'id_token';
 const _refreshTokenKey = 'refresh_token';
 const _logoutMessageKey = 'STORAGE_LOGOUT_MESSAGE';
 
+ClientChannelBase _createChannel() {
+  return getGrpcChannel();
+}
+
 final _serviceNoAuth = AuthServiceClient(
-  GrpcWebClientChannel.xhr(Uri.parse(AppEnv.grpcEndpoint)),
+  _createChannel(),
   interceptors: [AuthInterceptor()],
 );
 
@@ -65,6 +71,7 @@ Future<Map<String, dynamic>?> getUserAccess() async {
 }
 
 Future<void> refreshToken(Map<String, String> authHeaders) async {
+  log("auth ${AppEnv.grpcClientId}");
   final user = await getCurrentUser();
   if (user == null) return;
 
@@ -81,7 +88,7 @@ Future<void> refreshToken(Map<String, String> authHeaders) async {
     ..clientId = AppEnv.grpcClientId;
 
   final client = AuthServiceClient(
-    GrpcWebClientChannel.xhr(Uri.parse(AppEnv.grpcEndpoint)),
+    _createChannel(),
     options: CallOptions(metadata: authHeaders),
   );
 
@@ -103,7 +110,7 @@ Future<List<UserAccess>?> refreshAccess() async {
 
   final token = await getToken();
   final service = AuthServiceClient(
-    GrpcWebClientChannel.xhr(Uri.parse(AppEnv.grpcEndpoint)),
+    _createChannel(),
     options: CallOptions(metadata: {'Authorization': token ?? ''}),
   );
 
@@ -115,12 +122,12 @@ Future<List<UserAccess>?> refreshAccess() async {
 }
 
 Future<LoginWebResponse> loginWeb(String email, String password) {
+
   final req = LoginWebRequest()
     ..email = email
     ..password = password
     ..authenticationMode = 'email'
     ..clientId = AppEnv.grpcClientId;
-
   return _serviceNoAuth.loginWeb(req);
 }
 
@@ -140,7 +147,7 @@ Future<void> logout([String? msg]) async {
   }
 
   final service = AuthServiceClient(
-    GrpcWebClientChannel.xhr(Uri.parse(AppEnv.grpcEndpoint)),
+    _createChannel(),
     options: CallOptions(metadata: {'Authorization': token}),
   );
 

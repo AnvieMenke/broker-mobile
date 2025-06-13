@@ -9,8 +9,7 @@ class AuthInterceptor extends ClientInterceptor {
       CallOptions options,
       invoker,
       ) {
-    final token = AuthService.AuthService.cachedToken; // Synchronously get token
-
+    final token = AuthService.AuthService.cachedToken;
     final newOptions = (token != null && token.isNotEmpty)
         ? options.mergedWith(
       CallOptions(metadata: {
@@ -22,6 +21,7 @@ class AuthInterceptor extends ClientInterceptor {
 
     final response = invoker(method, request, newOptions);
 
+    // Attach error handler, but do not cast or wrap
     response.catchError((error) {
       if (error is GrpcError && error.code == StatusCode.unauthenticated) {
         AuthService.logout(error.message ?? 'Unauthenticated');
@@ -38,8 +38,7 @@ class AuthInterceptor extends ClientInterceptor {
       CallOptions options,
       invoker,
       ) {
-    final token = AuthService.AuthService.cachedToken; // Synchronously get token
-
+    final token = AuthService.AuthService.cachedToken;
     final newOptions = (token != null && token.isNotEmpty)
         ? options.mergedWith(
       CallOptions(metadata: {
