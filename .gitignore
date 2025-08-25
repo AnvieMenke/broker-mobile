@@ -44,6 +44,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-*.env
+# Ignore environment files
 .env
+*.env
 
+android/app/build/
+ios/Flutter/build/
