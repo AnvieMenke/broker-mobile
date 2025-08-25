@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:broker_mobile/src/otp_verification_page.dart';
 import 'package:flutter/material.dart';
 import '../service/auth-service.dart';
 import 'main_screen.dart';
@@ -19,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   void _handleLogin() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
+    final authenticationMode = 'email';
+    String session = "";
 
     if (email.isEmpty || password.isEmpty) {
       setState(() {
@@ -31,15 +34,24 @@ class _LoginPageState extends State<LoginPage> {
       _loading = true;
       _error = null;
     });
+
     try {
       final response = await loginWeb(email, password);
+      session = response.sessionKey;
       setState(() {
         _loading = false;
         _error = null;
       });
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
+        MaterialPageRoute(
+          builder: (context) => OtpVerificationPage(
+            email: email,
+            password: password,
+            sessionKey: session,
+            authenticationMode: authenticationMode,
+          ),
+        ),
       );
     } catch (e) {
       setState(() {
@@ -62,8 +74,10 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const Icon(Icons.lock_outline, size: 80, color: Colors.blueAccent),
               const SizedBox(height: 24),
-              const Text('Login',
-                  style: TextStyle(fontSize: 28, color: Colors.white)),
+              const Text(
+                'Login',
+                style: TextStyle(fontSize: 28, color: Colors.white),
+              ),
               const SizedBox(height: 32),
               TextField(
                 controller: _emailController,
@@ -112,7 +126,8 @@ class _LoginPageState extends State<LoginPage> {
                     backgroundColor: Colors.blueAccent,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   child: _loading
                       ? const CircularProgressIndicator(color: Colors.white)
@@ -124,5 +139,13 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  // ✅ Dispose controllers to free memory when this page is replaced
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
