@@ -11,12 +11,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppEnv.load();
 
-  await loadCachedToken();
-
-  await SharedPreferences.getInstance();
-
   // log('Environment loaded: ${AppEnv.grpcClientId}');
-  log('gRPC endpoint: ${dotenv.env['GRPC_ENDPOINT']}');
+  log('gRPC endpoint: ${dotenv.env['BROKER_GRPC_ENDPOINT']}');
   // You can now use prefs safely
   runApp(MyApp());
 }

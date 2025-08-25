@@ -122,7 +122,7 @@ Future<List<UserAccess>?> refreshAccess() async {
 }
 
 Future<LoginWebResponse> loginWeb(String email, String password) {
-
+log("test");
   final req = LoginWebRequest()
     ..email = email
     ..password = password
@@ -170,6 +170,33 @@ Future<void> _logoutUser(String? message) async {
         ? 'session logged out.'
         : message;
     await prefs.setString(_logoutMessageKey, stored);
+  }
+}
+
+Future<void> validateAuthCode({
+  required String email,
+  required String password,
+  required String authCode,
+  required String authenticationMode,
+  required String sessionKey,
+}) async {
+  final req = ValidateCodeRequest()
+    ..email = email
+    ..password = password
+    ..code = authCode
+    ..authenticationMode = authenticationMode
+    ..sessionKey = sessionKey
+    ..clientId = AppEnv.grpcClientId;
+
+  try {
+    final response = await _serviceNoAuth.validateCode(req);
+    await _setTokens(
+      response.accessToken,
+      response.refreshToken,
+      response.userAccesses,
+    );
+  } catch (error) {
+    rethrow;
   }
 }
 
