@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../service/auth-service.dart';
 import 'main_screen.dart';
+import 'login.dart'; // <-- make sure you have a LoginPage
 
 class OtpVerificationPage extends StatefulWidget {
   final String email;
@@ -11,10 +13,10 @@ class OtpVerificationPage extends StatefulWidget {
 
   const OtpVerificationPage(
       {super.key,
-      required this.email,
-      required this.password,
-      required this.sessionKey,
-      required this.authenticationMode});
+        required this.email,
+        required this.password,
+        required this.sessionKey,
+        required this.authenticationMode});
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();
@@ -25,7 +27,40 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   bool _verifying = false;
   String? _error;
 
-  /// Mask email after 3 characters, keeping domain visible
+  Timer? _timer;
+  int _remainingSeconds = 120; // 2 minutes = 120 seconds
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _otpController.dispose();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingSeconds > 0) {
+        setState(() {
+          _remainingSeconds--;
+        });
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
+  String _formatTime(int seconds) {
+    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    final secs = (seconds % 60).toString().padLeft(2, '0');
+    return "$minutes:$secs";
+  }
+
   String maskEmail(String email) {
     final parts = email.split('@');
     if (parts.length != 2) return email;
@@ -40,8 +75,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   }
 
   void _verifyOtp() async {
-    final otp = _otpController.text.trim();
+    if (_remainingSeconds <= 0) {
+      setState(() => _error = "OTP expired. Please request a new one.");
+      return;
+    }
 
+    final otp = _otpController.text.trim();
     if (otp.isEmpty) {
       setState(() => _error = 'Please enter the OTP.');
       return;
@@ -58,7 +97,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         email: widget.email,
         password: widget.password,
         authCode: otp,
-        authenticationMode:widget.authenticationMode,
+        authenticationMode: widget.authenticationMode,
         sessionKey: widget.sessionKey,
       );
       setState(() => _verifying = false);
@@ -69,10 +108,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     } catch (e) {
       setState(() {
         _verifying = false;
-        _error = e.toString(); // show the real error
+        _error = e.toString(); // show real error
       });
-
-      // Also print it in the debug console
       debugPrint("OTP Verification Error: $e");
     }
   }
@@ -94,6 +131,18 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 "Enter OTP sent to ${maskEmail(widget.email)}",
                 style: const TextStyle(color: Colors.white, fontSize: 16),
               ),
+              const SizedBox(height: 8),
+
+              Text(
+                _remainingSeconds > 0
+                    ? "Expires in ${_formatTime(_remainingSeconds)}"
+                    : "OTP expired",
+                style: TextStyle(
+                  color: _remainingSeconds > 0 ? Colors.grey : Colors.red,
+                  fontSize: 14,
+                ),
+              ),
+
               const SizedBox(height: 16),
               TextField(
                 controller: _otpController,
@@ -115,7 +164,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 Text(_error!, style: const TextStyle(color: Colors.redAccent)),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _verifying ? null : _verifyOtp,
+                onPressed: (_verifying || _remainingSeconds <= 0)
+                    ? null
+                    : _verifyOtp,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   padding: const EdgeInsets.symmetric(vertical: 14),
@@ -125,6 +176,22 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 child: _verifying
                     ? const CircularProgressIndicator(color: Colors.white)
                     : const Text('Verify'),
+              ),
+
+              const SizedBox(height: 20),
+
+              TextButton.icon(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                  );
+                },
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                label: const Text(
+                  "Back to Login",
+                  style: TextStyle(color: Colors.white),
+                ),
               )
             ],
           ),
