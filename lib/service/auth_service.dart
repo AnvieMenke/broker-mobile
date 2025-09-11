@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:grpc/grpc.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -12,7 +11,7 @@ import 'package:broker_mobile/proto/usrpb/useraccess.pbgrpc.dart';
 
 import '../google/protobuf/empty.pb.dart';
 import '../src/common/auth_interceptor.dart';
-import '../src/common/grpc_client.dart'; // Use only this for gRPC
+import '../src/common/grpc_client.dart';
 
 const _tokenKey = 'id_token';
 const _refreshTokenKey = 'refresh_token';
