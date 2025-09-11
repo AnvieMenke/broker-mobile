@@ -45,8 +45,9 @@ app.*.map.json
 /android/app/release
 
 # Ignore environment files
-.env
-*.env
+# ignore all .env files everywhere
+**/.env
+
 
 android/app/build/
 ios/Flutter/build/

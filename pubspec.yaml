@@ -14,9 +14,12 @@ dependencies:
   font_awesome_flutter: ^10.6.0
   grpc: ^4.1.0
   protobuf: ^4.1.0
+  fixnum: ^1.1.0
   flutter_dotenv: ^5.0.2
   shared_preferences: ^2.2.2
   jwt_decoder: ^2.0.1
+  flutter_typeahead: ^5.2.0
+  fluttertoast: ^8.2.4
 
 dev_dependencies:
   flutter_test:

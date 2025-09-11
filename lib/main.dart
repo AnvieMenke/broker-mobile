@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:broker_mobile/service/auth-service.dart';
+import 'package:broker_mobile/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/src/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

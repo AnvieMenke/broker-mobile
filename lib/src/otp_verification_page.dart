@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import '../service/auth-service.dart';
+import '../service/auth_service.dart';
 import 'main_screen.dart';
 import 'login.dart'; // <-- make sure you have a LoginPage
 

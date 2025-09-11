@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:grpc/grpc.dart';
 import 'package:broker_mobile/env.dart';
 
