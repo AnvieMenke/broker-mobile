@@ -49,29 +49,9 @@ Future<void> removeLogoutMessage() async {
   await prefs.remove(_logoutMessageKey);
 }
 
-Future<Map<String, dynamic>?> getCurrentUser() async {
-  final token = await getToken();
-  if (token == null || JwtDecoder.isExpired(token)) return null;
-
-  final decoded = JwtDecoder.decode(token);
-  final prefs = await SharedPreferences.getInstance();
-  if (decoded.containsKey('AccountId')) {
-    await prefs.setString('account_id', decoded['AccountId'].toString());
-  }
-  return decoded;
-}
-
-Future<Map<String, dynamic>?> getUserAccess() async {
-  await refreshAccess();
-  final prefs = await SharedPreferences.getInstance();
-  final accessJson = prefs.getString('access');
-  _userAccess = accessJson != null ? json.decode(accessJson) : null;
-  return _userAccess;
-}
-
 Future<void> refreshToken(Map<String, String> authHeaders) async {
   log("auth ${AppEnv.grpcClientId}");
-  final user = await getCurrentUser();
+  final user = await AuthService.getCurrentUser();
   if (user == null) return;
 
   final nowSec = DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -100,7 +80,7 @@ Future<void> refreshToken(Map<String, String> authHeaders) async {
 }
 
 Future<List<UserAccess>?> refreshAccess() async {
-  final user = await getCurrentUser();
+  final user = await AuthService.getCurrentUser();
   if (user == null) return null;
 
   final nowSec = DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -211,4 +191,17 @@ class AuthService {
     cachedToken = null;
     // Optionally, clear from storage and handle logout logic
   }
+
+  static Future<Map<String, dynamic>?> getCurrentUser() async {
+    final token = await getToken();
+    if (token == null || JwtDecoder.isExpired(token)) return null;
+
+    final decoded = JwtDecoder.decode(token);
+    final prefs = await SharedPreferences.getInstance();
+    if (decoded.containsKey('AccountId')) {
+      await prefs.setString('account_id', decoded['AccountId'].toString());
+    }
+    return decoded;
+  }
+
 }

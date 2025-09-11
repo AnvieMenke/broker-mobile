@@ -1,5 +1,5 @@
 import 'package:grpc/grpc.dart';
-import '../../service/auth-service.dart' as AuthService;
+import '../../service/auth_service.dart' as AuthService;
 
 class AuthInterceptor extends ClientInterceptor {
   @override

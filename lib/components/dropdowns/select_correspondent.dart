@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:broker_mobile/service/common-service.dart';
+import 'package:broker_mobile/service/common_service.dart';
 
 class AutoCompleteCorrespondent extends StatefulWidget {
   final String name;

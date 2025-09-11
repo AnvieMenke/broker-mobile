@@ -44,11 +44,13 @@ class _AchWirePageState extends State<AchWirePage> {
   Map<String, dynamic> maximumWithdrawable = {};
   bool isGettingMaxWithdrawal = false;
   bool isGettingFee = false;
+  bool isSubmitting = false;
 
   @override
   void initState() {
     super.initState();
     _achWireService = AchWireService();
+    _bankAccountService = BankAccountService();
     getNewRequestId();
     maximumWithdrawable = Map<String, dynamic>.from(initialMaximumWithdrawable);
   }
@@ -154,7 +156,7 @@ class _AchWirePageState extends State<AchWirePage> {
   Future<void> getBankAccount() async {
     try {
       final resp =
-      await _bankAccountService.readBankAccount(formData["bankAccountId"]);
+          await _bankAccountService.readBankAccount(formData["bankAccountId"]);
       String bic = resp.bankAccount.bankIdentifierCode;
       bool isInternational = bic.isNotEmpty;
       setState(() {
@@ -171,19 +173,15 @@ class _AchWirePageState extends State<AchWirePage> {
     if (data["correspondent"] == null || data["correspondent"] == "") {
       return Notify.warning('Please select a correspondent.');
     }
-
     if (data["accountNo"] == null || data["accountNo"] == "") {
       return Notify.warning('Please select an account.');
     }
-
     if (data["bankAccountId"] == null || data["bankAccountId"] == "") {
       return Notify.warning('Please select a bank account.');
     }
-
     if (data["transferType"] == null || data["transferType"] == "") {
       return Notify.warning('Please select a transfer type.');
     }
-
     if (data["requestType"] == null || data["requestType"] == "") {
       return Notify.warning('Please select a request type.');
     }
@@ -191,19 +189,24 @@ class _AchWirePageState extends State<AchWirePage> {
     if (data["transferType"] == 'Withdrawal') {
       if (double.tryParse(maximumWithdrawable["pendingCallLog"])! > 0) {
         return Notify.error('Cannot withdraw with pending calls.');
-      } else if (double.tryParse(data["pendingCallLog"])! >
+      } else if (data["amount"] >
           double.tryParse(maximumWithdrawable["withdrawableAmount"])!) {
         return Notify.error('Amount is greater than Maximum Withdrawable.');
       }
     }
 
+    setState(() => isSubmitting = true);
+
     try {
       await _achWireService.createRequest(data);
       Notify.success('Request created successfully.');
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
     } catch (err) {
       Notify.error("Failed to create request. ${err.toString()}");
     } finally {
-      // setState(() => isGettingFee = false);
+      setState(() => isSubmitting = false);
     }
   }
 
@@ -232,12 +235,11 @@ class _AchWirePageState extends State<AchWirePage> {
                       label: "Correspondent",
                       isAllStatus: true,
                       type: "",
-                      onChange: (value) =>
-                          setState(() {
-                            formData["correspondent"] = value;
-                            _checkAndFetchMaxWithdrawable();
-                            _calculateFee();
-                          }),
+                      onChange: (value) => setState(() {
+                        formData["correspondent"] = value;
+                        _checkAndFetchMaxWithdrawable();
+                        _calculateFee();
+                      }),
                     ),
                   ),
                   SizedBox(
@@ -248,14 +250,13 @@ class _AchWirePageState extends State<AchWirePage> {
                       isAllStatus: true,
                       correspondent: formData["correspondent"],
                       type: "",
-                      onChange: (map) =>
-                          setState(() {
-                            formData["accountNo"] = map['data']['accountNo'];
-                            formData["correspondent"] =
+                      onChange: (map) => setState(() {
+                        formData["accountNo"] = map['data']['accountNo'];
+                        formData["correspondent"] =
                             map['data']['correspondent'];
-                            _checkAndFetchMaxWithdrawable();
-                            _calculateFee();
-                          }),
+                        _checkAndFetchMaxWithdrawable();
+                        _calculateFee();
+                      }),
                     ),
                   ),
                   SizedBox(
@@ -265,12 +266,8 @@ class _AchWirePageState extends State<AchWirePage> {
                       accountNo: formData["accountNo"],
                       correspondent: formData["correspondent"],
                       onChange: (map) {
-                        // log entire map
                         debugPrint("onChange map: $map");
-
-                        // log specific nested data
                         debugPrint("bankId: ${map['data']?['bankId']}");
-
                         setState(() {
                           formData["bankAccountId"] = map['data']?['bankId'];
                           formData["bank"] = map['data']?['bankName'] ?? '';
@@ -286,13 +283,12 @@ class _AchWirePageState extends State<AchWirePage> {
                       value: formData["requestType"],
                       type: "Type",
                       subType: "Request Type",
-                      onChange: (map) =>
-                          setState(() {
-                            if (map != null) {
-                              formData["requestType"] = map["data"]["code"];
-                              _calculateFee();
-                            }
-                          }),
+                      onChange: (map) => setState(() {
+                        if (map != null) {
+                          formData["requestType"] = map["data"]["code"];
+                          _calculateFee();
+                        }
+                      }),
                     ),
                   ),
                   SizedBox(
@@ -303,14 +299,13 @@ class _AchWirePageState extends State<AchWirePage> {
                       value: formData["transferType"],
                       type: "Type",
                       subType: "Transfer Type",
-                      onChange: (map) =>
-                          setState(() {
-                            if (map != null) {
-                              formData["transferType"] = map["data"]["code"];
-                              _checkAndFetchMaxWithdrawable();
-                              _calculateFee();
-                            }
-                          }),
+                      onChange: (map) => setState(() {
+                        if (map != null) {
+                          formData["transferType"] = map["data"]["code"];
+                          _checkAndFetchMaxWithdrawable();
+                          _calculateFee();
+                        }
+                      }),
                     ),
                   ),
                   SizedBox(
@@ -325,7 +320,7 @@ class _AchWirePageState extends State<AchWirePage> {
                             : null,
                       ),
                       keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                          const TextInputType.numberWithOptions(decimal: true),
                       onChanged: (value) {
                         setState(() {
                           formData["amount"] = double.tryParse(value) ?? 0.0;
@@ -339,16 +334,16 @@ class _AchWirePageState extends State<AchWirePage> {
                     child: isGettingFee
                         ? const Center(child: CircularProgressIndicator())
                         : TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Fee",
-                        border: OutlineInputBorder(),
-                        prefixText: "\$",
-                      ),
-                      readOnly: true,
-                      controller: TextEditingController(
-                        text: formData["fee"].toString(),
-                      ),
-                    ),
+                            decoration: const InputDecoration(
+                              labelText: "Fee",
+                              border: OutlineInputBorder(),
+                              prefixText: "\$",
+                            ),
+                            readOnly: true,
+                            controller: TextEditingController(
+                              text: formData["fee"].toString(),
+                            ),
+                          ),
                   ),
                   SizedBox(
                     width: itemWidth,
@@ -356,12 +351,11 @@ class _AchWirePageState extends State<AchWirePage> {
                       disabled: true,
                       value: formData["status"],
                       requestType: formData["requestType"],
-                      onChange: (data) =>
-                          setState(() {
-                            if (data != null) {
-                              formData["status"] = data;
-                            }
-                          }),
+                      onChange: (data) => setState(() {
+                        if (data != null) {
+                          formData["status"] = data;
+                        }
+                      }),
                     ),
                   ),
                   SizedBox(
@@ -375,14 +369,22 @@ class _AchWirePageState extends State<AchWirePage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () {
-                        handleSubmit(formData);
-                      },
-                      child: const Text(
-                        "Submit",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
+                      onPressed:
+                          isSubmitting ? null : () => handleSubmit(formData),
+                      child: isSubmitting
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text(
+                              "Submit",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
                     ),
                   ),
                 ],
