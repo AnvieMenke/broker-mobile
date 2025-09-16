@@ -13,6 +13,13 @@ class AchWireList extends StatefulWidget {
 class _AchWireListState extends State<AchWireList> {
   late Future<List<GridItem>> _futureRequests;
 
+  GridPagination pagination = GridPagination(
+    pageNo: 0,
+    rowsPerPage: 10,
+    totalRows: 0,
+    reload: true,
+  );
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +43,17 @@ class _AchWireListState extends State<AchWireList> {
       "requestId": 0,
     };
 
-    final resp = await achWireService.listBankRequest(formData);
+    final resp = await achWireService.listBankRequest(formData, {
+      'pageNo': pagination.pageNo,
+      'rowsPerPage': pagination.rowsPerPage,
+    });
+
+    setState(() {
+      pagination = pagination.copyWith(
+        totalRows: resp.summary.totalRows,
+        reload: false,
+      );
+    });
 
     return resp.requests.map((e) {
       return GridItem.fromMap({
@@ -150,8 +167,9 @@ class _AchWireListState extends State<AchWireList> {
     }).toList();
   }
 
-  Future<void> _refresh() async {
+  void _onPageChange(GridPagination newPagination) {
     setState(() {
+      pagination = newPagination;
       _futureRequests = _fetchRequests();
     });
   }
@@ -167,25 +185,25 @@ class _AchWireListState extends State<AchWireList> {
           body = const Center(child: CircularProgressIndicator());
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           body = RefreshIndicator(
-            onRefresh: _refresh,
+            onRefresh: () async => _futureRequests = _fetchRequests(),
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               children: const [
                 SizedBox(height: 200),
                 Center(
-                  child: Text(
-                    "No data found",
-                    style: TextStyle(fontSize: 20),
-                  ),
+                  child: Text("No data found", style: TextStyle(fontSize: 20)),
                 ),
               ],
             ),
           );
         } else {
-          final items = snapshot.data!;
           body = RefreshIndicator(
-            onRefresh: _refresh,
-            child: AchWireGrid(items: items),
+            onRefresh: () async => _futureRequests = _fetchRequests(),
+            child: GridWithPagination(
+              items: snapshot.data!,
+              pagination: pagination,
+              onPageChange: _onPageChange,
+            ),
           );
         }
 
@@ -200,35 +218,6 @@ class _AchWireListState extends State<AchWireList> {
             ],
           ),
           body: body,
-        );
-      },
-    );
-  }
-}
-
-class AchWireGrid extends StatelessWidget {
-  final List<GridItem> items;
-
-  const AchWireGrid({super.key, required this.items});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.all(12.0),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return GridViewCard(
-          item: items[index],
-          actions: [
-            PopupMenuItem(
-              child: const Text("Edit"),
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Editing ${items[index].title}")),
-                );
-              },
-            ),
-          ],
         );
       },
     );
