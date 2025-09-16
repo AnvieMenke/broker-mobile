@@ -1,8 +1,7 @@
 import 'dart:developer';
-import 'package:broker_mobile/src/otp_verification_page.dart';
+import 'package:broker_mobile/src/screens/auth/otp_verification_page.dart';
 import 'package:flutter/material.dart';
-import '../service/auth_service.dart';
-import 'main_screen.dart';
+import '../../../service/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

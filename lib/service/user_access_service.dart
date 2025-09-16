@@ -1,8 +1,8 @@
 import 'package:broker_mobile/proto/usrpb/access.pbgrpc.dart';
-import 'package:broker_mobile/src/common/auth_interceptor.dart';
+import '../server/auth_interceptor.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import 'package:protobuf/protobuf.dart';
-import '../src/common/grpc_client.dart';
+import '../server/grpc_client.dart';
 
 class UsrAccessService {
   ClientChannelBase _createChannel() {
@@ -26,7 +26,7 @@ class UsrAccessService {
     final client = _usrSvc();
     final req = ListUsrAccessRequest()
       ..roleId = roleId
-      ..requestType = requestType ?? "";
+      ..requestType = requestType;
 
     try {
       final response = await client.listUsrAccess(req);

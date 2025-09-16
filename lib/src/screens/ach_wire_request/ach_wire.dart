@@ -59,7 +59,7 @@ class _AchWirePageState extends State<AchWirePage> {
     try {
       final resp = await _achWireService.getNewId();
       setState(() {
-        formData["requestId"] = resp;
+        formData["requestId"] = resp.requestId;
       });
     } catch (err) {
       debugPrint(err.toString());
@@ -196,7 +196,6 @@ class _AchWirePageState extends State<AchWirePage> {
     }
 
     setState(() => isSubmitting = true);
-
     try {
       await _achWireService.createRequest(data);
       Notify.success('Request created successfully.');
@@ -370,7 +369,9 @@ class _AchWirePageState extends State<AchWirePage> {
                         ),
                       ),
                       onPressed:
-                          isSubmitting ? null : () => handleSubmit(formData),
+                          isSubmitting || isGettingFee || isGettingMaxWithdrawal
+                              ? null
+                              : () => handleSubmit(formData),
                       child: isSubmitting
                           ? const SizedBox(
                               width: 24,

@@ -1,7 +1,9 @@
 import 'package:broker_mobile/proto/bankpb/request.pbgrpc.dart';
-import 'package:broker_mobile/src/common/auth_interceptor.dart';
+import 'package:flutter/cupertino.dart';
+import '../server/auth_interceptor.dart';
 import 'package:grpc/grpc_connection_interface.dart';
-import '../src/common/grpc_client.dart';
+import '../server/grpc_client.dart';
+import 'convert_service.dart';
 
 class AchWireService {
   ClientChannelBase _createChannel() {
@@ -56,11 +58,14 @@ class AchWireService {
 
   Future<CreateResponse> createRequest(param) async {
     final client = _achWireSvc();
+    debugPrint("test: ${param["requestId"]}");
 
     final req = CreateRequest()
       ..correspondent = param['correspondent'] ?? ""
       ..accountNo = param["accountNo"] ?? ""
-      ..bankId = (param["bankAccountId"] != null ? int.tryParse(param["bankAccountId"].toString()) : null)!
+      ..bankId = (param["bankAccountId"] != null
+          ? int.tryParse(param["bankAccountId"].toString())
+          : null)!
       ..transferType = param["transferType"] ?? ""
       ..amt = param["amount"]?.toString() ?? ""
       ..fee = param["fee"]?.toString() ?? ""
@@ -70,7 +75,8 @@ class AchWireService {
       ..bankNote = param["bankNote"] ?? ""
       ..internalNote = param["internalNote"] ?? ""
       ..status = param["status"] ?? ""
-      ..requestType = param["requestType"] ?? "";
+      ..requestType = param["requestType"] ?? ""
+      ..requestId = param["requestId"] ?? 0;
 
     try {
       final response = await client.create(req);
@@ -86,6 +92,38 @@ class AchWireService {
     final req = GetNewRequestIdRequest();
     try {
       final response = await client.getNewRequestId(req);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ListResponse> listBankRequest(param) async {
+    final client = _achWireSvc();
+
+    final req = ListRequest()
+      ..dateType = param["dateType"] ?? ""
+      ..fromDate = ConvertService.stringToPBObjectDate(param["fromDate"] != null
+          ? DateTime.parse(param["fromDate"])
+          : DateTime.now())
+      ..toDate = ConvertService.stringToPBObjectDate(param["toDate"] != null
+          ? DateTime.parse(param["toDate"])
+          : DateTime.now())
+      ..accountNo = param["accountNo"] ?? ""
+      ..correspondent = param["correspondent"] ?? ""
+      ..masterAccountNo = param["masterAccountNo"] ?? ""
+      ..transferType = param["transferType"] ?? ""
+      ..status = param["status"] ?? ""
+      ..requestType = param["requestType"] ?? ""
+      ..branch = param["branch"] ?? ""
+      ..rep = param["rep"] ?? ""
+      ..externalId = param["externalId"] ?? ""
+      ..isOpen = param["isOpen"] ?? false
+      ..sign = param["sign"] ?? ""
+      ..amount = param["amount"]?.toString() ?? "";
+
+    try {
+      final response = await client.list(req);
       return response;
     } catch (e) {
       rethrow;

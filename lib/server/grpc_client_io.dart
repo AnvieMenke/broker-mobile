@@ -3,7 +3,6 @@ import 'package:broker_mobile/env.dart';
 
 ClientChannel getGrpcChannel() {
   final uri = Uri.parse(AppEnv.grpcEndpoint);
-  print("uri: $uri");
   return ClientChannel(
     uri.host,
     port: uri.port,

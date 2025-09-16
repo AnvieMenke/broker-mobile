@@ -157,7 +157,7 @@ class _SelectStatusState extends State<SelectStatus> {
 
     final int initialNote = int.tryParse(initialSelected["note"] ?? '0') ?? 0;
     final int currentNote = int.tryParse(currentSelected["note"] ?? '0') ?? 0;
-    final int statusNote = int.tryParse(status.note ?? '0') ?? 0;
+    final int statusNote = int.tryParse(status.note) ?? 0;
 
     return ((initialNote + 1 == statusNote &&
             currentNote != 0 &&
@@ -209,14 +209,14 @@ class _SelectStatusState extends State<SelectStatus> {
             : Colors.white;
 
         final italic = previousSelected["code"] == status.code &&
-                (int.tryParse(status.note ?? "0") ?? 0) != 0
+                (int.tryParse(status.note) ?? 0) != 0
             ? FontStyle.italic
             : FontStyle.normal;
 
         return DropdownMenuItem<String>(
-          value: status.code ?? "",
+          value: status.code,
           child: Text(
-            status.description ?? "",
+            status.description,
             style: TextStyle(
               color: color,
               fontStyle: italic,

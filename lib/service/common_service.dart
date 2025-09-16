@@ -3,8 +3,8 @@ import 'package:broker_mobile/proto/commonpb/list.pbgrpc.dart';
 import 'package:broker_mobile/proto/commonpb/systemcode.pbgrpc.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import 'package:protobuf/protobuf.dart';
-import '../src/common/grpc_client.dart';
-import 'package:broker_mobile/src/common/auth_interceptor.dart';
+import '../server/grpc_client.dart';
+import '../server/auth_interceptor.dart';
 
 class CommonService {
   ClientChannelBase _createChannel() {
