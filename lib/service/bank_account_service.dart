@@ -1,7 +1,7 @@
 import 'package:broker_mobile/proto/bankpb/account.pbgrpc.dart';
-import 'package:broker_mobile/src/common/auth_interceptor.dart';
+import '../server/auth_interceptor.dart';
 import 'package:grpc/grpc_connection_interface.dart';
-import '../src/common/grpc_client.dart';
+import '../server/grpc_client.dart';
 
 class BankAccountService {
   ClientChannelBase _createChannel() {

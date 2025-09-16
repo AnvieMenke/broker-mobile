@@ -7,7 +7,7 @@ class Notify {
   }
 
   static void warning(String message) {
-    _showToast(message, Colors.orange); // better contrast than yellow
+    _showToast(message, Colors.orange);
   }
 
   static void info(String message) {

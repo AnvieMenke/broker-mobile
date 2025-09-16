@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -10,8 +10,8 @@ import 'package:broker_mobile/proto/usrpb/useraccess.pb.dart';
 import 'package:broker_mobile/proto/usrpb/useraccess.pbgrpc.dart';
 
 import '../google/protobuf/empty.pb.dart';
-import '../src/common/auth_interceptor.dart';
-import '../src/common/grpc_client.dart';
+import '../server/auth_interceptor.dart';
+import '../server/grpc_client.dart';
 
 const _tokenKey = 'id_token';
 const _refreshTokenKey = 'refresh_token';
@@ -26,7 +26,6 @@ final _serviceNoAuth = AuthServiceClient(
   interceptors: [AuthInterceptor()],
 );
 
-Map<String, dynamic>? _userAccess;
 
 /// Call this once at app start to initialize the cached token
 Future<void> loadCachedToken() async {
@@ -58,7 +57,8 @@ Future<void> refreshToken(Map<String, String> authHeaders) async {
   final exp = (user['exp'] as int?) ?? 0;
   if (nowSec > exp) return;
 
-  final refreshCheck = DateTime.now().add(Duration(minutes: 60)).millisecondsSinceEpoch ~/ 1000;
+  final refreshCheck =
+      DateTime.now().add(Duration(minutes: 60)).millisecondsSinceEpoch ~/ 1000;
   if (refreshCheck < exp) return;
 
   final prefs = await SharedPreferences.getInstance();
@@ -75,7 +75,7 @@ Future<void> refreshToken(Map<String, String> authHeaders) async {
     final resp = await client.refreshToken(req);
     await _setTokens(resp.accessToken, resp.refreshToken, resp.userAccesses);
   } catch (e) {
-    print('refreshToken error: $e');
+    debugPrint('refreshToken error: $e');
   }
 }
 
@@ -101,7 +101,7 @@ Future<List<UserAccess>?> refreshAccess() async {
 }
 
 Future<LoginWebResponse> loginWeb(String email, String password) {
-log("test");
+  log("test");
   final req = LoginWebRequest()
     ..email = email
     ..password = password
@@ -110,7 +110,8 @@ log("test");
   return _serviceNoAuth.loginWeb(req);
 }
 
-Future<void> _setTokens(String at, String rt, List<UserAccess> userAccesses) async {
+Future<void> _setTokens(
+    String at, String rt, List<UserAccess> userAccesses) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString(_tokenKey, at);
   await prefs.setString(_refreshTokenKey, rt);
@@ -133,7 +134,7 @@ Future<void> logout([String? msg]) async {
   try {
     await service.logout(Empty());
   } catch (e) {
-    print('Logout service call failed: $e');
+    debugPrint('Logout service call failed: $e');
   }
 
   AuthService.cachedToken = null;
@@ -203,5 +204,4 @@ class AuthService {
     }
     return decoded;
   }
-
 }

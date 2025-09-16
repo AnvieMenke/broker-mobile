@@ -1,5 +1,4 @@
-import 'position.dart';
-import 'ach_wire.dart';
+import '../ach_wire_request/ach_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -28,7 +27,7 @@ class HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => AchWirePage(),
+          pageBuilder: (_, __, ___) => AchWireMenuPage(),
           transitionsBuilder: (_, anim, __, child) =>
               FadeTransition(opacity: anim, child: child),
         ),
