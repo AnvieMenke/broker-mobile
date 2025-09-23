@@ -1,5 +1,4 @@
 import 'package:broker_mobile/proto/bankpb/request.pbgrpc.dart';
-import 'package:flutter/cupertino.dart';
 import '../server/auth_interceptor.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import '../server/grpc_client.dart';
@@ -23,34 +22,34 @@ class AchWireService {
     return client;
   }
 
+  late final achService = _achWireSvc();
+
   Future<ReadMaximumWithdrawableResponse> readMaximumWithdrawable(
       String correspondent, accountNo) async {
-    final client = _achWireSvc();
     final req = ReadMaximumWithdrawableRequest()
       ..correspondent = correspondent
       ..accountNo = accountNo ?? "";
 
     try {
-      final response = await client.readMaximumWithdrawable(req);
+      final response = await achService.readMaximumWithdrawable(req);
       return response;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<GetFeeResponse> getFee(param) async {
-    final client = _achWireSvc();
+  Future<GetFeeResponse> getFee(Map<String, dynamic> param) async {
     final req = GetFeeRequest()
       ..correspondent = param['correspondent'] ?? ""
       ..accountNo = param["accountNo"] ?? ""
       ..amt = param["amount"]?.toString() ?? ""
       ..requestType = param["requestType"] ?? ""
       ..transferType = param["transferType"] ?? ""
-      ..isInternational = param["isInternational"] ?? false
+      ..isInternational = ConvertService.safeBool(param["isInternational"])
       ..broker = param["broker"] ?? "";
 
     try {
-      final response = await client.getFee(req);
+      final response = await achService.getFee(req);
       return response;
     } catch (e) {
       rethrow;
@@ -58,39 +57,25 @@ class AchWireService {
   }
 
   Future<CreateResponse> createRequest(Map<String, dynamic> param) async {
-    final client = _achWireSvc();
     final req = CreateRequest()
       ..correspondent = param['correspondent'] ?? ""
       ..accountNo = param["accountNo"] ?? ""
-      ..bankId = (param["bankAccountId"] != null
-          ? int.tryParse(param["bankAccountId"].toString())
+      ..accountId = (param["accountId"] != null
+          ? int.tryParse(param["accountId"].toString())
+          : null)!
+      ..bankId = (param["bankId"] != null
+          ? int.tryParse(param["bankId"].toString())
           : null)!
       ..transferType = param["transferType"] ?? ""
-      ..amt = param["amount"]?.toString() ?? ""
+      ..amt = param["amt"]?.toString() ?? ""
       ..fee = param["fee"]?.toString() ?? ""
       ..fedNo = param["fedNo"] ?? ""
       ..externalId = param["externalId"] ?? ""
-      ..bank = param["bank"] ?? ""
-      ..bankNote = param["bankNote"] ?? ""
-      ..internalNote = param["internalNote"] ?? ""
       ..status = param["status"] ?? ""
-      ..requestType = param["requestType"] ?? ""
-      ..requestId = param["requestId"] ?? 0;
+      ..requestType = param["requestType"] ?? "";
 
     try {
-      final response = await client.create(req);
-      return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<GetNewRequestIdResponse> getNewId() async {
-    final client = _achWireSvc();
-
-    final req = GetNewRequestIdRequest();
-    try {
-      final response = await client.getNewRequestId(req);
+      final response = await achService.create(req);
       return response;
     } catch (e) {
       rethrow;
@@ -101,8 +86,6 @@ class AchWireService {
     Map<String, dynamic> param,
     Map<String, dynamic>? paging,
   ) async {
-    final client = _achWireSvc();
-
     final req = ListRequest()
       ..dateType = param["dateType"] ?? ""
       ..fromDate = ConvertService.stringToPBObjectDate(
@@ -124,7 +107,7 @@ class AchWireService {
       ..branch = param["branch"] ?? ""
       ..rep = param["rep"] ?? ""
       ..externalId = param["externalId"] ?? ""
-      ..isOpen = param["isOpen"] ?? false
+      ..isOpen = ConvertService.safeBool(["isOpen"])
       ..sign = param["sign"] ?? ""
       ..amount = param["amount"]?.toString() ?? "";
 
@@ -139,7 +122,22 @@ class AchWireService {
     }
 
     try {
-      final response = await client.list(req);
+      final response = await achService.list(req);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<UpdateResponse> updateRequest(Map<String, dynamic> param) async {
+    final req = UpdateRequest()
+      ..requestId = ConvertService.safeInt(param["requestId"])
+      ..amt = param["amt"]?.toString() ?? ""
+      ..fee = param["fee"]?.toString() ?? ""
+      ..status = param["status"] ?? "";
+
+    try {
+      final response = await achService.update(req);
       return response;
     } catch (e) {
       rethrow;

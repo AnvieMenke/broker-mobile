@@ -14,8 +14,6 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../usrpb/useraccess.pb.dart' as $2;
-
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 class LoginRequest extends $pb.GeneratedMessage {
@@ -23,13 +21,13 @@ class LoginRequest extends $pb.GeneratedMessage {
     $core.String? email,
     $core.String? password,
     $core.String? clientId,
-    $core.String? authenticationMode,
+    $core.String? correspondent,
   }) {
     final result = create();
     if (email != null) result.email = email;
     if (password != null) result.password = password;
     if (clientId != null) result.clientId = clientId;
-    if (authenticationMode != null) result.authenticationMode = authenticationMode;
+    if (correspondent != null) result.correspondent = correspondent;
     return result;
   }
 
@@ -42,7 +40,7 @@ class LoginRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'email')
     ..aOS(2, _omitFieldNames ? '' : 'password')
     ..aOS(3, _omitFieldNames ? '' : 'clientId')
-    ..aOS(4, _omitFieldNames ? '' : 'authenticationMode')
+    ..aOS(4, _omitFieldNames ? '' : 'correspondent')
     ..hasRequiredFields = false
   ;
 
@@ -91,13 +89,13 @@ class LoginRequest extends $pb.GeneratedMessage {
   void clearClientId() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get authenticationMode => $_getSZ(3);
+  $core.String get correspondent => $_getSZ(3);
   @$pb.TagNumber(4)
-  set authenticationMode($core.String value) => $_setString(3, value);
+  set correspondent($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
-  $core.bool hasAuthenticationMode() => $_has(3);
+  $core.bool hasCorrespondent() => $_has(3);
   @$pb.TagNumber(4)
-  void clearAuthenticationMode() => $_clearField(4);
+  void clearCorrespondent() => $_clearField(4);
 }
 
 class LoginWebRequest extends $pb.GeneratedMessage {
@@ -106,12 +104,14 @@ class LoginWebRequest extends $pb.GeneratedMessage {
     $core.String? password,
     $core.String? authenticationMode,
     $core.String? clientId,
+    $core.String? correspondent,
   }) {
     final result = create();
     if (email != null) result.email = email;
     if (password != null) result.password = password;
     if (authenticationMode != null) result.authenticationMode = authenticationMode;
     if (clientId != null) result.clientId = clientId;
+    if (correspondent != null) result.correspondent = correspondent;
     return result;
   }
 
@@ -125,6 +125,7 @@ class LoginWebRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'password')
     ..aOS(3, _omitFieldNames ? '' : 'authenticationMode')
     ..aOS(4, _omitFieldNames ? '' : 'clientId')
+    ..aOS(5, _omitFieldNames ? '' : 'correspondent')
     ..hasRequiredFields = false
   ;
 
@@ -180,14 +181,25 @@ class LoginWebRequest extends $pb.GeneratedMessage {
   $core.bool hasClientId() => $_has(3);
   @$pb.TagNumber(4)
   void clearClientId() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get correspondent => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set correspondent($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasCorrespondent() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearCorrespondent() => $_clearField(5);
 }
 
 class LoginWebResponse extends $pb.GeneratedMessage {
   factory LoginWebResponse({
     $core.String? sessionKey,
+    $core.Iterable<$core.String>? correspondents,
   }) {
     final result = create();
     if (sessionKey != null) result.sessionKey = sessionKey;
+    if (correspondents != null) result.correspondents.addAll(correspondents);
     return result;
   }
 
@@ -198,6 +210,7 @@ class LoginWebResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LoginWebResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'authpb'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'sessionKey')
+    ..pPS(2, _omitFieldNames ? '' : 'correspondents')
     ..hasRequiredFields = false
   ;
 
@@ -226,89 +239,19 @@ class LoginWebResponse extends $pb.GeneratedMessage {
   $core.bool hasSessionKey() => $_has(0);
   @$pb.TagNumber(1)
   void clearSessionKey() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<$core.String> get correspondents => $_getList(1);
 }
 
-class LoginUserRequest extends $pb.GeneratedMessage {
-  factory LoginUserRequest({
-    $core.String? iToken,
-    $core.int? iUser,
-    $core.String? clientId,
-  }) {
-    final result = create();
-    if (iToken != null) result.iToken = iToken;
-    if (iUser != null) result.iUser = iUser;
-    if (clientId != null) result.clientId = clientId;
-    return result;
-  }
-
-  LoginUserRequest._();
-
-  factory LoginUserRequest.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory LoginUserRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LoginUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'authpb'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'iToken')
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'iUser', $pb.PbFieldType.OU3)
-    ..aOS(3, _omitFieldNames ? '' : 'clientId')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  LoginUserRequest clone() => LoginUserRequest()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  LoginUserRequest copyWith(void Function(LoginUserRequest) updates) => super.copyWith((message) => updates(message as LoginUserRequest)) as LoginUserRequest;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static LoginUserRequest create() => LoginUserRequest._();
-  @$core.override
-  LoginUserRequest createEmptyInstance() => create();
-  static $pb.PbList<LoginUserRequest> createRepeated() => $pb.PbList<LoginUserRequest>();
-  @$core.pragma('dart2js:noInline')
-  static LoginUserRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LoginUserRequest>(create);
-  static LoginUserRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get iToken => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set iToken($core.String value) => $_setString(0, value);
-  @$pb.TagNumber(1)
-  $core.bool hasIToken() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearIToken() => $_clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.int get iUser => $_getIZ(1);
-  @$pb.TagNumber(2)
-  set iUser($core.int value) => $_setUnsignedInt32(1, value);
-  @$pb.TagNumber(2)
-  $core.bool hasIUser() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearIUser() => $_clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.String get clientId => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set clientId($core.String value) => $_setString(2, value);
-  @$pb.TagNumber(3)
-  $core.bool hasClientId() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearClientId() => $_clearField(3);
-}
-
-/// LoginResponse, response will be empty for web user, api user doesn't need auth code
 class LoginResponse extends $pb.GeneratedMessage {
   factory LoginResponse({
     $core.String? accessToken,
     $core.String? refreshToken,
-    $core.Iterable<$2.UserAccess>? userAccesses,
   }) {
     final result = create();
     if (accessToken != null) result.accessToken = accessToken;
     if (refreshToken != null) result.refreshToken = refreshToken;
-    if (userAccesses != null) result.userAccesses.addAll(userAccesses);
     return result;
   }
 
@@ -320,7 +263,6 @@ class LoginResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LoginResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'authpb'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'accessToken')
     ..aOS(2, _omitFieldNames ? '' : 'refreshToken')
-    ..pc<$2.UserAccess>(3, _omitFieldNames ? '' : 'userAccesses', $pb.PbFieldType.PM, subBuilder: $2.UserAccess.create)
     ..hasRequiredFields = false
   ;
 
@@ -358,9 +300,6 @@ class LoginResponse extends $pb.GeneratedMessage {
   $core.bool hasRefreshToken() => $_has(1);
   @$pb.TagNumber(2)
   void clearRefreshToken() => $_clearField(2);
-
-  @$pb.TagNumber(3)
-  $pb.PbList<$2.UserAccess> get userAccesses => $_getList(2);
 }
 
 class RefreshTokenRequest extends $pb.GeneratedMessage {
@@ -429,6 +368,7 @@ class ValidateCodeRequest extends $pb.GeneratedMessage {
     $core.String? authenticationMode,
     $core.String? sessionKey,
     $core.String? clientId,
+    $core.String? correspondent,
   }) {
     final result = create();
     if (email != null) result.email = email;
@@ -437,6 +377,7 @@ class ValidateCodeRequest extends $pb.GeneratedMessage {
     if (authenticationMode != null) result.authenticationMode = authenticationMode;
     if (sessionKey != null) result.sessionKey = sessionKey;
     if (clientId != null) result.clientId = clientId;
+    if (correspondent != null) result.correspondent = correspondent;
     return result;
   }
 
@@ -452,6 +393,7 @@ class ValidateCodeRequest extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'authenticationMode')
     ..aOS(5, _omitFieldNames ? '' : 'sessionKey')
     ..aOS(6, _omitFieldNames ? '' : 'clientId')
+    ..aOS(7, _omitFieldNames ? '' : 'correspondent')
     ..hasRequiredFields = false
   ;
 
@@ -525,156 +467,15 @@ class ValidateCodeRequest extends $pb.GeneratedMessage {
   $core.bool hasClientId() => $_has(5);
   @$pb.TagNumber(6)
   void clearClientId() => $_clearField(6);
-}
 
-class ValidateCodeResponse extends $pb.GeneratedMessage {
-  factory ValidateCodeResponse({
-    $core.String? accessToken,
-    $core.String? refreshToken,
-    $core.Iterable<$2.UserAccess>? userAccesses,
-  }) {
-    final result = create();
-    if (accessToken != null) result.accessToken = accessToken;
-    if (refreshToken != null) result.refreshToken = refreshToken;
-    if (userAccesses != null) result.userAccesses.addAll(userAccesses);
-    return result;
-  }
-
-  ValidateCodeResponse._();
-
-  factory ValidateCodeResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory ValidateCodeResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ValidateCodeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'authpb'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'accessToken')
-    ..aOS(2, _omitFieldNames ? '' : 'refreshToken')
-    ..pc<$2.UserAccess>(3, _omitFieldNames ? '' : 'userAccesses', $pb.PbFieldType.PM, subBuilder: $2.UserAccess.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ValidateCodeResponse clone() => ValidateCodeResponse()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ValidateCodeResponse copyWith(void Function(ValidateCodeResponse) updates) => super.copyWith((message) => updates(message as ValidateCodeResponse)) as ValidateCodeResponse;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static ValidateCodeResponse create() => ValidateCodeResponse._();
-  @$core.override
-  ValidateCodeResponse createEmptyInstance() => create();
-  static $pb.PbList<ValidateCodeResponse> createRepeated() => $pb.PbList<ValidateCodeResponse>();
-  @$core.pragma('dart2js:noInline')
-  static ValidateCodeResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ValidateCodeResponse>(create);
-  static ValidateCodeResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get accessToken => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set accessToken($core.String value) => $_setString(0, value);
-  @$pb.TagNumber(1)
-  $core.bool hasAccessToken() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearAccessToken() => $_clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.String get refreshToken => $_getSZ(1);
-  @$pb.TagNumber(2)
-  set refreshToken($core.String value) => $_setString(1, value);
-  @$pb.TagNumber(2)
-  $core.bool hasRefreshToken() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearRefreshToken() => $_clearField(2);
-
-  @$pb.TagNumber(3)
-  $pb.PbList<$2.UserAccess> get userAccesses => $_getList(2);
-}
-
-class RefreshAccessRequest extends $pb.GeneratedMessage {
-  factory RefreshAccessRequest({
-    $core.String? email,
-  }) {
-    final result = create();
-    if (email != null) result.email = email;
-    return result;
-  }
-
-  RefreshAccessRequest._();
-
-  factory RefreshAccessRequest.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory RefreshAccessRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RefreshAccessRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'authpb'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'email')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  RefreshAccessRequest clone() => RefreshAccessRequest()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  RefreshAccessRequest copyWith(void Function(RefreshAccessRequest) updates) => super.copyWith((message) => updates(message as RefreshAccessRequest)) as RefreshAccessRequest;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static RefreshAccessRequest create() => RefreshAccessRequest._();
-  @$core.override
-  RefreshAccessRequest createEmptyInstance() => create();
-  static $pb.PbList<RefreshAccessRequest> createRepeated() => $pb.PbList<RefreshAccessRequest>();
-  @$core.pragma('dart2js:noInline')
-  static RefreshAccessRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RefreshAccessRequest>(create);
-  static RefreshAccessRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get email => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set email($core.String value) => $_setString(0, value);
-  @$pb.TagNumber(1)
-  $core.bool hasEmail() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearEmail() => $_clearField(1);
-}
-
-class RefreshAccessResponse extends $pb.GeneratedMessage {
-  factory RefreshAccessResponse({
-    $core.Iterable<$2.UserAccess>? userAccesses,
-  }) {
-    final result = create();
-    if (userAccesses != null) result.userAccesses.addAll(userAccesses);
-    return result;
-  }
-
-  RefreshAccessResponse._();
-
-  factory RefreshAccessResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory RefreshAccessResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RefreshAccessResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'authpb'), createEmptyInstance: create)
-    ..pc<$2.UserAccess>(1, _omitFieldNames ? '' : 'userAccesses', $pb.PbFieldType.PM, subBuilder: $2.UserAccess.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  RefreshAccessResponse clone() => RefreshAccessResponse()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  RefreshAccessResponse copyWith(void Function(RefreshAccessResponse) updates) => super.copyWith((message) => updates(message as RefreshAccessResponse)) as RefreshAccessResponse;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static RefreshAccessResponse create() => RefreshAccessResponse._();
-  @$core.override
-  RefreshAccessResponse createEmptyInstance() => create();
-  static $pb.PbList<RefreshAccessResponse> createRepeated() => $pb.PbList<RefreshAccessResponse>();
-  @$core.pragma('dart2js:noInline')
-  static RefreshAccessResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RefreshAccessResponse>(create);
-  static RefreshAccessResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $pb.PbList<$2.UserAccess> get userAccesses => $_getList(0);
+  @$pb.TagNumber(7)
+  $core.String get correspondent => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set correspondent($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasCorrespondent() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearCorrespondent() => $_clearField(7);
 }
 
 class AccountEmailAuthRequest extends $pb.GeneratedMessage {
@@ -784,9 +585,11 @@ class AccountEmailAuthResponse extends $pb.GeneratedMessage {
 class EmailAuthCodeRequest extends $pb.GeneratedMessage {
   factory EmailAuthCodeRequest({
     $core.String? email,
+    $core.String? correspondent,
   }) {
     final result = create();
     if (email != null) result.email = email;
+    if (correspondent != null) result.correspondent = correspondent;
     return result;
   }
 
@@ -797,6 +600,7 @@ class EmailAuthCodeRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'EmailAuthCodeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'authpb'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'email')
+    ..aOS(2, _omitFieldNames ? '' : 'correspondent')
     ..hasRequiredFields = false
   ;
 
@@ -825,6 +629,15 @@ class EmailAuthCodeRequest extends $pb.GeneratedMessage {
   $core.bool hasEmail() => $_has(0);
   @$pb.TagNumber(1)
   void clearEmail() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get correspondent => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set correspondent($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasCorrespondent() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCorrespondent() => $_clearField(2);
 }
 
 class EmailAuthCodeResponse extends $pb.GeneratedMessage {
@@ -871,6 +684,76 @@ class EmailAuthCodeResponse extends $pb.GeneratedMessage {
   $core.bool hasExternalAuthId() => $_has(0);
   @$pb.TagNumber(1)
   void clearExternalAuthId() => $_clearField(1);
+}
+
+class ImpersonateRequest extends $pb.GeneratedMessage {
+  factory ImpersonateRequest({
+    $core.String? clientId,
+    $core.int? userId,
+    $core.String? token,
+  }) {
+    final result = create();
+    if (clientId != null) result.clientId = clientId;
+    if (userId != null) result.userId = userId;
+    if (token != null) result.token = token;
+    return result;
+  }
+
+  ImpersonateRequest._();
+
+  factory ImpersonateRequest.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory ImpersonateRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ImpersonateRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'authpb'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'clientId')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'userId', $pb.PbFieldType.OU3)
+    ..aOS(3, _omitFieldNames ? '' : 'token')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ImpersonateRequest clone() => ImpersonateRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ImpersonateRequest copyWith(void Function(ImpersonateRequest) updates) => super.copyWith((message) => updates(message as ImpersonateRequest)) as ImpersonateRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ImpersonateRequest create() => ImpersonateRequest._();
+  @$core.override
+  ImpersonateRequest createEmptyInstance() => create();
+  static $pb.PbList<ImpersonateRequest> createRepeated() => $pb.PbList<ImpersonateRequest>();
+  @$core.pragma('dart2js:noInline')
+  static ImpersonateRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ImpersonateRequest>(create);
+  static ImpersonateRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get clientId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set clientId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasClientId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearClientId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get userId => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set userId($core.int value) => $_setUnsignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasUserId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUserId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get token => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set token($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasToken() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearToken() => $_clearField(3);
 }
 
 

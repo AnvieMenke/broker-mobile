@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class GridField {
   final String keyName;
+  final String label;
   final String value;
   final String? type;
   final bool visible;
@@ -10,6 +11,7 @@ class GridField {
 
   const GridField({
     required this.keyName,
+    required this.label,
     required this.value,
     this.type,
     this.visible = true,
@@ -89,6 +91,7 @@ class GridItem {
       if (v is Map && v.containsKey("value")) {
         parsedFields.add(GridField(
           keyName: k,
+          label: v["label"]?.toString() ?? "",
           value: v["value"]?.toString() ?? "",
           type: v["type"]?.toString(),
           visible: v["visible"] as bool? ?? true,
@@ -98,6 +101,7 @@ class GridItem {
       } else {
         parsedFields.add(GridField(
           keyName: k,
+          label: k,
           value: v?.toString() ?? "",
           visible: true,
         ));
@@ -142,7 +146,7 @@ class GridViewCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 2),
                       child: Row(
                         children: [
-                          Text("${f.keyName}: ", style: textTheme.bodyMedium),
+                          Text("${f.label}: ", style: textTheme.bodyMedium),
                           f.displayValue,
                         ],
                       ),
@@ -166,7 +170,7 @@ class GridViewCard extends StatelessWidget {
                             ...c.fields.map(
                               (f) => Row(
                                 children: [
-                                  Text("${f.keyName}: ",
+                                  Text("${f.label}: ",
                                       style: textTheme.bodySmall),
                                   f.displayValue,
                                 ],
@@ -200,10 +204,11 @@ class GridViewCard extends StatelessWidget {
       PopupMenuItem(
         value: "view_details",
         child: const Text("View Details"),
-        onTap: () => Future.delayed(
-          Duration.zero,
-          () => _showDetails(context),
-        ),
+        onTap: () {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _showDetails(context);
+          });
+        },
       ),
     ];
 
@@ -243,7 +248,7 @@ class GridViewCard extends StatelessWidget {
                     children: [
                       if (!f.hideLabel)
                         Text(
-                          "${f.keyName}: ",
+                          "${f.label}: ",
                           style: textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -348,6 +353,7 @@ class GridWithPagination extends StatelessWidget {
   final GridPagination pagination;
   final void Function(GridPagination newPagination) onPageChange;
   final int maxPageButtonsToShow;
+  final List<PopupMenuEntry> Function(BuildContext, GridItem)? actionsBuilder;
 
   const GridWithPagination({
     super.key,
@@ -355,6 +361,7 @@ class GridWithPagination extends StatelessWidget {
     required this.pagination,
     required this.onPageChange,
     this.maxPageButtonsToShow = 5,
+    this.actionsBuilder,
   });
 
   List<int> _pageRange(int currentPage, int totalPages, int maxButtons) {
@@ -398,11 +405,18 @@ class GridWithPagination extends StatelessWidget {
             padding: const EdgeInsets.all(12.0),
             itemCount: items.length,
             itemBuilder: (context, index) {
-              return GridViewCard(item: items[index]);
+              final item = items[index];
+              final actions = actionsBuilder != null
+                  ? actionsBuilder!(context, item)
+                  : null;
+
+              return GridViewCard(
+                item: item,
+                actions: actions,
+              );
             },
           ),
         ),
-
         Container(
           color: Theme.of(context).scaffoldBackgroundColor,
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
@@ -421,13 +435,13 @@ class GridWithPagination extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text("Per page: "),
+                      const Text("Rows per page: "),
                       DropdownButton<int>(
                         value: rowsPerPage,
-                        items: [5, 10, 20, 50, 100].map((num) {
+                        items: [5, 10, 20, 50, 100].map((rowPerPage) {
                           return DropdownMenuItem<int>(
-                            value: num,
-                            child: Text('$num'),
+                            value: rowPerPage,
+                            child: Text('$rowPerPage'),
                           );
                         }).toList(),
                         onChanged: (newRowsPerPage) {
@@ -446,13 +460,12 @@ class GridWithPagination extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
                     tooltip: 'First',
-                    icon: Icon(Icons.first_page),
+                    icon: const Icon(Icons.first_page),
                     onPressed: currentPage > 0
                         ? () => onPageChange(
                             pagination.copyWith(pageNo: 0, reload: true))
@@ -460,13 +473,12 @@ class GridWithPagination extends StatelessWidget {
                   ),
                   IconButton(
                     tooltip: 'Previous',
-                    icon: Icon(Icons.chevron_left),
+                    icon: const Icon(Icons.chevron_left),
                     onPressed: currentPage > 0
                         ? () => onPageChange(pagination.copyWith(
                             pageNo: currentPage - 1, reload: true))
                         : null,
                   ),
-
                   ...pagesToShow.map((p) => Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -497,10 +509,9 @@ class GridWithPagination extends StatelessWidget {
                           ),
                         ),
                       )),
-
                   IconButton(
                     tooltip: 'Next',
-                    icon: Icon(Icons.chevron_right),
+                    icon: const Icon(Icons.chevron_right),
                     onPressed: currentPage < totalPages - 1
                         ? () => onPageChange(pagination.copyWith(
                             pageNo: currentPage + 1, reload: true))
@@ -508,7 +519,7 @@ class GridWithPagination extends StatelessWidget {
                   ),
                   IconButton(
                     tooltip: 'Last',
-                    icon: Icon(Icons.last_page),
+                    icon: const Icon(Icons.last_page),
                     onPressed: currentPage < totalPages - 1
                         ? () => onPageChange(pagination.copyWith(
                             pageNo: totalPages - 1, reload: true))

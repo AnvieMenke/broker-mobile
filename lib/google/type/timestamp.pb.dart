@@ -23,14 +23,14 @@ class Timestamp extends $pb.GeneratedMessage {
     $fixnum.Int64? seconds,
     $core.int? nanos,
   }) {
-    final _result = create();
+    final result = create();
     if (seconds != null) {
-      _result.seconds = seconds;
+      result.seconds = seconds;
     }
     if (nanos != null) {
-      _result.nanos = nanos;
+      result.nanos = nanos;
     }
-    return _result;
+    return result;
   }
   Timestamp._();
 

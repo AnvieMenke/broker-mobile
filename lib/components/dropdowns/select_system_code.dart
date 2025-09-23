@@ -78,7 +78,7 @@ class _SelectSystemCodeState extends State<SelectSystemCode> {
     return isLoading
         ? const LinearProgressIndicator()
         : DropdownButtonFormField<String>(
-      value: dropdownValue,
+      initialValue: dropdownValue,
       isExpanded: true,
       decoration: InputDecoration(
         labelText: widget.label,

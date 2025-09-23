@@ -1,7 +1,8 @@
-import 'dart:developer';
+
 import 'package:broker_mobile/src/screens/auth/otp_verification_page.dart';
 import 'package:flutter/material.dart';
 import '../../../service/auth_service.dart';
+import 'package:broker_mobile/components/messages/notification.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,11 +17,15 @@ class _LoginPageState extends State<LoginPage> {
   bool _loading = false;
   String? _error;
 
+  List<String> _correspondents = [];
+  String? _selectedCorrespondent;
+  bool _showCorrespondentDropdown = false;
+  String _session = "";
+
   void _handleLogin() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
-    final authenticationMode = 'email';
-    String session = "";
+    const authenticationMode = 'email';
 
     if (email.isEmpty || password.isEmpty) {
       setState(() {
@@ -35,29 +40,54 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      final response = await loginWeb(email, password);
-      session = response.sessionKey;
+      final response =
+          await loginWeb(email, password, _selectedCorrespondent ?? '');
+      _session = response.sessionKey;
+
       setState(() {
         _loading = false;
         _error = null;
+        _correspondents = response.correspondents;
       });
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OtpVerificationPage(
-            email: email,
-            password: password,
-            sessionKey: session,
-            authenticationMode: authenticationMode,
+
+      if (_correspondents.length > 1) {
+        Notify.info(
+          'The email you entered has multiple accounts. Please select a correspondent.',
+        );
+        setState(() {
+          _showCorrespondentDropdown = true;
+          _selectedCorrespondent = null;
+        });
+        return;
+      }
+
+      _selectedCorrespondent = _correspondents.first;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpVerificationPage(
+              email: email,
+              password: password,
+              sessionKey: _session,
+              authenticationMode: authenticationMode,
+              correspondent: _selectedCorrespondent ?? '',
+            ),
           ),
-        ),
-      );
+        );
+      });
     } catch (e) {
       setState(() {
         _loading = false;
-        _error = 'Login failed: ${e.toString()}';
+        _error = (e is Map && e['message'] != null)
+            ? e['message']
+            : (e.toString().contains('gRPC Error')
+                ? RegExp(r'message: ([^,]+)')
+                    .firstMatch(e.toString())
+                    ?.group(1)
+                    ?.trim()
+                : e.toString());
       });
-      log('Login error: $e');
     }
   }
 
@@ -71,7 +101,8 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.lock_outline, size: 80, color: Colors.blueAccent),
+              const Icon(Icons.lock_outline,
+                  size: 80, color: Colors.blueAccent),
               const SizedBox(height: 24),
               const Text(
                 'Login',
@@ -117,22 +148,72 @@ class _LoginPageState extends State<LoginPage> {
                     style: const TextStyle(color: Colors.redAccent),
                   ),
                 ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _loading ? null : _handleLogin,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
+              if (_showCorrespondentDropdown) ...[
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  initialValue: _selectedCorrespondent,
+                  items: _correspondents.map((c) {
+                    return DropdownMenuItem(
+                      value: c,
+                      child:
+                          Text(c, style: const TextStyle(color: Colors.white)),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedCorrespondent = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: "Select Correspondent",
+                    labelStyle: const TextStyle(color: Colors.grey),
+                    filled: true,
+                    fillColor: const Color(0xFF1E1B2E),
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
                     ),
                   ),
-                  child: _loading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text('Login', style: TextStyle(fontSize: 16)),
+                  dropdownColor: const Color(0xFF1E1B2E),
                 ),
-              ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _selectedCorrespondent == null
+                        ? null
+                        : () {
+                            _handleLogin();
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child:
+                        const Text('Continue', style: TextStyle(fontSize: 16)),
+                  ),
+                ),
+              ],
+              if (!_showCorrespondentDropdown)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _loading ? null : _handleLogin,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: _loading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text('Login', style: TextStyle(fontSize: 16)),
+                  ),
+                ),
             ],
           ),
         ),
@@ -140,7 +221,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // ✅ Dispose controllers to free memory when this page is replaced
   @override
   void dispose() {
     _emailController.dispose();

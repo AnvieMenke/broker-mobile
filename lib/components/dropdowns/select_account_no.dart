@@ -80,6 +80,7 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
 
         return data.accounts.map((acc) {
           return {
+            'accountId': acc.accountId,
             'accountNo': acc.accountNo,
             'correspondent': acc.correspondent,
             'broker': acc.broker,

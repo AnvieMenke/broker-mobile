@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:broker_mobile/proto/commonpb/systemcode.pb.dart';
 import 'package:broker_mobile/service/common_service.dart';
 import 'package:broker_mobile/service/user_access_service.dart';
-import 'package:broker_mobile/service/auth_service.dart';
 
 class SelectStatus extends StatefulWidget {
   final String? value;
@@ -42,11 +41,7 @@ class _SelectStatusState extends State<SelectStatus> {
   Future<void> getStatusList() async {
     bool hasBrokerApprovedAccess = false;
 
-    final user = await AuthService.getCurrentUser();
-    final roleId = user?['RoleId'];
-
-    final usrAccessesList =
-        await _usrAccessService.listUsrAccess(roleId, "Show Selected");
+    final usrAccessesList = await _usrAccessService.listRoleAccess("", "");
 
     for (final usrAccess in usrAccessesList) {
       if (usrAccess.access == "Bank Request" &&
@@ -79,7 +74,7 @@ class _SelectStatusState extends State<SelectStatus> {
     final tempStatusList = <SystemCode>[];
 
     for (final systemCode in systemCodeList) {
-      final note = int.tryParse(systemCode.note ?? "0") ?? 0;
+      final note = int.tryParse(systemCode.note) ?? 0;
 
       if (note == 0) {
         if (systemCode.code != "Canceled") continue;
@@ -93,24 +88,23 @@ class _SelectStatusState extends State<SelectStatus> {
     }
 
     tempStatusList.sort((a, b) {
-      final an = int.tryParse(a.note ?? "0") ?? 0;
-      final bn = int.tryParse(b.note ?? "0") ?? 0;
+      final an = int.tryParse(a.note) ?? 0;
+      final bn = int.tryParse(b.note) ?? 0;
       return an.compareTo(bn);
     });
 
     tempStatusList.addAll(statusZero);
 
     final seen = <String>{};
-    final uniqueList =
-        tempStatusList.where((s) => seen.add(s.code ?? "")).toList();
+    final uniqueList = tempStatusList.where((s) => seen.add(s.code)).toList();
 
     setState(() => statusList = uniqueList);
 
     for (final status in uniqueList) {
       if (status.code == widget.value) {
         setState(() {
-          currentSelected = {"note": status.note, "code": status.code ?? ""};
-          initialSelected = {"note": status.note, "code": status.code ?? ""};
+          currentSelected = {"note": status.note, "code": status.code};
+          initialSelected = {"note": status.note, "code": status.code};
         });
       }
     }
@@ -122,7 +116,7 @@ class _SelectStatusState extends State<SelectStatus> {
     for (int i = 0; i < statusList.length; i++) {
       final status = statusList[i];
       if (status.code == selectedCode) {
-        final index = int.tryParse(status.note ?? "0") ?? 0;
+        final index = int.tryParse(status.note) ?? 0;
 
         if (index == 0) {
           if ((int.tryParse(currentSelected["note"] ?? "0") ?? 0) != 0) {
@@ -130,12 +124,12 @@ class _SelectStatusState extends State<SelectStatus> {
           }
         }
 
-        currentSelected = {"note": status.note, "code": status.code ?? ""};
+        currentSelected = {"note": status.note, "code": status.code};
 
         if (index > 1 && selectedCode != initialSelected["code"]) {
           previousSelected = {
             "note": statusList[i - 1].note,
-            "code": statusList[i - 1].code ?? "",
+            "code": statusList[i - 1].code,
           };
         }
 
@@ -174,9 +168,7 @@ class _SelectStatusState extends State<SelectStatus> {
 
   @override
   Widget build(BuildContext context) {
-    final disabled = widget.disabled ||
-        initialSelected["note"] == "0" ||
-        initialSelected["note"] == "5";
+    final disabled = widget.disabled;
 
     // Filtered list that will actually be shown
     final activeStatusList =
@@ -195,7 +187,7 @@ class _SelectStatusState extends State<SelectStatus> {
         border: const OutlineInputBorder(),
         errorText: widget.error ? "Invalid status" : null,
       ),
-      value: dropdownValue,
+      initialValue: dropdownValue,
       onChanged: disabled ? null : handleChange,
       items: activeStatusList.map<DropdownMenuItem<String>>((status) {
         final color = [
