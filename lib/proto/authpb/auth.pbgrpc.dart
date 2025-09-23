@@ -39,22 +39,14 @@ class AuthServiceClient extends $grpc.Client {
       '/authpb.AuthService/LoginWeb',
       ($0.LoginWebRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.LoginWebResponse.fromBuffer(value));
-  static final _$loginuser = $grpc.ClientMethod<$0.LoginUserRequest, $0.LoginResponse>(
-      '/authpb.AuthService/Loginuser',
-      ($0.LoginUserRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.LoginResponse.fromBuffer(value));
   static final _$refreshToken = $grpc.ClientMethod<$0.RefreshTokenRequest, $0.LoginResponse>(
       '/authpb.AuthService/RefreshToken',
       ($0.RefreshTokenRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.LoginResponse.fromBuffer(value));
-  static final _$validateCode = $grpc.ClientMethod<$0.ValidateCodeRequest, $0.ValidateCodeResponse>(
+  static final _$validateCode = $grpc.ClientMethod<$0.ValidateCodeRequest, $0.LoginResponse>(
       '/authpb.AuthService/ValidateCode',
       ($0.ValidateCodeRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ValidateCodeResponse.fromBuffer(value));
-  static final _$refreshAccess = $grpc.ClientMethod<$0.RefreshAccessRequest, $0.RefreshAccessResponse>(
-      '/authpb.AuthService/RefreshAccess',
-      ($0.RefreshAccessRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.RefreshAccessResponse.fromBuffer(value));
+      ($core.List<$core.int> value) => $0.LoginResponse.fromBuffer(value));
   static final _$accountEmailAuth = $grpc.ClientMethod<$0.AccountEmailAuthRequest, $0.AccountEmailAuthResponse>(
       '/authpb.AuthService/AccountEmailAuth',
       ($0.AccountEmailAuthRequest value) => value.writeToBuffer(),
@@ -67,6 +59,10 @@ class AuthServiceClient extends $grpc.Client {
       '/authpb.AuthService/Logout',
       ($1.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $1.Empty.fromBuffer(value));
+  static final _$impersonate = $grpc.ClientMethod<$0.ImpersonateRequest, $0.LoginResponse>(
+      '/authpb.AuthService/Impersonate',
+      ($0.ImpersonateRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.LoginResponse.fromBuffer(value));
 
   AuthServiceClient(super.channel, {super.options, super.interceptors});
 
@@ -78,20 +74,12 @@ class AuthServiceClient extends $grpc.Client {
     return $createUnaryCall(_$loginWeb, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.LoginResponse> loginuser($0.LoginUserRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$loginuser, request, options: options);
-  }
-
   $grpc.ResponseFuture<$0.LoginResponse> refreshToken($0.RefreshTokenRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$refreshToken, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.ValidateCodeResponse> validateCode($0.ValidateCodeRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.LoginResponse> validateCode($0.ValidateCodeRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$validateCode, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.RefreshAccessResponse> refreshAccess($0.RefreshAccessRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$refreshAccess, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.AccountEmailAuthResponse> accountEmailAuth($0.AccountEmailAuthRequest request, {$grpc.CallOptions? options}) {
@@ -104,6 +92,10 @@ class AuthServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$1.Empty> logout($1.Empty request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$logout, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.LoginResponse> impersonate($0.ImpersonateRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$impersonate, request, options: options);
   }
 }
 
@@ -126,13 +118,6 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.LoginWebRequest.fromBuffer(value),
         ($0.LoginWebResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.LoginUserRequest, $0.LoginResponse>(
-        'Loginuser',
-        loginuser_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.LoginUserRequest.fromBuffer(value),
-        ($0.LoginResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.RefreshTokenRequest, $0.LoginResponse>(
         'RefreshToken',
         refreshToken_Pre,
@@ -140,20 +125,13 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.RefreshTokenRequest.fromBuffer(value),
         ($0.LoginResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ValidateCodeRequest, $0.ValidateCodeResponse>(
+    $addMethod($grpc.ServiceMethod<$0.ValidateCodeRequest, $0.LoginResponse>(
         'ValidateCode',
         validateCode_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $0.ValidateCodeRequest.fromBuffer(value),
-        ($0.ValidateCodeResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.RefreshAccessRequest, $0.RefreshAccessResponse>(
-        'RefreshAccess',
-        refreshAccess_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.RefreshAccessRequest.fromBuffer(value),
-        ($0.RefreshAccessResponse value) => value.writeToBuffer()));
+        ($0.LoginResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.AccountEmailAuthRequest, $0.AccountEmailAuthResponse>(
         'AccountEmailAuth',
         accountEmailAuth_Pre,
@@ -175,6 +153,13 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $1.Empty.fromBuffer(value),
         ($1.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ImpersonateRequest, $0.LoginResponse>(
+        'Impersonate',
+        impersonate_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.ImpersonateRequest.fromBuffer(value),
+        ($0.LoginResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.LoginResponse> login_Pre($grpc.ServiceCall $call, $async.Future<$0.LoginRequest> $request) async {
@@ -185,20 +170,12 @@ abstract class AuthServiceBase extends $grpc.Service {
     return loginWeb($call, await $request);
   }
 
-  $async.Future<$0.LoginResponse> loginuser_Pre($grpc.ServiceCall $call, $async.Future<$0.LoginUserRequest> $request) async {
-    return loginuser($call, await $request);
-  }
-
   $async.Future<$0.LoginResponse> refreshToken_Pre($grpc.ServiceCall $call, $async.Future<$0.RefreshTokenRequest> $request) async {
     return refreshToken($call, await $request);
   }
 
-  $async.Future<$0.ValidateCodeResponse> validateCode_Pre($grpc.ServiceCall $call, $async.Future<$0.ValidateCodeRequest> $request) async {
+  $async.Future<$0.LoginResponse> validateCode_Pre($grpc.ServiceCall $call, $async.Future<$0.ValidateCodeRequest> $request) async {
     return validateCode($call, await $request);
-  }
-
-  $async.Future<$0.RefreshAccessResponse> refreshAccess_Pre($grpc.ServiceCall $call, $async.Future<$0.RefreshAccessRequest> $request) async {
-    return refreshAccess($call, await $request);
   }
 
   $async.Future<$0.AccountEmailAuthResponse> accountEmailAuth_Pre($grpc.ServiceCall $call, $async.Future<$0.AccountEmailAuthRequest> $request) async {
@@ -213,13 +190,16 @@ abstract class AuthServiceBase extends $grpc.Service {
     return logout($call, await $request);
   }
 
+  $async.Future<$0.LoginResponse> impersonate_Pre($grpc.ServiceCall $call, $async.Future<$0.ImpersonateRequest> $request) async {
+    return impersonate($call, await $request);
+  }
+
   $async.Future<$0.LoginResponse> login($grpc.ServiceCall call, $0.LoginRequest request);
   $async.Future<$0.LoginWebResponse> loginWeb($grpc.ServiceCall call, $0.LoginWebRequest request);
-  $async.Future<$0.LoginResponse> loginuser($grpc.ServiceCall call, $0.LoginUserRequest request);
   $async.Future<$0.LoginResponse> refreshToken($grpc.ServiceCall call, $0.RefreshTokenRequest request);
-  $async.Future<$0.ValidateCodeResponse> validateCode($grpc.ServiceCall call, $0.ValidateCodeRequest request);
-  $async.Future<$0.RefreshAccessResponse> refreshAccess($grpc.ServiceCall call, $0.RefreshAccessRequest request);
+  $async.Future<$0.LoginResponse> validateCode($grpc.ServiceCall call, $0.ValidateCodeRequest request);
   $async.Future<$0.AccountEmailAuthResponse> accountEmailAuth($grpc.ServiceCall call, $0.AccountEmailAuthRequest request);
   $async.Future<$0.EmailAuthCodeResponse> emailAuthCode($grpc.ServiceCall call, $0.EmailAuthCodeRequest request);
   $async.Future<$1.Empty> logout($grpc.ServiceCall call, $1.Empty request);
+  $async.Future<$0.LoginResponse> impersonate($grpc.ServiceCall call, $0.ImpersonateRequest request);
 }

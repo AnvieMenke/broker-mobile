@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,8 +5,8 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 
 import 'package:broker_mobile/env.dart';
 import 'package:broker_mobile/proto/authpb/auth.pbgrpc.dart';
-import 'package:broker_mobile/proto/usrpb/useraccess.pb.dart';
-import 'package:broker_mobile/proto/usrpb/useraccess.pbgrpc.dart';
+// import 'package:broker_mobile/proto/usrpb/useraccess.pb.dart';
+// import 'package:broker_mobile/proto/usrpb/useraccess.pbgrpc.dart';
 
 import '../google/protobuf/empty.pb.dart';
 import '../server/auth_interceptor.dart';
@@ -25,7 +24,6 @@ final _serviceNoAuth = AuthServiceClient(
   _createChannel(),
   interceptors: [AuthInterceptor()],
 );
-
 
 /// Call this once at app start to initialize the cached token
 Future<void> loadCachedToken() async {
@@ -49,7 +47,6 @@ Future<void> removeLogoutMessage() async {
 }
 
 Future<void> refreshToken(Map<String, String> authHeaders) async {
-  log("auth ${AppEnv.grpcClientId}");
   final user = await AuthService.getCurrentUser();
   if (user == null) return;
 
@@ -73,45 +70,46 @@ Future<void> refreshToken(Map<String, String> authHeaders) async {
 
   try {
     final resp = await client.refreshToken(req);
-    await _setTokens(resp.accessToken, resp.refreshToken, resp.userAccesses);
+    await _setTokens(resp.accessToken, resp.refreshToken);
   } catch (e) {
     debugPrint('refreshToken error: $e');
   }
 }
 
-Future<List<UserAccess>?> refreshAccess() async {
-  final user = await AuthService.getCurrentUser();
-  if (user == null) return null;
+// Future<List<UserAccess>?> refreshAccess() async {
+//   final user = await AuthService.getCurrentUser();
+//   if (user == null) return null;
+//
+//   final nowSec = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+//   final exp = (user['exp'] as int?) ?? 0;
+//   if (nowSec > exp) return null;
+//
+//   final token = await getToken();
+//   final service = AuthServiceClient(
+//     _createChannel(),
+//     options: CallOptions(metadata: {'Authorization': token ?? ''}),
+//   );
+//
+//   final resp = await service.refreshToken(
+//     RefreshTokenRequest()..email = user['Username'],
+//   );
+//
+//   return resp.userAccesses;
+// }
 
-  final nowSec = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-  final exp = (user['exp'] as int?) ?? 0;
-  if (nowSec > exp) return null;
-
-  final token = await getToken();
-  final service = AuthServiceClient(
-    _createChannel(),
-    options: CallOptions(metadata: {'Authorization': token ?? ''}),
-  );
-
-  final resp = await service.refreshAccess(
-    RefreshAccessRequest()..email = user['Username'],
-  );
-
-  return resp.userAccesses;
-}
-
-Future<LoginWebResponse> loginWeb(String email, String password) {
-  log("test");
+Future<LoginWebResponse> loginWeb(
+    String email, String password, String correspondent) {
   final req = LoginWebRequest()
     ..email = email
     ..password = password
     ..authenticationMode = 'email'
-    ..clientId = AppEnv.grpcClientId;
+    ..clientId = AppEnv.grpcClientId
+    ..correspondent = correspondent;
+
   return _serviceNoAuth.loginWeb(req);
 }
 
-Future<void> _setTokens(
-    String at, String rt, List<UserAccess> userAccesses) async {
+Future<void> _setTokens(String at, String rt) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString(_tokenKey, at);
   await prefs.setString(_refreshTokenKey, rt);
@@ -159,6 +157,7 @@ Future<void> validateAuthCode({
   required String authCode,
   required String authenticationMode,
   required String sessionKey,
+  required String correspondent,
 }) async {
   final req = ValidateCodeRequest()
     ..email = email
@@ -166,14 +165,14 @@ Future<void> validateAuthCode({
     ..code = authCode
     ..authenticationMode = authenticationMode
     ..sessionKey = sessionKey
-    ..clientId = AppEnv.grpcClientId;
+    ..clientId = AppEnv.grpcClientId
+    ..correspondent = correspondent;
 
   try {
     final response = await _serviceNoAuth.validateCode(req);
     await _setTokens(
       response.accessToken,
       response.refreshToken,
-      response.userAccesses,
     );
   } catch (error) {
     rethrow;

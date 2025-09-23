@@ -21,16 +21,16 @@ class UsrAccessService {
     return client;
   }
 
-  Future<PbList<UsrAccess>> listUsrAccess(
-      int roleId, String requestType) async {
+  Future<PbList<AccessFunction>> listRoleAccess(
+      String access, subAccess) async {
     final client = _usrSvc();
-    final req = ListUsrAccessRequest()
-      ..roleId = roleId
-      ..requestType = requestType;
+    final req = ListRoleAccessFunctionRequest()
+      ..access = access
+      ..subAccess = subAccess;
 
     try {
-      final response = await client.listUsrAccess(req);
-      return response.usrAccesses;
+      final response = await client.listRoleAccessFunction(req);
+      return response.accesses;
     } catch (e) {
       rethrow;
     }

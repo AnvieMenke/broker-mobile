@@ -28,17 +28,17 @@ class Date extends $pb.GeneratedMessage {
     $core.int? month,
     $core.int? day,
   }) {
-    final _result = create();
+    final result = create();
     if (year != null) {
-      _result.year = year;
+      result.year = year;
     }
     if (month != null) {
-      _result.month = month;
+      result.month = month;
     }
     if (day != null) {
-      _result.day = day;
+      result.day = day;
     }
-    return _result;
+    return result;
   }
   Date._();
 

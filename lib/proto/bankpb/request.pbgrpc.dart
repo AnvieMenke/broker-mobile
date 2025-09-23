@@ -54,18 +54,6 @@ class RequestServiceClient extends $grpc.Client {
       '/proto.RequestService/ReadMaximumWithdrawable',
       ($0.ReadMaximumWithdrawableRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ReadMaximumWithdrawableResponse.fromBuffer(value));
-  static final _$readSummary = $grpc.ClientMethod<$0.ReadSummaryRequest, $0.ReadSummaryResponse>(
-      '/proto.RequestService/ReadSummary',
-      ($0.ReadSummaryRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ReadSummaryResponse.fromBuffer(value));
-  static final _$readCashBalance = $grpc.ClientMethod<$0.EmptyRequest, $0.ReadCashBalanceResponse>(
-      '/proto.RequestService/ReadCashBalance',
-      ($0.EmptyRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ReadCashBalanceResponse.fromBuffer(value));
-  static final _$getNewRequestId = $grpc.ClientMethod<$0.GetNewRequestIdRequest, $0.GetNewRequestIdResponse>(
-      '/proto.RequestService/GetNewRequestId',
-      ($0.GetNewRequestIdRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.GetNewRequestIdResponse.fromBuffer(value));
   static final _$getFee = $grpc.ClientMethod<$0.GetFeeRequest, $0.GetFeeResponse>(
       '/proto.RequestService/GetFee',
       ($0.GetFeeRequest value) => value.writeToBuffer(),
@@ -95,18 +83,6 @@ class RequestServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.ReadMaximumWithdrawableResponse> readMaximumWithdrawable($0.ReadMaximumWithdrawableRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$readMaximumWithdrawable, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.ReadSummaryResponse> readSummary($0.ReadSummaryRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$readSummary, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.ReadCashBalanceResponse> readCashBalance($0.EmptyRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$readCashBalance, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.GetNewRequestIdResponse> getNewRequestId($0.GetNewRequestIdRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getNewRequestId, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.GetFeeResponse> getFee($0.GetFeeRequest request, {$grpc.CallOptions? options}) {
@@ -161,27 +137,6 @@ abstract class RequestServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.ReadMaximumWithdrawableRequest.fromBuffer(value),
         ($0.ReadMaximumWithdrawableResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ReadSummaryRequest, $0.ReadSummaryResponse>(
-        'ReadSummary',
-        readSummary_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.ReadSummaryRequest.fromBuffer(value),
-        ($0.ReadSummaryResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.EmptyRequest, $0.ReadCashBalanceResponse>(
-        'ReadCashBalance',
-        readCashBalance_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.EmptyRequest.fromBuffer(value),
-        ($0.ReadCashBalanceResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.GetNewRequestIdRequest, $0.GetNewRequestIdResponse>(
-        'GetNewRequestId',
-        getNewRequestId_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.GetNewRequestIdRequest.fromBuffer(value),
-        ($0.GetNewRequestIdResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.GetFeeRequest, $0.GetFeeResponse>(
         'GetFee',
         getFee_Pre,
@@ -215,18 +170,6 @@ abstract class RequestServiceBase extends $grpc.Service {
     return readMaximumWithdrawable($call, await $request);
   }
 
-  $async.Future<$0.ReadSummaryResponse> readSummary_Pre($grpc.ServiceCall $call, $async.Future<$0.ReadSummaryRequest> $request) async {
-    return readSummary($call, await $request);
-  }
-
-  $async.Future<$0.ReadCashBalanceResponse> readCashBalance_Pre($grpc.ServiceCall $call, $async.Future<$0.EmptyRequest> $request) async {
-    return readCashBalance($call, await $request);
-  }
-
-  $async.Future<$0.GetNewRequestIdResponse> getNewRequestId_Pre($grpc.ServiceCall $call, $async.Future<$0.GetNewRequestIdRequest> $request) async {
-    return getNewRequestId($call, await $request);
-  }
-
   $async.Future<$0.GetFeeResponse> getFee_Pre($grpc.ServiceCall $call, $async.Future<$0.GetFeeRequest> $request) async {
     return getFee($call, await $request);
   }
@@ -237,8 +180,5 @@ abstract class RequestServiceBase extends $grpc.Service {
   $async.Future<$0.ListResponse> list($grpc.ServiceCall call, $0.ListRequest request);
   $async.Future<$0.ListRequestAuditResponse> listRequestAudit($grpc.ServiceCall call, $0.ListRequestAuditRequest request);
   $async.Future<$0.ReadMaximumWithdrawableResponse> readMaximumWithdrawable($grpc.ServiceCall call, $0.ReadMaximumWithdrawableRequest request);
-  $async.Future<$0.ReadSummaryResponse> readSummary($grpc.ServiceCall call, $0.ReadSummaryRequest request);
-  $async.Future<$0.ReadCashBalanceResponse> readCashBalance($grpc.ServiceCall call, $0.EmptyRequest request);
-  $async.Future<$0.GetNewRequestIdResponse> getNewRequestId($grpc.ServiceCall call, $0.GetNewRequestIdRequest request);
   $async.Future<$0.GetFeeResponse> getFee($grpc.ServiceCall call, $0.GetFeeRequest request);
 }

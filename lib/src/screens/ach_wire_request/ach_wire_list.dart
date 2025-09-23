@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
 import '../../../service/ach_wire_service.dart';
 import '../../../service/convert_service.dart';
+import '../../../service/profile_service.dart';
+import 'ach_wire.dart';
 
 class AchWireList extends StatefulWidget {
   const AchWireList({super.key});
@@ -11,7 +13,22 @@ class AchWireList extends StatefulWidget {
 }
 
 class _AchWireListState extends State<AchWireList> {
-  late Future<List<GridItem>> _futureRequests;
+  Future<List<GridItem>>? _futureRequests;
+
+  final Map<String, dynamic> queryData = {
+    "correspondent": "",
+    "accountNo": "",
+    "bankAccountId": "",
+    "bank": "",
+    "amt": 0.0,
+    "fee": 0.0,
+    "requestType": "",
+    "transferType": "",
+    "isInternational": false,
+    "broker": "",
+    "status": "",
+    "requestId": 0,
+  };
 
   GridPagination pagination = GridPagination(
     pageNo: 0,
@@ -23,27 +40,23 @@ class _AchWireListState extends State<AchWireList> {
   @override
   void initState() {
     super.initState();
-    _futureRequests = _fetchRequests();
+    init();
+  }
+
+  void init() async {
+    final profileService = ProfileService();
+    final systemDate = await profileService.getSystemDate();
+    setState(() {
+      queryData['fromDate'] = systemDate;
+      queryData['toDate'] = systemDate;
+      _futureRequests = _fetchRequests();
+    });
   }
 
   Future<List<GridItem>> _fetchRequests() async {
     final achWireService = AchWireService();
-    final Map<String, dynamic> formData = {
-      "correspondent": "",
-      "accountNo": "",
-      "bankAccountId": "",
-      "bank": "",
-      "amount": 0.0,
-      "fee": 0.0,
-      "requestType": "",
-      "transferType": "",
-      "isInternational": false,
-      "broker": "",
-      "status": "Pending",
-      "requestId": 0,
-    };
 
-    final resp = await achWireService.listBankRequest(formData, {
+    final resp = await achWireService.listBankRequest(queryData, {
       'pageNo': pagination.pageNo,
       'rowsPerPage': pagination.rowsPerPage,
     });
@@ -58,105 +71,115 @@ class _AchWireListState extends State<AchWireList> {
     return resp.requests.map((e) {
       return GridItem.fromMap({
         "title": "Bank Account:\n${e.bankAccountNo}\n",
-        "Request ID": {
+        "requestId": {
+          "label": "Request ID",
           "value": e.requestId,
           "visible": false,
         },
-        "System Date": {
+        "systemDate": {
+          "label": "System Date",
           "value": ConvertService.protoDateObjectToString(e.systemDate),
           "visible": true,
         },
-        "Process Date": {
+        "processDate": {
+          "label": "Process Date",
           "value": ConvertService.protoDateObjectToString(e.processDate),
           "visible": true,
         },
-        "Correspondent": {
+        "correspondent": {
+          "label": "Correspondent",
           "value": e.correspondent,
           "visible": true,
         },
-        "Account ID": {
+        "accountId": {
+          "label": "Account ID",
           "value": e.accountId,
           "visible": false,
         },
-        "Account No": {
+        "accountNo": {
+          "label": "Account No",
           "value": e.accountNo,
           "visible": true,
         },
-        "Master Account No": {
+        "masterAccountNo": {
+          "label": "Master Account No",
           "value": e.masterAccountNo,
           "visible": false,
         },
-        "Branch": {
+        "branch": {
+          "label": "Branch",
           "value": e.branch,
           "visible": false,
         },
-        "Rep": {
+        "rep": {
+          "label": "Rep",
           "value": e.rep,
           "visible": false,
         },
-        "Bank ID": {
+        "bankId": {
+          "label": "Bank ID",
           "value": e.bankId,
           "visible": false,
         },
-        "Bank Name": {
+        "bankName": {
+          "label": "Bank Name",
           "value": e.bankName,
           "visible": false,
         },
-        "Bank": {
-          "value": e.bank,
-          "visible": false,
-        },
-        "Bank Routing No": {
+        "bankRoutingNo": {
+          "label": "Bank Routing No",
           "value": e.bankRoutingNo,
           "visible": true,
         },
-        "Is International": {
+        "isInternational": {
+          "label": "International",
           "value": e.isInternational,
           "visible": false,
           "type": "bool",
         },
-        "Request Type": {
+        "requestType": {
+          "label": "Request Type",
           "value": e.requestType,
           "visible": true,
         },
-        "Transfer Type": {
+        "transferType": {
+          "label": "Transfer Type",
           "value": e.transferType,
           "visible": true,
         },
-        "Amount": {
-          "value": "\$${e.amt}",
+        "amt": {
+          "label": "Amount",
+          "value": e.amt,
           "visible": true,
         },
-        "Fee": {
-          "value": "\$${e.fee}",
+        "fee": {
+          "label": "Fee",
+          "value": e.fee,
           "visible": true,
         },
-        "Fed No": {
+        "fedNo": {
+          "label": "Fed No",
           "value": e.fedNo,
           "visible": false,
         },
-        "External ID": {
+        "externalId": {
+          "label": "External ID",
           "value": e.externalId,
           "visible": false,
         },
-        "Internal Note": {
+        "internalNote": {
+          "label": "Internal Note",
           "value": e.internalNote,
           "visible": false,
         },
-        "Waive Fee": {
+        "waiveFee": {
+          "label": "Waive Fee",
           "value": e.waiveFee,
           "visible": false,
           "type": "bool",
         },
-        "Send To": {
-          "value": e.sendTo,
-          "visible": false,
-        },
-        "Wallet ID": {
-          "value": e.walletId,
-          "visible": false,
-        },
-        "Status": {
+        "status": {
+          "label": "Status",
           "value": e.status,
           "visible": true,
           "type": "status",
@@ -176,6 +199,12 @@ class _AchWireListState extends State<AchWireList> {
 
   @override
   Widget build(BuildContext context) {
+    if (_futureRequests == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return FutureBuilder<List<GridItem>>(
       future: _futureRequests,
       builder: (context, snapshot) {
@@ -203,6 +232,34 @@ class _AchWireListState extends State<AchWireList> {
               items: snapshot.data!,
               pagination: pagination,
               onPageChange: _onPageChange,
+              actionsBuilder: (ctx, item) => [
+                PopupMenuItem(
+                  value: "edit",
+                  child: const Text("Edit"),
+                  onTap: () {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      final Map<String, dynamic> formData = {
+                        for (var f in item.fields) f.keyName: f.value,
+                      };
+
+                      Navigator.push(
+                        ctx,
+                        MaterialPageRoute(
+                          builder: (context) => AchWirePage(
+                            initialFormData: formData,
+                          ),
+                        ),
+                      ).then((value) {
+                        if (value == true) {
+                          setState(() {
+                            _futureRequests = _fetchRequests();
+                          });
+                        }
+                      });
+                    });
+                  },
+                ),
+              ],
             ),
           );
         }

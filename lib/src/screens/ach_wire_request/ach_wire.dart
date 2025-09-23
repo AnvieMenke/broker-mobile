@@ -1,6 +1,7 @@
 import 'package:broker_mobile/components/dropdowns/select_status.dart';
 import 'package:broker_mobile/service/ach_wire_service.dart';
 import 'package:broker_mobile/service/bank_account_service.dart';
+import 'package:broker_mobile/service/convert_service.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/dropdowns/select_correspondent.dart';
 import 'package:broker_mobile/components/dropdowns/select_account_no.dart';
@@ -9,7 +10,9 @@ import 'package:broker_mobile/components/dropdowns/select_system_code.dart';
 import 'package:broker_mobile/components/messages/notification.dart';
 
 class AchWirePage extends StatefulWidget {
-  const AchWirePage({super.key});
+  final Map<String, dynamic>? initialFormData;
+
+  const AchWirePage({super.key, this.initialFormData});
 
   @override
   State<AchWirePage> createState() => _AchWirePageState();
@@ -19,24 +22,11 @@ class _AchWirePageState extends State<AchWirePage> {
   late final AchWireService _achWireService;
   late final BankAccountService _bankAccountService;
 
-  final Map<String, dynamic> formData = {
-    "correspondent": "",
-    "accountNo": "",
-    "bankAccountId": "",
-    "bank": "",
-    "amount": 0.0,
-    "fee": 0.0,
-    "requestType": "",
-    "transferType": "",
-    "isInternational": false,
-    "broker": "",
-    "status": "Pending",
-    "requestId": 0,
-  };
+  late Map<String, dynamic> formData;
 
   final Map<String, dynamic> initialMaximumWithdrawable = {
-    "totalAmount": 0.0,
-    "withdrawableAmount": 0.0,
+    "totalAmt": 0.0,
+    "withdrawableAmt": 0.0,
     "charges": 0.0,
     "pendingCallLog": 0.0,
   };
@@ -45,26 +35,45 @@ class _AchWirePageState extends State<AchWirePage> {
   bool isGettingMaxWithdrawal = false;
   bool isGettingFee = false;
   bool isSubmitting = false;
+  bool isEdit = false;
+  late bool disableEdit =
+      isEdit && widget.initialFormData?["status"] != "Pending";
 
   @override
   void initState() {
     super.initState();
     _achWireService = AchWireService();
     _bankAccountService = BankAccountService();
-    getNewRequestId();
-    maximumWithdrawable = Map<String, dynamic>.from(initialMaximumWithdrawable);
-  }
 
-  Future<void> getNewRequestId() async {
-    try {
-      final resp = await _achWireService.getNewId();
+    formData = {
+      "correspondent": "",
+      "accountNo": "",
+      "accountId": "",
+      "bankId": "",
+      "amt": 0.0,
+      "fee": 0.0,
+      "requestType": "",
+      "transferType": "",
+      "isInternational": false,
+      "broker": "",
+      "status": "Pending",
+      "requestId": 0,
+      "waiveFee": false,
+      ...?widget.initialFormData,
+    };
+
+    maximumWithdrawable = Map<String, dynamic>.from(initialMaximumWithdrawable);
+
+    if (formData["correspondent"].isNotEmpty &&
+        formData["accountNo"].isNotEmpty) {
+      _checkAndFetchMaxWithdrawable();
+      _calculateFee();
+    }
+
+    if (ConvertService.safeInt(formData["requestId"]) != 0) {
       setState(() {
-        formData["requestId"] = resp.requestId;
+        isEdit = true;
       });
-    } catch (err) {
-      debugPrint(err.toString());
-    } finally {
-      setState(() => isGettingFee = false);
     }
   }
 
@@ -92,8 +101,8 @@ class _AchWirePageState extends State<AchWirePage> {
       final resp = await _achWireService.readMaximumWithdrawable(
           correspondent, accountNo);
       setMaximumWithdrawable({
-        "totalAmount": resp.totalAmount,
-        "withdrawableAmount": resp.withdrawableAmt,
+        "totalAmt": resp.totalAmt,
+        "withdrawableAmt": resp.withdrawableAmt,
         "charges": resp.charges,
         "pendingCallLog": resp.pendingCallLog,
       });
@@ -134,29 +143,35 @@ class _AchWirePageState extends State<AchWirePage> {
   }
 
   void _calculateFee() {
-    final correspondent = formData["correspondent"];
-    final accountNo = formData["accountNo"];
-    final amount = formData["amount"];
-    final requestType = formData["requestType"];
-    final transferType = formData["transferType"];
+    if (ConvertService.safeInt(formData["requestId"]) != 0) {
+      final correspondent = formData["correspondent"];
+      final accountNo = formData["accountNo"];
+      final amount = ConvertService.safeDouble(formData["amt"]);
+      final requestType = formData["requestType"];
+      final transferType = formData["transferType"];
 
-    if (correspondent.isNotEmpty &&
-        accountNo.isNotEmpty &&
-        amount > 0 &&
-        requestType.isNotEmpty &&
-        transferType.isNotEmpty) {
-      getFee();
-    } else {
-      setState(() {
-        formData["fee"] = 0.0;
-      });
+      final isEnable = correspondent.isNotEmpty &&
+          accountNo.isNotEmpty &&
+          amount > 0 &&
+          requestType.isNotEmpty &&
+          transferType.isNotEmpty &&
+          (!isEdit ||
+              ConvertService.safeDouble(widget.initialFormData?["fee"]) == 0.0);
+
+      if (isEnable) {
+        getFee();
+      } else {
+        setState(() {
+          formData["fee"] = 0.0;
+        });
+      }
     }
   }
 
   Future<void> getBankAccount() async {
     try {
       final resp =
-          await _bankAccountService.readBankAccount(formData["bankAccountId"]);
+          await _bankAccountService.readBankAccount(formData["bankId"]);
       String bic = resp.bankAccount.bankIdentifierCode;
       bool isInternational = bic.isNotEmpty;
       setState(() {
@@ -169,14 +184,14 @@ class _AchWirePageState extends State<AchWirePage> {
     }
   }
 
-  Future<void> handleSubmit(data) async {
+  Future<void> handleSubmit(Map<String, dynamic> data) async {
     if (data["correspondent"] == null || data["correspondent"] == "") {
       return Notify.warning('Please select a correspondent.');
     }
     if (data["accountNo"] == null || data["accountNo"] == "") {
       return Notify.warning('Please select an account.');
     }
-    if (data["bankAccountId"] == null || data["bankAccountId"] == "") {
+    if (data["bankId"] == null || data["bankId"] == "") {
       return Notify.warning('Please select a bank account.');
     }
     if (data["transferType"] == null || data["transferType"] == "") {
@@ -189,18 +204,23 @@ class _AchWirePageState extends State<AchWirePage> {
     if (data["transferType"] == 'Withdrawal') {
       if (double.tryParse(maximumWithdrawable["pendingCallLog"])! > 0) {
         return Notify.error('Cannot withdraw with pending calls.');
-      } else if (data["amount"] >
-          double.tryParse(maximumWithdrawable["withdrawableAmount"])!) {
+      } else if (data["amt"] >
+          double.tryParse(maximumWithdrawable["withdrawableAmt"])!) {
         return Notify.error('Amount is greater than Maximum Withdrawable.');
       }
     }
 
     setState(() => isSubmitting = true);
     try {
-      await _achWireService.createRequest(data);
-      Notify.success('Request created successfully.');
+      if (isEdit) {
+        await _achWireService.updateRequest(data);
+        Notify.success('Request updated successfully.');
+      } else {
+        await _achWireService.createRequest(data);
+        Notify.success('Request created successfully.');
+      }
       if (mounted) {
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(true);
       }
     } catch (err) {
       Notify.error("Failed to create request. ${err.toString()}");
@@ -229,6 +249,7 @@ class _AchWirePageState extends State<AchWirePage> {
                   SizedBox(
                     width: itemWidth,
                     child: AutoCompleteCorrespondent(
+                      disabled: isEdit,
                       name: "correspondent",
                       value: formData["correspondent"],
                       label: "Correspondent",
@@ -244,6 +265,7 @@ class _AchWirePageState extends State<AchWirePage> {
                   SizedBox(
                     width: itemWidth,
                     child: AutoCompleteAccountNo(
+                      disabled: isEdit,
                       name: "accountNo",
                       value: formData["accountNo"],
                       isAllStatus: true,
@@ -253,6 +275,7 @@ class _AchWirePageState extends State<AchWirePage> {
                         formData["accountNo"] = map['data']['accountNo'];
                         formData["correspondent"] =
                             map['data']['correspondent'];
+                        formData["accountId"] = map['data']['accountId'];
                         _checkAndFetchMaxWithdrawable();
                         _calculateFee();
                       }),
@@ -261,15 +284,14 @@ class _AchWirePageState extends State<AchWirePage> {
                   SizedBox(
                     width: itemWidth,
                     child: SelectBankAccount(
+                      disabled: isEdit,
                       label: "Bank Account",
                       accountNo: formData["accountNo"],
                       correspondent: formData["correspondent"],
+                      value: formData["bankId"],
                       onChange: (map) {
-                        debugPrint("onChange map: $map");
-                        debugPrint("bankId: ${map['data']?['bankId']}");
                         setState(() {
-                          formData["bankAccountId"] = map['data']?['bankId'];
-                          formData["bank"] = map['data']?['bankName'] ?? '';
+                          formData["bankId"] = map['data']?['bankId'];
                         });
                       },
                     ),
@@ -277,6 +299,7 @@ class _AchWirePageState extends State<AchWirePage> {
                   SizedBox(
                     width: itemWidth,
                     child: SelectSystemCode(
+                      disabled: isEdit,
                       label: "Request Type",
                       placeholder: "Select Request Type",
                       value: formData["requestType"],
@@ -293,6 +316,7 @@ class _AchWirePageState extends State<AchWirePage> {
                   SizedBox(
                     width: itemWidth,
                     child: SelectSystemCode(
+                      disabled: isEdit,
                       label: "Transfer Type",
                       placeholder: "Select Transfer Type",
                       value: formData["transferType"],
@@ -315,17 +339,21 @@ class _AchWirePageState extends State<AchWirePage> {
                         border: const OutlineInputBorder(),
                         prefixText: "\$",
                         helperText: formData["transferType"] == "Withdrawal"
-                            ? "Withdrawable amount: ${maximumWithdrawable["withdrawableAmount"]}"
+                            ? "Withdrawable amount: ${maximumWithdrawable["withdrawableAmt"]}"
                             : null,
                       ),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
                       onChanged: (value) {
                         setState(() {
-                          formData["amount"] = double.tryParse(value) ?? 0.0;
+                          formData["amt"] = double.tryParse(value) ?? 0.0;
                           _calculateFee();
                         });
                       },
+                      initialValue: (() {
+                        final amt = ConvertService.safeDouble(formData["amt"]);
+                        return amt > 0 ? amt.toString() : null;
+                      })(),
                     ),
                   ),
                   SizedBox(
@@ -347,7 +375,7 @@ class _AchWirePageState extends State<AchWirePage> {
                   SizedBox(
                     width: itemWidth,
                     child: SelectStatus(
-                      disabled: true,
+                      disabled: !isEdit || disableEdit,
                       value: formData["status"],
                       requestType: formData["requestType"],
                       onChange: (data) => setState(() {
@@ -358,7 +386,7 @@ class _AchWirePageState extends State<AchWirePage> {
                     ),
                   ),
                   SizedBox(
-                    width: double.infinity,
+                    width: itemWidth,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
@@ -368,10 +396,12 @@ class _AchWirePageState extends State<AchWirePage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed:
-                          isSubmitting || isGettingFee || isGettingMaxWithdrawal
-                              ? null
-                              : () => handleSubmit(formData),
+                      onPressed: (isSubmitting ||
+                              isGettingFee ||
+                              isGettingMaxWithdrawal ||
+                              disableEdit)
+                          ? null
+                          : () => handleSubmit(formData),
                       child: isSubmitting
                           ? const SizedBox(
                               width: 24,

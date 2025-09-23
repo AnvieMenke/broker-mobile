@@ -16,8 +16,8 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../google/protobuf/empty.pb.dart' as $1;
-import 'access.pb.dart' as $0;
+import '../../google/protobuf/empty.pb.dart' as $0;
+import 'access.pb.dart' as $1;
 
 export 'access.pb.dart';
 
@@ -31,23 +31,79 @@ class UsrAccessServiceClient extends $grpc.Client {
     '',
   ];
 
-  static final _$listUsrAccess = $grpc.ClientMethod<$0.ListUsrAccessRequest, $0.ListUsrAccessResponse>(
-      '/usrpb.UsrAccessService/ListUsrAccess',
-      ($0.ListUsrAccessRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ListUsrAccessResponse.fromBuffer(value));
-  static final _$updateAmountLimit = $grpc.ClientMethod<$0.UpdateAmountLimitRequest, $1.Empty>(
+  static final _$listRolePage = $grpc.ClientMethod<$0.Empty, $1.ListRolePageResponse>(
+      '/usrpb.UsrAccessService/ListRolePage',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.ListRolePageResponse.fromBuffer(value));
+  static final _$listRoleAccessFunction = $grpc.ClientMethod<$1.ListRoleAccessFunctionRequest, $1.ListAccessFunctionResponse>(
+      '/usrpb.UsrAccessService/ListRoleAccessFunction',
+      ($1.ListRoleAccessFunctionRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.ListAccessFunctionResponse.fromBuffer(value));
+  static final _$listAccessFunction = $grpc.ClientMethod<$1.ListAccessFunctionRequest, $1.ListAccessFunctionResponse>(
+      '/usrpb.UsrAccessService/ListAccessFunction',
+      ($1.ListAccessFunctionRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.ListAccessFunctionResponse.fromBuffer(value));
+  static final _$updateAmountLimit = $grpc.ClientMethod<$1.UpdateAmountLimitRequest, $0.Empty>(
       '/usrpb.UsrAccessService/UpdateAmountLimit',
-      ($0.UpdateAmountLimitRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $1.Empty.fromBuffer(value));
+      ($1.UpdateAmountLimitRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$addAccessFunction = $grpc.ClientMethod<$1.AddRemoveAccessFunctionRequest, $0.Empty>(
+      '/usrpb.UsrAccessService/AddAccessFunction',
+      ($1.AddRemoveAccessFunctionRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$removeAccessFunction = $grpc.ClientMethod<$1.AddRemoveAccessFunctionRequest, $0.Empty>(
+      '/usrpb.UsrAccessService/RemoveAccessFunction',
+      ($1.AddRemoveAccessFunctionRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$listAccessPage = $grpc.ClientMethod<$1.ListAccessPageRequest, $1.ListAccessPageResponse>(
+      '/usrpb.UsrAccessService/ListAccessPage',
+      ($1.ListAccessPageRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.ListAccessPageResponse.fromBuffer(value));
+  static final _$saveAccessPage = $grpc.ClientMethod<$1.SaveAccessPageRequest, $0.Empty>(
+      '/usrpb.UsrAccessService/SaveAccessPage',
+      ($1.SaveAccessPageRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$updateAccountAccess = $grpc.ClientMethod<$0.Empty, $0.Empty>(
+      '/usrpb.UsrAccessService/UpdateAccountAccess',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
 
   UsrAccessServiceClient(super.channel, {super.options, super.interceptors});
 
-  $grpc.ResponseFuture<$0.ListUsrAccessResponse> listUsrAccess($0.ListUsrAccessRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$listUsrAccess, request, options: options);
+  $grpc.ResponseFuture<$1.ListRolePageResponse> listRolePage($0.Empty request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$listRolePage, request, options: options);
   }
 
-  $grpc.ResponseFuture<$1.Empty> updateAmountLimit($0.UpdateAmountLimitRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$1.ListAccessFunctionResponse> listRoleAccessFunction($1.ListRoleAccessFunctionRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$listRoleAccessFunction, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$1.ListAccessFunctionResponse> listAccessFunction($1.ListAccessFunctionRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$listAccessFunction, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> updateAmountLimit($1.UpdateAmountLimitRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$updateAmountLimit, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> addAccessFunction($1.AddRemoveAccessFunctionRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$addAccessFunction, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> removeAccessFunction($1.AddRemoveAccessFunctionRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$removeAccessFunction, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$1.ListAccessPageResponse> listAccessPage($1.ListAccessPageRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$listAccessPage, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> saveAccessPage($1.SaveAccessPageRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$saveAccessPage, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> updateAccountAccess($0.Empty request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$updateAccountAccess, request, options: options);
   }
 }
 
@@ -56,30 +112,114 @@ abstract class UsrAccessServiceBase extends $grpc.Service {
   $core.String get $name => 'usrpb.UsrAccessService';
 
   UsrAccessServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.ListUsrAccessRequest, $0.ListUsrAccessResponse>(
-        'ListUsrAccess',
-        listUsrAccess_Pre,
+    $addMethod($grpc.ServiceMethod<$0.Empty, $1.ListRolePageResponse>(
+        'ListRolePage',
+        listRolePage_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.ListUsrAccessRequest.fromBuffer(value),
-        ($0.ListUsrAccessResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.UpdateAmountLimitRequest, $1.Empty>(
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($1.ListRolePageResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.ListRoleAccessFunctionRequest, $1.ListAccessFunctionResponse>(
+        'ListRoleAccessFunction',
+        listRoleAccessFunction_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.ListRoleAccessFunctionRequest.fromBuffer(value),
+        ($1.ListAccessFunctionResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.ListAccessFunctionRequest, $1.ListAccessFunctionResponse>(
+        'ListAccessFunction',
+        listAccessFunction_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.ListAccessFunctionRequest.fromBuffer(value),
+        ($1.ListAccessFunctionResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.UpdateAmountLimitRequest, $0.Empty>(
         'UpdateAmountLimit',
         updateAmountLimit_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.UpdateAmountLimitRequest.fromBuffer(value),
-        ($1.Empty value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $1.UpdateAmountLimitRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.AddRemoveAccessFunctionRequest, $0.Empty>(
+        'AddAccessFunction',
+        addAccessFunction_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.AddRemoveAccessFunctionRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.AddRemoveAccessFunctionRequest, $0.Empty>(
+        'RemoveAccessFunction',
+        removeAccessFunction_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.AddRemoveAccessFunctionRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.ListAccessPageRequest, $1.ListAccessPageResponse>(
+        'ListAccessPage',
+        listAccessPage_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.ListAccessPageRequest.fromBuffer(value),
+        ($1.ListAccessPageResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.SaveAccessPageRequest, $0.Empty>(
+        'SaveAccessPage',
+        saveAccessPage_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.SaveAccessPageRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
+        'UpdateAccountAccess',
+        updateAccountAccess_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.ListUsrAccessResponse> listUsrAccess_Pre($grpc.ServiceCall $call, $async.Future<$0.ListUsrAccessRequest> $request) async {
-    return listUsrAccess($call, await $request);
+  $async.Future<$1.ListRolePageResponse> listRolePage_Pre($grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return listRolePage($call, await $request);
   }
 
-  $async.Future<$1.Empty> updateAmountLimit_Pre($grpc.ServiceCall $call, $async.Future<$0.UpdateAmountLimitRequest> $request) async {
+  $async.Future<$1.ListAccessFunctionResponse> listRoleAccessFunction_Pre($grpc.ServiceCall $call, $async.Future<$1.ListRoleAccessFunctionRequest> $request) async {
+    return listRoleAccessFunction($call, await $request);
+  }
+
+  $async.Future<$1.ListAccessFunctionResponse> listAccessFunction_Pre($grpc.ServiceCall $call, $async.Future<$1.ListAccessFunctionRequest> $request) async {
+    return listAccessFunction($call, await $request);
+  }
+
+  $async.Future<$0.Empty> updateAmountLimit_Pre($grpc.ServiceCall $call, $async.Future<$1.UpdateAmountLimitRequest> $request) async {
     return updateAmountLimit($call, await $request);
   }
 
-  $async.Future<$0.ListUsrAccessResponse> listUsrAccess($grpc.ServiceCall call, $0.ListUsrAccessRequest request);
-  $async.Future<$1.Empty> updateAmountLimit($grpc.ServiceCall call, $0.UpdateAmountLimitRequest request);
+  $async.Future<$0.Empty> addAccessFunction_Pre($grpc.ServiceCall $call, $async.Future<$1.AddRemoveAccessFunctionRequest> $request) async {
+    return addAccessFunction($call, await $request);
+  }
+
+  $async.Future<$0.Empty> removeAccessFunction_Pre($grpc.ServiceCall $call, $async.Future<$1.AddRemoveAccessFunctionRequest> $request) async {
+    return removeAccessFunction($call, await $request);
+  }
+
+  $async.Future<$1.ListAccessPageResponse> listAccessPage_Pre($grpc.ServiceCall $call, $async.Future<$1.ListAccessPageRequest> $request) async {
+    return listAccessPage($call, await $request);
+  }
+
+  $async.Future<$0.Empty> saveAccessPage_Pre($grpc.ServiceCall $call, $async.Future<$1.SaveAccessPageRequest> $request) async {
+    return saveAccessPage($call, await $request);
+  }
+
+  $async.Future<$0.Empty> updateAccountAccess_Pre($grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return updateAccountAccess($call, await $request);
+  }
+
+  $async.Future<$1.ListRolePageResponse> listRolePage($grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$1.ListAccessFunctionResponse> listRoleAccessFunction($grpc.ServiceCall call, $1.ListRoleAccessFunctionRequest request);
+  $async.Future<$1.ListAccessFunctionResponse> listAccessFunction($grpc.ServiceCall call, $1.ListAccessFunctionRequest request);
+  $async.Future<$0.Empty> updateAmountLimit($grpc.ServiceCall call, $1.UpdateAmountLimitRequest request);
+  $async.Future<$0.Empty> addAccessFunction($grpc.ServiceCall call, $1.AddRemoveAccessFunctionRequest request);
+  $async.Future<$0.Empty> removeAccessFunction($grpc.ServiceCall call, $1.AddRemoveAccessFunctionRequest request);
+  $async.Future<$1.ListAccessPageResponse> listAccessPage($grpc.ServiceCall call, $1.ListAccessPageRequest request);
+  $async.Future<$0.Empty> saveAccessPage($grpc.ServiceCall call, $1.SaveAccessPageRequest request);
+  $async.Future<$0.Empty> updateAccountAccess($grpc.ServiceCall call, $0.Empty request);
 }

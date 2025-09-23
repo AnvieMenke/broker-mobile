@@ -10,13 +10,15 @@ class OtpVerificationPage extends StatefulWidget {
   final String password;
   final String sessionKey;
   final String authenticationMode;
+  final String correspondent;
 
   const OtpVerificationPage(
       {super.key,
-        required this.email,
-        required this.password,
-        required this.sessionKey,
-        required this.authenticationMode});
+      required this.email,
+      required this.password,
+      required this.sessionKey,
+      required this.authenticationMode,
+      required this.correspondent});
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();
@@ -99,16 +101,26 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         authCode: otp,
         authenticationMode: widget.authenticationMode,
         sessionKey: widget.sessionKey,
+        correspondent: widget.correspondent,
       );
       setState(() => _verifying = false);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreen()),
+        );
+      });
     } catch (e) {
       setState(() {
         _verifying = false;
-        _error = e.toString(); // show real error
+        _error = (e is Map && e['message'] != null)
+            ? e['message']
+            : (e.toString().contains('gRPC Error')
+                ? RegExp(r'message: ([^,]+)')
+                    .firstMatch(e.toString())
+                    ?.group(1)
+                    ?.trim()
+                : e.toString());
       });
       debugPrint("OTP Verification Error: $e");
     }
@@ -132,7 +144,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 style: const TextStyle(color: Colors.white, fontSize: 16),
               ),
               const SizedBox(height: 8),
-
               Text(
                 _remainingSeconds > 0
                     ? "Expires in ${_formatTime(_remainingSeconds)}"
@@ -142,7 +153,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   fontSize: 14,
                 ),
               ),
-
               const SizedBox(height: 16),
               TextField(
                 controller: _otpController,
@@ -164,9 +174,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 Text(_error!, style: const TextStyle(color: Colors.redAccent)),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: (_verifying || _remainingSeconds <= 0)
-                    ? null
-                    : _verifyOtp,
+                onPressed:
+                    (_verifying || _remainingSeconds <= 0) ? null : _verifyOtp,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   padding: const EdgeInsets.symmetric(vertical: 14),
@@ -177,9 +186,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     ? const CircularProgressIndicator(color: Colors.white)
                     : const Text('Verify'),
               ),
-
               const SizedBox(height: 20),
-
               TextButton.icon(
                 onPressed: () {
                   Navigator.pushReplacement(
