@@ -20,7 +20,7 @@ import 'request.pb.dart' as $0;
 
 export 'request.pb.dart';
 
-@$pb.GrpcServiceName('proto.RequestService')
+@$pb.GrpcServiceName('bankpb.RequestService')
 class RequestServiceClient extends $grpc.Client {
   /// The hostname for this service.
   static const $core.String defaultHost = '';
@@ -31,31 +31,31 @@ class RequestServiceClient extends $grpc.Client {
   ];
 
   static final _$create = $grpc.ClientMethod<$0.CreateRequest, $0.CreateResponse>(
-      '/proto.RequestService/Create',
+      '/bankpb.RequestService/Create',
       ($0.CreateRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.CreateResponse.fromBuffer(value));
   static final _$update = $grpc.ClientMethod<$0.UpdateRequest, $0.UpdateResponse>(
-      '/proto.RequestService/Update',
+      '/bankpb.RequestService/Update',
       ($0.UpdateRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.UpdateResponse.fromBuffer(value));
   static final _$read = $grpc.ClientMethod<$0.ReadRequest, $0.ReadResponse>(
-      '/proto.RequestService/Read',
+      '/bankpb.RequestService/Read',
       ($0.ReadRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ReadResponse.fromBuffer(value));
   static final _$list = $grpc.ClientMethod<$0.ListRequest, $0.ListResponse>(
-      '/proto.RequestService/List',
+      '/bankpb.RequestService/List',
       ($0.ListRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ListResponse.fromBuffer(value));
   static final _$listRequestAudit = $grpc.ClientMethod<$0.ListRequestAuditRequest, $0.ListRequestAuditResponse>(
-      '/proto.RequestService/ListRequestAudit',
+      '/bankpb.RequestService/ListRequestAudit',
       ($0.ListRequestAuditRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ListRequestAuditResponse.fromBuffer(value));
   static final _$readMaximumWithdrawable = $grpc.ClientMethod<$0.ReadMaximumWithdrawableRequest, $0.ReadMaximumWithdrawableResponse>(
-      '/proto.RequestService/ReadMaximumWithdrawable',
+      '/bankpb.RequestService/ReadMaximumWithdrawable',
       ($0.ReadMaximumWithdrawableRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ReadMaximumWithdrawableResponse.fromBuffer(value));
   static final _$getFee = $grpc.ClientMethod<$0.GetFeeRequest, $0.GetFeeResponse>(
-      '/proto.RequestService/GetFee',
+      '/bankpb.RequestService/GetFee',
       ($0.GetFeeRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.GetFeeResponse.fromBuffer(value));
 
@@ -90,9 +90,9 @@ class RequestServiceClient extends $grpc.Client {
   }
 }
 
-@$pb.GrpcServiceName('proto.RequestService')
+@$pb.GrpcServiceName('bankpb.RequestService')
 abstract class RequestServiceBase extends $grpc.Service {
-  $core.String get $name => 'proto.RequestService';
+  $core.String get $name => 'bankpb.RequestService';
 
   RequestServiceBase() {
     $addMethod($grpc.ServiceMethod<$0.CreateRequest, $0.CreateResponse>(

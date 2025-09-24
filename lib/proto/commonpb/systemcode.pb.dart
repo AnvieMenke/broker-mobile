@@ -22,18 +22,12 @@ class SystemCode extends $pb.GeneratedMessage {
     $core.String? description,
     $core.String? subType,
     $core.String? note,
-    $core.String? note2,
-    $core.String? systemRef,
-    $core.String? type,
   }) {
     final result = create();
     if (code != null) result.code = code;
     if (description != null) result.description = description;
     if (subType != null) result.subType = subType;
     if (note != null) result.note = note;
-    if (note2 != null) result.note2 = note2;
-    if (systemRef != null) result.systemRef = systemRef;
-    if (type != null) result.type = type;
     return result;
   }
 
@@ -47,9 +41,6 @@ class SystemCode extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'description')
     ..aOS(3, _omitFieldNames ? '' : 'subType')
     ..aOS(4, _omitFieldNames ? '' : 'note')
-    ..aOS(5, _omitFieldNames ? '' : 'note2')
-    ..aOS(6, _omitFieldNames ? '' : 'systemRef')
-    ..aOS(7, _omitFieldNames ? '' : 'type')
     ..hasRequiredFields = false
   ;
 
@@ -105,33 +96,6 @@ class SystemCode extends $pb.GeneratedMessage {
   $core.bool hasNote() => $_has(3);
   @$pb.TagNumber(4)
   void clearNote() => $_clearField(4);
-
-  @$pb.TagNumber(5)
-  $core.String get note2 => $_getSZ(4);
-  @$pb.TagNumber(5)
-  set note2($core.String value) => $_setString(4, value);
-  @$pb.TagNumber(5)
-  $core.bool hasNote2() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearNote2() => $_clearField(5);
-
-  @$pb.TagNumber(6)
-  $core.String get systemRef => $_getSZ(5);
-  @$pb.TagNumber(6)
-  set systemRef($core.String value) => $_setString(5, value);
-  @$pb.TagNumber(6)
-  $core.bool hasSystemRef() => $_has(5);
-  @$pb.TagNumber(6)
-  void clearSystemRef() => $_clearField(6);
-
-  @$pb.TagNumber(7)
-  $core.String get type => $_getSZ(6);
-  @$pb.TagNumber(7)
-  set type($core.String value) => $_setString(6, value);
-  @$pb.TagNumber(7)
-  $core.bool hasType() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearType() => $_clearField(7);
 }
 
 class LazySystemCodeRequest extends $pb.GeneratedMessage {

@@ -175,31 +175,6 @@ final $typed_data.Uint8List listSubAccountNoRequestDescriptor = $convert.base64D
     'ChdMaXN0U3ViQWNjb3VudE5vUmVxdWVzdBIdCgphY2NvdW50X25vGAEgASgJUglhY2NvdW50Tm'
     '8SEAoDa2V5GAIgASgJUgNrZXkSFAoFbGltaXQYAyABKA1SBWxpbWl0');
 
-@$core.Deprecated('Use signetWalletDescriptor instead')
-const SignetWallet$json = {
-  '1': 'SignetWallet',
-  '2': [
-    {'1': 'bank_account', '3': 1, '4': 1, '5': 9, '10': 'bankAccount'},
-  ],
-};
-
-/// Descriptor for `SignetWallet`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List signetWalletDescriptor = $convert.base64Decode(
-    'CgxTaWduZXRXYWxsZXQSIQoMYmFua19hY2NvdW50GAEgASgJUgtiYW5rQWNjb3VudA==');
-
-@$core.Deprecated('Use listSignetWalletResponseDescriptor instead')
-const ListSignetWalletResponse$json = {
-  '1': 'ListSignetWalletResponse',
-  '2': [
-    {'1': 'signet_wallets', '3': 1, '4': 3, '5': 11, '6': '.commonpb.SignetWallet', '10': 'signetWallets'},
-  ],
-};
-
-/// Descriptor for `ListSignetWalletResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listSignetWalletResponseDescriptor = $convert.base64Decode(
-    'ChhMaXN0U2lnbmV0V2FsbGV0UmVzcG9uc2USPQoOc2lnbmV0X3dhbGxldHMYASADKAsyFi5jb2'
-    '1tb25wYi5TaWduZXRXYWxsZXRSDXNpZ25ldFdhbGxldHM=');
-
 @$core.Deprecated('Use houseAccountDescriptor instead')
 const HouseAccount$json = {
   '1': 'HouseAccount',
@@ -413,6 +388,10 @@ const BankAccount$json = {
     {'1': 'wire_routing_no', '3': 4, '4': 1, '5': 9, '10': 'wireRoutingNo'},
     {'1': 'bank_account_no', '3': 5, '4': 1, '5': 9, '10': 'bankAccountNo'},
     {'1': 'bank_account_type', '3': 6, '4': 1, '5': 9, '10': 'bankAccountType'},
+    {'1': 'is_international', '3': 7, '4': 1, '5': 8, '10': 'isInternational'},
+    {'1': 'ach', '3': 8, '4': 1, '5': 8, '10': 'ach'},
+    {'1': 'wire', '3': 9, '4': 1, '5': 8, '10': 'wire'},
+    {'1': 'check', '3': 10, '4': 1, '5': 8, '10': 'check'},
   ],
 };
 
@@ -422,7 +401,8 @@ final $typed_data.Uint8List bankAccountDescriptor = $convert.base64Decode(
     'gJUghiYW5rTmFtZRIkCg5hY2hfcm91dGluZ19ubxgDIAEoCVIMYWNoUm91dGluZ05vEiYKD3dp'
     'cmVfcm91dGluZ19ubxgEIAEoCVINd2lyZVJvdXRpbmdObxImCg9iYW5rX2FjY291bnRfbm8YBS'
     'ABKAlSDWJhbmtBY2NvdW50Tm8SKgoRYmFua19hY2NvdW50X3R5cGUYBiABKAlSD2JhbmtBY2Nv'
-    'dW50VHlwZQ==');
+    'dW50VHlwZRIpChBpc19pbnRlcm5hdGlvbmFsGAcgASgIUg9pc0ludGVybmF0aW9uYWwSEAoDYW'
+    'NoGAggASgIUgNhY2gSEgoEd2lyZRgJIAEoCFIEd2lyZRIUCgVjaGVjaxgKIAEoCFIFY2hlY2s=');
 
 @$core.Deprecated('Use listBankAccountResponseDescriptor instead')
 const ListBankAccountResponse$json = {

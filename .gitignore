@@ -51,3 +51,13 @@ app.*.map.json
 
 android/app/build/
 ios/Flutter/build/
+
+# Ignore generated plugin registrants and build artifacts
+macos/Flutter/*
+!macos/Flutter/CMakeLists.txt
+
+windows/flutter/*
+!windows/flutter/CMakeLists.txt
+
+linux/flutter/*
+!linux/flutter/CMakeLists.txt

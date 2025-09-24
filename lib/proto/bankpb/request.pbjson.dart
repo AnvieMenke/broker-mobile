@@ -214,14 +214,14 @@ final $typed_data.Uint8List createRequestDescriptor = $convert.base64Decode(
 const CreateResponse$json = {
   '1': 'CreateResponse',
   '2': [
-    {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.proto.Request', '10': 'request'},
+    {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.bankpb.Request', '10': 'request'},
   ],
 };
 
 /// Descriptor for `CreateResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createResponseDescriptor = $convert.base64Decode(
-    'Cg5DcmVhdGVSZXNwb25zZRIoCgdyZXF1ZXN0GAEgASgLMg4ucHJvdG8uUmVxdWVzdFIHcmVxdW'
-    'VzdA==');
+    'Cg5DcmVhdGVSZXNwb25zZRIpCgdyZXF1ZXN0GAEgASgLMg8uYmFua3BiLlJlcXVlc3RSB3JlcX'
+    'Vlc3Q=');
 
 @$core.Deprecated('Use updateRequestDescriptor instead')
 const UpdateRequest$json = {
@@ -278,14 +278,14 @@ final $typed_data.Uint8List updateRequestDescriptor = $convert.base64Decode(
 const UpdateResponse$json = {
   '1': 'UpdateResponse',
   '2': [
-    {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.proto.Request', '10': 'request'},
+    {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.bankpb.Request', '10': 'request'},
   ],
 };
 
 /// Descriptor for `UpdateResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List updateResponseDescriptor = $convert.base64Decode(
-    'Cg5VcGRhdGVSZXNwb25zZRIoCgdyZXF1ZXN0GAEgASgLMg4ucHJvdG8uUmVxdWVzdFIHcmVxdW'
-    'VzdA==');
+    'Cg5VcGRhdGVSZXNwb25zZRIpCgdyZXF1ZXN0GAEgASgLMg8uYmFua3BiLlJlcXVlc3RSB3JlcX'
+    'Vlc3Q=');
 
 @$core.Deprecated('Use readRequestDescriptor instead')
 const ReadRequest$json = {
@@ -305,14 +305,14 @@ final $typed_data.Uint8List readRequestDescriptor = $convert.base64Decode(
 const ReadResponse$json = {
   '1': 'ReadResponse',
   '2': [
-    {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.proto.Request', '10': 'request'},
+    {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.bankpb.Request', '10': 'request'},
   ],
 };
 
 /// Descriptor for `ReadResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List readResponseDescriptor = $convert.base64Decode(
-    'CgxSZWFkUmVzcG9uc2USKAoHcmVxdWVzdBgBIAEoCzIOLnByb3RvLlJlcXVlc3RSB3JlcXVlc3'
-    'Q=');
+    'CgxSZWFkUmVzcG9uc2USKQoHcmVxdWVzdBgBIAEoCzIPLmJhbmtwYi5SZXF1ZXN0UgdyZXF1ZX'
+    'N0');
 
 @$core.Deprecated('Use listRequestDescriptor instead')
 const ListRequest$json = {
@@ -430,15 +430,15 @@ final $typed_data.Uint8List listSummaryDescriptor = $convert.base64Decode(
 const ListResponse$json = {
   '1': 'ListResponse',
   '2': [
-    {'1': 'requests', '3': 1, '4': 3, '5': 11, '6': '.proto.Request', '10': 'requests'},
-    {'1': 'summary', '3': 2, '4': 1, '5': 11, '6': '.proto.ListSummary', '10': 'summary'},
+    {'1': 'requests', '3': 1, '4': 3, '5': 11, '6': '.bankpb.Request', '10': 'requests'},
+    {'1': 'summary', '3': 2, '4': 1, '5': 11, '6': '.bankpb.ListSummary', '10': 'summary'},
   ],
 };
 
 /// Descriptor for `ListResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List listResponseDescriptor = $convert.base64Decode(
-    'CgxMaXN0UmVzcG9uc2USKgoIcmVxdWVzdHMYASADKAsyDi5wcm90by5SZXF1ZXN0UghyZXF1ZX'
-    'N0cxIsCgdzdW1tYXJ5GAIgASgLMhIucHJvdG8uTGlzdFN1bW1hcnlSB3N1bW1hcnk=');
+    'CgxMaXN0UmVzcG9uc2USKwoIcmVxdWVzdHMYASADKAsyDy5iYW5rcGIuUmVxdWVzdFIIcmVxdW'
+    'VzdHMSLQoHc3VtbWFyeRgCIAEoCzITLmJhbmtwYi5MaXN0U3VtbWFyeVIHc3VtbWFyeQ==');
 
 @$core.Deprecated('Use listRequestAuditRequestDescriptor instead')
 const ListRequestAuditRequest$json = {
@@ -457,14 +457,14 @@ final $typed_data.Uint8List listRequestAuditRequestDescriptor = $convert.base64D
 const ListRequestAuditResponse$json = {
   '1': 'ListRequestAuditResponse',
   '2': [
-    {'1': 'request', '3': 1, '4': 3, '5': 11, '6': '.proto.Request', '10': 'request'},
+    {'1': 'request', '3': 1, '4': 3, '5': 11, '6': '.bankpb.Request', '10': 'request'},
   ],
 };
 
 /// Descriptor for `ListRequestAuditResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List listRequestAuditResponseDescriptor = $convert.base64Decode(
-    'ChhMaXN0UmVxdWVzdEF1ZGl0UmVzcG9uc2USKAoHcmVxdWVzdBgBIAMoCzIOLnByb3RvLlJlcX'
-    'Vlc3RSB3JlcXVlc3Q=');
+    'ChhMaXN0UmVxdWVzdEF1ZGl0UmVzcG9uc2USKQoHcmVxdWVzdBgBIAMoCzIPLmJhbmtwYi5SZX'
+    'F1ZXN0UgdyZXF1ZXN0');
 
 @$core.Deprecated('Use readMaximumWithdrawableRequestDescriptor instead')
 const ReadMaximumWithdrawableRequest$json = {

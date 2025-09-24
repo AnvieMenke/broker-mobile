@@ -17,9 +17,9 @@ import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import '../../google/protobuf/empty.pb.dart' as $0;
-import 'access.pb.dart' as $1;
+import 'usraccess.pb.dart' as $1;
 
-export 'access.pb.dart';
+export 'usraccess.pb.dart';
 
 @$pb.GrpcServiceName('usrpb.UsrAccessService')
 class UsrAccessServiceClient extends $grpc.Client {

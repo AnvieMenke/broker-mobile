@@ -652,92 +652,6 @@ class ListSubAccountNoRequest extends $pb.GeneratedMessage {
   void clearLimit() => $_clearField(3);
 }
 
-class SignetWallet extends $pb.GeneratedMessage {
-  factory SignetWallet({
-    $core.String? bankAccount,
-  }) {
-    final result = create();
-    if (bankAccount != null) result.bankAccount = bankAccount;
-    return result;
-  }
-
-  SignetWallet._();
-
-  factory SignetWallet.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory SignetWallet.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SignetWallet', package: const $pb.PackageName(_omitMessageNames ? '' : 'commonpb'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'bankAccount')
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  SignetWallet clone() => SignetWallet()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  SignetWallet copyWith(void Function(SignetWallet) updates) => super.copyWith((message) => updates(message as SignetWallet)) as SignetWallet;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static SignetWallet create() => SignetWallet._();
-  @$core.override
-  SignetWallet createEmptyInstance() => create();
-  static $pb.PbList<SignetWallet> createRepeated() => $pb.PbList<SignetWallet>();
-  @$core.pragma('dart2js:noInline')
-  static SignetWallet getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SignetWallet>(create);
-  static SignetWallet? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get bankAccount => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set bankAccount($core.String value) => $_setString(0, value);
-  @$pb.TagNumber(1)
-  $core.bool hasBankAccount() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearBankAccount() => $_clearField(1);
-}
-
-class ListSignetWalletResponse extends $pb.GeneratedMessage {
-  factory ListSignetWalletResponse({
-    $core.Iterable<SignetWallet>? signetWallets,
-  }) {
-    final result = create();
-    if (signetWallets != null) result.signetWallets.addAll(signetWallets);
-    return result;
-  }
-
-  ListSignetWalletResponse._();
-
-  factory ListSignetWalletResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory ListSignetWalletResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListSignetWalletResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'commonpb'), createEmptyInstance: create)
-    ..pc<SignetWallet>(1, _omitFieldNames ? '' : 'signetWallets', $pb.PbFieldType.PM, subBuilder: SignetWallet.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSignetWalletResponse clone() => ListSignetWalletResponse()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSignetWalletResponse copyWith(void Function(ListSignetWalletResponse) updates) => super.copyWith((message) => updates(message as ListSignetWalletResponse)) as ListSignetWalletResponse;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static ListSignetWalletResponse create() => ListSignetWalletResponse._();
-  @$core.override
-  ListSignetWalletResponse createEmptyInstance() => create();
-  static $pb.PbList<ListSignetWalletResponse> createRepeated() => $pb.PbList<ListSignetWalletResponse>();
-  @$core.pragma('dart2js:noInline')
-  static ListSignetWalletResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListSignetWalletResponse>(create);
-  static ListSignetWalletResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $pb.PbList<SignetWallet> get signetWallets => $_getList(0);
-}
-
 class HouseAccount extends $pb.GeneratedMessage {
   factory HouseAccount({
     $core.String? houseAccount,
@@ -1604,6 +1518,10 @@ class BankAccount extends $pb.GeneratedMessage {
     $core.String? wireRoutingNo,
     $core.String? bankAccountNo,
     $core.String? bankAccountType,
+    $core.bool? isInternational,
+    $core.bool? ach,
+    $core.bool? wire,
+    $core.bool? check_10,
   }) {
     final result = create();
     if (bankId != null) result.bankId = bankId;
@@ -1612,6 +1530,10 @@ class BankAccount extends $pb.GeneratedMessage {
     if (wireRoutingNo != null) result.wireRoutingNo = wireRoutingNo;
     if (bankAccountNo != null) result.bankAccountNo = bankAccountNo;
     if (bankAccountType != null) result.bankAccountType = bankAccountType;
+    if (isInternational != null) result.isInternational = isInternational;
+    if (ach != null) result.ach = ach;
+    if (wire != null) result.wire = wire;
+    if (check_10 != null) result.check_10 = check_10;
     return result;
   }
 
@@ -1627,6 +1549,10 @@ class BankAccount extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'wireRoutingNo')
     ..aOS(5, _omitFieldNames ? '' : 'bankAccountNo')
     ..aOS(6, _omitFieldNames ? '' : 'bankAccountType')
+    ..aOB(7, _omitFieldNames ? '' : 'isInternational')
+    ..aOB(8, _omitFieldNames ? '' : 'ach')
+    ..aOB(9, _omitFieldNames ? '' : 'wire')
+    ..aOB(10, _omitFieldNames ? '' : 'check')
     ..hasRequiredFields = false
   ;
 
@@ -1700,6 +1626,42 @@ class BankAccount extends $pb.GeneratedMessage {
   $core.bool hasBankAccountType() => $_has(5);
   @$pb.TagNumber(6)
   void clearBankAccountType() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.bool get isInternational => $_getBF(6);
+  @$pb.TagNumber(7)
+  set isInternational($core.bool value) => $_setBool(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasIsInternational() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearIsInternational() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.bool get ach => $_getBF(7);
+  @$pb.TagNumber(8)
+  set ach($core.bool value) => $_setBool(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasAch() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearAch() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.bool get wire => $_getBF(8);
+  @$pb.TagNumber(9)
+  set wire($core.bool value) => $_setBool(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasWire() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearWire() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.bool get check_10 => $_getBF(9);
+  @$pb.TagNumber(10)
+  set check_10($core.bool value) => $_setBool(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasCheck_10() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearCheck_10() => $_clearField(10);
 }
 
 class ListBankAccountResponse extends $pb.GeneratedMessage {
