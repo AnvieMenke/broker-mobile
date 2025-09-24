@@ -1,4 +1,4 @@
-import 'package:broker_mobile/proto/usrpb/access.pbgrpc.dart';
+import 'package:broker_mobile/proto/usrpb/usraccess.pbgrpc.dart';
 import '../server/auth_interceptor.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import 'package:protobuf/protobuf.dart';
