@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
+import '../../../components/dropdowns/select_account_no.dart';
 import '../../../service/ach_wire_service.dart';
 import '../../../service/convert_service.dart';
 import '../../../service/profile_service.dart';
@@ -20,15 +21,14 @@ class _AchWireListState extends State<AchWireList> {
     "accountNo": "",
     "bankAccountId": "",
     "bank": "",
-    "amt": 0.0,
-    "fee": 0.0,
     "requestType": "",
     "transferType": "",
-    "isInternational": false,
     "broker": "",
     "status": "",
     "requestId": 0,
   };
+
+  late final ValueNotifier<int> queryDataNotifier;
 
   GridPagination pagination = GridPagination(
     pageNo: 0,
@@ -40,6 +40,7 @@ class _AchWireListState extends State<AchWireList> {
   @override
   void initState() {
     super.initState();
+    queryDataNotifier = ValueNotifier(0);
     init();
   }
 
@@ -53,21 +54,22 @@ class _AchWireListState extends State<AchWireList> {
     });
   }
 
+  void _updateQueryData() {
+    queryDataNotifier.value++;
+  }
+
   Future<List<GridItem>> _fetchRequests() async {
     final achWireService = AchWireService();
-
     final resp = await achWireService.listBankRequest(queryData, {
       'pageNo': pagination.pageNo,
       'rowsPerPage': pagination.rowsPerPage,
     });
-
     setState(() {
       pagination = pagination.copyWith(
         totalRows: resp.summary.totalRows,
         reload: false,
       );
     });
-
     return resp.requests.map((e) {
       return GridItem.fromMap({
         "title": "Bank Account:\n${e.bankAccountNo}\n",
@@ -197,6 +199,127 @@ class _AchWireListState extends State<AchWireList> {
     });
   }
 
+  void _openFilterDialog() {
+    String selectedAccountNo = queryData["accountNo"];
+    DateTime? selectedFromDate =
+        ConvertService.stringToDate(queryData["fromDate"]);
+    DateTime? selectedToDate = ConvertService.stringToDate(queryData["toDate"]);
+    debugPrint(selectedToDate.toString());
+    showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text("Filter by:"),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              Future<void> pickDate({required bool isFrom}) async {
+                final DateTime? picked = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                );
+                if (picked != null) {
+                  setState(() {
+                    if (isFrom) {
+                      selectedFromDate = picked;
+                    } else {
+                      selectedToDate = picked;
+                    }
+                  });
+                }
+              }
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => pickDate(isFrom: true),
+                          child: InputDecorator(
+                            decoration: const InputDecoration(
+                              labelText: "From Date",
+                              border: OutlineInputBorder(),
+                            ),
+                            child: Text(
+                              selectedFromDate != null
+                                  ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
+                                  : "Select date",
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => pickDate(isFrom: false),
+                          child: InputDecorator(
+                            decoration: const InputDecoration(
+                              labelText: "To Date",
+                              border: OutlineInputBorder(),
+                            ),
+                            child: Text(
+                              selectedToDate != null
+                                  ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
+                                  : "Select date",
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  AutoCompleteAccountNo(
+                    name: "accountNo",
+                    value: selectedAccountNo,
+                    isAllStatus: true,
+                    correspondent: queryData["correspondent"],
+                    type: "Client",
+                    onChange: (map) => setState(() {
+                      selectedAccountNo = map['data']['accountNo'];
+                    }),
+                  ),
+                ],
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  queryData["accountNo"] = selectedAccountNo;
+                  queryData["fromDate"] =
+                      ConvertService.dateToString(selectedFromDate);
+                  queryData["toDate"] =
+                      ConvertService.dateToString(selectedToDate);
+                  _updateQueryData();
+                });
+                Navigator.pop(context, true);
+              },
+              child: const Text("Search"),
+            ),
+          ],
+        );
+      },
+    ).then((value) {
+      if (value == true) {
+        setState(() {
+          _futureRequests = _fetchRequests();
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_futureRequests == null) {
@@ -209,7 +332,6 @@ class _AchWireListState extends State<AchWireList> {
       future: _futureRequests,
       builder: (context, snapshot) {
         Widget body;
-
         if (snapshot.connectionState == ConnectionState.waiting) {
           body = const Center(child: CircularProgressIndicator());
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -241,7 +363,6 @@ class _AchWireListState extends State<AchWireList> {
                       final Map<String, dynamic> formData = {
                         for (var f in item.fields) f.keyName: f.value,
                       };
-
                       Navigator.push(
                         ctx,
                         MaterialPageRoute(
@@ -267,14 +388,64 @@ class _AchWireListState extends State<AchWireList> {
         return Scaffold(
           appBar: AppBar(
             title: const Text('ACH/Wire Requests'),
-            actions: const [
-              Icon(Icons.search),
-              SizedBox(width: 16),
-              Icon(Icons.menu),
-              SizedBox(width: 16),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  _openFilterDialog();
+                },
+              ),
+              const SizedBox(width: 16),
             ],
           ),
-          body: body,
+          body: Column(
+            children: [
+              ValueListenableBuilder(
+                valueListenable: queryDataNotifier,
+                builder: (_, __, ___) {
+                  final activeFilters = queryData.entries
+                      .where((e) =>
+                          e.value != null &&
+                          e.value.toString().isNotEmpty &&
+                          e.value.toString() != "0")
+                      .toList();
+
+                  if (activeFilters.isEmpty) return const SizedBox.shrink();
+
+                  return Container(
+                    width: double.infinity,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: activeFilters.map((entry) {
+                        return Chip(
+                          label: Text(
+                            "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                          ),
+                          deleteIcon: entry.key.toLowerCase().contains("date")
+                              ? null
+                              : const Icon(Icons.close),
+                          onDeleted: entry.key.toLowerCase().contains("date")
+                              ? null
+                              : () {
+                                  setState(() {
+                                    queryData[entry.key] =
+                                        entry.value is bool ? false : "";
+                                    _updateQueryData();
+                                    _futureRequests = _fetchRequests();
+                                  });
+                                },
+                        );
+                      }).toList(),
+                    ),
+                  );
+                },
+              ),
+              Expanded(child: body),
+            ],
+          ),
         );
       },
     );

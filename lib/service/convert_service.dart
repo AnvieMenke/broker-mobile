@@ -46,4 +46,38 @@ class ConvertService {
     }
     return false;
   }
+
+  static String camelToTitle(String value) {
+    if (value.isEmpty) return value;
+    final result = value.replaceAllMapped(
+      RegExp(r'([a-z])([A-Z])'),
+      (match) => '${match.group(1)} ${match.group(2)}',
+    );
+    return result[0].toUpperCase() + result.substring(1);
+  }
+
+  static DateTime? stringToDate(String value) {
+    if (value.isEmpty) return null;
+    try {
+      final parts = value.split('-');
+      if (parts.length != 3) return null;
+      final year = int.tryParse(parts[0]);
+      final month = int.tryParse(parts[1]);
+      final day = int.tryParse(parts[2]);
+
+      if (month == null || day == null || year == null) return null;
+
+      return DateTime(year, month, day); // always midnight
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static String dateToString(DateTime? date) {
+    if (date == null) return '';
+    final mm = date.month.toString().padLeft(2, '0');
+    final dd = date.day.toString().padLeft(2, '0');
+    final yyyy = date.year.toString();
+    return "$yyyy-$mm-$dd";
+  }
 }
