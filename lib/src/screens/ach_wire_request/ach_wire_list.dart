@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
 import '../../../components/dropdowns/select_account_no.dart';
+import '../../../components/dropdowns/select_correspondent.dart';
+import '../../../components/dropdowns/select_system_code.dart';
+import '../../../components/dropdowns/select_master_account_no.dart';
+import '../../../components/messages/notification.dart';
 import '../../../service/ach_wire_service.dart';
 import '../../../service/convert_service.dart';
 import '../../../service/profile_service.dart';
@@ -19,13 +23,13 @@ class _AchWireListState extends State<AchWireList> {
   final Map<String, dynamic> queryData = {
     "correspondent": "",
     "accountNo": "",
-    "bankAccountId": "",
-    "bank": "",
+    "masterAccountNo": "",
     "requestType": "",
     "transferType": "",
-    "broker": "",
+    "isOpen": false,
+    "sign": "",
+    "amount": "",
     "status": "",
-    "requestId": 0,
   };
 
   late final ValueNotifier<int> queryDataNotifier;
@@ -60,6 +64,7 @@ class _AchWireListState extends State<AchWireList> {
 
   Future<List<GridItem>> _fetchRequests() async {
     final achWireService = AchWireService();
+    debugPrint(queryData.toString());
     final resp = await achWireService.listBankRequest(queryData, {
       'pageNo': pagination.pageNo,
       'rowsPerPage': pagination.rowsPerPage,
@@ -200,11 +205,19 @@ class _AchWireListState extends State<AchWireList> {
   }
 
   void _openFilterDialog() {
+    String selectedCorrespondent = queryData["correspondent"];
     String selectedAccountNo = queryData["accountNo"];
+    String selectedMasterAccountNo = queryData["masterAccountNo"];
     DateTime? selectedFromDate =
         ConvertService.stringToDate(queryData["fromDate"]);
     DateTime? selectedToDate = ConvertService.stringToDate(queryData["toDate"]);
-    debugPrint(selectedToDate.toString());
+    String? selectedRequestType = queryData["requestType"];
+    String? selectedStatus = queryData["status"];
+    String? selectedTransferType = queryData["selectedTransferType"];
+    String? externalId = queryData["externalId"];
+    String? selectedSign = queryData["sign"];
+    String? amount = queryData["amount"];
+    bool isOpen = queryData["isOpen"] ?? false;
     showDialog<bool>(
       context: context,
       builder: (context) {
@@ -233,59 +246,205 @@ class _AchWireListState extends State<AchWireList> {
                 }
               }
 
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () => pickDate(isFrom: true),
-                          child: InputDecorator(
-                            decoration: const InputDecoration(
-                              labelText: "From Date",
-                              border: OutlineInputBorder(),
-                            ),
-                            child: Text(
-                              selectedFromDate != null
-                                  ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
-                                  : "Select date",
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      "Date Range",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => pickDate(isFrom: true),
+                            child: InputDecorator(
+                              decoration: const InputDecoration(
+                                labelText: "From",
+                                border: OutlineInputBorder(),
+                              ),
+                              child: Text(
+                                selectedFromDate != null
+                                    ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
+                                    : "Select date",
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () => pickDate(isFrom: false),
-                          child: InputDecorator(
-                            decoration: const InputDecoration(
-                              labelText: "To Date",
-                              border: OutlineInputBorder(),
-                            ),
-                            child: Text(
-                              selectedToDate != null
-                                  ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
-                                  : "Select date",
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => pickDate(isFrom: false),
+                            child: InputDecorator(
+                              decoration: const InputDecoration(
+                                labelText: "To",
+                                border: OutlineInputBorder(),
+                              ),
+                              child: Text(
+                                selectedToDate != null
+                                    ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
+                                    : "Select date",
+                              ),
                             ),
                           ),
                         ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: AutoCompleteCorrespondent(
+                        name: "correspondent",
+                        value: selectedCorrespondent,
+                        label: "Correspondent",
+                        isAllStatus: true,
+                        type: "",
+                        onChange: (value) => setState(() {
+                          selectedCorrespondent = value;
+                        }),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  AutoCompleteAccountNo(
-                    name: "accountNo",
-                    value: selectedAccountNo,
-                    isAllStatus: true,
-                    correspondent: queryData["correspondent"],
-                    type: "Client",
-                    onChange: (map) => setState(() {
-                      selectedAccountNo = map['data']['accountNo'];
-                    }),
-                  ),
-                ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: AutoCompleteAccountNo(
+                        name: "accountNo",
+                        freeSolo: true,
+                        value: selectedAccountNo,
+                        isAllStatus: true,
+                        correspondent: queryData["correspondent"],
+                        type: "Client",
+                        onChange: (map) => setState(() {
+                          if (map['data'] != null &&
+                              map['data']['accountNo'] != null) {
+                            selectedAccountNo =
+                                map['data']['accountNo'] as String;
+                          }
+                        }),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: AutoCompleteMasterAccountNo(
+                        name: "masterAccountNo",
+                        freeSolo: true,
+                        value: selectedMasterAccountNo,
+                        isAllStatus: true,
+                        correspondent: queryData["correspondent"],
+                        onChange: (map) => setState(() {
+                          if (map['data'] != null &&
+                              map['data']['masterAccountNo'] != null) {
+                            selectedAccountNo =
+                                map['data']['masterAccountNo'] as String;
+                          }
+                        }),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'External ID',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          externalId = value;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: SelectSystemCode(
+                        label: "Request Type",
+                        placeholder: "Select Request Type",
+                        value: selectedRequestType,
+                        type: "Type",
+                        subType: "Request Type",
+                        onChange: (map) => setState(() {
+                          selectedRequestType = map?['data']['code'];
+                        }),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: SelectSystemCode(
+                        label: "Transfer Type",
+                        placeholder: "Select Transfer Type",
+                        value: selectedTransferType,
+                        type: "Type",
+                        subType: "Transfer Type",
+                        onChange: (map) => setState(() {
+                          selectedTransferType = map?['data']['code'];
+                        }),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: SelectSystemCode(
+                              label: "Sign",
+                              placeholder: "Select Sign",
+                              value: selectedSign,
+                              type: "Sign",
+                              subType: "Bank Request",
+                              onChange: (map) {
+                                setState(() {
+                                  selectedSign = map?['data']['code'];
+                                });
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                labelText: "Amount",
+                                border: OutlineInputBorder(),
+                              ),
+                              enabled: (selectedSign ?? "").isNotEmpty,
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                amount = value;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: CheckboxListTile(
+                        title: const Text("Open"),
+                        value: isOpen,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isOpen = value ?? false;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity.trailing,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: SelectSystemCode(
+                        label: "Status",
+                        placeholder: "Select Status",
+                        value: selectedStatus,
+                        type: "Status",
+                        subType: "Bank Request",
+                        onChange: (map) => setState(() {
+                          selectedStatus = map?['data']['code'];
+                        }),
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),
@@ -297,11 +456,26 @@ class _AchWireListState extends State<AchWireList> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  queryData["accountNo"] = selectedAccountNo;
+                  if (amount != null &&
+                      amount!.isNotEmpty &&
+                      selectedSign!.isEmpty) {
+                    Notify.warning(
+                        "Please select a sign before entering amount.");
+                    return;
+                  }
                   queryData["fromDate"] =
                       ConvertService.dateToString(selectedFromDate);
                   queryData["toDate"] =
                       ConvertService.dateToString(selectedToDate);
+                  queryData["correspondent"] = selectedCorrespondent;
+                  queryData["accountNo"] = selectedAccountNo;
+                  queryData["externalId"] = externalId;
+                  queryData["requestType"] = selectedRequestType;
+                  queryData["masterAccountNo"] = selectedMasterAccountNo;
+                  queryData["sign"] = selectedSign;
+                  queryData["amount"] = amount;
+                  queryData["isOpen"] = isOpen;
+                  queryData["status"] = selectedStatus;
                   _updateQueryData();
                 });
                 Navigator.pop(context, true);
@@ -419,10 +593,19 @@ class _AchWireListState extends State<AchWireList> {
                     child: Wrap(
                       spacing: 6,
                       runSpacing: 6,
-                      children: activeFilters.map((entry) {
+                      children: activeFilters
+                          .where((entry) {
+                        if (entry.value is bool) return entry.value == true;
+                        if (entry.value == null || entry.value.toString().isEmpty) return false;
+                        return true;
+                      })
+                          .map((entry) {
                         return Chip(
                           label: Text(
-                            "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                            entry.value is bool
+                                ? ConvertService.camelToTitle(entry.key).replaceAll("Is ", "")
+                                : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                            style: const TextStyle(fontSize: 9),
                           ),
                           deleteIcon: entry.key.toLowerCase().contains("date")
                               ? null
@@ -430,15 +613,24 @@ class _AchWireListState extends State<AchWireList> {
                           onDeleted: entry.key.toLowerCase().contains("date")
                               ? null
                               : () {
-                                  setState(() {
-                                    queryData[entry.key] =
-                                        entry.value is bool ? false : "";
-                                    _updateQueryData();
-                                    _futureRequests = _fetchRequests();
-                                  });
-                                },
+                            setState(() {
+                              queryData[entry.key] =
+                              entry.value is bool ? false : "";
+
+                              if (entry.key == "amount") {
+                                queryData["sign"] = "";
+                              } else if (entry.key == "sign") {
+                                queryData["amount"] = "";
+                              }
+
+                              _updateQueryData();
+                              _futureRequests = _fetchRequests();
+                            });
+                          },
                         );
-                      }).toList(),
+                      })
+                          .toList(),
+
                     ),
                   );
                 },
