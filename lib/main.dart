@@ -5,6 +5,7 @@ import 'package:broker_mobile/env.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppEnv.load();
+  debugPrint(AppEnv.grpcEndpoint);
   runApp(MyApp());
 }
 

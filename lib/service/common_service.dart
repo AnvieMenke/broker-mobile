@@ -65,9 +65,10 @@ class CommonService {
   }
 
   Future<PbList<AccountNo>> accessibleAccountNo(
-      String correspondent, bool isAllStatus, String type) async {
+      String key, correspondent, bool isAllStatus, String type) async {
     final client = _lazyClient();
     final req = AccessibleRequest()
+      ..key = key
       ..isAllStatus = isAllStatus
       ..type = type;
 
@@ -130,6 +131,21 @@ class CommonService {
     try {
       final response = await client.listSystemCode(req);
       return response.systemCode;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<PbList<MasterAccountNo>> accessibleMasterAccountNo(
+      String key, correspondent, bool isAllStatus) async {
+    final client = _lazyClient();
+    final req = AccessibleRequest()
+      ..key = key
+      ..isAllStatus = isAllStatus;
+
+    try {
+      final response = await client.accessibleMasterAccountNo(req);
+      return response.masterAccountNos;
     } catch (e) {
       rethrow;
     }

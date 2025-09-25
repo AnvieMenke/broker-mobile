@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:broker_mobile/service/common_service.dart';
 
-class AutoCompleteAccountNo extends StatefulWidget {
+class AutoCompleteMasterAccountNo extends StatefulWidget {
   final String name;
   final String value;
   final bool disabled;
@@ -12,12 +12,11 @@ class AutoCompleteAccountNo extends StatefulWidget {
   final bool isAccessibleOnly;
   final bool isAllStatus;
   final bool isActive;
-  final String type;
   final String correspondent;
   final Function(Map<String, dynamic>) onChange;
   final bool reset;
 
-  const AutoCompleteAccountNo({
+  const AutoCompleteMasterAccountNo({
     super.key,
     required this.name,
     required this.value,
@@ -28,19 +27,21 @@ class AutoCompleteAccountNo extends StatefulWidget {
     this.isAccessibleOnly = false,
     this.isAllStatus = false,
     this.isActive = true,
-    this.type = '',
     this.correspondent = '',
     required this.onChange,
     this.reset = false,
   });
 
   @override
-  State<AutoCompleteAccountNo> createState() => _AutoCompleteAccountNoState();
+  State<AutoCompleteMasterAccountNo> createState() =>
+      _AutoCompleteMasterAccountNoState();
 }
 
-class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
+class _AutoCompleteMasterAccountNoState
+    extends State<AutoCompleteMasterAccountNo> {
   final TextEditingController _controller = TextEditingController();
   late final CommonService _service;
+  List<Map<String, String>> _options = [];
 
   @override
   void initState() {
@@ -54,39 +55,35 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
     }
   }
 
-  Future<List<Map<String, dynamic>>> _getOptions(String input) async {
+  Future<List<Map<String, String>>> _getOptions(String input) async {
     try {
       if (widget.isAccessibleOnly) {
-        final data = await _service.accessibleAccountNo(
+        final data = await _service.accessibleMasterAccountNo(
           input,
           widget.correspondent,
           widget.isAllStatus,
-          widget.type,
         );
 
-        return data.map((acc) {
+        return data.map<Map<String, String>>((acc) {
           return {
-            'accountNo': acc.accountNo,
-            'correspondent': acc.correspondent,
+            'masterAccountNo': acc.masterAccountNo,
             'accountName': acc.accountName,
           };
         }).toList();
       } else {
         final data = await _service.lazyLoadAccount(
           input,
-          'account_no',
-          'account_no',
+          'master_account_no',
+          'master_account_no',
           widget.isActive,
           widget.correspondent,
         );
 
-        return data.accounts.map((acc) {
+        return data.accounts.map<Map<String, String>>((acc) {
           return {
-            'accountId': acc.accountId,
-            'accountNo': acc.accountNo,
-            'correspondent': acc.correspondent,
-            'broker': acc.broker,
+            'masterAccountNo': acc.accountNo,
             'accountName': acc.accountName,
+            'correspondent': acc.correspondent,
           };
         }).toList();
       }
@@ -96,20 +93,19 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
     }
   }
 
-  void _handleOnBlur(String value, List<Map<String, dynamic>> options) {
-    final data = options.firstWhere(
-      (o) => o['accountNo'] == value,
-      orElse: () => {},
-    );
-
-    if (data.isNotEmpty) {
-      _setPropsValue(
-          data['accountNo'], data, data['correspondent'], data['broker']);
+  void _handleOnBlur(String value) {
+    if (widget.freeSolo) {
+      _setPropsValue(value, {});
       return;
     }
 
-    if (widget.freeSolo) {
-      _setPropsValue(value, {}, '', '');
+    final match = _options.firstWhere(
+      (o) => o['masterAccountNo'] == value,
+      orElse: () => {},
+    );
+
+    if (match.isNotEmpty) {
+      _setPropsValue(match['masterAccountNo'] ?? '', match);
       return;
     }
 
@@ -117,52 +113,35 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
     _setPropsValue('', {});
   }
 
-  void _setPropsValue(String value, Map<String, dynamic> data,
-      [String correspondent = '', String broker = '']) {
-    final result = {
+  void _setPropsValue(String value, Map<String, String> data) {
+    widget.onChange({
       'name': widget.name,
       'value': value,
       'data': data,
-      'correspondent': correspondent,
-      'broker': broker,
-    };
-    widget.onChange(result);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return TypeAheadField<Map<String, dynamic>>(
+    return TypeAheadField<Map<String, String>>(
       suggestionsCallback: (pattern) async {
-        final options = await _getOptions(pattern);
+        _options = await _getOptions(pattern);
 
-        if (widget.value.isNotEmpty &&
-            !options.any((o) => o['accountNo'] == widget.value)) {
-          options.insert(0, {
-            'accountNo': widget.value,
-            'correspondent': '',
-            'broker': '',
-          });
-        }
-
-        return options;
+        return _options;
       },
       itemBuilder: (context, suggestion) {
         return ListTile(
           title: Text(
-            suggestion['accountNo'] ?? '',
+            suggestion['masterAccountNo'] ?? '',
             style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
           ),
           subtitle: Text(suggestion['accountName'] ?? ''),
         );
       },
       onSelected: (suggestion) {
-        _controller.text = suggestion['accountNo'] ?? '';
-        _setPropsValue(
-          suggestion['accountNo'] ?? '',
-          suggestion,
-          suggestion['correspondent'] ?? '',
-          suggestion['broker'] ?? '',
-        );
+        final val = suggestion['masterAccountNo'] ?? '';
+        _controller.text = val;
+        _setPropsValue(val, suggestion);
       },
       builder: (context, controller, focusNode) {
         return TextField(
@@ -170,8 +149,8 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
           focusNode: focusNode,
           enabled: !widget.disabled,
           decoration: InputDecoration(
-            labelText: 'Account No',
-            hintText: 'Account No',
+            labelText: 'Master Account No',
+            hintText: 'Master Account No',
             errorText: widget.error ? 'Invalid input' : null,
             border: const OutlineInputBorder(),
           ),
@@ -181,9 +160,8 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
               _setPropsValue(value, {});
             }
           },
-          onEditingComplete: () async {
-            final opts = await _getOptions(_controller.text);
-            _handleOnBlur(_controller.text, opts);
+          onEditingComplete: () {
+            _handleOnBlur(_controller.text);
           },
         );
       },
