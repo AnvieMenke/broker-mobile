@@ -107,7 +107,7 @@ class AchWireService {
       ..branch = param["branch"] ?? ""
       ..rep = param["rep"] ?? ""
       ..externalId = param["externalId"] ?? ""
-      ..isOpen = ConvertService.safeBool(["isOpen"])
+      ..isOpen = ConvertService.safeBool(param["isOpen"])
       ..sign = param["sign"] ?? ""
       ..amount = param["amount"]?.toString() ?? "";
 
@@ -120,7 +120,6 @@ class AchWireService {
 
       req.pagination = paginationReq;
     }
-
     try {
       final response = await achService.list(req);
       return response;
