@@ -64,7 +64,6 @@ class _AchWireListState extends State<AchWireList> {
 
   Future<List<GridItem>> _fetchRequests() async {
     final achWireService = AchWireService();
-    debugPrint(queryData.toString());
     final resp = await achWireService.listBankRequest(queryData, {
       'pageNo': pagination.pageNo,
       'rowsPerPage': pagination.rowsPerPage,
