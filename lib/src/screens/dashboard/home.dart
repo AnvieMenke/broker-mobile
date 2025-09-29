@@ -1,6 +1,7 @@
 import '../ach_wire_request/ach_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../reports/reports.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,7 +17,7 @@ class HomePageState extends State<HomePage> {
 
   final List<Widget> _pages = [
     const Center(child: Text('Home')),
-    const Center(child: Text('Investing')),
+    const Center(child: Reports()),
     const SizedBox.shrink(),
     const Center(child: Text('Planning')),
     const Center(child: Text('Discover')),
@@ -41,8 +42,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
@@ -51,7 +50,7 @@ class HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 6.0,
-        color: isDark ? Colors.grey[900] : Colors.black87,
+        color: Colors.grey[900],
         child: SizedBox(
           height: 64,
           child: Row(
@@ -80,8 +79,11 @@ class HomePageState extends State<HomePage> {
         child: FloatingActionButton(
           backgroundColor: activeColor,
           shape: const CircleBorder(),
-          child: const Icon(FontAwesomeIcons.rightLeft, size: 20),
-          // Transfer icon
+          child: const Icon(
+            FontAwesomeIcons.rightLeft,
+            size: 20,
+            color: Colors.white,
+          ),
           onPressed: () => _onTabTapped(2),
         ),
       ),

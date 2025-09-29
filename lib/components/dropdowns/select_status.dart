@@ -170,11 +170,9 @@ class _SelectStatusState extends State<SelectStatus> {
   Widget build(BuildContext context) {
     final disabled = widget.disabled;
 
-    // Filtered list that will actually be shown
     final activeStatusList =
         statusList.where((s) => statusIsActive(s)).toList();
 
-    // Ensure dropdownValue is in active list
     final dropdownValue =
         activeStatusList.any((s) => s.code == currentSelected["code"])
             ? currentSelected["code"]
@@ -198,7 +196,7 @@ class _SelectStatusState extends State<SelectStatus> {
           "Canceled",
         ].contains(status.code)
             ? Colors.red
-            : Colors.white;
+            : Theme.of(context).textTheme.bodyMedium?.copyWith().color;
 
         final italic = previousSelected["code"] == status.code &&
                 (int.tryParse(status.note) ?? 0) != 0

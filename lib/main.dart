@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/src/screens/auth/login.dart';
 import 'package:broker_mobile/env.dart';
+import 'custom_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppEnv.load();
-  debugPrint(AppEnv.grpcEndpoint);
-  runApp(MyApp());
+  AppTheme.setSystemUIOverlayStyle();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,8 +17,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Broker App',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       home: const LoginPage(),
     );
