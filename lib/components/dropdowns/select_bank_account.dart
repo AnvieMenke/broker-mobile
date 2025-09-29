@@ -88,7 +88,10 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
     return DropdownButtonFormField<BankAccount>(
       initialValue: selectedValue,
       hint: const Text("Select Bank Account"),
-      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+      ),
       decoration: InputDecoration(
         labelText: widget.label,
         border: const OutlineInputBorder(),

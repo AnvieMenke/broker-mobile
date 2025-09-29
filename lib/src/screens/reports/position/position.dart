@@ -5,43 +5,18 @@ class PositionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PortfolioScreen();
+    return Scaffold(
+      body: const PositionsReport(),
+    );
   }
 }
 
-class PortfolioScreen extends StatelessWidget {
-  const PortfolioScreen({super.key});
+class PositionsReport extends StatelessWidget {
+  const PositionsReport({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Report'),
-          actions: const [
-            Icon(Icons.search),
-            SizedBox(width: 16),
-            Icon(Icons.account_circle_outlined),
-            SizedBox(width: 16),
-          ],
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Positions'),
-              Tab(text: 'Watch Lists'),
-              Tab(text: 'Markets'),
-            ],
-          ),
-        ),
-        body: const TabBarView(
-          children: [
-            PositionsTab(),
-            Center(child: Text('Watch Lists')),
-            Center(child: Text('Markets')),
-          ],
-        ),
-      ),
-    );
+    return const PositionsTab();
   }
 }
 

@@ -94,7 +94,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0C1D),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -106,17 +105,15 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 24),
               const Text(
                 'Login',
-                style: TextStyle(fontSize: 28, color: Colors.white),
+                style: TextStyle(fontSize: 28),
               ),
               const SizedBox(height: 32),
               TextField(
                 controller: _emailController,
-                style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   hintText: 'Email',
                   hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
-                  fillColor: const Color(0xFF1E1B2E),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -127,12 +124,10 @@ class _LoginPageState extends State<LoginPage> {
               TextField(
                 controller: _passwordController,
                 obscureText: true,
-                style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   hintText: 'Password',
                   hintStyle: const TextStyle(color: Colors.grey),
                   filled: true,
-                  fillColor: const Color(0xFF1E1B2E),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
@@ -156,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                     return DropdownMenuItem(
                       value: c,
                       child:
-                          Text(c, style: const TextStyle(color: Colors.white)),
+                          Text(c),
                     );
                   }).toList(),
                   onChanged: (value) {
@@ -166,15 +161,12 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   decoration: InputDecoration(
                     labelText: "Select Correspondent",
-                    labelStyle: const TextStyle(color: Colors.grey),
                     filled: true,
-                    fillColor: const Color(0xFF1E1B2E),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
                     ),
                   ),
-                  dropdownColor: const Color(0xFF1E1B2E),
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
@@ -193,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     child:
-                        const Text('Continue', style: TextStyle(fontSize: 16)),
+                        const Text('Continue', style: TextStyle(fontSize: 16,color: Colors.white)),
                   ),
                 ),
               ],
@@ -211,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: _loading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text('Login', style: TextStyle(fontSize: 16)),
+                        : const Text('Login', style: TextStyle(fontSize: 16,color: Colors.white)),
                   ),
                 ),
             ],

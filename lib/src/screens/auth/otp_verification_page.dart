@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../../../service/auth_service.dart';
 import '../dashboard/main_screen.dart';
-import '../auth/login.dart'; // <-- make sure you have a LoginPage
+import '../auth/login.dart';
+import '../../../components/inputs/otp_input.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   final String email;
@@ -30,7 +31,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   String? _error;
 
   Timer? _timer;
-  int _remainingSeconds = 120; // 2 minutes = 120 seconds
+  int _remainingSeconds = 120;
 
   @override
   void initState() {
@@ -129,7 +130,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0C1D),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -141,7 +141,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               const SizedBox(height: 24),
               Text(
                 "Enter OTP sent to ${maskEmail(widget.email)}",
-                style: const TextStyle(color: Colors.white, fontSize: 16),
               ),
               const SizedBox(height: 8),
               Text(
@@ -154,20 +153,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              TextField(
-                controller: _otpController,
-                keyboardType: TextInputType.number,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  hintText: '6-digit OTP',
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  filled: true,
-                  fillColor: const Color(0xFF1E1B2E),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
+              OtpBoxes(
+                onOtpChanged: (otp) {
+                  _otpController.text = otp;
+                },
               ),
               const SizedBox(height: 16),
               if (_error != null)
@@ -184,7 +173,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 ),
                 child: _verifying
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text('Verify'),
+                    : const Text(
+                        'Verify',
+                        style: TextStyle(color: Colors.white),
+                      ),
               ),
               const SizedBox(height: 20),
               TextButton.icon(
@@ -194,10 +186,13 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     MaterialPageRoute(builder: (_) => const LoginPage()),
                   );
                 },
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                label: const Text(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                ),
+                label: Text(
                   "Back to Login",
-                  style: TextStyle(color: Colors.white),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
                 ),
               )
             ],
