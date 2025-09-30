@@ -48,16 +48,29 @@ app.*.map.json
 # ignore all .env files everywhere
 **/.env
 
-
 android/app/build/
 ios/Flutter/build/
 
-# Ignore generated plugin registrants and build artifacts
-macos/Flutter/*
-!macos/Flutter/CMakeLists.txt
+# -------------------------------
+# Flutter platform-specific ignores
+# -------------------------------
 
-windows/flutter/*
-!windows/flutter/CMakeLists.txt
+# Generated plugin registrants (auto-generated, not for version control)
+**/generated_plugin_registrant.*
+**/GeneratedPluginRegistrant.swift
 
-linux/flutter/*
-!linux/flutter/CMakeLists.txt
+# Ephemeral directories (regenerated automatically)
+**/ephemeral/
+
+# Web build artifacts
+web/.dart_tool/
+web/.firebase/
+
+# macOS
+macos/Flutter/ephemeral/
+
+# Windows
+windows/flutter/ephemeral/
+
+# Linux
+linux/flutter/ephemeral/
