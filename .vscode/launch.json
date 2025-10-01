@@ -8,6 +8,11 @@
 			"name": "broker-mobile",
 			"request": "launch",
 			"type": "dart"
+		},		{
+			"name": "broker-mobile (Edge)",
+			"request": "launch",
+			"type": "dart",
+      "deviceId": "edge"
 		},
 		{
 			"name": "broker-mobile (profile mode)",

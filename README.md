@@ -26,6 +26,19 @@ samples, guidance on mobile development, and a full API reference.
 
 ---
 
+## Dev Guide
+
+1. To verify nothing breaks before committing, run:
+
+```bash
+flutter clean
+flutter pub get
+flutter analyze
+# flutter build apk --debug
+```
+
+---
+
 ## 🛠️ Installing `protoc-gen-dart`
 
 This guide walks you through installing the Dart plugin for Protocol Buffers (`protoc-gen-dart`) to generate Dart code from `.proto` files.

@@ -1,5 +1,5 @@
+import 'package:broker_mobile/main.dart';
 import 'package:grpc/grpc.dart';
-import '../../service/auth_service.dart' as auth_service;
 
 class AuthInterceptor extends ClientInterceptor {
   @override
@@ -9,8 +9,8 @@ class AuthInterceptor extends ClientInterceptor {
     CallOptions options,
     invoker,
   ) {
-    final token = auth_service.AuthService.cachedToken;
-    final newOptions = (token != null && token.isNotEmpty)
+    final token = sessionManager.token;
+    final newOptions = (token.isNotEmpty)
         ? options.mergedWith(
             CallOptions(metadata: {
               ...options.metadata,
@@ -23,7 +23,7 @@ class AuthInterceptor extends ClientInterceptor {
 
     response.catchError((error) {
       if (error is GrpcError && error.code == StatusCode.unauthenticated) {
-        auth_service.logout(error.message ?? 'Unauthenticated');
+        sessionManager.logout(error.message ?? 'Unauthenticated');
         return null;
       }
       return Future.error(error);
@@ -39,8 +39,8 @@ class AuthInterceptor extends ClientInterceptor {
     CallOptions options,
     invoker,
   ) {
-    final token = auth_service.AuthService.cachedToken;
-    final newOptions = (token != null && token.isNotEmpty)
+    final token = sessionManager.token;
+    final newOptions = (token.isNotEmpty)
         ? options.mergedWith(
             CallOptions(metadata: {
               ...options.metadata,
@@ -53,7 +53,7 @@ class AuthInterceptor extends ClientInterceptor {
 
     response.handleError((error) {
       if (error is GrpcError && error.code == StatusCode.unauthenticated) {
-        auth_service.logout(error.message ?? 'Unauthenticated');
+        sessionManager.logout(error.message ?? 'Unauthenticated');
       }
     });
 
