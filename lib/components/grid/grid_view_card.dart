@@ -8,6 +8,8 @@ class GridField {
   final bool visible;
   final bool floatRight;
   final bool hideLabel;
+  final String gridPosition;
+  final bool addAvatar;
 
   const GridField({
     required this.keyName,
@@ -17,6 +19,8 @@ class GridField {
     this.visible = true,
     this.floatRight = false,
     this.hideLabel = false,
+    this.gridPosition = "body",
+    this.addAvatar = false,
   });
 
   Widget get displayValue {
@@ -49,7 +53,8 @@ class GridField {
         ),
         child: Text(
           value,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       );
     }
@@ -60,36 +65,27 @@ class GridField {
 
 class GridItem {
   final String title;
+  final String subTitle;
+  final String rightTitle;
   final List<GridField> fields;
-  final List<GridItem> children;
 
   const GridItem({
     required this.title,
+    this.subTitle = "",
+    this.rightTitle = "",
     this.fields = const [],
-    this.children = const [],
   });
 
   factory GridItem.fromMap(Map<String, dynamic> map) {
-    final title = map['title']?.toString() ?? '';
-
-    final rawChildren = map['children'];
-    final parsedChildren = <GridItem>[];
-    if (rawChildren is List) {
-      for (final c in rawChildren) {
-        if (c is Map<String, dynamic>) {
-          parsedChildren.add(GridItem.fromMap(c));
-        } else if (c is GridItem) {
-          parsedChildren.add(c);
-        }
-      }
-    }
+    String extractedTitle = "";
+    String extractedSubTitle = "";
+    String extractedRightTitle = "";
 
     final parsedFields = <GridField>[];
-    map.forEach((k, v) {
-      if (k == 'title' || k == 'children') return;
 
+    map.forEach((k, v) {
       if (v is Map && v.containsKey("value")) {
-        parsedFields.add(GridField(
+        final field = GridField(
           keyName: k,
           label: v["label"]?.toString() ?? "",
           value: v["value"]?.toString() ?? "",
@@ -97,21 +93,35 @@ class GridItem {
           visible: v["visible"] as bool? ?? true,
           floatRight: v["floatRight"] as bool? ?? false,
           hideLabel: v["hideLabel"] as bool? ?? false,
-        ));
+          gridPosition: v["gridPosition"]?.toString() ?? "body",
+          addAvatar: v["addAvatar"] as bool? ?? false,
+        );
+
+        if (field.gridPosition == "title") {
+          extractedTitle = field.value;
+        } else if (field.gridPosition == "subTitle") {
+          extractedSubTitle = field.value;
+        } else if (field.gridPosition == "rightTitle") {
+          extractedRightTitle = field.value;
+        }
+
+        parsedFields.add(field);
       } else {
-        parsedFields.add(GridField(
+        final field = GridField(
           keyName: k,
           label: k,
           value: v?.toString() ?? "",
-          visible: true,
-        ));
+          gridPosition: "body",
+        );
+        parsedFields.add(field);
       }
     });
 
     return GridItem(
-      title: title,
+      title: extractedTitle,
+      subTitle: extractedSubTitle,
+      rightTitle: extractedRightTitle,
       fields: parsedFields,
-      children: parsedChildren,
     );
   }
 }
@@ -133,7 +143,7 @@ class GridViewCard extends StatelessWidget {
         final textTheme = Theme.of(ctx).textTheme;
 
         return AlertDialog(
-          title: Text(item.title),
+          title: const Text("Details"),
           content: SizedBox(
             width: double.maxFinite,
             height: 400,
@@ -141,6 +151,7 @@ class GridViewCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 8),
                   ...item.fields.map(
                     (f) => Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -152,35 +163,6 @@ class GridViewCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (item.children.isNotEmpty) ...[
-                    const SizedBox(height: 12),
-                    Text("Children:", style: textTheme.titleSmall),
-                    ...item.children.map(
-                      (c) => Padding(
-                        padding: const EdgeInsets.only(left: 8, top: 4),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              c.title,
-                              style: textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            ...c.fields.map(
-                              (f) => Row(
-                                children: [
-                                  Text("${f.label}: ",
-                                      style: textTheme.bodySmall),
-                                  f.displayValue,
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),
@@ -225,94 +207,96 @@ class GridViewCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  item.title,
-                  style: textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (item.title.isNotEmpty)
+                        Text(
+                          item.title,
+                          style: textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      if (item.subTitle.isNotEmpty)
+                        Text(
+                          item.subTitle,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-                PopupMenuButton(
-                  icon: const Icon(Icons.more_horiz),
-                  itemBuilder: (context) => mergedActions,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: PopupMenuButton(
+                        icon: const Icon(Icons.more_horiz),
+                        itemBuilder: (context) => mergedActions,
+                      ),
+                    ),
+                    if (item.rightTitle.isNotEmpty)
+                      Text(
+                        item.rightTitle,
+                        style: textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                  ],
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            ...item.fields.where((f) => f.visible).map(
-                  (f) => Row(
-                    mainAxisAlignment: f.floatRight
-                        ? MainAxisAlignment.spaceBetween
-                        : MainAxisAlignment.start,
-                    children: [
-                      if (!f.hideLabel)
-                        Text(
-                          "${f.label}: ",
-                          style: textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                          ),
-                        )
-                      else
-                        const SizedBox.shrink(),
-                      f.displayValue,
-                    ],
-                  ),
-                ),
-            if (item.children.isNotEmpty) ...[
-              const Divider(),
-              Column(
-                children: item.children
-                    .map((child) => _GridChildRow(child: child))
-                    .toList(),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _GridChildRow extends StatelessWidget {
-  final GridItem child;
-
-  const _GridChildRow({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 16,
-            backgroundColor: Colors.grey.shade200,
-            child: Text(
-              child.title.isNotEmpty ? child.title[0] : '?',
-              style: const TextStyle(color: Colors.black),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: child.fields
-                  .where((f) => f.visible)
-                  .map(
-                    (f) => Row(
+            ...item.fields
+                .where((f) => f.visible && f.gridPosition == "body")
+                .map(
+                  (f) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      mainAxisAlignment: f.floatRight
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.start,
                       children: [
-                        Text("${f.keyName}: ", style: textTheme.bodySmall),
-                        f.displayValue,
+                        if (!f.hideLabel)
+                          Text(
+                            "${f.label}: ",
+                            style: textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        else
+                          const SizedBox.shrink(),
+                        if (f.addAvatar && f.value.isNotEmpty) ...[
+                          CircleAvatar(
+                            radius: 16,
+                            backgroundColor: Colors.blue.shade100,
+                            child: Text(
+                              f.value[0].toUpperCase(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              f.value,
+                              style: textTheme.bodyMedium,
+                            ),
+                          ),
+                        ] else
+                          f.displayValue,
                       ],
                     ),
-                  )
-                  .toList(),
-            ),
-          ),
-        ],
+                  ),
+                ),
+          ],
+        ),
       ),
     );
   }
@@ -398,138 +382,139 @@ class GridWithPagination extends StatelessWidget {
     final pagesToShow =
         _pageRange(currentPage, totalPages, maxPageButtonsToShow);
 
-    return Column(
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(2, 2, 2, 20),
       children: [
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.all(12.0),
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              final item = items[index];
-              final actions = actionsBuilder != null
-                  ? actionsBuilder!(context, item)
-                  : null;
-
-              return GridViewCard(
-                item: item,
-                actions: actions,
-              );
-            },
-          ),
-        ),
-        Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    totalRows == 0
-                        ? "No results"
-                        : "Showing $start-${end.clamp(0, totalRows)} of $totalRows",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text("Rows per page: "),
-                      DropdownButton<int>(
-                        value: rowsPerPage,
-                        items: [5, 10, 20, 50, 100].map((rowPerPage) {
-                          return DropdownMenuItem<int>(
-                            value: rowPerPage,
-                            child: Text('$rowPerPage'),
-                          );
-                        }).toList(),
-                        onChanged: (newRowsPerPage) {
-                          if (newRowsPerPage != null) {
-                            onPageChange(pagination.copyWith(
-                              pageNo: 0,
-                              rowsPerPage: newRowsPerPage,
-                              reload: true,
-                            ));
-                          }
-                        },
-                        underline: const SizedBox(),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    tooltip: 'First',
-                    icon: const Icon(Icons.first_page),
-                    onPressed: currentPage > 0
-                        ? () => onPageChange(
-                            pagination.copyWith(pageNo: 0, reload: true))
-                        : null,
-                  ),
-                  IconButton(
-                    tooltip: 'Previous',
-                    icon: const Icon(Icons.chevron_left),
-                    onPressed: currentPage > 0
-                        ? () => onPageChange(pagination.copyWith(
-                            pageNo: currentPage - 1, reload: true))
-                        : null,
-                  ),
-                  ...pagesToShow.map((p) => Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 2),
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: p == currentPage
-                                  ? Colors.blueAccent
-                                  : Theme.of(context).colorScheme.surface,
-                              foregroundColor: p == currentPage
-                                  ? Theme.of(context).colorScheme.onPrimary
-                                  : Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.color,
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
+        ...items.map((item) {
+          final actions =
+              actionsBuilder != null ? actionsBuilder!(context, item) : null;
+          return GridViewCard(item: item, actions: actions);
+        }),
+        if (totalRows > 10)
+          Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      totalRows == 0
+                          ? "No results"
+                          : "Showing $start-${end.clamp(0, totalRows)} of $totalRows",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text("Rows per page: "),
+                        DropdownButton<int>(
+                          value: rowsPerPage,
+                          items: [5, 10, 20, 50, 100].map((rowPerPage) {
+                            return DropdownMenuItem<int>(
+                              value: rowPerPage,
+                              child: Text('$rowPerPage'),
+                            );
+                          }).toList(),
+                          onChanged: (newRowsPerPage) {
+                            if (newRowsPerPage != null) {
+                              onPageChange(pagination.copyWith(
+                                pageNo: 0,
+                                rowsPerPage: newRowsPerPage,
+                                reload: true,
+                              ));
+                            }
+                          },
+                          underline: const SizedBox(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Center(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          tooltip: 'First',
+                          icon: const Icon(Icons.first_page),
+                          onPressed: currentPage > 0
+                              ? () => onPageChange(
+                                  pagination.copyWith(pageNo: 0, reload: true))
+                              : null,
+                        ),
+                        IconButton(
+                          tooltip: 'Previous',
+                          icon: const Icon(Icons.chevron_left),
+                          onPressed: currentPage > 0
+                              ? () => onPageChange(
+                                    pagination.copyWith(
+                                        pageNo: currentPage - 1, reload: true),
+                                  )
+                              : null,
+                        ),
+                        ...pagesToShow.map(
+                          (p) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: p == currentPage
+                                    ? Colors.blueAccent
+                                    : Theme.of(context).colorScheme.surface,
+                                foregroundColor: p == currentPage
+                                    ? Colors.white
+                                    : Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
                               ),
-                            ),
-                            onPressed: p == currentPage
-                                ? null
-                                : () => onPageChange(pagination.copyWith(
-                                    pageNo: p, reload: true)),
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
+                              onPressed: p == currentPage
+                                  ? null
+                                  : () => onPageChange(
+                                        pagination.copyWith(
+                                            pageNo: p, reload: true),
+                                      ),
                               child: Text('${p + 1}'),
                             ),
                           ),
                         ),
-                      )),
-                  IconButton(
-                    tooltip: 'Next',
-                    icon: const Icon(Icons.chevron_right),
-                    onPressed: currentPage < totalPages - 1
-                        ? () => onPageChange(pagination.copyWith(
-                            pageNo: currentPage + 1, reload: true))
-                        : null,
+                        IconButton(
+                          tooltip: 'Next',
+                          icon: const Icon(Icons.chevron_right),
+                          onPressed: currentPage < totalPages - 1
+                              ? () => onPageChange(
+                                    pagination.copyWith(
+                                        pageNo: currentPage + 1, reload: true),
+                                  )
+                              : null,
+                        ),
+                        IconButton(
+                          tooltip: 'Last',
+                          icon: const Icon(Icons.last_page),
+                          onPressed: currentPage < totalPages - 1
+                              ? () => onPageChange(
+                                    pagination.copyWith(
+                                        pageNo: totalPages - 1, reload: true),
+                                  )
+                              : null,
+                        ),
+                      ],
+                    ),
                   ),
-                  IconButton(
-                    tooltip: 'Last',
-                    icon: const Icon(Icons.last_page),
-                    onPressed: currentPage < totalPages - 1
-                        ? () => onPageChange(pagination.copyWith(
-                            pageNo: totalPages - 1, reload: true))
-                        : null,
-                  ),
-                ],
-              )
-            ],
+                ),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }

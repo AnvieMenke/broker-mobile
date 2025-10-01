@@ -19,8 +19,8 @@ class HomePageState extends State<HomePage> {
     const Center(child: Text('Home')),
     const Center(child: Reports()),
     const SizedBox.shrink(),
-    const Center(child: Text('Planning')),
-    const Center(child: Text('Discover')),
+    const Center(child: Text('Summary')),
+    const Center(child: Text('Account')),
   ];
 
   void _onTabTapped(int index) {
@@ -61,12 +61,12 @@ class HomePageState extends State<HomePage> {
                   icon: FontAwesomeIcons.chartLine, label: 'Report', index: 1),
               const SizedBox(width: 60),
               _navItem(
-                  icon: FontAwesomeIcons.arrowsRotate,
-                  label: 'Planning',
+                  icon: FontAwesomeIcons.book,
+                  label: 'Summary',
                   index: 3),
               _navItem(
-                  icon: FontAwesomeIcons.magnifyingGlass,
-                  label: 'Discover',
+                  icon: FontAwesomeIcons.user,
+                  label: 'Account',
                   index: 4),
             ],
           ),

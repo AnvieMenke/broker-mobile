@@ -1,203 +1,395 @@
 import 'package:flutter/material.dart';
+import 'package:broker_mobile/components/grid/grid_view_card.dart';
+import '../../../../components/dropdowns/select_account_no.dart';
+import '../../../../components/dropdowns/select_correspondent.dart';
+import '../../../../components/dropdowns/select_master_account_no.dart';
+import '../../../../components/messages/notification.dart';
+import '../../../../service/position_service.dart';
+import '../../../../service/convert_service.dart';
+import '../../../../service/profile_service.dart';
 
-class PositionPage extends StatelessWidget {
-  const PositionPage({super.key});
+class PositionFragment extends StatefulWidget {
+  const PositionFragment({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: const PositionsReport(),
-    );
+  PositionFragmentState createState() => PositionFragmentState();
+}
+
+class PositionFragmentState extends State<PositionFragment> {
+  Future<List<GridItem>>? _futureRequests;
+
+  final Map<String, dynamic> queryData = {
+    "correspondent": "",
+    "accountNo": "",
+    "masterAccountNo": "",
+  };
+
+  late final ValueNotifier<int> queryDataNotifier;
+
+  GridPagination pagination = GridPagination(
+    pageNo: 0,
+    rowsPerPage: 10,
+    totalRows: 0,
+    reload: true,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    queryDataNotifier = ValueNotifier(0);
+    _init();
   }
-}
 
-class PositionsReport extends StatelessWidget {
-  const PositionsReport({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const PositionsTab();
+  void _init() async {
+    final profileService = ProfileService();
+    final systemDate = await profileService.getSystemDate();
+    setState(() {
+      queryData['fromDate'] = systemDate;
+      queryData['toDate'] = systemDate;
+      _futureRequests = _listPosition();
+    });
   }
-}
 
-class PositionsTab extends StatelessWidget {
-  const PositionsTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(8.0),
-      children: const [
-        AccountCard(
-          title: 'ROTH IRA',
-          balance: '\$59,554.50',
-          bp: '\$3,411.49',
-          holdings: [
-            Holding(
-              symbol: 'SPY',
-              shares: '100 shares',
-              value: '\$56,069.00',
-              change: '+\$615.00',
-              percentChange: '+1.10%',
-            ),
-          ],
-        ),
-        AccountCard(
-          title: 'TRADITIONAL IRA',
-          balance: '\$52,836.11',
-          bp: '\$168.64',
-          holdings: [
-            Holding(
-              symbol: 'COST',
-              shares: '52.663 shares',
-              value: '\$52,625.08',
-              change: '+\$251.72',
-              percentChange: '+0.48%',
-            ),
-          ],
-        ),
-        AccountCard(
-          title: 'SELF EMPLOYED 401K',
-          balance: '\$331,110.26',
-          bp: '\$2,018.73',
-          holdings: [
-            Holding(
-              symbol: 'AAPL',
-              shares: '100 shares',
-              value: '\$21,189.61',
-              change: '-\$60.39',
-              percentChange: '-0.29%',
-            ),
-            Holding(
-              symbol: 'BRKB',
-              shares: '100 shares',
-              value: '\$53,022.09',
-              change: '-\$302.91',
-              percentChange: '-0.57%',
-            ),
-            Holding(
-              symbol: 'JPM',
-              shares: '---',
-              value: '\$24,696.00',
-              change: '---',
-              percentChange: '---',
-            ),
-          ],
-        ),
-      ],
-    );
+  void _updateQueryData() {
+    queryDataNotifier.value++;
   }
-}
 
-class AccountCard extends StatelessWidget {
-  final String title;
-  final String balance;
-  final String bp;
-  final List<Holding> holdings;
-
-  const AccountCard({
-    super.key,
-    required this.title,
-    required this.balance,
-    required this.bp,
-    required this.holdings,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cardColor = theme.cardColor;
-    final textTheme = theme.textTheme;
-
-    return Card(
-      color: cardColor,
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-            Text(balance, style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-            Text('BP $bp', style: const TextStyle(color: Colors.green)),
-            const SizedBox(height: 8),
-            ...holdings.map((h) => HoldingRow(holding: h)),
-          ],
-        ),
-      ),
-    );
+  Future<List<GridItem>> _listPosition() async {
+    final achWireService = PositionService();
+    final resp = await achWireService.listPosition(queryData, {
+      'pageNo': pagination.pageNo,
+      'rowsPerPage': pagination.rowsPerPage,
+    });
+    setState(() {
+      pagination = pagination.copyWith(
+        totalRows: resp.summary.totalRows,
+        reload: false,
+      );
+    });
+    return resp.positions.map((e) {
+      return GridItem.fromMap({
+        "bankAccountNo": {
+          "label": "Account No",
+          "value": e.accountNo,
+          "visible": true,
+          "gridPosition": "title",
+        },
+        "date": {
+          "label": "Date",
+          "value": ConvertService.protoDateObjectToString(e.date),
+          "visible": true,
+          "gridPosition": "subTitle",
+        },
+        "symbol": {
+          "hideLabel": true,
+          "label": "Symbol",
+          "value": e.symbol,
+          "visible": true,
+          "addAvatar": true,
+        },
+        "tdQty": {
+          "label": "TD Qty",
+          "value": e.tdQty,
+          "visible": true,
+        },
+        "costBasis": {
+          "label": "Cost Basis",
+          "value": e.costBasis,
+          "visible": true,
+        },
+        "tdMarketValue": {
+          "hideLabel": true,
+          "label": "TD Market Value",
+          "value": e.tdMarketValue,
+          "floatRight": true,
+          "visible": true,
+        },
+      });
+    }).toList();
   }
-}
 
-class Holding {
-  final String symbol;
-  final String shares;
-  final String value;
-  final String change;
-  final String percentChange;
+  void _onPageChange(GridPagination newPagination) {
+    setState(() {
+      pagination = newPagination;
+      _futureRequests = _listPosition();
+    });
+  }
 
-  const Holding({
-    required this.symbol,
-    required this.shares,
-    required this.value,
-    required this.change,
-    required this.percentChange,
-  });
-}
+  void openFilterDialog() {
+    String selectedCorrespondent = queryData["correspondent"];
+    String selectedAccountNo = queryData["accountNo"];
+    String selectedMasterAccountNo = queryData["masterAccountNo"];
+    DateTime? selectedFromDate =
+        ConvertService.stringToDate(queryData["fromDate"]);
+    DateTime? selectedToDate = ConvertService.stringToDate(queryData["toDate"]);
+    String? selectedSign = queryData["sign"];
+    String? amount = queryData["amount"];
 
-class HoldingRow extends StatelessWidget {
-  final Holding holding;
+    showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text("Filter by:"),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              Future<void> pickDate({required bool isFrom}) async {
+                final DateTime? picked = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                );
+                if (picked != null) {
+                  setState(() {
+                    if (isFrom) {
+                      selectedFromDate = picked;
+                    } else {
+                      selectedToDate = picked;
+                    }
+                  });
+                }
+              }
 
-  const HoldingRow({super.key, required this.holding});
-
-  @override
-  Widget build(BuildContext context) {
-    bool isPositive = holding.percentChange.startsWith('+');
-    bool isNeutral = holding.percentChange == '---';
-
-    Color changeColor = isNeutral
-        ? Colors.grey
-        : isPositive
-        ? Colors.green
-        : Colors.redAccent;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: Colors.white,
-            child: Text(
-              holding.symbol[0],
-              style: const TextStyle(color: Colors.black),
-            ),
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text("Date Range",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => pickDate(isFrom: true),
+                            child: InputDecorator(
+                              decoration: const InputDecoration(
+                                labelText: "From",
+                                border: OutlineInputBorder(),
+                              ),
+                              child: Text(
+                                selectedFromDate != null
+                                    ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
+                                    : "Select date",
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => pickDate(isFrom: false),
+                            child: InputDecorator(
+                              decoration: const InputDecoration(
+                                labelText: "To",
+                                border: OutlineInputBorder(),
+                              ),
+                              child: Text(
+                                selectedToDate != null
+                                    ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
+                                    : "Select date",
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    AutoCompleteCorrespondent(
+                      name: "correspondent",
+                      value: selectedCorrespondent,
+                      label: "Correspondent",
+                      isAllStatus: true,
+                      type: "",
+                      onChange: (value) => setState(() {
+                        selectedCorrespondent = value;
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    AutoCompleteAccountNo(
+                      name: "accountNo",
+                      freeSolo: true,
+                      value: selectedAccountNo,
+                      isAllStatus: true,
+                      correspondent: queryData["correspondent"],
+                      type: "Client",
+                      onChange: (map) => setState(() {
+                        if (map['data'] != null &&
+                            map['data']['accountNo'] != null) {
+                          selectedAccountNo =
+                              map['data']['accountNo'] as String;
+                        }
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    AutoCompleteMasterAccountNo(
+                      name: "masterAccountNo",
+                      freeSolo: true,
+                      value: selectedMasterAccountNo,
+                      isAllStatus: true,
+                      correspondent: queryData["correspondent"],
+                      onChange: (map) => setState(() {
+                        if (map['data'] != null &&
+                            map['data']['masterAccountNo'] != null) {
+                          selectedMasterAccountNo =
+                              map['data']['masterAccountNo'] as String;
+                        }
+                      }),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(holding.symbol, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(holding.shares, style: const TextStyle(color: Colors.grey)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  if (amount != null &&
+                      amount.isNotEmpty &&
+                      (selectedSign ?? "").isEmpty) {
+                    Notify.warning(
+                        "Please select a sign before entering amount.");
+                    return;
+                  }
+                  queryData["fromDate"] =
+                      ConvertService.dateToString(selectedFromDate);
+                  queryData["toDate"] =
+                      ConvertService.dateToString(selectedToDate);
+                  queryData["correspondent"] = selectedCorrespondent;
+                  queryData["accountNo"] = selectedAccountNo;
+                  queryData["masterAccountNo"] = selectedMasterAccountNo;
+
+                  _updateQueryData();
+                });
+                Navigator.pop(context, true);
+              },
+              child: const Text("Search"),
+            ),
+          ],
+        );
+      },
+    ).then((value) {
+      if (value == true) {
+        setState(() {
+          _futureRequests = _listPosition();
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_futureRequests == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    return FutureBuilder<List<GridItem>>(
+      future: _futureRequests,
+      builder: (context, snapshot) {
+        Widget body;
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          body = const Center(child: CircularProgressIndicator());
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          body = RefreshIndicator(
+            onRefresh: () async => _futureRequests = _listPosition(),
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: const [
+                SizedBox(height: 200),
+                Center(
+                  child: Text("No data found", style: TextStyle(fontSize: 20)),
+                ),
               ],
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          );
+        } else {
+          body = RefreshIndicator(
+            onRefresh: () async => _futureRequests = _listPosition(),
+            child: GridWithPagination(
+              items: snapshot.data!,
+              pagination: pagination,
+              onPageChange: _onPageChange,
+            ),
+          );
+        }
+
+        return Scaffold(
+          body: Column(
             children: [
-              Text(holding.value),
-              Text(
-                holding.change,
-                style: TextStyle(color: changeColor),
+              ValueListenableBuilder(
+                valueListenable: queryDataNotifier,
+                builder: (_, __, ___) {
+                  final activeFilters = queryData.entries
+                      .where((e) =>
+                          e.value != null &&
+                          e.value.toString().isNotEmpty &&
+                          e.value.toString() != "0")
+                      .toList();
+
+                  if (activeFilters.isEmpty) return const SizedBox.shrink();
+
+                  return Container(
+                    width: double.infinity,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: activeFilters.where((entry) {
+                        if (entry.value is bool) return entry.value == true;
+                        if (entry.value == null ||
+                            entry.value.toString().isEmpty) return false;
+                        return true;
+                      }).map((entry) {
+                        return Chip(
+                          label: Text(
+                            entry.value is bool
+                                ? ConvertService.camelToTitle(entry.key)
+                                    .replaceAll("Is ", "")
+                                : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                            style: const TextStyle(fontSize: 9),
+                          ),
+                          deleteIcon: entry.key.toLowerCase().contains("date")
+                              ? null
+                              : const Icon(Icons.close),
+                          onDeleted: entry.key.toLowerCase().contains("date")
+                              ? null
+                              : () {
+                                  setState(() {
+                                    queryData[entry.key] =
+                                        entry.value is bool ? false : "";
+
+                                    if (entry.key == "amount") {
+                                      queryData["sign"] = "";
+                                    } else if (entry.key == "sign") {
+                                      queryData["amount"] = "";
+                                    }
+
+                                    _updateQueryData();
+                                    _futureRequests = _listPosition();
+                                  });
+                                },
+                        );
+                      }).toList(),
+                    ),
+                  );
+                },
               ),
-              Text(
-                holding.percentChange,
-                style: TextStyle(color: changeColor),
-              ),
+              Expanded(child: body),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

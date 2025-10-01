@@ -76,26 +76,48 @@ class _AchWireListState extends State<AchWireList> {
     });
     return resp.requests.map((e) {
       return GridItem.fromMap({
-        "title": "Bank Account:\n${e.bankAccountNo}\n",
+        "requestType": {
+          "label": "Request Type",
+          "value": e.requestType,
+          "visible": true,
+          "gridPosition": "subTitle",
+        },
+        "transferType": {
+          "label": "Transfer Type",
+          "value": e.transferType,
+          "visible": true,
+          "gridPosition": "title",
+        },
         "requestId": {
           "label": "Request ID",
           "value": e.requestId,
           "visible": false,
         },
         "systemDate": {
-          "label": "System Date",
+          "label": "Requested Date",
           "value": ConvertService.protoDateObjectToString(e.systemDate),
           "visible": true,
         },
         "processDate": {
           "label": "Process Date",
           "value": ConvertService.protoDateObjectToString(e.processDate),
+          "visible":
+              ConvertService.protoDateObjectToString(e.processDate).isNotEmpty,
+        },
+        "bankName": {
+          "label": "Bank",
+          "value": e.bankName,
+          "visible": true,
+        },
+        "bankAccountNo": {
+          "label": "Bank Account",
+          "value": e.bankAccountNo,
           "visible": true,
         },
         "correspondent": {
           "label": "Correspondent",
           "value": e.correspondent,
-          "visible": true,
+          "visible": false,
         },
         "accountId": {
           "label": "Account ID",
@@ -127,15 +149,10 @@ class _AchWireListState extends State<AchWireList> {
           "value": e.bankId,
           "visible": false,
         },
-        "bankName": {
-          "label": "Bank Name",
-          "value": e.bankName,
-          "visible": false,
-        },
         "bankRoutingNo": {
           "label": "Bank Routing No",
           "value": e.bankRoutingNo,
-          "visible": true,
+          "visible": false,
         },
         "isInternational": {
           "label": "International",
@@ -143,20 +160,12 @@ class _AchWireListState extends State<AchWireList> {
           "visible": false,
           "type": "bool",
         },
-        "requestType": {
-          "label": "Request Type",
-          "value": e.requestType,
-          "visible": true,
-        },
-        "transferType": {
-          "label": "Transfer Type",
-          "value": e.transferType,
-          "visible": true,
-        },
+
         "amt": {
           "label": "Amount",
           "value": e.amt,
           "visible": true,
+          "gridPosition": "rightTitle",
         },
         "fee": {
           "label": "Fee",
@@ -523,37 +532,48 @@ class _AchWireListState extends State<AchWireList> {
         } else {
           body = RefreshIndicator(
             onRefresh: () async => _futureRequests = _fetchRequests(),
-            child: GridWithPagination(
-              items: snapshot.data!,
-              pagination: pagination,
-              onPageChange: _onPageChange,
-              actionsBuilder: (ctx, item) => [
-                PopupMenuItem(
-                  value: "edit",
-                  child: const Text("Edit"),
-                  onTap: () {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      final Map<String, dynamic> formData = {
-                        for (var f in item.fields) f.keyName: f.value,
-                      };
-                      Navigator.push(
-                        ctx,
-                        MaterialPageRoute(
-                          builder: (context) => AchWirePage(
-                            initialFormData: formData,
-                          ),
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: GridWithPagination(
+                  items: snapshot.data!,
+                  pagination: pagination,
+                  onPageChange: _onPageChange,
+                  actionsBuilder: (ctx, item) {
+                    final statusField = item.fields.firstWhere(
+                      (f) => f.keyName == "status",
+                      orElse: () =>
+                          GridField(keyName: '', label: '', value: ''),
+                    );
+
+                    return [
+                      if (["Pending"].contains(statusField.value))
+                        PopupMenuItem(
+                          value: "edit",
+                          child: const Text("Edit"),
+                          onTap: () {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              final Map<String, dynamic> formData = {
+                                for (var f in item.fields) f.keyName: f.value,
+                              };
+                              Navigator.push(
+                                ctx,
+                                MaterialPageRoute(
+                                  builder: (context) => AchWirePage(
+                                    initialFormData: formData,
+                                  ),
+                                ),
+                              ).then((value) {
+                                if (value == true) {
+                                  setState(() {
+                                    _futureRequests = _fetchRequests();
+                                  });
+                                }
+                              });
+                            });
+                          },
                         ),
-                      ).then((value) {
-                        if (value == true) {
-                          setState(() {
-                            _futureRequests = _fetchRequests();
-                          });
-                        }
-                      });
-                    });
-                  },
-                ),
-              ],
+                    ];
+                  }),
             ),
           );
         }
@@ -563,7 +583,7 @@ class _AchWireListState extends State<AchWireList> {
             title: const Text('ACH/Wire Requests'),
             actions: [
               IconButton(
-                icon: const Icon(Icons.search),
+                icon: const Icon(Icons.filter_list),
                 onPressed: () {
                   _openFilterDialog();
                 },
@@ -592,17 +612,19 @@ class _AchWireListState extends State<AchWireList> {
                     child: Wrap(
                       spacing: 6,
                       runSpacing: 6,
-                      children: activeFilters
-                          .where((entry) {
+                      children: activeFilters.where((entry) {
                         if (entry.value is bool) return entry.value == true;
-                        if (entry.value == null || entry.value.toString().isEmpty) return false;
+                        if (entry.value == null ||
+                            entry.value.toString().isEmpty) {
+                          return false;
+                        }
                         return true;
-                      })
-                          .map((entry) {
+                      }).map((entry) {
                         return Chip(
                           label: Text(
                             entry.value is bool
-                                ? ConvertService.camelToTitle(entry.key).replaceAll("Is ", "")
+                                ? ConvertService.camelToTitle(entry.key)
+                                    .replaceAll("Is ", "")
                                 : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
                             style: const TextStyle(fontSize: 9),
                           ),
@@ -612,24 +634,22 @@ class _AchWireListState extends State<AchWireList> {
                           onDeleted: entry.key.toLowerCase().contains("date")
                               ? null
                               : () {
-                            setState(() {
-                              queryData[entry.key] =
-                              entry.value is bool ? false : "";
+                                  setState(() {
+                                    queryData[entry.key] =
+                                        entry.value is bool ? false : "";
 
-                              if (entry.key == "amount") {
-                                queryData["sign"] = "";
-                              } else if (entry.key == "sign") {
-                                queryData["amount"] = "";
-                              }
+                                    if (entry.key == "amount") {
+                                      queryData["sign"] = "";
+                                    } else if (entry.key == "sign") {
+                                      queryData["amount"] = "";
+                                    }
 
-                              _updateQueryData();
-                              _futureRequests = _fetchRequests();
-                            });
-                          },
+                                    _updateQueryData();
+                                    _futureRequests = _fetchRequests();
+                                  });
+                                },
                         );
-                      })
-                          .toList(),
-
+                      }).toList(),
                     ),
                   );
                 },
