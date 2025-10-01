@@ -1,4 +1,4 @@
-import 'package:broker_mobile/main.dart';
+import 'package:broker_mobile/session/session.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:broker_mobile/env.dart';

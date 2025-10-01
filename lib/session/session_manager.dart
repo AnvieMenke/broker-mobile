@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:broker_mobile/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'idle_timer_manager.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -11,13 +12,21 @@ class SessionManager with WidgetsBindingObserver {
   DateTime? _expiry;
 
   Timer? _refreshTimer;
-  final Duration _refreshBefore = const Duration(seconds: 30);
+
+  final Duration _refreshBefore = const Duration(minutes: 1);
 
   final void Function(String? logoutReason) onLogout;
+  late final IdleTimerManager _idleTimerManager;
 
   SessionManager({
     required this.onLogout,
-  });
+  }) {
+    _idleTimerManager = IdleTimerManager(
+      idleTimeout: const Duration(minutes: 5), // show warning after x idle
+      warningDuration: const Duration(seconds: 30), // show countdown
+      onIdleLogout: () => logout("Logged out due to inactivity.", false),
+    );
+  }
 
   void init() {
     WidgetsBinding.instance.addObserver(this);
@@ -26,6 +35,7 @@ class SessionManager with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _refreshTimer?.cancel();
+    _idleTimerManager.stop();
   }
 
   void startSession(String token, String refreshToken) {
@@ -33,6 +43,9 @@ class SessionManager with WidgetsBindingObserver {
     _refreshToken = refreshToken;
     _expiry = _parseExpiry(token);
     _scheduleRefresh();
+
+    final ctx = navigatorKey.currentContext;
+    if (ctx != null) _idleTimerManager.start(ctx);
   }
 
   void clearSession() {
@@ -40,6 +53,7 @@ class SessionManager with WidgetsBindingObserver {
     _refreshToken = null;
     _expiry = null;
     _refreshTimer?.cancel();
+    _idleTimerManager.stop();
   }
 
   String get token => _accessToken ?? "";
@@ -50,6 +64,18 @@ class SessionManager with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _checkExpiry();
+
+      if (isAuthenticated) {
+        final ctx = navigatorKey.currentContext;
+        if (ctx != null) _idleTimerManager.start(ctx);
+      }
+    }
+  }
+
+  void userActivityDetected() {
+    if (isAuthenticated) {
+      final ctx = navigatorKey.currentContext;
+      if (ctx != null) _idleTimerManager.notifyUserActivity(ctx);
     }
   }
 
@@ -62,13 +88,11 @@ class SessionManager with WidgetsBindingObserver {
     var duration = refreshAt.difference(now);
 
     if (duration.isNegative) {
-      // Already expired, force check
       _checkExpiry();
       return;
     }
 
-    // Cap how far in the future we’ll wait
-    const maxWait = Duration(hours: 12); // check at least twice a day
+    const maxWait = Duration(hours: 12);
     if (duration > maxWait) {
       duration = maxWait;
     }
@@ -80,12 +104,12 @@ class SessionManager with WidgetsBindingObserver {
 
   Future<void> _refresh() async {
     if (_refreshToken == null) {
-      return logout("Invalid session. Please log in again.");
+      return logout("Invalid session. Please log in again.", true);
     }
 
     final auth = await refreshToken(_refreshToken!);
     if (auth == null) {
-      return logout("Invalid session. Please log in again.");
+      return logout("Invalid session. Please log in again.", true);
     }
 
     _accessToken = auth.accessToken;
@@ -98,16 +122,16 @@ class SessionManager with WidgetsBindingObserver {
     if (_expiry == null) return;
     final now = DateTime.now();
     if (now.isAfter(_expiry!)) {
-      logout("Your session expired. Please log in again.");
+      logout("Your session expired. Please log in again.", true);
     } else {
       _scheduleRefresh();
     }
   }
 
-  void logout(String? logoutReason) async {
+  void logout(String? logoutReason, bool isInvalidSession) {
     if (isAuthenticated) {
-      if (logoutReason == null) {
-        await logoutUser();
+      if (!isInvalidSession) {
+        logoutUser();
       }
       onLogout(logoutReason);
     }
