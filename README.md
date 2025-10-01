@@ -100,7 +100,7 @@ protoc-gen-dart --version
 Example command:
 
 ```bash
-	make dart-proto
+make dart-proto
 ```
 
 ---
