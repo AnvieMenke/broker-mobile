@@ -69,8 +69,8 @@ class GridField {
         return Text(text);
       case 'qty':
         final text = FormatUtils.formatQty(value);
-        final amtValue = Decimal.tryParse(value) ?? Decimal.zero;
-        final color = amtValue < Decimal.zero ? Colors.red : null;
+        final qtyValue = Decimal.tryParse(value) ?? Decimal.zero;
+        final color = qtyValue < Decimal.zero ? Colors.red : null;
 
         return Text(
           text,
