@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../utils/fmt/fmt.dart';
+import 'package:decimal/decimal.dart';
 
 class GridField {
   final String keyName;
@@ -24,62 +26,98 @@ class GridField {
   });
 
   Widget get displayValue {
-    if (type == 'bool') {
-      final normalized = value.toLowerCase();
-      final text = (normalized == 'true' || normalized == '1') ? "✔" : "✖";
-      return Text(text);
-    } else if (type == 'status') {
-      Color bg;
-      switch (value.toLowerCase()) {
-        case 'pending':
-          bg = Colors.orange;
-          break;
-        case 'approved':
-        case 'active':
-          bg = Colors.lightGreen;
-          break;
-        case 'canceled':
-        case 'denied':
-          bg = Colors.red;
-          break;
-        default:
-          bg = Colors.grey;
-      }
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: bg,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Text(
-          value,
-          style:
-              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-      );
-    }
+    switch (type) {
+      case 'bool':
+        final normalized = value.toLowerCase();
+        final text = (normalized == 'true' || normalized == '1') ? "✔" : "✖";
+        return Text(text);
 
-    return Text(value);
+      case 'status':
+        Color bg;
+        switch (value.toLowerCase()) {
+          case 'pending':
+            bg = Colors.orange;
+            break;
+          case 'approved':
+          case 'active':
+            bg = Colors.lightGreen;
+            break;
+          case 'canceled':
+          case 'denied':
+            bg = Colors.red;
+            break;
+          default:
+            bg = Colors.grey;
+        }
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: bg,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(
+            value,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        );
+      case 'date':
+        debugPrint(value);
+        final text = FormatUtils.formatPbDate(value);
+        return Text(text);
+      case 'qty':
+        final text = FormatUtils.formatQty(value);
+        final qtyValue = Decimal.tryParse(value) ?? Decimal.zero;
+        final color = qtyValue < Decimal.zero ? Colors.red : null;
+
+        return Text(
+          text,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        );
+
+      case 'amount':
+        final text = FormatUtils.formatCurrency(value);
+        final amtValue = Decimal.tryParse(value) ?? Decimal.zero;
+        final color = amtValue < Decimal.zero
+            ? Colors.red
+            : (amtValue > Decimal.zero ? Colors.green : Colors.grey);
+
+        return Text(
+          text,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        );
+
+      default:
+        return Text(value);
+    }
   }
 }
 
 class GridItem {
-  final String title;
-  final String subTitle;
-  final String rightTitle;
+  final GridField? titleField;
+  final GridField? subTitleField;
+  final GridField? rightField;
   final List<GridField> fields;
 
   const GridItem({
-    required this.title,
-    this.subTitle = "",
-    this.rightTitle = "",
+    this.titleField,
+    this.subTitleField,
+    this.rightField,
     this.fields = const [],
   });
 
   factory GridItem.fromMap(Map<String, dynamic> map) {
-    String extractedTitle = "";
-    String extractedSubTitle = "";
-    String extractedRightTitle = "";
+    GridField? extractedTitleField;
+    GridField? extractedSubTitleField;
+    GridField? extractedRightField;
 
     final parsedFields = <GridField>[];
 
@@ -98,11 +136,11 @@ class GridItem {
         );
 
         if (field.gridPosition == "title") {
-          extractedTitle = field.value;
+          extractedTitleField = field;
         } else if (field.gridPosition == "subTitle") {
-          extractedSubTitle = field.value;
+          extractedSubTitleField = field;
         } else if (field.gridPosition == "rightTitle") {
-          extractedRightTitle = field.value;
+          extractedRightField = field;
         }
 
         parsedFields.add(field);
@@ -118,9 +156,9 @@ class GridItem {
     });
 
     return GridItem(
-      title: extractedTitle,
-      subTitle: extractedSubTitle,
-      rightTitle: extractedRightTitle,
+      titleField: extractedTitleField,
+      subTitleField: extractedSubTitleField,
+      rightField: extractedRightField,
       fields: parsedFields,
     );
   }
@@ -214,19 +252,19 @@ class GridViewCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (item.title.isNotEmpty)
-                        Text(
-                          item.title,
-                          style: textTheme.titleMedium?.copyWith(
+                      if (item.titleField != null)
+                        DefaultTextStyle(
+                          style: textTheme.titleMedium!.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
+                          child: item.titleField!.displayValue,
                         ),
-                      if (item.subTitle.isNotEmpty)
-                        Text(
-                          item.subTitle,
-                          style: textTheme.bodySmall?.copyWith(
+                      if (item.subTitleField != null)
+                        DefaultTextStyle(
+                          style: textTheme.bodySmall!.copyWith(
                             color: Colors.grey[600],
                           ),
+                          child: item.subTitleField!.displayValue,
                         ),
                     ],
                   ),
@@ -241,12 +279,12 @@ class GridViewCard extends StatelessWidget {
                         itemBuilder: (context) => mergedActions,
                       ),
                     ),
-                    if (item.rightTitle.isNotEmpty)
-                      Text(
-                        item.rightTitle,
-                        style: textTheme.titleMedium?.copyWith(
+                    if (item.rightField != null)
+                      DefaultTextStyle(
+                        style: textTheme.titleMedium!.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
+                        child: item.rightField!.displayValue,
                       ),
                   ],
                 ),
