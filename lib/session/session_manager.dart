@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:broker_mobile/proto/authpb/auth.pb.dart';
+import 'package:broker_mobile/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
@@ -13,12 +13,10 @@ class SessionManager with WidgetsBindingObserver {
   Timer? _refreshTimer;
   final Duration _refreshBefore = const Duration(seconds: 30);
 
-  final VoidCallback onLogout;
-  final Future<LoginResponse?> Function(String refreshToken) onRefresh;
+  final void Function(String? logoutReason) onLogout;
 
   SessionManager({
     required this.onLogout,
-    required this.onRefresh,
   });
 
   void init() {
@@ -44,7 +42,7 @@ class SessionManager with WidgetsBindingObserver {
     _refreshTimer?.cancel();
   }
 
-  String? get token => _accessToken;
+  String get token => _accessToken ?? "";
   bool get isAuthenticated =>
       _accessToken != null && _expiry?.isAfter(DateTime.now()) == true;
 
@@ -81,12 +79,13 @@ class SessionManager with WidgetsBindingObserver {
   }
 
   Future<void> _refresh() async {
-    if (_refreshToken == null) return logout();
+    if (_refreshToken == null) {
+      return logout("Invalid session. Please log in again.");
+    }
 
-    final auth = await onRefresh(_refreshToken!);
+    final auth = await refreshToken(_refreshToken!);
     if (auth == null) {
-      logout();
-      return;
+      return logout("Invalid session. Please log in again.");
     }
 
     _accessToken = auth.accessToken;
@@ -99,15 +98,20 @@ class SessionManager with WidgetsBindingObserver {
     if (_expiry == null) return;
     final now = DateTime.now();
     if (now.isAfter(_expiry!)) {
-      logout();
+      logout("Your session expired. Please log in again.");
     } else {
       _scheduleRefresh();
     }
   }
 
-  void logout() {
+  void logout(String? logoutReason) async {
+    if (isAuthenticated) {
+      if (logoutReason == null) {
+        await logoutUser();
+      }
+      onLogout(logoutReason);
+    }
     clearSession();
-    onLogout();
   }
 
   DateTime? _parseExpiry(String jwt) {

@@ -348,7 +348,9 @@ class PositionFragmentState extends State<PositionFragment> {
                       children: activeFilters.where((entry) {
                         if (entry.value is bool) return entry.value == true;
                         if (entry.value == null ||
-                            entry.value.toString().isEmpty) return false;
+                            entry.value.toString().isEmpty) {
+                          return false;
+                        }
                         return true;
                       }).map((entry) {
                         return Chip(
