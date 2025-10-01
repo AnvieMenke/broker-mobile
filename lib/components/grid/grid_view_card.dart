@@ -144,9 +144,10 @@ class GridViewCard extends StatelessWidget {
 
         return AlertDialog(
           title: const Text("Details"),
-          content: SizedBox(
-            width: double.maxFinite,
-            height: 400,
+          content: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxHeight: 400,
+            ),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,7 +345,7 @@ class GridWithPagination extends StatelessWidget {
     required this.items,
     required this.pagination,
     required this.onPageChange,
-    this.maxPageButtonsToShow = 5,
+    this.maxPageButtonsToShow = 3,
     this.actionsBuilder,
   });
 
@@ -439,6 +440,7 @@ class GridWithPagination extends StatelessWidget {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
                           tooltip: 'First',
@@ -472,8 +474,10 @@ class GridWithPagination extends StatelessWidget {
                                         .textTheme
                                         .bodyMedium
                                         ?.color,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 8),
+                                minimumSize: const Size(30, 30),
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
                                 ),
@@ -484,7 +488,10 @@ class GridWithPagination extends StatelessWidget {
                                         pagination.copyWith(
                                             pageNo: p, reload: true),
                                       ),
-                              child: Text('${p + 1}'),
+                              child: Text(
+                                '${p + 1}',
+                                style: const TextStyle(fontSize: 12),
+                              ),
                             ),
                           ),
                         ),
@@ -511,7 +518,7 @@ class GridWithPagination extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),
