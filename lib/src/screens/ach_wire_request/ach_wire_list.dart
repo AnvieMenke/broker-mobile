@@ -95,12 +95,14 @@ class _AchWireListState extends State<AchWireList> {
         },
         "systemDate": {
           "label": "Requested Date",
-          "value": ConvertService.protoDateObjectToString(e.systemDate),
+          "type": "date",
+          "value": e.systemDate,
           "visible": true,
         },
         "processDate": {
           "label": "Process Date",
-          "value": ConvertService.protoDateObjectToString(e.processDate),
+          "type": "date",
+          "value": e.processDate,
           "visible":
               ConvertService.protoDateObjectToString(e.processDate).isNotEmpty,
         },
@@ -160,16 +162,17 @@ class _AchWireListState extends State<AchWireList> {
           "visible": false,
           "type": "bool",
         },
-
         "amt": {
           "label": "Amount",
           "value": e.amt,
           "visible": true,
+          "type": "amount",
           "gridPosition": "rightTitle",
         },
         "fee": {
           "label": "Fee",
           "value": e.fee,
+          "type": "amount",
           "visible": true,
         },
         "fedNo": {

@@ -7,6 +7,7 @@ import '../../../../components/messages/notification.dart';
 import '../../../../service/position_service.dart';
 import '../../../../service/convert_service.dart';
 import '../../../../service/profile_service.dart';
+import '../../../../components/dropdowns/select_system_code.dart';
 
 class PositionFragment extends StatefulWidget {
   const PositionFragment({super.key});
@@ -22,6 +23,7 @@ class PositionFragmentState extends State<PositionFragment> {
     "correspondent": "",
     "accountNo": "",
     "masterAccountNo": "",
+    "dateType": "",
   };
 
   late final ValueNotifier<int> queryDataNotifier;
@@ -76,7 +78,8 @@ class PositionFragmentState extends State<PositionFragment> {
         },
         "date": {
           "label": "Date",
-          "value": ConvertService.protoDateObjectToString(e.date),
+          "value": e.date,
+          "type": "date",
           "visible": true,
           "gridPosition": "subTitle",
         },
@@ -90,17 +93,20 @@ class PositionFragmentState extends State<PositionFragment> {
         "tdQty": {
           "label": "TD Qty",
           "value": e.tdQty,
+          "type": "qty",
           "visible": true,
         },
         "costBasis": {
           "label": "Cost Basis",
           "value": e.costBasis,
+          "type": "amount",
           "visible": true,
         },
         "tdMarketValue": {
           "hideLabel": true,
           "label": "TD Market Value",
           "value": e.tdMarketValue,
+          "type": "amount",
           "floatRight": true,
           "visible": true,
         },
@@ -116,6 +122,7 @@ class PositionFragmentState extends State<PositionFragment> {
   }
 
   void openFilterDialog() {
+    String selectedDateType = queryData["dateType"];
     String selectedCorrespondent = queryData["correspondent"];
     String selectedAccountNo = queryData["accountNo"];
     String selectedMasterAccountNo = queryData["masterAccountNo"];
@@ -157,6 +164,16 @@ class PositionFragmentState extends State<PositionFragment> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    SelectSystemCode(
+                      label: "Date Type",
+                      placeholder: "Select Date Type",
+                      value: selectedDateType,
+                      type: "Date Type",
+                      subType: "Position Report",
+                      onChange: (map) => setState(() {
+                        selectedDateType = map?['data']['code'];
+                      }),
+                    ),
                     const Text("Date Range",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
@@ -259,6 +276,7 @@ class PositionFragmentState extends State<PositionFragment> {
                         "Please select a sign before entering amount.");
                     return;
                   }
+                  queryData["dateType"] = selectedDateType;
                   queryData["fromDate"] =
                       ConvertService.dateToString(selectedFromDate);
                   queryData["toDate"] =
@@ -361,10 +379,10 @@ class PositionFragmentState extends State<PositionFragment> {
                                 : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
                             style: const TextStyle(fontSize: 9),
                           ),
-                          deleteIcon: entry.key.toLowerCase().contains("date")
+                          deleteIcon: entry.key.toLowerCase().contains("fromdate") || entry.key.toLowerCase().contains("todate")
                               ? null
                               : const Icon(Icons.close),
-                          onDeleted: entry.key.toLowerCase().contains("date")
+                          onDeleted: entry.key.toLowerCase().contains("fromdate") || entry.key.toLowerCase().contains("todate")
                               ? null
                               : () {
                                   setState(() {

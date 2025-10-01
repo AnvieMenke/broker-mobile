@@ -2,7 +2,7 @@ import 'package:broker_mobile/session/session_guard.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/src/screens/auth/login.dart';
 import 'package:broker_mobile/env.dart';
-import 'custom_theme.dart';
+import 'utils/theme/custom_theme.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:broker_mobile/session/activity_listener.dart';
 
