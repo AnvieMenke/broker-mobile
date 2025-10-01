@@ -1,4 +1,4 @@
-import 'package:broker_mobile/main.dart';
+import 'package:broker_mobile/session/session.dart';
 import 'package:grpc/grpc.dart';
 
 class AuthInterceptor extends ClientInterceptor {
@@ -23,7 +23,7 @@ class AuthInterceptor extends ClientInterceptor {
 
     response.catchError((error) {
       if (error is GrpcError && error.code == StatusCode.unauthenticated) {
-        sessionManager.logout(error.message ?? 'Unauthenticated');
+        sessionManager.logout(error.message ?? 'Unauthenticated', true);
         return null;
       }
       return Future.error(error);
@@ -53,7 +53,7 @@ class AuthInterceptor extends ClientInterceptor {
 
     response.handleError((error) {
       if (error is GrpcError && error.code == StatusCode.unauthenticated) {
-        sessionManager.logout(error.message ?? 'Unauthenticated');
+        sessionManager.logout(error.message ?? 'Unauthenticated', true);
       }
     });
 
