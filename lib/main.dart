@@ -13,23 +13,46 @@ void main() async {
   await AppEnv.load();
   AppTheme.setSystemUIOverlayStyle();
   sessionManager.init();
+
+  // Load saved theme before runApp
+  await themeManager.loadTheme();
+
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    themeManager.addListener(_onThemeChanged);
+  }
+
+  @override
+  void dispose() {
+    themeManager.removeListener(_onThemeChanged);
+    super.dispose();
+  }
+
+  void _onThemeChanged() {
+    setState(() {}); // Rebuild when theme changes
+  }
 
   @override
   Widget build(BuildContext context) {
     return ActivityListener(
-      onActivity: () {
-        sessionManager.userActivityDetected();
-      },
+      onActivity: sessionManager.userActivityDetected,
       child: MaterialApp(
         title: 'Broker App',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.system,
+        themeMode: themeManager.themeMode, // Use persisted theme here
         navigatorKey: navigatorKey,
         home: SessionGuard(
           manager: sessionManager,
