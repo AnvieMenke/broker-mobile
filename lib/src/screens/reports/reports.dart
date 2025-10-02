@@ -1,8 +1,10 @@
 import 'package:broker_mobile/src/screens/reports/margin/call_log.dart';
+import 'package:broker_mobile/components/option/option_grid.dart';
 import 'package:flutter/material.dart';
 import 'position/position.dart';
 import 'activity/activity.dart';
 import 'margin/buying_power.dart';
+import 'package:broker_mobile/session/session.dart';
 
 class Reports extends StatefulWidget {
   const Reports({super.key});
@@ -19,22 +21,19 @@ class _ReportsState extends State<Reports> {
   final GlobalKey<CallLogFragmentState> _callLogKey = GlobalKey();
   final GlobalKey<BuyingPowerFragmentState> _buyingPowerKey = GlobalKey();
 
-  final List<Map<String, dynamic>> reports = [
+  final List<Map<String, dynamic>> _options = [
     {"title": "Activity", "icon": Icons.bar_chart},
     {"title": "Position", "icon": Icons.account_balance},
     {"title": "Margin Call", "icon": Icons.warning},
-    {
-      "title": "Buying Power",
-      "icon": Icons.account_balance_wallet,
-    },
+    {"title": "Buying Power", "icon": Icons.account_balance_wallet},
   ];
 
-  late final List<Widget> fragments;
+  late final List<Widget> _fragments;
 
   @override
   void initState() {
     super.initState();
-    fragments = [
+    _fragments = [
       ActivityFragment(key: _activityKey),
       PositionFragment(key: _positionKey),
       CallLogFragment(key: _callLogKey),
@@ -42,14 +41,22 @@ class _ReportsState extends State<Reports> {
     ];
   }
 
-  void _onFilterPressed(int selectedIndex) {
-    if (selectedIndex == 0) {
+  void _handleOptionTap(int index) {
+    if (index == 0) {
+      sessionManager.logout(null, false);
+    } else {
+      setState(() => _selectedIndex = index);
+    }
+  }
+
+  void _onFilterPressed(int index) {
+    if (index == 0) {
       _activityKey.currentState?.openFilterDialog();
-    } else if (selectedIndex == 1) {
+    } else if (index == 1) {
       _positionKey.currentState?.openFilterDialog();
-    } else if (selectedIndex == 2) {
+    } else if (index == 2) {
       _callLogKey.currentState?.openFilterDialog();
-    } else if (selectedIndex == 3) {
+    } else if (index == 3) {
       _buyingPowerKey.currentState?.openFilterDialog();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -60,23 +67,21 @@ class _ReportsState extends State<Reports> {
 
   @override
   Widget build(BuildContext context) {
+    final isPageSelected = _selectedIndex != -1;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _selectedIndex == -1 ? "Reports" : reports[_selectedIndex]["title"],
+          isPageSelected ? _options[_selectedIndex]["title"] : "Reports",
         ),
-        leading: _selectedIndex != -1
+        leading: isPageSelected
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = -1;
-                  });
-                },
+                onPressed: () => setState(() => _selectedIndex = -1),
               )
             : null,
         actions: [
-          if (_selectedIndex != -1)
+          if (isPageSelected)
             IconButton(
               icon: const Icon(Icons.filter_list),
               onPressed: () => _onFilterPressed(_selectedIndex),
@@ -84,48 +89,13 @@ class _ReportsState extends State<Reports> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+        padding: const EdgeInsets.only(bottom: 10),
         child: _selectedIndex == -1
-            ? GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                  childAspectRatio: 1,
-                ),
-                itemCount: reports.length,
-                itemBuilder: (context, index) {
-                  final report = reports[index];
-                  return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      padding: const EdgeInsets.all(16),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _selectedIndex = index;
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(report["icon"] as IconData, size: 48),
-                        const SizedBox(height: 12),
-                        Text(
-                          report["title"] as String,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                },
+            ? OptionGrid(
+                options: _options,
+                onTap: _handleOptionTap,
               )
-            : fragments[_selectedIndex],
+            : _fragments[_selectedIndex],
       ),
     );
   }
