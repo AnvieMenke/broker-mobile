@@ -1,3 +1,5 @@
+import 'package:broker_mobile/src/screens/account/account.dart';
+
 import '../ach_wire_request/ach_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,7 +22,7 @@ class HomePageState extends State<HomePage> {
     const Center(child: Reports()),
     const SizedBox.shrink(),
     const Center(child: Text('Summary')),
-    const Center(child: Text('Account')),
+    const Center(child: Account()),
   ];
 
   void _onTabTapped(int index) {
@@ -60,14 +62,8 @@ class HomePageState extends State<HomePage> {
               _navItem(
                   icon: FontAwesomeIcons.chartLine, label: 'Report', index: 1),
               const SizedBox(width: 60),
-              _navItem(
-                  icon: FontAwesomeIcons.book,
-                  label: 'Summary',
-                  index: 3),
-              _navItem(
-                  icon: FontAwesomeIcons.user,
-                  label: 'Account',
-                  index: 4),
+              _navItem(icon: FontAwesomeIcons.book, label: 'Summary', index: 3),
+              _navItem(icon: FontAwesomeIcons.user, label: 'Account', index: 4),
             ],
           ),
         ),
@@ -90,8 +86,11 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _navItem(
-      {required IconData icon, required String label, required int index}) {
+  Widget _navItem({
+    required IconData icon,
+    required String label,
+    required int index,
+  }) {
     final bool isSelected = _currentIndex == index;
     final Color iconColor = isSelected ? activeColor : Colors.white;
 
