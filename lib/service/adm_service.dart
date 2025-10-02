@@ -4,7 +4,7 @@ import 'package:grpc/grpc_connection_interface.dart';
 import '../server/grpc_client.dart';
 import '../server/auth_interceptor.dart';
 
-class CommonService {
+class AdmService {
   ClientChannelBase _createChannel() {
     return getGrpcChannel();
   }

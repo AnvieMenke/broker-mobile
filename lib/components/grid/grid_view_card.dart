@@ -94,6 +94,10 @@ class GridField {
             color: color,
           ),
         );
+      case 'price':
+        final text = FormatUtils.formatCurrency(value);
+
+        return Text(text);
 
       default:
         return Text(value);

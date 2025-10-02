@@ -182,4 +182,24 @@ class CommonService {
       rethrow;
     }
   }
+
+  Future<ListAdmEntryTypeResponse> listEntryType(
+      String entryType, screenType, correspondent, accountNo, status, note) async {
+    final client = _listClient();
+    final req = ListAdmEntryTypeRequest()
+      ..entryType = entryType
+      ..correspondent = correspondent
+      ..screenType = screenType
+      ..correspondent = correspondent
+      ..accountNo = accountNo
+      ..status = status
+      ..note = note;
+
+    try {
+      final response = await client.listAdmEntryType(req);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
