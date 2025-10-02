@@ -1,4 +1,3 @@
-
 import 'package:broker_mobile/src/screens/auth/otp_verification_page.dart';
 import 'package:flutter/material.dart';
 import '../../../service/auth_service.dart';
@@ -62,6 +61,8 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       _selectedCorrespondent = _correspondents.first;
+      // set expiry time (2 minutes from now)
+      final expiryTime = DateTime.now().add(const Duration(seconds: 120));
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(
           context,
@@ -72,6 +73,7 @@ class _LoginPageState extends State<LoginPage> {
               sessionKey: _session,
               authenticationMode: authenticationMode,
               correspondent: _selectedCorrespondent ?? '',
+              expiryTime: expiryTime,
             ),
           ),
         );
@@ -150,8 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                   items: _correspondents.map((c) {
                     return DropdownMenuItem(
                       value: c,
-                      child:
-                          Text(c),
+                      child: Text(c),
                     );
                   }).toList(),
                   onChanged: (value) {
@@ -184,8 +185,8 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child:
-                        const Text('Continue', style: TextStyle(fontSize: 16,color: Colors.white)),
+                    child: const Text('Continue',
+                        style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
               ],
@@ -203,7 +204,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: _loading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text('Login', style: TextStyle(fontSize: 16,color: Colors.white)),
+                        : const Text('Login',
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
             ],

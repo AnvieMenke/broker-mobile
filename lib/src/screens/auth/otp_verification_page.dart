@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../../../service/auth_service.dart';
 import '../dashboard/main_screen.dart';
@@ -12,14 +11,17 @@ class OtpVerificationPage extends StatefulWidget {
   final String sessionKey;
   final String authenticationMode;
   final String correspondent;
+  final DateTime expiryTime;
 
-  const OtpVerificationPage(
-      {super.key,
-      required this.email,
-      required this.password,
-      required this.sessionKey,
-      required this.authenticationMode,
-      required this.correspondent});
+  const OtpVerificationPage({
+    super.key,
+    required this.email,
+    required this.password,
+    required this.sessionKey,
+    required this.authenticationMode,
+    required this.correspondent,
+    required this.expiryTime,
+  });
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();
@@ -30,32 +32,28 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   bool _verifying = false;
   String? _error;
 
-  Timer? _timer;
-  int _remainingSeconds = 120;
+  Timer? _ticker;
 
   @override
   void initState() {
     super.initState();
-    _startTimer();
+
+    // use ticker just to update UI every second
+    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+      setState(() {}); // trigger rebuild, remaining time is recalculated
+    });
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _ticker?.cancel();
     _otpController.dispose();
     super.dispose();
   }
 
-  void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds > 0) {
-        setState(() {
-          _remainingSeconds--;
-        });
-      } else {
-        timer.cancel();
-      }
-    });
+  int get _remainingSeconds {
+    final diff = widget.expiryTime.difference(DateTime.now()).inSeconds;
+    return diff > 0 ? diff : 0;
   }
 
   String _formatTime(int seconds) {
@@ -95,7 +93,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     });
 
     try {
-      log('email: ${widget.email}, password: ${widget.password}, otp: $otp, sessionKey: ${widget.sessionKey}, authenticationMode: ${widget.authenticationMode}');
       await validateAuthCode(
         email: widget.email,
         password: widget.password,
@@ -123,12 +120,13 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     ?.trim()
                 : e.toString());
       });
-      debugPrint("OTP Verification Error: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final seconds = _remainingSeconds;
+
     return Scaffold(
       body: Center(
         child: Padding(
@@ -142,13 +140,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               Text(
                 "Enter OTP sent to ${maskEmail(widget.email)}",
               ),
-              const SizedBox(height: 8),
               Text(
-                _remainingSeconds > 0
-                    ? "Expires in ${_formatTime(_remainingSeconds)}"
+                seconds > 0
+                    ? "Expires in ${_formatTime(seconds)}"
                     : "OTP expired",
                 style: TextStyle(
-                  color: _remainingSeconds > 0 ? Colors.grey : Colors.red,
+                  color: seconds > 0 ? Colors.grey : Colors.red,
                   fontSize: 14,
                 ),
               ),
@@ -163,8 +160,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 Text(_error!, style: const TextStyle(color: Colors.redAccent)),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed:
-                    (_verifying || _remainingSeconds <= 0) ? null : _verifyOtp,
+                onPressed: (_verifying || seconds <= 0) ? null : _verifyOtp,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   padding: const EdgeInsets.symmetric(vertical: 14),
