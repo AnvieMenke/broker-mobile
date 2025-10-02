@@ -253,7 +253,7 @@ class _AchWirePageState extends State<AchWirePage> {
                       name: "correspondent",
                       value: formData["correspondent"],
                       label: "Correspondent",
-                      isAllStatus: true,
+                      isAllStatus: false,
                       type: "",
                       onChange: (value) => setState(() {
                         formData["correspondent"] = value;
@@ -268,7 +268,8 @@ class _AchWirePageState extends State<AchWirePage> {
                       disabled: isEdit,
                       name: "accountNo",
                       value: formData["accountNo"],
-                      isAllStatus: true,
+                      isAllStatus: false,
+                      isAccessibleOnly: true,
                       correspondent: formData["correspondent"],
                       type: "",
                       onChange: (map) => setState(() {

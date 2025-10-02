@@ -312,7 +312,7 @@ class _AchWireListState extends State<AchWireList> {
                         name: "correspondent",
                         value: selectedCorrespondent,
                         label: "Correspondent",
-                        isAllStatus: true,
+                        isAllStatus: false,
                         type: "",
                         onChange: (value) => setState(() {
                           selectedCorrespondent = value;
@@ -325,7 +325,8 @@ class _AchWireListState extends State<AchWireList> {
                         name: "accountNo",
                         freeSolo: true,
                         value: selectedAccountNo,
-                        isAllStatus: true,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
                         correspondent: queryData["correspondent"],
                         type: "Client",
                         onChange: (map) => setState(() {
@@ -343,7 +344,8 @@ class _AchWireListState extends State<AchWireList> {
                         name: "masterAccountNo",
                         freeSolo: true,
                         value: selectedMasterAccountNo,
-                        isAllStatus: true,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
                           if (map['data'] != null &&

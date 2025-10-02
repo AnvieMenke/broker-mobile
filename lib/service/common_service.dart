@@ -150,4 +150,36 @@ class CommonService {
       rethrow;
     }
   }
+
+  Future<PbList<Rep>> accessibleRep(
+      String key, correspondent, bool isAllStatus) async {
+    final client = _lazyClient();
+    final req = AccessibleRequest()
+      ..key = key
+      ..correspondent = correspondent
+      ..isAllStatus = isAllStatus;
+
+    try {
+      final response = await client.accessibleRep(req);
+      return response.reps;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<PbList<Branch>> accessibleBranch(
+      String key, correspondent, bool isAllStatus) async {
+    final client = _lazyClient();
+    final req = AccessibleRequest()
+      ..key = key
+      ..correspondent = correspondent
+      ..isAllStatus = isAllStatus;
+
+    try {
+      final response = await client.accessibleBranch(req);
+      return response.branches;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

@@ -36,7 +36,14 @@ class PositionService {
         param["toDate"] != null
             ? DateTime.parse(param["toDate"])
             : DateTime.now(),
-      );
+      )
+      ..correspondent = param['correspondent'] ?? ""
+      ..masterAccountNo = param['masterAccountNo'] ?? ""
+      ..rep = param['rep'] ?? ""
+      ..branch = param['branch'] ?? ""
+      ..assetType = param['assetType'] ?? ""
+      ..symbol = param['symbol'] ?? "";
+
     if (paging != null && paging.isNotEmpty) {
       var paginationReq = Pagination()
         ..pageNo = paging["pageNo"] ?? 0

@@ -3,11 +3,13 @@ import 'package:broker_mobile/components/grid/grid_view_card.dart';
 import '../../../../components/dropdowns/select_account_no.dart';
 import '../../../../components/dropdowns/select_correspondent.dart';
 import '../../../../components/dropdowns/select_master_account_no.dart';
-import '../../../../components/messages/notification.dart';
 import '../../../../service/position_service.dart';
 import '../../../../service/convert_service.dart';
 import '../../../../service/profile_service.dart';
 import '../../../../components/dropdowns/select_system_code.dart';
+import '../../../../components/dropdowns/select_rep.dart';
+import '../../../../components/dropdowns/select_branch.dart';
+import '../../../../components/dropdowns/select_symbol.dart';
 
 class PositionFragment extends StatefulWidget {
   const PositionFragment({super.key});
@@ -20,10 +22,14 @@ class PositionFragmentState extends State<PositionFragment> {
   Future<List<GridItem>>? _futureRequests;
 
   final Map<String, dynamic> queryData = {
+    "dateType": "",
     "correspondent": "",
     "accountNo": "",
     "masterAccountNo": "",
-    "dateType": "",
+    "rep": "",
+    "branch": "",
+    "assetType": "",
+    "symbol": "",
   };
 
   late final ValueNotifier<int> queryDataNotifier;
@@ -70,11 +76,31 @@ class PositionFragmentState extends State<PositionFragment> {
     });
     return resp.positions.map((e) {
       return GridItem.fromMap({
-        "bankAccountNo": {
+        "accountNo": {
           "label": "Account No",
           "value": e.accountNo,
           "visible": true,
           "gridPosition": "title",
+        },
+        "correspondent": {
+          "label": "Correspondent",
+          "value": e.correspondent,
+          "visible": false,
+        },
+        "masterAccountNo": {
+          "label": "Master Account No",
+          "value": e.masterAccountNo,
+          "visible": false,
+        },
+        "rep": {
+          "label": "Rep",
+          "value": e.rep,
+          "visible": false,
+        },
+        "branch": {
+          "label": "Branch",
+          "value": e.branch,
+          "visible": false,
         },
         "date": {
           "label": "Date",
@@ -82,6 +108,11 @@ class PositionFragmentState extends State<PositionFragment> {
           "type": "date",
           "visible": true,
           "gridPosition": "subTitle",
+        },
+        "assetType": {
+          "label": "Asset Type",
+          "value": e.assetType,
+          "visible": false,
         },
         "symbol": {
           "hideLabel": true,
@@ -126,11 +157,13 @@ class PositionFragmentState extends State<PositionFragment> {
     String selectedCorrespondent = queryData["correspondent"];
     String selectedAccountNo = queryData["accountNo"];
     String selectedMasterAccountNo = queryData["masterAccountNo"];
+    String selectedRep = queryData["rep"];
+    String selectedBranch = queryData["branch"];
+    String selectedAssetType = queryData["assetType"];
+    String selectedSymbol = queryData["symbol"];
     DateTime? selectedFromDate =
         ConvertService.stringToDate(queryData["fromDate"]);
     DateTime? selectedToDate = ConvertService.stringToDate(queryData["toDate"]);
-    String? selectedSign = queryData["sign"];
-    String? amount = queryData["amount"];
 
     showDialog<bool>(
       context: context,
@@ -219,7 +252,7 @@ class PositionFragmentState extends State<PositionFragment> {
                       name: "correspondent",
                       value: selectedCorrespondent,
                       label: "Correspondent",
-                      isAllStatus: true,
+                      isAllStatus: false,
                       type: "",
                       onChange: (value) => setState(() {
                         selectedCorrespondent = value;
@@ -230,7 +263,8 @@ class PositionFragmentState extends State<PositionFragment> {
                       name: "accountNo",
                       freeSolo: true,
                       value: selectedAccountNo,
-                      isAllStatus: true,
+                      isAllStatus: false,
+                      isAccessibleOnly: true,
                       correspondent: queryData["correspondent"],
                       type: "Client",
                       onChange: (map) => setState(() {
@@ -246,13 +280,66 @@ class PositionFragmentState extends State<PositionFragment> {
                       name: "masterAccountNo",
                       freeSolo: true,
                       value: selectedMasterAccountNo,
-                      isAllStatus: true,
+                      isAllStatus: false,
+                      isAccessibleOnly: true,
                       correspondent: queryData["correspondent"],
                       onChange: (map) => setState(() {
                         if (map['data'] != null &&
                             map['data']['masterAccountNo'] != null) {
                           selectedMasterAccountNo =
                               map['data']['masterAccountNo'] as String;
+                        }
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    AutoCompleteRepAdvisor(
+                      name: "rep",
+                      freeSolo: true,
+                      value: selectedMasterAccountNo,
+                      isAllStatus: false,
+                      isAccessibleOnly: true,
+                      correspondent: queryData["correspondent"],
+                      onChange: (map) => setState(() {
+                        if (map['data'] != null && map['data']['rep'] != null) {
+                          selectedRep = map['data']['rep'] as String;
+                        }
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    AutoCompleteBranch(
+                      name: "branch",
+                      freeSolo: true,
+                      value: selectedBranch,
+                      isAllStatus: false,
+                      isAccessibleOnly: true,
+                      correspondent: queryData["correspondent"],
+                      onChange: (map) => setState(() {
+                        if (map['data'] != null &&
+                            map['data']['branch'] != null) {
+                          selectedBranch = map['data']['branch'] as String;
+                        }
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    SelectSystemCode(
+                      label: "Asset Type",
+                      placeholder: "Select Asset Type",
+                      value: selectedDateType,
+                      type: "Asset Type",
+                      onChange: (map) => setState(() {
+                        selectedAssetType = map?['data']['code'];
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    AutoCompleteSymbol(
+                      name: "symbol",
+                      freeSolo: true,
+                      value: selectedSymbol,
+                      isActive: true,
+                      onChange: (map) => setState(() {
+                        if (map['data'] != null &&
+                            map['data']['symbol'] != null) {
+                          selectedSymbol = map['data']['symbol'] as String;
                         }
                       }),
                     ),
@@ -269,13 +356,6 @@ class PositionFragmentState extends State<PositionFragment> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  if (amount != null &&
-                      amount.isNotEmpty &&
-                      (selectedSign ?? "").isEmpty) {
-                    Notify.warning(
-                        "Please select a sign before entering amount.");
-                    return;
-                  }
                   queryData["dateType"] = selectedDateType;
                   queryData["fromDate"] =
                       ConvertService.dateToString(selectedFromDate);
@@ -284,7 +364,10 @@ class PositionFragmentState extends State<PositionFragment> {
                   queryData["correspondent"] = selectedCorrespondent;
                   queryData["accountNo"] = selectedAccountNo;
                   queryData["masterAccountNo"] = selectedMasterAccountNo;
-
+                  queryData["rep"] = selectedRep;
+                  queryData["branch"] = selectedBranch;
+                  queryData["assetType"] = selectedAssetType;
+                  queryData["symbol"] = selectedSymbol;
                   _updateQueryData();
                 });
                 Navigator.pop(context, true);
@@ -379,26 +462,30 @@ class PositionFragmentState extends State<PositionFragment> {
                                 : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
                             style: const TextStyle(fontSize: 9),
                           ),
-                          deleteIcon: entry.key.toLowerCase().contains("fromdate") || entry.key.toLowerCase().contains("todate")
-                              ? null
-                              : const Icon(Icons.close),
-                          onDeleted: entry.key.toLowerCase().contains("fromdate") || entry.key.toLowerCase().contains("todate")
-                              ? null
-                              : () {
-                                  setState(() {
-                                    queryData[entry.key] =
-                                        entry.value is bool ? false : "";
+                          deleteIcon:
+                              entry.key.toLowerCase().contains("fromdate") ||
+                                      entry.key.toLowerCase().contains("todate")
+                                  ? null
+                                  : const Icon(Icons.close),
+                          onDeleted:
+                              entry.key.toLowerCase().contains("fromdate") ||
+                                      entry.key.toLowerCase().contains("todate")
+                                  ? null
+                                  : () {
+                                      setState(() {
+                                        queryData[entry.key] =
+                                            entry.value is bool ? false : "";
 
-                                    if (entry.key == "amount") {
-                                      queryData["sign"] = "";
-                                    } else if (entry.key == "sign") {
-                                      queryData["amount"] = "";
-                                    }
+                                        if (entry.key == "amount") {
+                                          queryData["sign"] = "";
+                                        } else if (entry.key == "sign") {
+                                          queryData["amount"] = "";
+                                        }
 
-                                    _updateQueryData();
-                                    _futureRequests = _listPosition();
-                                  });
-                                },
+                                        _updateQueryData();
+                                        _futureRequests = _listPosition();
+                                      });
+                                    },
                         );
                       }).toList(),
                     ),
