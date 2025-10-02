@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class IdleWarningDialog extends StatefulWidget {
   final Duration warningDuration;
   final VoidCallback onStay;
-  final VoidCallback onLogout;
+  final void Function(bool showNotification) onLogout;
 
   const IdleWarningDialog({
     super.key,
@@ -24,16 +24,20 @@ class _IdleWarningDialogState extends State<IdleWarningDialog> {
   @override
   void initState() {
     super.initState();
-    remainingSeconds = widget.warningDuration.inSeconds;
+    const second1 = Duration(seconds: 1);
+    remainingSeconds = widget.warningDuration.inSeconds + second1.inSeconds;
+    if (remainingSeconds < 0) {
+      remainingSeconds = 0;
+    }
 
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _countdownTimer = Timer.periodic(second1, (timer) {
       if (mounted) {
         setState(() => remainingSeconds--);
       }
       if (remainingSeconds <= 0) {
         _countdownTimer?.cancel();
         Navigator.of(context).pop(); // close dialog
-        widget.onLogout();
+        widget.onLogout(true);
       }
     });
   }
@@ -64,7 +68,7 @@ class _IdleWarningDialogState extends State<IdleWarningDialog> {
           onPressed: () {
             _countdownTimer?.cancel();
             Navigator.of(context).pop(); // close dialog
-            widget.onLogout();
+            widget.onLogout(false);
           },
           child: const Text("Logout"),
         ),

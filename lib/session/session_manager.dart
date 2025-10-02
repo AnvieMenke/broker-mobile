@@ -24,7 +24,12 @@ class SessionManager with WidgetsBindingObserver {
     _idleTimerManager = IdleTimerManager(
       idleTimeout: const Duration(minutes: 5), // show warning after x idle
       warningDuration: const Duration(seconds: 30), // show countdown
-      onIdleLogout: () => logout("Logged out due to inactivity.", false),
+      onIdleLogout: (showNotification) {
+        logout(
+          showNotification ? "Logged out due to inactivity." : null,
+          false,
+        );
+      },
     );
   }
 
@@ -67,7 +72,7 @@ class SessionManager with WidgetsBindingObserver {
 
       if (isAuthenticated) {
         final ctx = navigatorKey.currentContext;
-        if (ctx != null) _idleTimerManager.start(ctx);
+        if (ctx != null) _idleTimerManager.checkIdle(ctx);
       }
     }
   }
