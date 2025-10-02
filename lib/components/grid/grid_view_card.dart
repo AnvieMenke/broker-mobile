@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../utils/fmt/fmt.dart';
 import 'package:decimal/decimal.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class GridField {
   final String keyName;
@@ -64,7 +65,6 @@ class GridField {
           ),
         );
       case 'date':
-        debugPrint(value);
         final text = FormatUtils.formatPbDate(value);
         return Text(text);
       case 'qty':
@@ -98,7 +98,19 @@ class GridField {
         final text = FormatUtils.formatCurrency(value);
 
         return Text(text);
-
+      case 'note':
+        return Html(
+          data: value,
+          style: {
+            "p": Style(
+              margin: Margins.all(0),
+              fontSize: FontSize(12),
+            ),
+            "b": Style(
+              fontWeight: FontWeight.bold,
+            ),
+          },
+        );
       default:
         return Text(value);
     }

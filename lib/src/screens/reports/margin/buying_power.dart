@@ -1,35 +1,30 @@
+import 'package:broker_mobile/service/buying_power_service.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
-import '../../../../components/dropdowns/select_account_no.dart';
 import '../../../../components/dropdowns/select_correspondent.dart';
 import '../../../../components/dropdowns/select_master_account_no.dart';
-import '../../../../service/position_service.dart';
+import '../../../../components/dropdowns/select_account_name.dart';
+import '../../../../components/dropdowns/select_system_code.dart';
 import '../../../../service/convert_service.dart';
 import '../../../../service/profile_service.dart';
-import '../../../../components/dropdowns/select_system_code.dart';
-import '../../../../components/dropdowns/select_rep.dart';
-import '../../../../components/dropdowns/select_branch.dart';
-import '../../../../components/dropdowns/select_symbol.dart';
 
-class PositionFragment extends StatefulWidget {
-  const PositionFragment({super.key});
+class BuyingPowerFragment extends StatefulWidget {
+  const BuyingPowerFragment({super.key});
 
   @override
-  PositionFragmentState createState() => PositionFragmentState();
+  BuyingPowerFragmentState createState() => BuyingPowerFragmentState();
 }
 
-class PositionFragmentState extends State<PositionFragment> {
+class BuyingPowerFragmentState extends State<BuyingPowerFragment> {
   Future<List<GridItem>>? _futureRequests;
 
   final Map<String, dynamic> queryData = {
-    "dateType": "",
     "correspondent": "",
     "accountNo": "",
     "masterAccountNo": "",
-    "rep": "",
-    "branch": "",
-    "assetType": "",
-    "symbol": "",
+    "accountName": "",
+    "marginType": "",
+    "hideZero": false,
   };
 
   late final ValueNotifier<int> queryDataNotifier;
@@ -54,7 +49,7 @@ class PositionFragmentState extends State<PositionFragment> {
     setState(() {
       queryData['fromDate'] = systemDate;
       queryData['toDate'] = systemDate;
-      _futureRequests = _listPosition();
+      _futureRequests = _listBuyingPower();
     });
   }
 
@@ -62,9 +57,9 @@ class PositionFragmentState extends State<PositionFragment> {
     queryDataNotifier.value++;
   }
 
-  Future<List<GridItem>> _listPosition() async {
-    final positionService = PositionService();
-    final resp = await positionService.listPosition(queryData, {
+  Future<List<GridItem>> _listBuyingPower() async {
+    final buyingPowerService = BuyingPowerService();
+    final resp = await buyingPowerService.listBuyingPower(queryData, {
       'pageNo': pagination.pageNo,
       'rowsPerPage': pagination.rowsPerPage,
     });
@@ -74,11 +69,11 @@ class PositionFragmentState extends State<PositionFragment> {
         reload: false,
       );
     });
-    return resp.positions.map((e) {
+    return resp.buyingPowers.map((e) {
       return GridItem.fromMap({
-        "accountNo": {
-          "label": "Account No",
-          "value": e.accountNo,
+        "masterAccountNo": {
+          "label": "Master Account No",
+          "value": e.masterAccountNo,
           "visible": true,
           "gridPosition": "title",
         },
@@ -87,56 +82,24 @@ class PositionFragmentState extends State<PositionFragment> {
           "value": e.correspondent,
           "visible": false,
         },
-        "masterAccountNo": {
-          "label": "Master Account No",
-          "value": e.masterAccountNo,
-          "visible": false,
-        },
-        "rep": {
-          "label": "Rep",
-          "value": e.rep,
-          "visible": false,
-        },
-        "branch": {
-          "label": "Branch",
-          "value": e.branch,
-          "visible": false,
-        },
         "date": {
           "label": "Date",
-          "value": e.date,
+          "value": e.tradeDate,
           "type": "date",
           "visible": true,
           "gridPosition": "subTitle",
         },
-        "assetType": {
-          "label": "Asset Type",
-          "value": e.assetType,
-          "visible": false,
-        },
-        "symbol": {
+        "note": {
+          "label": "Note",
           "hideLabel": true,
-          "label": "Symbol",
-          "value": e.symbol,
-          "visible": true,
-          "addAvatar": true,
+          "type": "note",
+          "value": e.note,
+          "visible": e.note.isNotEmpty,
         },
-        "tdQty": {
-          "label": "TD Qty",
-          "value": e.tdQty,
-          "type": "qty",
-          "visible": true,
-        },
-        "costBasis": {
-          "label": "Cost Basis",
-          "value": e.costBasis,
-          "type": "amount",
-          "visible": true,
-        },
-        "tdMarketValue": {
+        "buyingPower": {
           "hideLabel": true,
-          "label": "TD Market Value",
-          "value": e.tdMarketValue,
+          "label": "Buying Power",
+          "value": e.buyingPower,
           "type": "amount",
           "floatRight": true,
           "visible": true,
@@ -148,19 +111,16 @@ class PositionFragmentState extends State<PositionFragment> {
   void _onPageChange(GridPagination newPagination) {
     setState(() {
       pagination = newPagination;
-      _futureRequests = _listPosition();
+      _futureRequests = _listBuyingPower();
     });
   }
 
   void openFilterDialog() {
-    String selectedDateType = queryData["dateType"];
     String selectedCorrespondent = queryData["correspondent"];
-    String selectedAccountNo = queryData["accountNo"];
     String selectedMasterAccountNo = queryData["masterAccountNo"];
-    String selectedRep = queryData["rep"];
-    String selectedBranch = queryData["branch"];
-    String selectedAssetType = queryData["assetType"];
-    String selectedSymbol = queryData["symbol"];
+    String selectedAccountName = queryData["accountName"];
+    String selectedMarginType = queryData["marginType"];
+    bool hideZero = queryData["hideZero"] ?? false;
     DateTime? selectedFromDate =
         ConvertService.stringToDate(queryData["fromDate"]);
     DateTime? selectedToDate = ConvertService.stringToDate(queryData["toDate"]);
@@ -197,17 +157,6 @@ class PositionFragmentState extends State<PositionFragment> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 8),
-                    SelectSystemCode(
-                      label: "Date Type",
-                      placeholder: "Select Date Type",
-                      value: selectedDateType,
-                      type: "Date Type",
-                      subType: "Position Report",
-                      onChange: (map) => setState(() {
-                        selectedDateType = map?['data']['code'];
-                      }),
-                    ),
                     const Text("Date Range",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
@@ -260,23 +209,6 @@ class PositionFragmentState extends State<PositionFragment> {
                       }),
                     ),
                     const SizedBox(height: 16),
-                    AutoCompleteAccountNo(
-                      name: "accountNo",
-                      freeSolo: true,
-                      value: selectedAccountNo,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      type: "Client",
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['accountNo'] != null) {
-                          selectedAccountNo =
-                              map['data']['accountNo'] as String;
-                        }
-                      }),
-                    ),
-                    const SizedBox(height: 16),
                     AutoCompleteMasterAccountNo(
                       name: "masterAccountNo",
                       freeSolo: true,
@@ -293,56 +225,41 @@ class PositionFragmentState extends State<PositionFragment> {
                       }),
                     ),
                     const SizedBox(height: 16),
-                    AutoCompleteRepAdvisor(
-                      name: "rep",
+                    AutoCompleteAccountName(
+                      name: "accountName",
                       freeSolo: true,
-                      value: selectedMasterAccountNo,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null && map['data']['rep'] != null) {
-                          selectedRep = map['data']['rep'] as String;
-                        }
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteBranch(
-                      name: "branch",
-                      freeSolo: true,
-                      value: selectedBranch,
+                      value: selectedAccountName,
                       isAllStatus: false,
                       isAccessibleOnly: true,
                       correspondent: queryData["correspondent"],
                       onChange: (map) => setState(() {
                         if (map['data'] != null &&
-                            map['data']['branch'] != null) {
-                          selectedBranch = map['data']['branch'] as String;
+                            map['data']['accountName'] != null) {
+                          selectedAccountName =
+                              map['data']['accountName'] as String;
                         }
                       }),
                     ),
                     const SizedBox(height: 16),
                     SelectSystemCode(
-                      label: "Asset Type",
-                      placeholder: "Select Asset Type",
-                      value: selectedAssetType,
-                      type: "Asset Type",
+                      label: "Margin Type",
+                      placeholder: "Select Margin Type",
+                      value: selectedMarginType,
+                      type: "Margin Type",
                       onChange: (map) => setState(() {
-                        selectedAssetType = map?['data']['code'];
+                        selectedMarginType = map?['data']['code'];
                       }),
                     ),
                     const SizedBox(height: 16),
-                    AutoCompleteSymbol(
-                      name: "symbol",
-                      freeSolo: true,
-                      value: selectedSymbol,
-                      isActive: true,
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['symbol'] != null) {
-                          selectedSymbol = map['data']['symbol'] as String;
-                        }
-                      }),
+                    CheckboxListTile(
+                      title: const Text("Hide  Zero"),
+                      value: hideZero,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          hideZero = value ?? false;
+                        });
+                      },
+                      controlAffinity: ListTileControlAffinity.trailing,
                     ),
                   ],
                 ),
@@ -357,18 +274,15 @@ class PositionFragmentState extends State<PositionFragment> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  queryData["dateType"] = selectedDateType;
                   queryData["fromDate"] =
                       ConvertService.dateToString(selectedFromDate);
                   queryData["toDate"] =
                       ConvertService.dateToString(selectedToDate);
                   queryData["correspondent"] = selectedCorrespondent;
-                  queryData["accountNo"] = selectedAccountNo;
                   queryData["masterAccountNo"] = selectedMasterAccountNo;
-                  queryData["rep"] = selectedRep;
-                  queryData["branch"] = selectedBranch;
-                  queryData["assetType"] = selectedAssetType;
-                  queryData["symbol"] = selectedSymbol;
+                  queryData["accountName"] = selectedAccountName;
+                  queryData["marginType"] = selectedMarginType;
+                  queryData["hideZero"] = hideZero;
                   _updateQueryData();
                 });
                 Navigator.pop(context, true);
@@ -381,7 +295,7 @@ class PositionFragmentState extends State<PositionFragment> {
     ).then((value) {
       if (value == true) {
         setState(() {
-          _futureRequests = _listPosition();
+          _futureRequests = _listBuyingPower();
         });
       }
     });
@@ -403,7 +317,7 @@ class PositionFragmentState extends State<PositionFragment> {
           body = const Center(child: CircularProgressIndicator());
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           body = RefreshIndicator(
-            onRefresh: () async => _futureRequests = _listPosition(),
+            onRefresh: () async => _futureRequests = _listBuyingPower(),
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               children: const [
@@ -416,7 +330,7 @@ class PositionFragmentState extends State<PositionFragment> {
           );
         } else {
           body = RefreshIndicator(
-            onRefresh: () async => _futureRequests = _listPosition(),
+            onRefresh: () async => _futureRequests = _listBuyingPower(),
             child: GridWithPagination(
               items: snapshot.data!,
               pagination: pagination,
@@ -478,7 +392,7 @@ class PositionFragmentState extends State<PositionFragment> {
                                             entry.value is bool ? false : "";
 
                                         _updateQueryData();
-                                        _futureRequests = _listPosition();
+                                        _futureRequests = _listBuyingPower();
                                       });
                                     },
                         );
