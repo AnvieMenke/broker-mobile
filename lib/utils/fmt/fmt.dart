@@ -1,4 +1,5 @@
 import 'package:decimal/decimal.dart';
+import 'package:intl/intl.dart';
 
 class FormatUtils {
   static String formatPbDate(dynamic d, {String separator = '/'}) {
@@ -53,6 +54,25 @@ class FormatUtils {
 
     return formatted;
   }
+
+  static String formatCurrencySymbol(
+      dynamic amount, {
+        String currency = 'USD',
+        int decimalCount = 6,
+      }) {
+    try {
+      final formatter = NumberFormat.currency(
+        locale: 'en_US',
+        symbol: '',
+        name: currency,
+        decimalDigits: decimalCount,
+      );
+      return formatter.format(amount);
+    } catch (e) {
+      return formatCurrency(amount, decimalCount: decimalCount);
+    }
+  }
+
 
   static String formatQty(dynamic num) {
     if (num == null || num.toString().isEmpty) return '0';

@@ -1,28 +1,29 @@
+import 'package:broker_mobile/service/activity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
 import '../../../../components/dropdowns/select_account_no.dart';
 import '../../../../components/dropdowns/select_correspondent.dart';
 import '../../../../components/dropdowns/select_master_account_no.dart';
-import '../../../../service/position_service.dart';
 import '../../../../service/convert_service.dart';
 import '../../../../service/profile_service.dart';
 import '../../../../components/dropdowns/select_system_code.dart';
 import '../../../../components/dropdowns/select_rep.dart';
 import '../../../../components/dropdowns/select_branch.dart';
 import '../../../../components/dropdowns/select_symbol.dart';
+import '../../../../components/dropdowns/select_entry_type.dart';
 
-class PositionFragment extends StatefulWidget {
-  const PositionFragment({super.key});
+class ActivityFragment extends StatefulWidget {
+  const ActivityFragment({super.key});
 
   @override
-  PositionFragmentState createState() => PositionFragmentState();
+  ActivityFragmentState createState() => ActivityFragmentState();
 }
 
-class PositionFragmentState extends State<PositionFragment> {
+class ActivityFragmentState extends State<ActivityFragment> {
   Future<List<GridItem>>? _futureRequests;
 
   final Map<String, dynamic> queryData = {
-    "dateType": "",
+    "dateType": "Trade Date",
     "correspondent": "",
     "accountNo": "",
     "masterAccountNo": "",
@@ -30,6 +31,8 @@ class PositionFragmentState extends State<PositionFragment> {
     "branch": "",
     "assetType": "",
     "symbol": "",
+    "entryType": "",
+    "description": "",
   };
 
   late final ValueNotifier<int> queryDataNotifier;
@@ -54,7 +57,7 @@ class PositionFragmentState extends State<PositionFragment> {
     setState(() {
       queryData['fromDate'] = systemDate;
       queryData['toDate'] = systemDate;
-      _futureRequests = _listPosition();
+      _futureRequests = _listActivity();
     });
   }
 
@@ -62,9 +65,9 @@ class PositionFragmentState extends State<PositionFragment> {
     queryDataNotifier.value++;
   }
 
-  Future<List<GridItem>> _listPosition() async {
-    final positionService = PositionService();
-    final resp = await positionService.listPosition(queryData, {
+  Future<List<GridItem>> _listActivity() async {
+    final activityService = ActivityService();
+    final resp = await activityService.listActivity(queryData, {
       'pageNo': pagination.pageNo,
       'rowsPerPage': pagination.rowsPerPage,
     });
@@ -74,17 +77,35 @@ class PositionFragmentState extends State<PositionFragment> {
         reload: false,
       );
     });
-    return resp.positions.map((e) {
+    return resp.activities.map((e) {
       return GridItem.fromMap({
-        "accountNo": {
-          "label": "Account No",
-          "value": e.accountNo,
+        "entryType": {
+          "label": "Entry Type",
+          "value": "${e.entryType} ${e.entryTypeDescription}",
           "visible": true,
           "gridPosition": "title",
+        },
+        "date": {
+          "label": "Date",
+          "value": e.systemDate,
+          "type": "date",
+          "visible": true,
+          "gridPosition": "subTitle",
+        },
+        "marginType": {
+          "label": "Margin Type",
+          "value": e.marginType,
+          "visible": true,
+          "hideLabel": true,
         },
         "correspondent": {
           "label": "Correspondent",
           "value": e.correspondent,
+          "visible": false,
+        },
+        "accountNo": {
+          "label": "Account No",
+          "value": e.accountNo,
           "visible": false,
         },
         "masterAccountNo": {
@@ -102,44 +123,58 @@ class PositionFragmentState extends State<PositionFragment> {
           "value": e.branch,
           "visible": false,
         },
-        "date": {
-          "label": "Date",
-          "value": e.date,
-          "type": "date",
-          "visible": true,
-          "gridPosition": "subTitle",
-        },
-        "assetType": {
-          "label": "Asset Type",
-          "value": e.assetType,
+        "description": {
+          "label": "Description",
+          "value": e.description,
           "visible": false,
         },
         "symbol": {
-          "hideLabel": true,
           "label": "Symbol",
           "value": e.symbol,
-          "visible": true,
-          "addAvatar": true,
+          "visible": false,
         },
-        "tdQty": {
-          "label": "TD Qty",
-          "value": e.tdQty,
+        "qty": {
+          "label": "QTY",
+          "value": e.qty,
           "type": "qty",
-          "visible": true,
+          "visible": false,
         },
-        "costBasis": {
-          "label": "Cost Basis",
-          "value": e.costBasis,
+        "price": {
+          "label": "Price",
+          "value": e.price,
+          "type": "price",
+          "visible": false,
+        },
+        "grossAmt": {
+          "label": "Gross Amount",
+          "value": e.grossAmt,
           "type": "amount",
-          "visible": true,
+          "visible": false,
         },
-        "tdMarketValue": {
+        "fees": {
+          "label": "Fees",
+          "value": e.fees,
+          "type": "amount",
+          "visible": false,
+        },
+        "otherFees": {
+          "label": "Other Fees",
+          "value": e.otherFees,
+          "type": "amount",
+          "visible": false,
+        },
+        "netAmt": {
           "hideLabel": true,
-          "label": "TD Market Value",
-          "value": e.tdMarketValue,
+          "label": "Net Amount",
+          "value": e.netAmt,
           "type": "amount",
           "floatRight": true,
           "visible": true,
+        },
+        "status": {
+          "label": "Status",
+          "value": e.status,
+          "visible": false,
         },
       });
     }).toList();
@@ -148,7 +183,7 @@ class PositionFragmentState extends State<PositionFragment> {
   void _onPageChange(GridPagination newPagination) {
     setState(() {
       pagination = newPagination;
-      _futureRequests = _listPosition();
+      _futureRequests = _listActivity();
     });
   }
 
@@ -161,9 +196,18 @@ class PositionFragmentState extends State<PositionFragment> {
     String selectedBranch = queryData["branch"];
     String selectedAssetType = queryData["assetType"];
     String selectedSymbol = queryData["symbol"];
+
+    List<String> selectedEntryTypes = queryData["entryType"].isNotEmpty
+        ? queryData["entryType"].split(",")
+        : <String>[];
+
+    String description = queryData["description"] ?? "";
     DateTime? selectedFromDate =
         ConvertService.stringToDate(queryData["fromDate"]);
     DateTime? selectedToDate = ConvertService.stringToDate(queryData["toDate"]);
+
+    final TextEditingController descriptionController =
+        TextEditingController(text: description);
 
     showDialog<bool>(
       context: context,
@@ -203,11 +247,12 @@ class PositionFragmentState extends State<PositionFragment> {
                       placeholder: "Select Date Type",
                       value: selectedDateType,
                       type: "Date Type",
-                      subType: "Position Report",
+                      subType: "Activity Report",
                       onChange: (map) => setState(() {
                         selectedDateType = map?['data']['code'];
                       }),
                     ),
+                    const SizedBox(height: 8),
                     const Text("Date Range",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
@@ -344,6 +389,30 @@ class PositionFragmentState extends State<PositionFragment> {
                         }
                       }),
                     ),
+                    const SizedBox(height: 16),
+                    MultiSelectEntryType(
+                      name: "entryType",
+                      value: selectedEntryTypes,
+                      onChange: (map) => setState(() {
+                        if (map['value'] != null) {
+                          selectedEntryTypes =
+                              List<String>.from(map['value'] as List);
+                        }
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: descriptionController,
+                      decoration: const InputDecoration(
+                        labelText: "Description",
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          description = value;
+                        });
+                      },
+                    ),
                   ],
                 ),
               );
@@ -369,6 +438,10 @@ class PositionFragmentState extends State<PositionFragment> {
                   queryData["branch"] = selectedBranch;
                   queryData["assetType"] = selectedAssetType;
                   queryData["symbol"] = selectedSymbol;
+
+                  queryData["entryType"] = selectedEntryTypes.join(",");
+
+                  queryData["description"] = description;
                   _updateQueryData();
                 });
                 Navigator.pop(context, true);
@@ -381,7 +454,7 @@ class PositionFragmentState extends State<PositionFragment> {
     ).then((value) {
       if (value == true) {
         setState(() {
-          _futureRequests = _listPosition();
+          _futureRequests = _listActivity();
         });
       }
     });
@@ -403,7 +476,7 @@ class PositionFragmentState extends State<PositionFragment> {
           body = const Center(child: CircularProgressIndicator());
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           body = RefreshIndicator(
-            onRefresh: () async => _futureRequests = _listPosition(),
+            onRefresh: () async => _futureRequests = _listActivity(),
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               children: const [
@@ -416,7 +489,7 @@ class PositionFragmentState extends State<PositionFragment> {
           );
         } else {
           body = RefreshIndicator(
-            onRefresh: () async => _futureRequests = _listPosition(),
+            onRefresh: () async => _futureRequests = _listActivity(),
             child: GridWithPagination(
               items: snapshot.data!,
               pagination: pagination,
@@ -457,36 +530,21 @@ class PositionFragmentState extends State<PositionFragment> {
                       }).map((entry) {
                         return Chip(
                           label: Text(
-                            entry.value is bool
-                                ? ConvertService.camelToTitle(entry.key)
-                                    .replaceAll("Is ", "")
-                                : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                            "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
                             style: const TextStyle(fontSize: 9),
                           ),
-                          deleteIcon:
-                              entry.key.toLowerCase().contains("fromdate") ||
-                                      entry.key.toLowerCase().contains("todate")
-                                  ? null
-                                  : const Icon(Icons.close),
-                          onDeleted:
-                              entry.key.toLowerCase().contains("fromdate") ||
-                                      entry.key.toLowerCase().contains("todate")
-                                  ? null
-                                  : () {
-                                      setState(() {
-                                        queryData[entry.key] =
-                                            entry.value is bool ? false : "";
-
-                                        if (entry.key == "amount") {
-                                          queryData["sign"] = "";
-                                        } else if (entry.key == "sign") {
-                                          queryData["amount"] = "";
-                                        }
-
-                                        _updateQueryData();
-                                        _futureRequests = _listPosition();
-                                      });
-                                    },
+                          deleteIcon: entry.key.toLowerCase().contains("date")
+                              ? null
+                              : const Icon(Icons.close),
+                          onDeleted: entry.key.toLowerCase().contains("date")
+                              ? null
+                              : () {
+                                  setState(() {
+                                    queryData[entry.key] = "";
+                                    _updateQueryData();
+                                    _futureRequests = _listActivity();
+                                  });
+                                },
                         );
                       }).toList(),
                     ),

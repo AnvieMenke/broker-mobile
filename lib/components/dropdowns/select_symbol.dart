@@ -35,14 +35,14 @@ class AutoCompleteSymbol extends StatefulWidget {
 
 class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
   final TextEditingController _controller = TextEditingController();
-  late final CommonService _service;
+  late final AdmService _service;
   List<Map<String, String>> _options = [];
 
   @override
   void initState() {
     super.initState();
     _controller.text = widget.value;
-    _service = CommonService();
+    _service = AdmService();
 
     if (widget.reset) {
       _controller.clear();

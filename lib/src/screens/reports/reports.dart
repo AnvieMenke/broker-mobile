@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'position/position.dart';
+import 'activity/activity.dart';
 
 class Reports extends StatefulWidget {
   const Reports({super.key});
@@ -12,6 +13,7 @@ class _ReportsState extends State<Reports> {
   int _selectedIndex = -1;
 
   final GlobalKey<PositionFragmentState> _positionKey = GlobalKey();
+  final GlobalKey<ActivityFragmentState> _activityKey = GlobalKey();
 
   final List<Map<String, dynamic>> reports = [
     {"title": "Activity", "icon": Icons.bar_chart},
@@ -29,15 +31,17 @@ class _ReportsState extends State<Reports> {
   void initState() {
     super.initState();
     fragments = [
-      const Center(child: Text("Activity Fragment")),
+      ActivityFragment(key: _activityKey),
       PositionFragment(key: _positionKey),
       const Center(child: Text("Margin Call Fragment")),
       const Center(child: Text("Buying Power Fragment")),
     ];
   }
 
-  void _onFilterPressed() {
-    if (_selectedIndex == 1) {
+  void _onFilterPressed(int selectedIndex) {
+    if (selectedIndex == 0) {
+      _activityKey.currentState?.openFilterDialog();
+    } else if (selectedIndex == 1) {
       _positionKey.currentState?.openFilterDialog();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -50,9 +54,9 @@ class _ReportsState extends State<Reports> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_selectedIndex == -1
-            ? "Reports"
-            : reports[_selectedIndex]["title"]),
+        title: Text(
+          _selectedIndex == -1 ? "Reports" : reports[_selectedIndex]["title"],
+        ),
         leading: _selectedIndex != -1
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -64,10 +68,10 @@ class _ReportsState extends State<Reports> {
               )
             : null,
         actions: [
-          if (_selectedIndex == 1)
+          if (_selectedIndex != -1)
             IconButton(
               icon: const Icon(Icons.filter_list),
-              onPressed: _onFilterPressed,
+              onPressed: () => _onFilterPressed(_selectedIndex),
             ),
         ],
       ),
