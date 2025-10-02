@@ -202,4 +202,20 @@ class CommonService {
       rethrow;
     }
   }
+
+  Future<PbList<String>> accessibleAccountName(
+      String key, correspondent, bool isAllStatus) async {
+    final client = _lazyClient();
+    final req = AccessibleRequest()
+      ..key = key
+      ..correspondent = correspondent
+      ..isAllStatus = isAllStatus;
+
+    try {
+      final response = await client.accessibleAccountName(req);
+      return response.accountNames;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

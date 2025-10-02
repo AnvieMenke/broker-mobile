@@ -1,6 +1,8 @@
+import 'package:broker_mobile/src/screens/reports/margin/call_log.dart';
 import 'package:flutter/material.dart';
 import 'position/position.dart';
 import 'activity/activity.dart';
+import 'margin/buying_power.dart';
 
 class Reports extends StatefulWidget {
   const Reports({super.key});
@@ -14,6 +16,8 @@ class _ReportsState extends State<Reports> {
 
   final GlobalKey<PositionFragmentState> _positionKey = GlobalKey();
   final GlobalKey<ActivityFragmentState> _activityKey = GlobalKey();
+  final GlobalKey<CallLogFragmentState> _callLogKey = GlobalKey();
+  final GlobalKey<BuyingPowerFragmentState> _buyingPowerKey = GlobalKey();
 
   final List<Map<String, dynamic>> reports = [
     {"title": "Activity", "icon": Icons.bar_chart},
@@ -33,8 +37,8 @@ class _ReportsState extends State<Reports> {
     fragments = [
       ActivityFragment(key: _activityKey),
       PositionFragment(key: _positionKey),
-      const Center(child: Text("Margin Call Fragment")),
-      const Center(child: Text("Buying Power Fragment")),
+      CallLogFragment(key: _callLogKey),
+      BuyingPowerFragment(key: _buyingPowerKey),
     ];
   }
 
@@ -43,6 +47,10 @@ class _ReportsState extends State<Reports> {
       _activityKey.currentState?.openFilterDialog();
     } else if (selectedIndex == 1) {
       _positionKey.currentState?.openFilterDialog();
+    } else if (selectedIndex == 2) {
+      _callLogKey.currentState?.openFilterDialog();
+    } else if (selectedIndex == 3) {
+      _buyingPowerKey.currentState?.openFilterDialog();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("No filter available for this report")),
