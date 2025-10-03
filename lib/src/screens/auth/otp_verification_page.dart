@@ -165,7 +165,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   autoFocus: true,
                   animationType: AnimationType.scale,
                   keyboardType: TextInputType.number,
-                  cursorColor: Colors.black,
+                  cursorColor: Colors.white,
                   pinTheme: PinTheme(
                     shape: PinCodeFieldShape.box,
                     borderRadius: BorderRadius.circular(8),
@@ -176,6 +176,11 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     activeColor: Colors.blueAccent,
                     selectedColor: Colors.blueAccent,
                     inactiveColor: Colors.grey,
+                  ),
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                   enableActiveFill: true,
                   onChanged: (value) {},
