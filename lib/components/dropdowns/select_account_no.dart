@@ -1,3 +1,4 @@
+import 'package:broker_mobile/service/convert_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:broker_mobile/service/common_service.dart';
@@ -69,6 +70,7 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
             'accountNo': acc.accountNo,
             'correspondent': acc.correspondent,
             'accountName': acc.accountName,
+            'accountId': acc.accountId,
           };
         }).toList();
       } else {
@@ -98,13 +100,13 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
 
   void _handleOnBlur(String value, List<Map<String, dynamic>> options) {
     final data = options.firstWhere(
-      (o) => o['accountNo'] == value,
+          (o) => o['accountNo'] == value,
       orElse: () => {},
     );
 
     if (data.isNotEmpty) {
-      _setPropsValue(
-          data['accountNo'], data, data['correspondent'], data['broker']);
+      _setPropsValue(data['accountNo'], data, data['correspondent'],
+          data['broker'], ConvertService.safeInt(data['accountId']));
       return;
     }
 
@@ -118,13 +120,14 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
   }
 
   void _setPropsValue(String value, Map<String, dynamic> data,
-      [String correspondent = '', String broker = '']) {
+      [String correspondent = '', String broker = '', int accountId = 0]) {
     final result = {
       'name': widget.name,
       'value': value,
       'data': data,
       'correspondent': correspondent,
       'broker': broker,
+      'accountId': accountId,
     };
     widget.onChange(result);
   }
@@ -158,10 +161,11 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
       onSelected: (suggestion) {
         _controller.text = suggestion['accountNo'] ?? '';
         _setPropsValue(
-          suggestion['accountNo'] ?? '',
-          suggestion,
-          suggestion['correspondent'] ?? '',
-          suggestion['broker'] ?? '',
+            suggestion['accountNo'] ?? '',
+            suggestion,
+            suggestion['correspondent'] ?? '',
+            suggestion['broker'] ?? '',
+            ConvertService.safeInt(suggestion['accountId']),
         );
       },
       builder: (context, controller, focusNode) {
