@@ -391,7 +391,6 @@ class GridWithPagination extends StatelessWidget {
   final List<GridItem> items;
   final GridPagination pagination;
   final void Function(GridPagination newPagination) onPageChange;
-  final int maxPageButtonsToShow;
   final List<PopupMenuEntry> Function(BuildContext, GridItem)? actionsBuilder;
 
   const GridWithPagination({
@@ -399,7 +398,6 @@ class GridWithPagination extends StatelessWidget {
     required this.items,
     required this.pagination,
     required this.onPageChange,
-    this.maxPageButtonsToShow = 3,
     this.actionsBuilder,
   });
 
@@ -434,149 +432,204 @@ class GridWithPagination extends StatelessWidget {
 
     final int start = (totalRows == 0) ? 0 : (currentPage * rowsPerPage) + 1;
     final int end = start + items.length - 1;
-    final pagesToShow =
-        _pageRange(currentPage, totalPages, maxPageButtonsToShow);
 
-    return ListView(
+    return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(2, 2, 2, 20),
-      children: [
-        ...items.map((item) {
-          final actions =
-              actionsBuilder != null ? actionsBuilder!(context, item) : null;
-          return GridViewCard(item: item, actions: actions);
-        }),
-        if (totalRows > 10)
-          Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      totalRows == 0
-                          ? "No results"
-                          : "Showing $start-${end.clamp(0, totalRows)} of $totalRows",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text("Rows per page: "),
-                        DropdownButton<int>(
-                          value: rowsPerPage,
-                          items: [5, 10, 20, 50, 100].map((rowPerPage) {
-                            return DropdownMenuItem<int>(
-                              value: rowPerPage,
-                              child: Text('$rowPerPage'),
-                            );
-                          }).toList(),
-                          onChanged: (newRowsPerPage) {
-                            if (newRowsPerPage != null) {
-                              onPageChange(pagination.copyWith(
-                                pageNo: 0,
-                                rowsPerPage: newRowsPerPage,
-                                reload: true,
-                              ));
-                            }
-                          },
-                          underline: const SizedBox(),
-                        ),
-                      ],
-                    ),
-                  ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final width = constraints.maxWidth;
+
+          final breakpoints = [
+            {'width': 1200, 'columns': 4, 'maxButtons': 9},
+            {'width': 900, 'columns': 3, 'maxButtons': 7},
+            {'width': 600, 'columns': 2, 'maxButtons': 5},
+          ];
+
+          int columns = 1;
+          int maxPageButtons = 3;
+
+          for (final bp in breakpoints) {
+            if (width >= bp['width']!) {
+              columns = bp['columns']!;
+              maxPageButtons = bp['maxButtons']!;
+              break;
+            }
+          }
+
+          final pagesToShow =
+              _pageRange(currentPage, totalPages, maxPageButtons);
+
+          return Column(
+            children: [
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: items.map((item) {
+                  final actions = actionsBuilder != null
+                      ? actionsBuilder!(context, item)
+                      : null;
+                  final cardWidth = (width - (columns - 1) * 8) / columns;
+                  return SizedBox(
+                    width: cardWidth,
+                    child: GridViewCard(item: item, actions: actions),
+                  );
+                }).toList(),
+              ),
+              if (totalRows > 10)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: _buildPaginationControls(
+                    context,
+                    currentPage,
+                    totalPages,
+                    start,
+                    end,
+                    totalRows,
+                    pagesToShow,
+                  ),
                 ),
-                const SizedBox(height: 8),
-                Center(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          tooltip: 'First',
-                          icon: const Icon(Icons.first_page),
-                          onPressed: currentPage > 0
-                              ? () => onPageChange(
-                                  pagination.copyWith(pageNo: 0, reload: true))
-                              : null,
-                        ),
-                        IconButton(
-                          tooltip: 'Previous',
-                          icon: const Icon(Icons.chevron_left),
-                          onPressed: currentPage > 0
-                              ? () => onPageChange(
-                                    pagination.copyWith(
-                                        pageNo: currentPage - 1, reload: true),
-                                  )
-                              : null,
-                        ),
-                        ...pagesToShow.map(
-                          (p) => Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: p == currentPage
-                                    ? Colors.blueAccent
-                                    : Theme.of(context).colorScheme.surface,
-                                foregroundColor: p == currentPage
-                                    ? Colors.white
-                                    : Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.color,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4, horizontal: 8),
-                                minimumSize: const Size(30, 30),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                              onPressed: p == currentPage
-                                  ? null
-                                  : () => onPageChange(
-                                        pagination.copyWith(
-                                            pageNo: p, reload: true),
-                                      ),
-                              child: Text(
-                                '${p + 1}',
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                            ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPaginationControls(
+    BuildContext context,
+    int currentPage,
+    int totalPages,
+    int start,
+    int end,
+    int totalRows,
+    List<int> pagesToShow,
+  ) {
+    final rowsPerPage = pagination.rowsPerPage;
+
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                totalRows == 0
+                    ? "No results"
+                    : "Showing $start-${end.clamp(0, totalRows)} of $totalRows",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Rows per page: "),
+                  DropdownButton<int>(
+                    value: rowsPerPage,
+                    items: [5, 10, 20, 50, 100].map((rowPerPage) {
+                      return DropdownMenuItem<int>(
+                        value: rowPerPage,
+                        child: Text('$rowPerPage'),
+                      );
+                    }).toList(),
+                    onChanged: (newRowsPerPage) {
+                      if (newRowsPerPage != null) {
+                        onPageChange(pagination.copyWith(
+                          pageNo: 0,
+                          rowsPerPage: newRowsPerPage,
+                          reload: true,
+                        ));
+                      }
+                    },
+                    underline: const SizedBox(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Center(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    tooltip: 'First',
+                    icon: const Icon(Icons.first_page),
+                    onPressed: currentPage > 0
+                        ? () => onPageChange(
+                            pagination.copyWith(pageNo: 0, reload: true))
+                        : null,
+                  ),
+                  IconButton(
+                    tooltip: 'Previous',
+                    icon: const Icon(Icons.chevron_left),
+                    onPressed: currentPage > 0
+                        ? () => onPageChange(
+                              pagination.copyWith(
+                                  pageNo: currentPage - 1, reload: true),
+                            )
+                        : null,
+                  ),
+                  ...pagesToShow.map(
+                    (p) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: p == currentPage
+                              ? Colors.blueAccent
+                              : Theme.of(context).colorScheme.surface,
+                          foregroundColor: p == currentPage
+                              ? Colors.white
+                              : Theme.of(context).textTheme.bodyMedium?.color,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 8),
+                          minimumSize: const Size(30, 30),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
                           ),
                         ),
-                        IconButton(
-                          tooltip: 'Next',
-                          icon: const Icon(Icons.chevron_right),
-                          onPressed: currentPage < totalPages - 1
-                              ? () => onPageChange(
-                                    pagination.copyWith(
-                                        pageNo: currentPage + 1, reload: true),
-                                  )
-                              : null,
+                        onPressed: p == currentPage
+                            ? null
+                            : () => onPageChange(
+                                  pagination.copyWith(pageNo: p, reload: true),
+                                ),
+                        child: Text(
+                          '${p + 1}',
+                          style: const TextStyle(fontSize: 12),
                         ),
-                        IconButton(
-                          tooltip: 'Last',
-                          icon: const Icon(Icons.last_page),
-                          onPressed: currentPage < totalPages - 1
-                              ? () => onPageChange(
-                                    pagination.copyWith(
-                                        pageNo: totalPages - 1, reload: true),
-                                  )
-                              : null,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                )
-              ],
+                  IconButton(
+                    tooltip: 'Next',
+                    icon: const Icon(Icons.chevron_right),
+                    onPressed: currentPage < totalPages - 1
+                        ? () => onPageChange(
+                              pagination.copyWith(
+                                  pageNo: currentPage + 1, reload: true),
+                            )
+                        : null,
+                  ),
+                  IconButton(
+                    tooltip: 'Last',
+                    icon: const Icon(Icons.last_page),
+                    onPressed: currentPage < totalPages - 1
+                        ? () => onPageChange(
+                              pagination.copyWith(
+                                  pageNo: totalPages - 1, reload: true),
+                            )
+                        : null,
+                  ),
+                ],
+              ),
             ),
-          ),
-      ],
+          )
+        ],
+      ),
     );
   }
 }
