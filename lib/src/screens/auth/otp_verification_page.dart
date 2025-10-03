@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../service/auth_service.dart';
 import '../dashboard/main_screen.dart';
 import '../auth/login.dart';
-import '../../../components/inputs/otp_input.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   final String email;
@@ -114,11 +114,11 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         _error = (e is Map && e['message'] != null)
             ? e['message']
             : (e.toString().contains('gRPC Error')
-                ? RegExp(r'message: ([^,]+)')
-                    .firstMatch(e.toString())
-                    ?.group(1)
-                    ?.trim()
-                : e.toString());
+            ? RegExp(r'message: ([^,]+)')
+            .firstMatch(e.toString())
+            ?.group(1)
+            ?.trim()
+            : e.toString());
       });
     }
   }
@@ -129,69 +129,113 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
     return Scaffold(
       body: Center(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.verified_user_outlined,
-                  size: 80, color: Colors.blueAccent),
-              const SizedBox(height: 24),
-              Text(
-                "Enter OTP sent to ${maskEmail(widget.email)}",
-              ),
-              Text(
-                seconds > 0
-                    ? "Expires in ${_formatTime(seconds)}"
-                    : "OTP expired",
-                style: TextStyle(
-                  color: seconds > 0 ? Colors.grey : Colors.red,
-                  fontSize: 14,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.verified_user_outlined,
+                  size: 80,
+                  color: Colors.blueAccent,
                 ),
-              ),
-              const SizedBox(height: 16),
-              OtpBoxes(
-                onOtpChanged: (otp) {
-                  _otpController.text = otp;
-                },
-              ),
-              const SizedBox(height: 16),
-              if (_error != null)
-                Text(_error!, style: const TextStyle(color: Colors.redAccent)),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: (_verifying || seconds <= 0) ? null : _verifyOtp,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                const SizedBox(height: 24),
+                Text(
+                  "Enter OTP sent to ${maskEmail(widget.email)}",
+                  textAlign: TextAlign.center,
                 ),
-                child: _verifying
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        'Verify',
-                        style: TextStyle(color: Colors.white),
+                const SizedBox(height: 8),
+                Text(
+                  seconds > 0
+                      ? "Expires in ${_formatTime(seconds)}"
+                      : "OTP expired",
+                  style: TextStyle(
+                    color: seconds > 0 ? Colors.grey : Colors.red,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                PinCodeTextField(
+                  controller: _otpController,
+                  appContext: context,
+                  length: 6,
+                  autoFocus: true,
+                  animationType: AnimationType.scale,
+                  keyboardType: TextInputType.number,
+                  cursorColor: Colors.black,
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(8),
+                    fieldHeight: 55,
+                    fieldWidth: 45,
+                    activeFillColor: Colors.blueAccent,
+                    inactiveFillColor: Colors.grey,
+                    activeColor: Colors.blueAccent,
+                    selectedColor: Colors.blueAccent,
+                    inactiveColor: Colors.grey,
+                  ),
+                  enableActiveFill: true,
+                  onChanged: (value) {},
+                  onCompleted: (value) {
+                    _otpController.text = value;
+                  },
+                ),
+
+                const SizedBox(height: 16),
+                if (_error != null)
+                  Text(
+                    _error!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.redAccent),
+                  ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: (_verifying || seconds <= 0) ? null : _verifyOtp,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: _verifying
+                        ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
                       ),
-              ),
-              const SizedBox(height: 20),
-              TextButton.icon(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
-                  );
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                    )
+                        : const Text(
+                      'Verify',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
-                label: Text(
-                  "Back to Login",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
+                const SizedBox(height: 20),
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const LoginPage()),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                  label: Text(
+                    "Back to Login",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
+                  ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
