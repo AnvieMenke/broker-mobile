@@ -25,6 +25,7 @@ dependencies:
   multi_select_flutter: ^4.1.3
   shared_preferences: ^2.2.2
   flutter_html: ^3.0.0-beta.2
+  pin_code_fields: ^8.0.1
 
 dev_dependencies:
   flutter_test:
