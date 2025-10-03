@@ -1,4 +1,5 @@
 import 'package:broker_mobile/src/screens/auth/otp_verification_page.dart';
+import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
 import '../../../service/auth_service.dart';
 import 'package:broker_mobile/components/messages/notification.dart';
@@ -81,14 +82,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       setState(() {
         _loading = false;
-        _error = (e is Map && e['message'] != null)
-            ? e['message']
-            : (e.toString().contains('gRPC Error')
-                ? RegExp(r'message: ([^,]+)')
-                    .firstMatch(e.toString())
-                    ?.group(1)
-                    ?.trim()
-                : e.toString());
+        _error = FormatUtils.cleanErrorMessage(e);
       });
     }
   }

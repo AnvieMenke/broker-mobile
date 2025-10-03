@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:broker_mobile/service/auth_service.dart';
+import 'package:broker_mobile/session/session_user.dart';
 import 'package:flutter/material.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 import 'idle_timer_manager.dart';
 import 'package:broker_mobile/env.dart';
 
@@ -10,8 +10,8 @@ final navigatorKey = GlobalKey<NavigatorState>();
 class SessionManager with WidgetsBindingObserver {
   String? _accessToken;
   String? _refreshToken;
-  DateTime? _expiry;
-
+  SessionUser? _user;
+  SessionUser? get user => _user;
   Timer? _refreshTimer;
 
   final Duration _refreshBefore = const Duration(minutes: 1);
@@ -48,7 +48,8 @@ class SessionManager with WidgetsBindingObserver {
   void startSession(String token, String refreshToken) {
     _accessToken = token;
     _refreshToken = refreshToken;
-    _expiry = _parseExpiry(token);
+    _user = SessionUser.fromToken(token);
+
     _scheduleRefresh();
 
     final ctx = navigatorKey.currentContext;
@@ -58,14 +59,15 @@ class SessionManager with WidgetsBindingObserver {
   void clearSession() {
     _accessToken = null;
     _refreshToken = null;
-    _expiry = null;
+    _user = null;
     _refreshTimer?.cancel();
     _idleTimerManager.stop();
   }
 
   String get token => _accessToken ?? "";
   bool get isAuthenticated =>
-      _accessToken != null && _expiry?.isAfter(DateTime.now()) == true;
+      _accessToken != null &&
+      _user?.tokenExpiry?.isAfter(DateTime.now()) == true;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -88,10 +90,10 @@ class SessionManager with WidgetsBindingObserver {
 
   void _scheduleRefresh() {
     _refreshTimer?.cancel();
-    if (_expiry == null) return;
+    if (_user?.tokenExpiry == null) return;
 
     final now = DateTime.now();
-    final refreshAt = _expiry!.subtract(_refreshBefore);
+    final refreshAt = _user!.tokenExpiry!.subtract(_refreshBefore);
     var duration = refreshAt.difference(now);
 
     if (duration.isNegative) {
@@ -121,14 +123,15 @@ class SessionManager with WidgetsBindingObserver {
 
     _accessToken = auth.accessToken;
     _refreshToken = auth.refreshToken;
-    _expiry = _parseExpiry(auth.accessToken);
+    _user = SessionUser.fromToken(auth.accessToken);
+
     _scheduleRefresh();
   }
 
   void _checkExpiry() {
-    if (_expiry == null) return;
+    if (_user?.tokenExpiry == null) return;
     final now = DateTime.now();
-    if (now.isAfter(_expiry!)) {
+    if (now.isAfter(_user!.tokenExpiry!)) {
       logout("Your session expired. Please log in again.", true);
     } else {
       _scheduleRefresh();
@@ -143,16 +146,5 @@ class SessionManager with WidgetsBindingObserver {
       onLogout(logoutReason);
     }
     clearSession();
-  }
-
-  DateTime? _parseExpiry(String jwt) {
-    try {
-      Map<String, dynamic> payload = Jwt.parseJwt(jwt);
-      final exp = payload['exp'];
-      if (exp is int) {
-        return DateTime.fromMillisecondsSinceEpoch(exp * 1000);
-      }
-    } catch (_) {}
-    return null;
   }
 }

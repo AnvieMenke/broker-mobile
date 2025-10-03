@@ -1,6 +1,8 @@
 import 'package:broker_mobile/components/option/option_grid.dart';
+import 'package:broker_mobile/service/user_service.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:broker_mobile/src/screens/account/app_settings/app_settings.dart';
+import 'package:broker_mobile/src/screens/account/change_password/change_password.dart';
 import 'package:flutter/material.dart';
 
 class Account extends StatefulWidget {
@@ -28,7 +30,13 @@ class _AccountState extends State<Account> {
     _fragments = [
       const Center(child: Text("Logout")),
       const Center(child: Text("User Settings")),
-      const Center(child: Text("Change Password")),
+      ChangePasswordForm(
+        email: sessionManager.user!.email,
+        onSubmit: ({required oldPassword, required newPassword}) async {
+          final service = UserService();
+          await service.changePassword(oldPassword, newPassword);
+        },
+      ),
       AppSettings(),
     ];
   }

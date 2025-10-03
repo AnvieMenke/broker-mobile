@@ -34,15 +34,20 @@ Future<LoginResponse?> refreshToken(
 
 Future<LoginWebResponse> loginWeb(
     String email, String password, String correspondent) {
-  final req = LoginWebRequest()
-    ..email = email
-    ..password = password
-    ..authenticationMode = 'email'
-    ..clientId = AppEnv.grpcClientId
-    ..correspondent = correspondent;
+  try {
+    final req = LoginWebRequest()
+      ..email = email
+      ..password = password
+      ..authenticationMode = 'email'
+      ..clientId = AppEnv.grpcClientId
+      ..correspondent = correspondent;
 
-  final response = _service.loginWeb(req);
-  return response;
+    final response = _service.loginWeb(req);
+    return response;
+  } catch (err, stack) {
+    debugPrint("Login error: $err\n$stack");
+    rethrow;
+  }
 }
 
 Future<void> logoutUser() async {

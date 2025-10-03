@@ -21,28 +21,25 @@ class OptionGrid extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const AlwaysScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: maxCrossAxisExtent,
-              crossAxisSpacing: 0,
-              mainAxisSpacing: 0,
-              childAspectRatio: 1,
-            ),
-            itemCount: options.length,
-            itemBuilder: (context, index) {
-              final item = options[index];
-              return OptionCard(
-                title: item["title"] as String,
-                icon: item["icon"] as IconData,
-                onTap: () => onTap(index),
-              );
-            },
+        child: GridView.builder(
+          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: maxCrossAxisExtent,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+            childAspectRatio: 1,
           ),
+          itemCount: options.length,
+          itemBuilder: (context, index) {
+            final item = options[index];
+            return OptionCard(
+              title: item["title"] as String,
+              icon: item["icon"] as IconData,
+              onTap: () => onTap(index),
+            );
+          },
         ),
       ),
     );
