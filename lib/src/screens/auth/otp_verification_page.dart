@@ -198,7 +198,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   ),
                 const SizedBox(height: 16),
                 SizedBox(
-                  width: double.infinity,
+                  width: 100,
                   child: ElevatedButton(
                     onPressed: (_verifying || seconds <= 0) ? null : _verifyOtp,
                     style: ElevatedButton.styleFrom(
