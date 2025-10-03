@@ -20,13 +20,18 @@ final sessionManager = SessionManager(
             cleanReason = "Your session expired. Please log in again.";
           }
 
+          Color notificationColor = Colors.red;
+          if (cleanReason.contains('success')) {
+            notificationColor = Colors.green;
+          }
+
           ScaffoldMessenger.of(navigatorKey.currentContext!)
               .showSnackBar(SnackBar(
             content: Text(
               cleanReason,
               style: const TextStyle(color: Colors.white),
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: notificationColor,
           ));
         }
       });

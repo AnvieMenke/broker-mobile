@@ -1,7 +1,29 @@
 import 'package:decimal/decimal.dart';
+import 'package:grpc/grpc.dart';
 import 'package:intl/intl.dart';
 
 class FormatUtils {
+  static String cleanErrorMessage(Object err) {
+    // Handle gRPC errors
+    if (err is GrpcError) {
+      return err.message ?? 'An unexpected gRPC error occurred.';
+    }
+
+    // Handle Exception or Error types
+    if (err is Exception || err is Error) {
+      final msg = err.toString();
+      return msg.replaceFirst(RegExp(r'^(Exception|Error):\s*'), '').trim();
+    }
+
+    // Handle plain strings
+    if (err is String) {
+      return err.trim();
+    }
+
+    // Fallback for unknown types
+    return 'An unexpected error occurred.';
+  }
+
   static String formatPbDate(dynamic d, {String separator = '/'}) {
     if (d == null) return '';
 
@@ -56,10 +78,10 @@ class FormatUtils {
   }
 
   static String formatCurrencySymbol(
-      dynamic amount, {
-        String currency = 'USD',
-        int decimalCount = 6,
-      }) {
+    dynamic amount, {
+    String currency = 'USD',
+    int decimalCount = 6,
+  }) {
     try {
       final formatter = NumberFormat.currency(
         locale: 'en_US',
@@ -72,7 +94,6 @@ class FormatUtils {
       return formatCurrency(amount, decimalCount: decimalCount);
     }
   }
-
 
   static String formatQty(dynamic num) {
     if (num == null || num.toString().isEmpty) return '0';
