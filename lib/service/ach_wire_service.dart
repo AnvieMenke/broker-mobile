@@ -60,12 +60,8 @@ class AchWireService {
     final req = CreateRequest()
       ..correspondent = param['correspondent'] ?? ""
       ..accountNo = param["accountNo"] ?? ""
-      ..accountId = (param["accountId"] != null
-          ? int.tryParse(param["accountId"].toString())
-          : null)!
-      ..bankId = (param["bankId"] != null
-          ? int.tryParse(param["bankId"].toString())
-          : null)!
+      ..accountId = ConvertService.safeInt(param["accountId"])
+      ..bankId = ConvertService.safeInt(param["bankId"])
       ..transferType = param["transferType"] ?? ""
       ..amt = param["amt"]?.toString() ?? ""
       ..fee = param["fee"]?.toString() ?? ""
@@ -73,7 +69,6 @@ class AchWireService {
       ..externalId = param["externalId"] ?? ""
       ..status = param["status"] ?? ""
       ..requestType = param["requestType"] ?? "";
-
     try {
       final response = await achService.create(req);
       return response;
