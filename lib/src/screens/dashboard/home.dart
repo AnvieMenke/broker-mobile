@@ -3,6 +3,7 @@ import '../ach_wire_request/ach_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../reports/reports.dart';
+import 'dashboard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +18,7 @@ class HomePageState extends State<HomePage> {
   final Color activeColor = const Color(0xFF1A73E8);
 
   final List<Widget> _pages = [
-    const Center(child: Text('Home')),
+    const Dashboard(),
     const Center(child: Reports()),
     const SizedBox.shrink(),
     const Center(child: Text('Summary')),
@@ -44,65 +45,69 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
     final bottomAppBarColor = isDarkMode ? Colors.grey[900] : Colors.grey[200];
     final inactiveColor = isDarkMode ? Colors.white : Colors.black87;
 
-    return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: _pages[_currentIndex],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 6.0,
-        color: bottomAppBarColor,
-        child: SizedBox(
-          height: 72,
-          child: Row(
-            children: [
-              _buildNavItem(
-                  icon: FontAwesomeIcons.house,
-                  label: 'Home',
-                  index: 0,
-                  inactiveColor: inactiveColor),
-              _buildNavItem(
-                  icon: FontAwesomeIcons.chartLine,
-                  label: 'Report',
-                  index: 1,
-                  inactiveColor: inactiveColor),
-              Expanded(child: SizedBox()),
-              _buildNavItem(
-                  icon: FontAwesomeIcons.book,
-                  label: 'Summary',
-                  index: 3,
-                  inactiveColor: inactiveColor),
-              _buildNavItem(
-                  icon: FontAwesomeIcons.user,
-                  label: 'Account',
-                  index: 4,
-                  inactiveColor: inactiveColor),
-            ],
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(viewInsets: EdgeInsets.zero),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: _pages[_currentIndex],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 6.0,
+          color: bottomAppBarColor,
+          child: SizedBox(
+            height: 72,
+            child: Row(
+              children: [
+                _buildNavItem(
+                    icon: FontAwesomeIcons.house,
+                    label: 'Home',
+                    index: 0,
+                    inactiveColor: inactiveColor),
+                _buildNavItem(
+                    icon: FontAwesomeIcons.chartLine,
+                    label: 'Report',
+                    index: 1,
+                    inactiveColor: inactiveColor),
+                const Expanded(child: SizedBox()),
+                _buildNavItem(
+                    icon: FontAwesomeIcons.book,
+                    label: 'Summary',
+                    index: 3,
+                    inactiveColor: inactiveColor),
+                _buildNavItem(
+                    icon: FontAwesomeIcons.user,
+                    label: 'Account',
+                    index: 4,
+                    inactiveColor: inactiveColor),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: SizedBox(
-        height: 60,
-        width: 60,
-        child: FloatingActionButton(
-          backgroundColor: activeColor,
-          shape: const CircleBorder(),
-          child: const Icon(
-            FontAwesomeIcons.rightLeft,
-            size: 20,
-            color: Colors.white,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: SizedBox(
+          height: 60,
+          width: 60,
+          child: FloatingActionButton(
+            backgroundColor: activeColor,
+            shape: const CircleBorder(),
+            child: const Icon(
+              FontAwesomeIcons.rightLeft,
+              size: 20,
+              color: Colors.white,
+            ),
+            onPressed: () => _onTabTapped(2),
           ),
-          onPressed: () => _onTabTapped(2),
         ),
       ),
     );
   }
+
 
   Widget _buildNavItem({
     required IconData icon,

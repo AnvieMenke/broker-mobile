@@ -1,4 +1,4 @@
-import 'package:broker_mobile/proto/reportpb/activity.pbgrpc.dart';
+import 'package:broker_mobile/proto/reportpb/balance.pbgrpc.dart';
 import 'package:flutter/cupertino.dart';
 import '../server/auth_interceptor.dart';
 import 'package:grpc/grpc_connection_interface.dart';
@@ -6,15 +6,15 @@ import '../server/grpc_client.dart';
 import 'convert_service.dart';
 import 'package:broker_mobile/proto/utilspb/pagination.pb.dart';
 
-class ActivityService {
+class BalanceService {
   ClientChannelBase _createChannel() {
     return getGrpcChannel();
   }
 
-  ActivityServiceClient _activityService() {
+  BalanceServiceClient _balanceService() {
     final channel = _createChannel();
 
-    final client = ActivityServiceClient(
+    final client = BalanceServiceClient(
       channel,
       options: CallOptions(timeout: Duration(seconds: 30)),
       interceptors: [AuthInterceptor()],
@@ -23,10 +23,10 @@ class ActivityService {
     return client;
   }
 
-  Future<ListActivityResponse> listActivity(
+  Future<ListBalanceResponse> listBalance(
       Map<String, dynamic> param, Map<String, dynamic>? paging) async {
-    final client = _activityService();
-    final req = ListActivityRequest()
+    final client = _balanceService();
+    final req = ListBalanceRequest()
       ..dateType = param['dateType'] ?? ""
       ..fromDate = ConvertService.stringToPBObjectDate(
         param["fromDate"] != null
@@ -37,29 +37,7 @@ class ActivityService {
         param["toDate"] != null
             ? DateTime.parse(param["toDate"])
             : DateTime.now(),
-      )
-      ..correspondent = param['correspondent'] ?? ""
-      ..masterAccountNo = param['masterAccountNo'] ?? ""
-      ..rep = param['rep'] ?? ""
-      ..branch = param['branch'] ?? ""
-      ..assetType = param['assetType'] ?? ""
-      ..symbol = param['symbol'] ?? ""
-      ..entryType = (() {
-        final entryTypeParam = param['entryType'];
-        if (entryTypeParam == null) return "";
-
-        if (entryTypeParam is List && entryTypeParam.isNotEmpty) {
-          return "'${entryTypeParam.join("','")}'";
-        }
-
-        if (entryTypeParam is String && entryTypeParam.isNotEmpty) {
-          final parts = entryTypeParam.split(",").map((e) => e.trim()).toList();
-          return "'${parts.join("','")}'";
-        }
-
-        return "";
-      })()
-      ..description = param['description'] ?? "";
+      );
 
     if (paging != null && paging.isNotEmpty) {
       var paginationReq = Pagination()
@@ -72,7 +50,7 @@ class ActivityService {
     }
 
     try {
-      final response = await client.listActivity(req);
+      final response = await client.listBalance(req);
       return response;
     } catch (e) {
       rethrow;
