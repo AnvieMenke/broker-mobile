@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'position/position.dart';
 import 'activity/activity.dart';
 import 'margin/buying_power.dart';
-import 'package:broker_mobile/session/session.dart';
 
 class Reports extends StatefulWidget {
   const Reports({super.key});
@@ -42,11 +41,7 @@ class _ReportsState extends State<Reports> {
   }
 
   void _handleOptionTap(int index) {
-    if (index == 0) {
-      sessionManager.logout(null, false);
-    } else {
-      setState(() => _selectedIndex = index);
-    }
+    setState(() => _selectedIndex = index);
   }
 
   void _onFilterPressed(int index) {
