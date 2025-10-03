@@ -19,7 +19,7 @@ class HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     const Center(child: Text('Home')),
     const Center(child: Reports()),
-    const SizedBox.shrink(), // Placeholder for FAB
+    const SizedBox.shrink(),
     const Center(child: Text('Summary')),
     const Center(child: Account()),
   ];
@@ -61,11 +61,27 @@ class HomePageState extends State<HomePage> {
           height: 72,
           child: Row(
             children: [
-              _buildNavItem(icon: FontAwesomeIcons.house, label: 'Home', index: 0, inactiveColor: inactiveColor),
-              _buildNavItem(icon: FontAwesomeIcons.chartLine, label: 'Report', index: 1, inactiveColor: inactiveColor),
-              Expanded(child: SizedBox()), // space for FAB
-              _buildNavItem(icon: FontAwesomeIcons.book, label: 'Summary', index: 3, inactiveColor: inactiveColor),
-              _buildNavItem(icon: FontAwesomeIcons.user, label: 'Account', index: 4, inactiveColor: inactiveColor),
+              _buildNavItem(
+                  icon: FontAwesomeIcons.house,
+                  label: 'Home',
+                  index: 0,
+                  inactiveColor: inactiveColor),
+              _buildNavItem(
+                  icon: FontAwesomeIcons.chartLine,
+                  label: 'Report',
+                  index: 1,
+                  inactiveColor: inactiveColor),
+              Expanded(child: SizedBox()),
+              _buildNavItem(
+                  icon: FontAwesomeIcons.book,
+                  label: 'Summary',
+                  index: 3,
+                  inactiveColor: inactiveColor),
+              _buildNavItem(
+                  icon: FontAwesomeIcons.user,
+                  label: 'Account',
+                  index: 4,
+                  inactiveColor: inactiveColor),
             ],
           ),
         ),
