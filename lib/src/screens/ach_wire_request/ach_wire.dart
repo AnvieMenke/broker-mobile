@@ -161,10 +161,6 @@ class _AchWirePageState extends State<AchWirePage> {
 
     if (isEnable) {
       getFee();
-    } else {
-      setState(() {
-        formData["fee"] = 0.0;
-      });
     }
   }
 
