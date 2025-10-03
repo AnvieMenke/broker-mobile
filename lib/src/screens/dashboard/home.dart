@@ -1,5 +1,4 @@
 import 'package:broker_mobile/src/screens/account/account.dart';
-
 import '../ach_wire_request/ach_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,7 +19,7 @@ class HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     const Center(child: Text('Home')),
     const Center(child: Reports()),
-    const SizedBox.shrink(),
+    const SizedBox.shrink(), // Placeholder for FAB
     const Center(child: Text('Summary')),
     const Center(child: Account()),
   ];
@@ -44,6 +43,11 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    final bottomAppBarColor = isDarkMode ? Colors.grey[900] : Colors.grey[200];
+    final inactiveColor = isDarkMode ? Colors.white : Colors.black87;
+
     return Scaffold(
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
@@ -52,18 +56,16 @@ class HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 6.0,
-        color: Colors.grey[900],
+        color: bottomAppBarColor,
         child: SizedBox(
-          height: 64,
+          height: 72,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _navItem(icon: FontAwesomeIcons.house, label: 'Home', index: 0),
-              _navItem(
-                  icon: FontAwesomeIcons.chartLine, label: 'Report', index: 1),
-              const SizedBox(width: 60),
-              _navItem(icon: FontAwesomeIcons.book, label: 'Summary', index: 3),
-              _navItem(icon: FontAwesomeIcons.user, label: 'Account', index: 4),
+            children: [
+              _buildNavItem(icon: FontAwesomeIcons.house, label: 'Home', index: 0, inactiveColor: inactiveColor),
+              _buildNavItem(icon: FontAwesomeIcons.chartLine, label: 'Report', index: 1, inactiveColor: inactiveColor),
+              Expanded(child: SizedBox()), // space for FAB
+              _buildNavItem(icon: FontAwesomeIcons.book, label: 'Summary', index: 3, inactiveColor: inactiveColor),
+              _buildNavItem(icon: FontAwesomeIcons.user, label: 'Account', index: 4, inactiveColor: inactiveColor),
             ],
           ),
         ),
@@ -86,29 +88,33 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _navItem({
+  Widget _buildNavItem({
     required IconData icon,
     required String label,
     required int index,
+    required Color inactiveColor,
   }) {
     final bool isSelected = _currentIndex == index;
-    final Color iconColor = isSelected ? activeColor : Colors.white;
+    final Color iconColor = isSelected ? activeColor : inactiveColor;
 
-    return Flexible(
-      child: GestureDetector(
+    return Expanded(
+      child: InkWell(
         onTap: () => _onTabTapped(index),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FaIcon(icon, size: 18, color: iconColor),
-            const SizedBox(height: 2),
-            FittedBox(
-              child: Text(
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FaIcon(icon, size: 20, color: iconColor),
+              const SizedBox(height: 4),
+              Text(
                 label,
-                style: TextStyle(fontSize: 11, color: iconColor),
+                style: TextStyle(fontSize: 12, color: iconColor),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

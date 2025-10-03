@@ -16,7 +16,6 @@ class OptionGrid extends StatelessWidget {
   });
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topCenter,
@@ -26,8 +25,8 @@ class OptionGrid extends StatelessWidget {
           padding: const EdgeInsets.all(12.0),
           child: GridView.builder(
             shrinkWrap: true,
-            physics:
-                const NeverScrollableScrollPhysics(), // avoid scroll conflicts
+            physics: const AlwaysScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: maxCrossAxisExtent,
               crossAxisSpacing: 0,
