@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     },
                     decoration: InputDecoration(
-                      labelText: "Select Correspondent",
+                      labelText: "Correspondent",
                       filled: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -196,10 +196,18 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text(
-                        'Continue',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
+                      child: _loading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text('Continue',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white)),
                     ),
                   ),
                 ],
