@@ -1,3 +1,4 @@
+import 'package:broker_mobile/google/protobuf/empty.pb.dart';
 import 'package:broker_mobile/proto/usrpb/administrator.pbgrpc.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,37 @@ class UserService {
         throw Exception(response.msg);
       }
       sessionManager.logout(response.msg, true);
+    } catch (err, stack) {
+      debugPrint("Change password error: $err\n$stack");
+      rethrow;
+    }
+  }
+
+  Future<void> updateUserSettings(
+      String mobileNo, List<String> authMethods) async {
+    final client = _usrSvc();
+    final authenticationMode = authMethods.join(",");
+    final req = UpdateUserSettingsRequest()
+      ..mobileNo = mobileNo
+      ..authenticationMode = authenticationMode;
+
+    try {
+      await client.updateUserSettings(req);
+
+      sessionManager.updateUserSettings(mobileNo, authenticationMode);
+    } catch (err, stack) {
+      debugPrint("Change password error: $err\n$stack");
+      rethrow;
+    }
+  }
+
+  Future<CurrentUserDetailsResponse> currentUserDetails() async {
+    try {
+      final client = _usrSvc();
+      final payload = Empty();
+      final result = await client.currentUserDetails(payload);
+
+      return result;
     } catch (err, stack) {
       debugPrint("Change password error: $err\n$stack");
       rethrow;

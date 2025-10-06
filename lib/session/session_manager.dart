@@ -147,4 +147,9 @@ class SessionManager with WidgetsBindingObserver {
     }
     clearSession();
   }
+
+  void updateUserSettings(String mobileNo, String authenticationMode) {
+    _user?.mobileNo = mobileNo;
+    _user?.authenticationMode = authenticationMode;
+  }
 }

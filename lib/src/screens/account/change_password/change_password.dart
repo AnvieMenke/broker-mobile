@@ -148,7 +148,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                           height: 18,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text("Change Password"),
+                      : const Text("Submit"),
                 ),
               ),
             ],
