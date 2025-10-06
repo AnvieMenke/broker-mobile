@@ -30,7 +30,9 @@ class SessionUser {
   final String status;
   final String accountStatus;
   final String language;
-  final String mobileNo;
+  String mobileNo;
+  final String roleName;
+  String authenticationMode;
   final int userId;
   final int accountId;
   final int roleId;
@@ -52,6 +54,8 @@ class SessionUser {
     required this.accountStatus,
     required this.language,
     required this.mobileNo,
+    required this.roleName,
+    required this.authenticationMode,
     required this.userId,
     required this.accountId,
     required this.roleId,
@@ -86,6 +90,8 @@ class SessionUser {
         accountStatus: payload["AccountStatus"] as String,
         language: payload["Language"] as String,
         mobileNo: payload["MobileNo"] as String,
+        roleName: payload["Role"] as String,
+        authenticationMode: payload["AuthenticationMode"] as String,
         userId: payload["UserId"] as int,
         accountId: payload["AccountId"] as int,
         roleId: payload["RoleId"] as int,
