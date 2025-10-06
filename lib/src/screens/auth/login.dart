@@ -14,6 +14,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  String _selectedAuthMethod = "Email";
+
   bool _loading = false;
   bool _obscurePassword = true;
   String? _error;
@@ -26,7 +28,6 @@ class _LoginPageState extends State<LoginPage> {
   void _handleLogin() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
-    const authenticationMode = 'email';
 
     if (email.isEmpty || password.isEmpty) {
       setState(() {
@@ -41,8 +42,8 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      final response =
-          await loginWeb(email, password, _selectedCorrespondent ?? '');
+      final response = await loginWeb(
+          email, password, _selectedCorrespondent ?? '', _selectedAuthMethod);
       _session = response.sessionKey;
 
       setState(() {
@@ -72,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
               email: email,
               password: password,
               sessionKey: _session,
-              authenticationMode: authenticationMode,
+              authenticationMode: _selectedAuthMethod,
               correspondent: _selectedCorrespondent ?? '',
               expiryTime: expiryTime,
             ),
@@ -87,151 +88,181 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Widget _buildAuthMethodRadios() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: RadioGroup<String>(
+        groupValue: _selectedAuthMethod,
+        onChanged: (val) {
+          setState(() {
+            _selectedAuthMethod = val ?? "Email";
+          });
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Send code authentication via:"),
+            Wrap(
+              alignment: WrapAlignment.start,
+              children: const [
+                _AuthOption(value: "Text", label: "Text"),
+                _AuthOption(value: "Email", label: "Email"),
+                _AuthOption(value: "Authenticator", label: "Authenticator"),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginForm() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.lock_outline, size: 80, color: Colors.blueAccent),
+        const SizedBox(height: 24),
+        const Text(
+          'Login',
+          style: TextStyle(fontSize: 28),
+        ),
+        const SizedBox(height: 32),
+        TextField(
+          controller: _emailController,
+          decoration: InputDecoration(
+            hintText: 'Email',
+            hintStyle: const TextStyle(color: Colors.grey),
+            filled: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        TextField(
+          controller: _passwordController,
+          obscureText: _obscurePassword,
+          decoration: InputDecoration(
+            hintText: 'Password',
+            hintStyle: const TextStyle(color: Colors.grey),
+            filled: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none,
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscurePassword ? Icons.visibility : Icons.visibility_off,
+              ),
+              onPressed: () {
+                setState(() {
+                  _obscurePassword = !_obscurePassword;
+                });
+              },
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        _buildAuthMethodRadios(),
+        const SizedBox(height: 24),
+        if (_error != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Text(
+              _error!,
+              style: const TextStyle(color: Colors.redAccent),
+            ),
+          ),
+        if (_showCorrespondentDropdown) ...[
+          const SizedBox(height: 16),
+          DropdownButtonFormField<String>(
+            initialValue: _selectedCorrespondent,
+            items: _correspondents.map((c) {
+              return DropdownMenuItem(
+                value: c,
+                child: Text(c),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                _selectedCorrespondent = value;
+              });
+            },
+            decoration: InputDecoration(
+              labelText: "Correspondent",
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _selectedCorrespondent == null ? null : _handleLogin,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: _loading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Text('Continue',
+                      style: TextStyle(fontSize: 16, color: Colors.white)),
+            ),
+          ),
+        ],
+        if (!_showCorrespondentDropdown)
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _loading ? null : _handleLogin,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: _loading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Text('Login',
+                      style: TextStyle(fontSize: 16, color: Colors.white)),
+            ),
+          ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 400),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.lock_outline,
-                    size: 80, color: Colors.blueAccent),
-                const SizedBox(height: 24),
-                const Text(
-                  'Login',
-                  style: TextStyle(fontSize: 28),
-                ),
-                const SizedBox(height: 32),
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    hintText: 'Email',
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                if (_error != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      _error!,
-                      style: const TextStyle(color: Colors.redAccent),
-                    ),
-                  ),
-                if (_showCorrespondentDropdown) ...[
-                  const SizedBox(height: 16),
-                  DropdownButtonFormField<String>(
-                    initialValue: _selectedCorrespondent,
-                    items: _correspondents.map((c) {
-                      return DropdownMenuItem(
-                        value: c,
-                        child: Text(c),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedCorrespondent = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: "Correspondent",
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed:
-                          _selectedCorrespondent == null ? null : _handleLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: _loading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : const Text('Continue',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white)),
-                    ),
-                  ),
-                ],
-                if (!_showCorrespondentDropdown)
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _loading ? null : _handleLogin,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: _loading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : const Text('Login',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white)),
-                    ),
-                  ),
-              ],
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: _buildLoginForm(),
             ),
           ),
         ),
@@ -244,5 +275,23 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+}
+
+class _AuthOption extends StatelessWidget {
+  final String value;
+  final String label;
+
+  const _AuthOption({required this.value, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Radio<String>(value: value),
+        Text(label),
+      ],
+    );
   }
 }

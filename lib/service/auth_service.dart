@@ -32,13 +32,13 @@ Future<LoginResponse?> refreshToken(
   }
 }
 
-Future<LoginWebResponse> loginWeb(
-    String email, String password, String correspondent) {
+Future<LoginWebResponse> loginWeb(String email, String password,
+    String correspondent, String authenticationMode) {
   try {
     final req = LoginWebRequest()
       ..email = email
       ..password = password
-      ..authenticationMode = 'email'
+      ..authenticationMode = authenticationMode
       ..clientId = AppEnv.grpcClientId
       ..correspondent = correspondent;
 
