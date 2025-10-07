@@ -1,5 +1,8 @@
+import 'package:broker_mobile/src/screens/ach_wire_request/ach_menu.dart';
+import 'package:broker_mobile/src/screens/dashboard/dashboard.dart';
+import 'package:broker_mobile/src/screens/reports/reports.dart';
+import 'package:broker_mobile/src/screens/settings/settings_page.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -9,17 +12,58 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final int _selectedIndex = 0;
+  int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    HomePage(),
+  final _pages = const [
+    Dashboard(),
+    Center(child: Text('📊 Summary', style: TextStyle(fontSize: 24))),
+    Reports(),
+    AchWireMenuPage(),
+    SettingsPage(),
   ];
 
+  void _onItemTapped(int index) {
+    setState(() => _selectedIndex = index);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: _pages[_selectedIndex]),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onItemTapped,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.summarize_outlined),
+            selectedIcon: Icon(Icons.summarize),
+            label: 'Summary',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.insert_chart_outlined),
+            selectedIcon: Icon(Icons.insert_chart),
+            label: 'Reports',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.payments_outlined),
+            selectedIcon: Icon(Icons.payments),
+            label: 'Transfers',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings_outlined),
+            selectedIcon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+      ),
     );
   }
 }

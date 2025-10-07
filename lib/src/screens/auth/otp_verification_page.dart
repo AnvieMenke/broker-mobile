@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../service/auth_service.dart';
-import '../dashboard/main_screen.dart';
 import '../auth/login.dart';
 
 class OtpVerificationPage extends StatefulWidget {
@@ -103,10 +102,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       );
       setState(() => _verifying = false);
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MainScreen()),
-        );
+        Navigator.of(context).pushReplacementNamed('/home');
       });
     } catch (e) {
       setState(() {
@@ -114,11 +110,11 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         _error = (e is Map && e['message'] != null)
             ? e['message']
             : (e.toString().contains('gRPC Error')
-            ? RegExp(r'message: ([^,]+)')
-            .firstMatch(e.toString())
-            ?.group(1)
-            ?.trim()
-            : e.toString());
+                ? RegExp(r'message: ([^,]+)')
+                    .firstMatch(e.toString())
+                    ?.group(1)
+                    ?.trim()
+                : e.toString());
       });
     }
   }
@@ -157,7 +153,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-
                 PinCodeTextField(
                   controller: _otpController,
                   appContext: context,
@@ -188,7 +183,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     _otpController.text = value;
                   },
                 ),
-
                 const SizedBox(height: 16),
                 if (_error != null)
                   Text(
@@ -209,17 +203,17 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     ),
                     child: _verifying
                         ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
                         : const Text(
-                      'Verify',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                            'Verify',
+                            style: TextStyle(color: Colors.white),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 20),

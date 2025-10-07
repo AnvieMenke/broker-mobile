@@ -1,20 +1,21 @@
-import 'package:broker_mobile/session/session.dart';
+import 'package:broker_mobile/components/containers/page_container.dart';
 import 'package:flutter/material.dart';
+import 'package:broker_mobile/session/session.dart';
 
-class AppSettings extends StatefulWidget {
-  const AppSettings({super.key});
+class AppSettingsPage extends StatefulWidget {
+  const AppSettingsPage({super.key});
 
   @override
-  State<AppSettings> createState() => _AppSettingsState();
+  State<AppSettingsPage> createState() => _AppSettingsPageState();
 }
 
-class _AppSettingsState extends State<AppSettings> {
+class _AppSettingsPageState extends State<AppSettingsPage> {
   late ThemeMode _themeMode;
 
   @override
   void initState() {
     super.initState();
-    _themeMode = themeManager.themeMode; // load current theme
+    _themeMode = themeManager.themeMode; // Load current theme
     themeManager.addListener(_onThemeChanged);
   }
 
@@ -46,10 +47,11 @@ class _AppSettingsState extends State<AppSettings> {
   Widget build(BuildContext context) {
     final isDark = _isDarkMode(context);
 
-    return Scaffold(
-      body: ListView(
+    return PageContainer(
+      title: "App Settings",
+      page: Column(
         children: [
-          // Dark mode option
+          // Dark mode toggle
           SwitchListTile(
             secondary: Icon(isDark ? Icons.dark_mode : Icons.light_mode),
             title: Text(isDark ? "Dark Mode" : "Light Mode"),
@@ -57,17 +59,13 @@ class _AppSettingsState extends State<AppSettings> {
             onChanged: _toggleTheme,
           ),
 
-          // const Divider(),
-
-          // // Language option
+          // Add more settings here if needed
           // ListTile(
           //   leading: const Icon(Icons.language),
           //   title: const Text("Language"),
-          //   subtitle: const Text("English"), // you can make this dynamic
+          //   subtitle: const Text("English"),
           //   trailing: const Icon(Icons.chevron_right),
-          //   onTap: () {
-          //
-          //   },
+          //   onTap: () {},
           // ),
         ],
       ),

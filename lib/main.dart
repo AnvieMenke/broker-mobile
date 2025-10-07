@@ -1,6 +1,5 @@
-import 'package:broker_mobile/session/session_guard.dart';
+import 'package:broker_mobile/router.dart';
 import 'package:flutter/material.dart';
-import 'package:broker_mobile/src/screens/auth/login.dart';
 import 'package:broker_mobile/env.dart';
 import 'utils/theme/custom_theme.dart';
 import 'package:broker_mobile/session/session.dart';
@@ -52,12 +51,10 @@ class _MyAppState extends State<MyApp> {
         title: 'Broker App',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        themeMode: themeManager.themeMode, // Use persisted theme here
+        themeMode: themeManager.themeMode,
         navigatorKey: navigatorKey,
-        home: SessionGuard(
-          manager: sessionManager,
-          child: const LoginPage(),
-        ),
+        initialRoute: '/',
+        onGenerateRoute: generateRoute,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:broker_mobile/components/buttons/button.dart';
 import 'package:broker_mobile/components/fields/field_password.dart';
 import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
@@ -138,19 +139,10 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _isSubmitting ? null : _handleSubmit,
-                  child: _isSubmitting
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text("Submit"),
-                ),
-              ),
+              Button(
+                  label: "Submit",
+                  isLoading: _isSubmitting,
+                  onPressed: _handleSubmit),
             ],
           ),
         ),

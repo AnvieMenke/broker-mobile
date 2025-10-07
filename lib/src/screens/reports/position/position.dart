@@ -1,3 +1,4 @@
+import 'package:broker_mobile/components/containers/page_list_container.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
 import '../../../../components/dropdowns/select_account_no.dart';
@@ -11,14 +12,14 @@ import '../../../../components/dropdowns/select_rep.dart';
 import '../../../../components/dropdowns/select_branch.dart';
 import '../../../../components/dropdowns/select_symbol.dart';
 
-class PositionFragment extends StatefulWidget {
-  const PositionFragment({super.key});
+class PositionPage extends StatefulWidget {
+  const PositionPage({super.key});
 
   @override
-  PositionFragmentState createState() => PositionFragmentState();
+  PositionPageState createState() => PositionPageState();
 }
 
-class PositionFragmentState extends State<PositionFragment> {
+class PositionPageState extends State<PositionPage> {
   Future<List<GridItem>>? _futureRequests;
 
   final Map<String, dynamic> queryData = {
@@ -389,109 +390,123 @@ class PositionFragmentState extends State<PositionFragment> {
 
   @override
   Widget build(BuildContext context) {
-    if (_futureRequests == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    return FutureBuilder<List<GridItem>>(
-      future: _futureRequests,
-      builder: (context, snapshot) {
-        Widget body;
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          body = const Center(child: CircularProgressIndicator());
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          body = RefreshIndicator(
-            onRefresh: () async => _futureRequests = _listPosition(),
-            child: ListView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              children: const [
-                SizedBox(height: 200),
-                Center(
-                  child: Text("No data found", style: TextStyle(fontSize: 20)),
-                ),
-              ],
-            ),
-          );
-        } else {
-          body = RefreshIndicator(
-            onRefresh: () async => _futureRequests = _listPosition(),
-            child: GridWithPagination(
-              items: snapshot.data!,
-              pagination: pagination,
-              onPageChange: _onPageChange,
-            ),
-          );
-        }
-
-        return Scaffold(
-          body: Column(
-            children: [
-              ValueListenableBuilder(
-                valueListenable: queryDataNotifier,
-                builder: (_, __, ___) {
-                  final activeFilters = queryData.entries
-                      .where((e) =>
-                          e.value != null &&
-                          e.value.toString().isNotEmpty &&
-                          e.value.toString() != "0")
-                      .toList();
-
-                  if (activeFilters.isEmpty) return const SizedBox.shrink();
-
-                  return Container(
-                    width: double.infinity,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
-                      children: activeFilters.where((entry) {
-                        if (entry.value is bool) return entry.value == true;
-                        if (entry.value == null ||
-                            entry.value.toString().isEmpty) {
-                          return false;
-                        }
-                        return true;
-                      }).map((entry) {
-                        return Chip(
-                          label: Text(
-                            entry.value is bool
-                                ? ConvertService.camelToTitle(entry.key)
-                                    .replaceAll("Is ", "")
-                                : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
-                            style: const TextStyle(fontSize: 9),
+    return PageListContainer(
+        title: "Position",
+        openFilterDialog: openFilterDialog,
+        page: _futureRequests == null
+            ? Center(child: CircularProgressIndicator())
+            : FutureBuilder<List<GridItem>>(
+                future: _futureRequests,
+                builder: (context, snapshot) {
+                  Widget body;
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    body = const Center(child: CircularProgressIndicator());
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    body = RefreshIndicator(
+                      onRefresh: () async => _futureRequests = _listPosition(),
+                      child: ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        children: const [
+                          SizedBox(height: 200),
+                          Center(
+                            child: Text("No data found",
+                                style: TextStyle(fontSize: 20)),
                           ),
-                          deleteIcon:
-                              entry.key.toLowerCase().contains("fromdate") ||
-                                      entry.key.toLowerCase().contains("todate")
-                                  ? null
-                                  : const Icon(Icons.close),
-                          onDeleted:
-                              entry.key.toLowerCase().contains("fromdate") ||
-                                      entry.key.toLowerCase().contains("todate")
-                                  ? null
-                                  : () {
-                                      setState(() {
-                                        queryData[entry.key] =
-                                            entry.value is bool ? false : "";
+                        ],
+                      ),
+                    );
+                  } else {
+                    body = RefreshIndicator(
+                      onRefresh: () async => _futureRequests = _listPosition(),
+                      child: GridWithPagination(
+                        items: snapshot.data!,
+                        pagination: pagination,
+                        onPageChange: _onPageChange,
+                      ),
+                    );
+                  }
 
-                                        _updateQueryData();
-                                        _futureRequests = _listPosition();
-                                      });
-                                    },
-                        );
-                      }).toList(),
+                  return Scaffold(
+                    body: Column(
+                      children: [
+                        ValueListenableBuilder(
+                          valueListenable: queryDataNotifier,
+                          builder: (_, __, ___) {
+                            final activeFilters = queryData.entries
+                                .where((e) =>
+                                    e.value != null &&
+                                    e.value.toString().isNotEmpty &&
+                                    e.value.toString() != "0")
+                                .toList();
+
+                            if (activeFilters.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+
+                            return Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              child: Wrap(
+                                spacing: 6,
+                                runSpacing: 6,
+                                children: activeFilters.where((entry) {
+                                  if (entry.value is bool) {
+                                    return entry.value == true;
+                                  }
+
+                                  if (entry.value == null ||
+                                      entry.value.toString().isEmpty) {
+                                    return false;
+                                  }
+                                  return true;
+                                }).map((entry) {
+                                  return Chip(
+                                    label: Text(
+                                      entry.value is bool
+                                          ? ConvertService.camelToTitle(
+                                                  entry.key)
+                                              .replaceAll("Is ", "")
+                                          : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                                      style: const TextStyle(fontSize: 9),
+                                    ),
+                                    deleteIcon: entry.key
+                                                .toLowerCase()
+                                                .contains("fromdate") ||
+                                            entry.key
+                                                .toLowerCase()
+                                                .contains("todate")
+                                        ? null
+                                        : const Icon(Icons.close),
+                                    onDeleted: entry.key
+                                                .toLowerCase()
+                                                .contains("fromdate") ||
+                                            entry.key
+                                                .toLowerCase()
+                                                .contains("todate")
+                                        ? null
+                                        : () {
+                                            setState(() {
+                                              queryData[entry.key] =
+                                                  entry.value is bool
+                                                      ? false
+                                                      : "";
+
+                                              _updateQueryData();
+                                              _futureRequests = _listPosition();
+                                            });
+                                          },
+                                  );
+                                }).toList(),
+                              ),
+                            );
+                          },
+                        ),
+                        Expanded(child: body),
+                      ],
                     ),
                   );
                 },
-              ),
-              Expanded(child: body),
-            ],
-          ),
-        );
-      },
-    );
+              ));
   }
 }
