@@ -1,3 +1,4 @@
+import 'package:broker_mobile/components/containers/page_list_container.dart';
 import 'package:broker_mobile/service/activity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
@@ -12,14 +13,14 @@ import '../../../../components/dropdowns/select_branch.dart';
 import '../../../../components/dropdowns/select_symbol.dart';
 import '../../../../components/dropdowns/select_entry_type.dart';
 
-class ActivityFragment extends StatefulWidget {
-  const ActivityFragment({super.key});
+class ActivityPage extends StatefulWidget {
+  const ActivityPage({super.key});
 
   @override
-  ActivityFragmentState createState() => ActivityFragmentState();
+  ActivityPageState createState() => ActivityPageState();
 }
 
-class ActivityFragmentState extends State<ActivityFragment> {
+class ActivityPageState extends State<ActivityPage> {
   Future<List<GridItem>>? _futureRequests;
 
   final Map<String, dynamic> queryData = {
@@ -462,100 +463,105 @@ class ActivityFragmentState extends State<ActivityFragment> {
 
   @override
   Widget build(BuildContext context) {
-    if (_futureRequests == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    return FutureBuilder<List<GridItem>>(
-      future: _futureRequests,
-      builder: (context, snapshot) {
-        Widget body;
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          body = const Center(child: CircularProgressIndicator());
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          body = RefreshIndicator(
-            onRefresh: () async => _futureRequests = _listActivity(),
-            child: ListView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              children: const [
-                SizedBox(height: 200),
-                Center(
-                  child: Text("No data found", style: TextStyle(fontSize: 20)),
-                ),
-              ],
-            ),
-          );
-        } else {
-          body = RefreshIndicator(
-            onRefresh: () async => _futureRequests = _listActivity(),
-            child: GridWithPagination(
-              items: snapshot.data!,
-              pagination: pagination,
-              onPageChange: _onPageChange,
-            ),
-          );
-        }
-
-        return Scaffold(
-          body: Column(
-            children: [
-              ValueListenableBuilder(
-                valueListenable: queryDataNotifier,
-                builder: (_, __, ___) {
-                  final activeFilters = queryData.entries
-                      .where((e) =>
-                          e.value != null &&
-                          e.value.toString().isNotEmpty &&
-                          e.value.toString() != "0")
-                      .toList();
-
-                  if (activeFilters.isEmpty) return const SizedBox.shrink();
-
-                  return Container(
-                    width: double.infinity,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
-                      children: activeFilters.where((entry) {
-                        if (entry.value is bool) return entry.value == true;
-                        if (entry.value == null ||
-                            entry.value.toString().isEmpty) {
-                          return false;
-                        }
-                        return true;
-                      }).map((entry) {
-                        return Chip(
-                          label: Text(
-                            "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
-                            style: const TextStyle(fontSize: 9),
+    return PageListContainer(
+        title: "Activity",
+        openFilterDialog: openFilterDialog,
+        page: _futureRequests == null
+            ? Center(child: CircularProgressIndicator())
+            : FutureBuilder<List<GridItem>>(
+                future: _futureRequests,
+                builder: (context, snapshot) {
+                  Widget body;
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    body = const Center(child: CircularProgressIndicator());
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    body = RefreshIndicator(
+                      onRefresh: () async => _futureRequests = _listActivity(),
+                      child: ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        children: const [
+                          SizedBox(height: 200),
+                          Center(
+                            child: Text("No data found",
+                                style: TextStyle(fontSize: 20)),
                           ),
-                          deleteIcon: entry.key.toLowerCase().contains("date")
-                              ? null
-                              : const Icon(Icons.close),
-                          onDeleted: entry.key.toLowerCase().contains("date")
-                              ? null
-                              : () {
-                                  setState(() {
-                                    queryData[entry.key] = "";
-                                    _updateQueryData();
-                                    _futureRequests = _listActivity();
-                                  });
-                                },
-                        );
-                      }).toList(),
-                    ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    body = RefreshIndicator(
+                      onRefresh: () async => _futureRequests = _listActivity(),
+                      child: GridWithPagination(
+                        items: snapshot.data!,
+                        pagination: pagination,
+                        onPageChange: _onPageChange,
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      ValueListenableBuilder(
+                        valueListenable: queryDataNotifier,
+                        builder: (_, __, ___) {
+                          final activeFilters = queryData.entries
+                              .where((e) =>
+                                  e.value != null &&
+                                  e.value.toString().isNotEmpty &&
+                                  e.value.toString() != "0")
+                              .toList();
+
+                          if (activeFilters.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Wrap(
+                              spacing: 6,
+                              runSpacing: 6,
+                              children: activeFilters.where((entry) {
+                                if (entry.value is bool) {
+                                  return entry.value == true;
+                                }
+                                if (entry.value == null ||
+                                    entry.value.toString().isEmpty) {
+                                  return false;
+                                }
+                                return true;
+                              }).map((entry) {
+                                return Chip(
+                                  label: Text(
+                                    "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                                    style: const TextStyle(fontSize: 9),
+                                  ),
+                                  deleteIcon:
+                                      entry.key.toLowerCase().contains("date")
+                                          ? null
+                                          : const Icon(Icons.close),
+                                  onDeleted: entry.key
+                                          .toLowerCase()
+                                          .contains("date")
+                                      ? null
+                                      : () {
+                                          setState(() {
+                                            queryData[entry.key] = "";
+                                            _updateQueryData();
+                                            _futureRequests = _listActivity();
+                                          });
+                                        },
+                                );
+                              }).toList(),
+                            ),
+                          );
+                        },
+                      ),
+                      Expanded(child: body),
+                    ],
                   );
                 },
-              ),
-              Expanded(child: body),
-            ],
-          ),
-        );
-      },
-    );
+              ));
   }
 }

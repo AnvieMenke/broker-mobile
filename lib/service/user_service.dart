@@ -25,12 +25,12 @@ class UserService {
 
   Future<void> changePassword(String oldPassword, String newPassword) async {
     final client = _usrSvc();
-    final req = ChangePasswordRequest()
+    final payload = ChangePasswordRequest()
       ..oldPassword = oldPassword
       ..newPassword = newPassword;
 
     try {
-      final response = await client.changePassword(req);
+      final response = await client.changePassword(payload);
       if (response.status == "Failed") {
         throw Exception(response.msg);
       }
@@ -45,29 +45,53 @@ class UserService {
       String mobileNo, List<String> authMethods) async {
     final client = _usrSvc();
     final authenticationMode = authMethods.join(",");
-    final req = UpdateUserSettingsRequest()
+    final payload = UpdateUserSettingsRequest()
       ..mobileNo = mobileNo
       ..authenticationMode = authenticationMode;
 
     try {
-      await client.updateUserSettings(req);
+      await client.updateUserSettings(payload);
 
       sessionManager.updateUserSettings(mobileNo, authenticationMode);
     } catch (err, stack) {
-      debugPrint("Change password error: $err\n$stack");
+      debugPrint("Update user settings error: $err\n$stack");
       rethrow;
     }
   }
 
-  Future<CurrentUserDetailsResponse> currentUserDetails() async {
+  Future<GetUserOtpAuthUrlResponse> getUserOtpAuthUrl() async {
     try {
       final client = _usrSvc();
       final payload = Empty();
-      final result = await client.currentUserDetails(payload);
+      final result = await client.getUserOtpAuthUrl(payload);
 
       return result;
     } catch (err, stack) {
-      debugPrint("Change password error: $err\n$stack");
+      debugPrint("Get user OTP URL error: $err\n$stack");
+      rethrow;
+    }
+  }
+
+  Future<void> updateUserOtpAuth(String validationCode) async {
+    try {
+      final client = _usrSvc();
+      final payload = UpdateUserOtpAuthRequest()
+        ..validationCode = validationCode;
+
+      await client.updateUserOtpAuth(payload);
+    } catch (err, stack) {
+      debugPrint("Update user OTP error: $err\n$stack");
+      rethrow;
+    }
+  }
+
+  Future<void> removeUserOtpAuth() async {
+    try {
+      final client = _usrSvc();
+      final payload = EmptyRequest();
+      await client.removeUserOtpAuth(payload);
+    } catch (err, stack) {
+      debugPrint("Remove user OTP error: $err\n$stack");
       rethrow;
     }
   }

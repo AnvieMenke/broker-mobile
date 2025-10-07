@@ -1,5 +1,7 @@
+import 'package:broker_mobile/components/buttons/button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:broker_mobile/components/messages/notification.dart';
 
 class UserSettingsForm extends StatefulWidget {
   final String name;
@@ -79,6 +81,7 @@ class _UserSettingsFormState extends State<UserSettingsForm> {
               .map((e) => e.key)
               .toList(),
         );
+        Notify.success('Changes saved successfully.');
       } catch (err) {
         setState(() {
           _errorMessage = err.toString();
@@ -167,20 +170,11 @@ class _UserSettingsFormState extends State<UserSettingsForm> {
               ),
             ),
 
-          // Submit button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _isSubmitting ? null : _handleSubmit,
-              child: _isSubmitting
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text("Submit"),
-            ),
-          ),
+          Button(
+            label: "Submit",
+            onPressed: _handleSubmit,
+            isLoading: _isSubmitting,
+          )
         ],
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:broker_mobile/proto/reportpb/activity.pbgrpc.dart';
-import 'package:flutter/cupertino.dart';
 import '../server/auth_interceptor.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import '../server/grpc_client.dart';

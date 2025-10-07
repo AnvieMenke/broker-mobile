@@ -70,9 +70,6 @@ class DashboardState extends State<Dashboard> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Dashboard"),
-      ),
       body: SafeArea(
         child: FutureBuilder<List<Balance>>(
           future: _futureBalances,
