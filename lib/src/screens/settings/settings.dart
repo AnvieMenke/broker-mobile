@@ -1,19 +1,19 @@
 import 'package:broker_mobile/components/option/option_grid.dart';
 import 'package:broker_mobile/service/user_service.dart';
 import 'package:broker_mobile/session/session.dart';
-import 'package:broker_mobile/src/screens/account/app_settings/app_settings.dart';
-import 'package:broker_mobile/src/screens/account/change_password/change_password.dart';
-import 'package:broker_mobile/src/screens/account/user-settings/user_settings.dart';
+import 'package:broker_mobile/src/screens/settings/app_settings/app_settings.dart';
+import 'package:broker_mobile/src/screens/settings/change_password/change_password.dart';
+import 'package:broker_mobile/src/screens/settings/user-settings/user_settings.dart';
 import 'package:flutter/material.dart';
 
-class Account extends StatefulWidget {
-  const Account({super.key});
+class Settings extends StatefulWidget {
+  const Settings({super.key});
 
   @override
-  State<Account> createState() => _AccountState();
+  State<Settings> createState() => _SettingsState();
 }
 
-class _AccountState extends State<Account> {
+class _SettingsState extends State<Settings> {
   int _selectedIndex = -1;
 
   final List<Map<String, dynamic>> _options = [
@@ -66,7 +66,7 @@ class _AccountState extends State<Account> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          isPageSelected ? _options[_selectedIndex]["title"] : "Account",
+          isPageSelected ? _options[_selectedIndex]["title"] : "Settings",
         ),
         leading: isPageSelected
             ? IconButton(

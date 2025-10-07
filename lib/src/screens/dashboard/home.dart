@@ -1,4 +1,4 @@
-import 'package:broker_mobile/src/screens/account/account.dart';
+import 'package:broker_mobile/src/screens/settings/settings.dart';
 import '../ach_wire_request/ach_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,7 +22,7 @@ class HomePageState extends State<HomePage> {
     const Center(child: Reports()),
     const SizedBox.shrink(),
     const Center(child: Text('Summary')),
-    const Center(child: Account()),
+    const Center(child: Settings()),
   ];
 
   void _onTabTapped(int index) {
@@ -81,8 +81,8 @@ class HomePageState extends State<HomePage> {
                     index: 3,
                     inactiveColor: inactiveColor),
                 _buildNavItem(
-                    icon: FontAwesomeIcons.user,
-                    label: 'Account',
+                    icon: FontAwesomeIcons.gear,
+                    label: 'Settings',
                     index: 4,
                     inactiveColor: inactiveColor),
               ],
@@ -107,7 +107,6 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
-
 
   Widget _buildNavItem({
     required IconData icon,
