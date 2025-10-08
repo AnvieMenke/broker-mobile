@@ -108,7 +108,6 @@ class _AutoCompleteCorrespondentState extends State<AutoCompleteCorrespondent> {
             labelText: widget.label ?? 'Correspondent',
             hintText: widget.label ?? 'Correspondent',
             errorText: widget.error ? 'Invalid input' : null,
-            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             if (widget.freeSolo) {

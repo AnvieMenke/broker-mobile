@@ -33,12 +33,10 @@ class AutoCompleteBranch extends StatefulWidget {
   });
 
   @override
-  State<AutoCompleteBranch> createState() =>
-      _AutoCompleteBranchState();
+  State<AutoCompleteBranch> createState() => _AutoCompleteBranchState();
 }
 
-class _AutoCompleteBranchState
-    extends State<AutoCompleteBranch> {
+class _AutoCompleteBranchState extends State<AutoCompleteBranch> {
   final TextEditingController _controller = TextEditingController();
   late final CommonService _service;
   List<Map<String, String>> _options = [];
@@ -97,7 +95,7 @@ class _AutoCompleteBranchState
     }
 
     final match = _options.firstWhere(
-          (o) => o['branch'] == value,
+      (o) => o['branch'] == value,
       orElse: () => {},
     );
 
@@ -148,7 +146,6 @@ class _AutoCompleteBranchState
             labelText: 'Branch',
             hintText: 'Branch',
             errorText: widget.error ? 'Invalid input' : null,
-            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             controller.text = value;

@@ -37,8 +37,7 @@ class AutoCompleteAccountName extends StatefulWidget {
       _AutoCompleteAccountNameState();
 }
 
-class _AutoCompleteAccountNameState
-    extends State<AutoCompleteAccountName> {
+class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
   final TextEditingController _controller = TextEditingController();
   late final CommonService _service;
   List<Map<String, String>> _options = [];
@@ -97,7 +96,7 @@ class _AutoCompleteAccountNameState
     }
 
     final match = _options.firstWhere(
-          (o) => o['accountName'] == value,
+      (o) => o['accountName'] == value,
       orElse: () => {},
     );
 
@@ -148,7 +147,6 @@ class _AutoCompleteAccountNameState
             labelText: 'Account Name',
             hintText: 'Account Name',
             errorText: widget.error ? 'Invalid input' : null,
-            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             controller.text = value;

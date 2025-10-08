@@ -1,30 +1,14 @@
 import 'package:broker_mobile/google/protobuf/empty.pb.dart';
 import 'package:broker_mobile/proto/usrpb/administrator.pbgrpc.dart';
+import 'package:broker_mobile/server/grpc_client_factory.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:flutter/material.dart';
-import '../server/auth_interceptor.dart';
-import 'package:grpc/grpc_connection_interface.dart';
-import '../server/grpc_client.dart';
 
 class UserService {
-  ClientChannelBase _createChannel() {
-    return getGrpcChannel();
-  }
-
-  UserServiceClient _usrSvc() {
-    final channel = _createChannel();
-
-    final client = UserServiceClient(
-      channel,
-      options: CallOptions(timeout: Duration(seconds: 30)),
-      interceptors: [AuthInterceptor()],
-    );
-
-    return client;
-  }
+  final _service = GrpcClientFactory.create(UserServiceClient.new);
 
   Future<void> changePassword(String oldPassword, String newPassword) async {
-    final client = _usrSvc();
+    final client = GrpcClientFactory.create(UserServiceClient.new);
     final payload = ChangePasswordRequest()
       ..oldPassword = oldPassword
       ..newPassword = newPassword;
@@ -43,14 +27,13 @@ class UserService {
 
   Future<void> updateUserSettings(
       String mobileNo, List<String> authMethods) async {
-    final client = _usrSvc();
     final authenticationMode = authMethods.join(",");
     final payload = UpdateUserSettingsRequest()
       ..mobileNo = mobileNo
       ..authenticationMode = authenticationMode;
 
     try {
-      await client.updateUserSettings(payload);
+      await _service.updateUserSettings(payload);
 
       sessionManager.updateUserSettings(mobileNo, authenticationMode);
     } catch (err, stack) {
@@ -61,9 +44,8 @@ class UserService {
 
   Future<GetUserOtpAuthUrlResponse> getUserOtpAuthUrl() async {
     try {
-      final client = _usrSvc();
       final payload = Empty();
-      final result = await client.getUserOtpAuthUrl(payload);
+      final result = await _service.getUserOtpAuthUrl(payload);
 
       return result;
     } catch (err, stack) {
@@ -74,11 +56,10 @@ class UserService {
 
   Future<void> updateUserOtpAuth(String validationCode) async {
     try {
-      final client = _usrSvc();
       final payload = UpdateUserOtpAuthRequest()
         ..validationCode = validationCode;
 
-      await client.updateUserOtpAuth(payload);
+      await _service.updateUserOtpAuth(payload);
     } catch (err, stack) {
       debugPrint("Update user OTP error: $err\n$stack");
       rethrow;
@@ -87,9 +68,8 @@ class UserService {
 
   Future<void> removeUserOtpAuth() async {
     try {
-      final client = _usrSvc();
       final payload = EmptyRequest();
-      await client.removeUserOtpAuth(payload);
+      await _service.removeUserOtpAuth(payload);
     } catch (err, stack) {
       debugPrint("Remove user OTP error: $err\n$stack");
       rethrow;

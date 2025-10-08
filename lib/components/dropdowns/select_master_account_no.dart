@@ -152,7 +152,6 @@ class _AutoCompleteMasterAccountNoState
             labelText: 'Master Account No',
             hintText: 'Master Account No',
             errorText: widget.error ? 'Invalid input' : null,
-            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             controller.text = value;

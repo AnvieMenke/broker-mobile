@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:flutter/services.dart';
 
 class FieldOtp extends StatelessWidget {
-  final TextEditingController controller;
   final void Function(String)? onCompleted;
   final void Function(String)? onChanged;
   final bool autoFocus;
@@ -12,7 +12,6 @@ class FieldOtp extends StatelessWidget {
 
   const FieldOtp({
     super.key,
-    required this.controller,
     this.onCompleted,
     this.onChanged,
     this.autoFocus = true,
@@ -28,26 +27,31 @@ class FieldOtp extends StatelessWidget {
         constraints: BoxConstraints(maxWidth: maxWidth),
         child: PinCodeTextField(
           appContext: context,
-          controller: controller,
           length: length,
           autoFocus: autoFocus,
           animationType: AnimationType.scale,
           keyboardType: TextInputType.number,
           cursorColor: Colors.white,
+          backgroundColor: Colors.transparent,
           validator: validator ??
               (v) => v == null || v.isEmpty || v.length != length
                   ? "Your validation code must be exactly $length digits."
                   : null,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly, // ✅ allows only 0–9
+          ],
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.box,
             borderRadius: BorderRadius.circular(8),
             fieldHeight: 55,
             fieldWidth: 45,
-            activeFillColor: Colors.blueAccent,
-            inactiveFillColor: Colors.grey,
+            activeFillColor: Colors.transparent,
+            inactiveFillColor: Colors.transparent,
             activeColor: Colors.blueAccent,
-            selectedColor: Colors.blueAccent,
+            selectedColor: Colors.blueAccent.shade700,
             inactiveColor: Colors.grey,
+            selectedFillColor: Colors.blueAccent.shade100,
+            errorBorderColor: Colors.redAccent,
           ),
           textStyle: const TextStyle(
             color: Colors.white,

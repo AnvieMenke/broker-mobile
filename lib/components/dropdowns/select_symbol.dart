@@ -133,7 +133,6 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
             labelText: 'Symbol',
             hintText: 'Symbol',
             errorText: widget.error ? 'Invalid input' : null,
-            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             controller.text = value;

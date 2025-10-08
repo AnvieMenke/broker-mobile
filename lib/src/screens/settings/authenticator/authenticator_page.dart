@@ -16,7 +16,7 @@ class AuthenticatorPage extends StatefulWidget {
 
 class _AuthenticatorPageState extends State<AuthenticatorPage> {
   final _formKey = GlobalKey<FormState>();
-  final _otpController = TextEditingController();
+  String _otp = '';
   String _qrCodeUrl = '';
   bool _hasAuthenticator = false;
 
@@ -25,7 +25,6 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
 
   @override
   void dispose() {
-    _otpController.dispose();
     super.dispose();
   }
 
@@ -49,7 +48,7 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() => _isSubmitting = true);
       try {
-        await UserService().updateUserOtpAuth(_otpController.text);
+        await UserService().updateUserOtpAuth(_otp);
         Notify.success('Authenticator setup successful.');
       } catch (err) {
         setState(() {
@@ -121,8 +120,8 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
             child: Column(
               children: [
                 FieldOtp(
-                  controller: _otpController,
-                  onCompleted: (value) => _otpController.text = value,
+                  onChanged: (value) => _otp = value,
+                  autoFocus: false,
                 ),
                 const SizedBox(height: 16),
                 if (_errorMessage != null)
@@ -135,15 +134,17 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
                   ),
                 Row(
                   children: [
-                    Expanded(
-                      child: Button(
-                        label: "Remove Authenticator",
-                        variant: ButtonVariant.destructive,
-                        isLoading: _isSubmitting,
-                        onPressed: _removeAuthenticator,
+                    if (_hasAuthenticator) ...[
+                      Expanded(
+                        child: Button(
+                          label: "Remove Authenticator",
+                          variant: ButtonVariant.destructive,
+                          isLoading: _isSubmitting,
+                          onPressed: _removeAuthenticator,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 5),
+                      const SizedBox(width: 5),
+                    ],
                     Expanded(
                       child: Button(
                         label: "Submit",

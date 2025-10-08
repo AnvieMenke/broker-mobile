@@ -1,4 +1,5 @@
 import 'package:broker_mobile/components/buttons/button.dart';
+import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:broker_mobile/components/messages/notification.dart';
@@ -84,7 +85,7 @@ class _UserSettingsFormState extends State<UserSettingsForm> {
         Notify.success('Changes saved successfully.');
       } catch (err) {
         setState(() {
-          _errorMessage = err.toString();
+          _errorMessage = FormatUtils.cleanErrorMessage(err);
         });
       } finally {
         setState(() => _isSubmitting = false);
@@ -123,7 +124,10 @@ class _UserSettingsFormState extends State<UserSettingsForm> {
           TextFormField(
             initialValue: widget.name,
             readOnly: true,
-            decoration: const InputDecoration(labelText: "Name"),
+            decoration: InputDecoration(
+              labelText: "Name",
+              hintText: 'Email',
+            ),
           ),
           const SizedBox(height: 12),
           TextFormField(

@@ -11,6 +11,7 @@ class SelectSystemCode extends StatefulWidget {
   final bool disabled;
   final String? error;
   final String? msg;
+  final InputBorder? border;
   final void Function(Map<String, dynamic>?) onChange;
 
   const SelectSystemCode({
@@ -25,6 +26,7 @@ class SelectSystemCode extends StatefulWidget {
     this.disabled = false,
     this.error,
     this.msg,
+    this.border,
   });
 
   @override
@@ -71,59 +73,58 @@ class _SelectSystemCodeState extends State<SelectSystemCode> {
 
   @override
   Widget build(BuildContext context) {
-    final dropdownValue = (widget.value != null && widget.value!.isNotEmpty)
-        ? widget.value
-        : "";
+    final dropdownValue =
+        (widget.value != null && widget.value!.isNotEmpty) ? widget.value : "";
 
     return isLoading
         ? const LinearProgressIndicator()
         : DropdownButtonFormField<String>(
-      initialValue: dropdownValue,
-      isExpanded: true,
-      decoration: InputDecoration(
-        labelText: widget.label,
-        border: const OutlineInputBorder(),
-        errorText: widget.error != null ? widget.msg : null,
-      ),
-      onChanged: widget.disabled
-          ? null
-          : (selectedCode) {
-        if (selectedCode == null || selectedCode.isEmpty) {
-          widget.onChange(null);
-          return;
-        }
+            initialValue: dropdownValue,
+            isExpanded: true,
+            decoration: InputDecoration(
+              labelText: widget.label,
+              errorText: widget.error != null ? widget.msg : null,
+              border: widget.border,
+            ),
+            onChanged: widget.disabled
+                ? null
+                : (selectedCode) {
+                    if (selectedCode == null || selectedCode.isEmpty) {
+                      widget.onChange(null);
+                      return;
+                    }
 
-        final matches = systemCodes
-            .where((o) => o.code == selectedCode)
-            .toList();
-        final data = matches.isNotEmpty ? matches.first : null;
+                    final matches = systemCodes
+                        .where((o) => o.code == selectedCode)
+                        .toList();
+                    final data = matches.isNotEmpty ? matches.first : null;
 
-        if (data != null) {
-          widget.onChange({
-            "data": {
-              "code": data.code ?? "",
-              "description": data.description ?? "",
-              "subType": data.subType ?? "",
-              "note": data.note ?? "",
-            }
-          });
-        }
-      },
-      items: [
-        DropdownMenuItem<String>(
-          value: "",
-          child: Text(
-            widget.placeholder,
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ),
-        ...systemCodes.map((systemCode) {
-          return DropdownMenuItem<String>(
-            value: systemCode.code ?? "",
-            child: Text(systemCode.description ?? ""),
+                    if (data != null) {
+                      widget.onChange({
+                        "data": {
+                          "code": data.code ?? "",
+                          "description": data.description ?? "",
+                          "subType": data.subType ?? "",
+                          "note": data.note ?? "",
+                        }
+                      });
+                    }
+                  },
+            items: [
+              DropdownMenuItem<String>(
+                value: "",
+                child: Text(
+                  widget.placeholder,
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ),
+              ...systemCodes.map((systemCode) {
+                return DropdownMenuItem<String>(
+                  value: systemCode.code ?? "",
+                  child: Text(systemCode.description ?? ""),
+                );
+              }),
+            ],
           );
-        }),
-      ],
-    );
   }
 }
