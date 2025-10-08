@@ -1,4 +1,5 @@
 import 'package:broker_mobile/components/containers/page_container.dart';
+import 'package:broker_mobile/session/session_user.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:broker_mobile/service/user_service.dart';
@@ -18,10 +19,10 @@ class UserSettingsPage extends StatelessWidget {
         email: user.email,
         role: user.roleName,
         mobileNo: user.mobileNo,
-        authMethods: user.authenticationMode,
+        authenticationMode: user.authenticationMode,
         onSubmit: ({
           required String mobileNo,
-          required List<String> authMethods,
+          required AuthenticationMode authMethods,
         }) async {
           await UserService().updateUserSettings(mobileNo, authMethods);
         },

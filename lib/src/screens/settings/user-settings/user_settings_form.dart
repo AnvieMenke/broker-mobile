@@ -1,4 +1,5 @@
 import 'package:broker_mobile/components/buttons/button.dart';
+import 'package:broker_mobile/session/session_user.dart';
 import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -9,11 +10,11 @@ class UserSettingsForm extends StatefulWidget {
   final String email;
   final String role;
   final String mobileNo;
-  final String authMethods; // e.g. "Email,Authenticator"
+  final AuthenticationMode authenticationMode;
 
   final Future<void> Function({
     required String mobileNo,
-    required List<String> authMethods,
+    required AuthenticationMode authMethods,
   }) onSubmit;
 
   const UserSettingsForm({
@@ -22,7 +23,7 @@ class UserSettingsForm extends StatefulWidget {
     required this.email,
     required this.role,
     required this.mobileNo,
-    required this.authMethods,
+    required this.authenticationMode,
     required this.onSubmit,
   });
 
@@ -44,16 +45,10 @@ class _UserSettingsFormState extends State<UserSettingsForm> {
     super.initState();
 
     _mobileNo = widget.mobileNo.replaceAll(" ", "");
-
-    final defaults = widget.authMethods
-        .split(',')
-        .map((s) => s.trim().toLowerCase())
-        .toSet();
-
     _authMethods = {
-      "Text": defaults.contains("text"),
-      "Email": defaults.contains("email"),
-      "Authenticator": defaults.contains("authenticator"),
+      "Text": widget.authenticationMode.text,
+      "Email": widget.authenticationMode.email,
+      "Authenticator": widget.authenticationMode.authenticator,
     };
   }
 
@@ -75,12 +70,15 @@ class _UserSettingsFormState extends State<UserSettingsForm> {
 
       setState(() => _isSubmitting = true);
       try {
+        final authenticationMode = AuthenticationMode(
+          text: _authMethods["Text"] ?? false,
+          email: _authMethods["Email"] ?? false,
+          authenticator: _authMethods["Authenticator"] ?? false,
+        );
+
         await widget.onSubmit(
           mobileNo: _mobileNo,
-          authMethods: _authMethods.entries
-              .where((e) => e.value)
-              .map((e) => e.key)
-              .toList(),
+          authMethods: authenticationMode,
         );
         Notify.success('Changes saved successfully.');
       } catch (err) {

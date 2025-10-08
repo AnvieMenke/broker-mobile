@@ -2,6 +2,7 @@ import 'package:broker_mobile/google/protobuf/empty.pb.dart';
 import 'package:broker_mobile/proto/usrpb/administrator.pbgrpc.dart';
 import 'package:broker_mobile/server/grpc_client_factory.dart';
 import 'package:broker_mobile/session/session.dart';
+import 'package:broker_mobile/session/session_user.dart';
 import 'package:flutter/material.dart';
 
 class UserService {
@@ -26,15 +27,24 @@ class UserService {
   }
 
   Future<void> updateUserSettings(
-      String mobileNo, List<String> authMethods) async {
-    final authenticationMode = authMethods.join(",");
+      String mobileNo, AuthenticationMode authenticationMode) async {
+    List<String> authMethods = [];
+    if (authenticationMode.text) {
+      authMethods.add("Text");
+    }
+    if (authenticationMode.email) {
+      authMethods.add("Email");
+    }
+    if (authenticationMode.authenticator) {
+      authMethods.add("Authenticator");
+    }
+
     final payload = UpdateUserSettingsRequest()
       ..mobileNo = mobileNo
-      ..authenticationMode = authenticationMode;
+      ..authenticationMode = authMethods.join(",");
 
     try {
       await _service.updateUserSettings(payload);
-
       sessionManager.updateUserSettings(mobileNo, authenticationMode);
     } catch (err, stack) {
       debugPrint("Update user settings error: $err\n$stack");
@@ -60,6 +70,7 @@ class UserService {
         ..validationCode = validationCode;
 
       await _service.updateUserOtpAuth(payload);
+      sessionManager.updateUserAuthenticator(true);
     } catch (err, stack) {
       debugPrint("Update user OTP error: $err\n$stack");
       rethrow;
@@ -70,6 +81,7 @@ class UserService {
     try {
       final payload = EmptyRequest();
       await _service.removeUserOtpAuth(payload);
+      sessionManager.updateUserAuthenticator(false);
     } catch (err, stack) {
       debugPrint("Remove user OTP error: $err\n$stack");
       rethrow;

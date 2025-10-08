@@ -148,8 +148,13 @@ class SessionManager with WidgetsBindingObserver {
     clearSession();
   }
 
-  void updateUserSettings(String mobileNo, String authenticationMode) {
+  void updateUserSettings(
+      String mobileNo, AuthenticationMode authenticationMode) {
     _user?.mobileNo = mobileNo;
     _user?.authenticationMode = authenticationMode;
+  }
+
+  void updateUserAuthenticator(bool isEnabled) {
+    _user?.authenticationMode.authenticator = isEnabled;
   }
 }

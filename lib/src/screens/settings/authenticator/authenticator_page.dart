@@ -6,6 +6,7 @@ import 'package:broker_mobile/components/messages/notification.dart';
 import 'package:broker_mobile/service/user_service.dart';
 import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class AuthenticatorPage extends StatefulWidget {
   const AuthenticatorPage({super.key});
@@ -42,6 +43,15 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
     });
   }
 
+  Future<void> _navigateBack() async {
+    if (!mounted) return;
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    } else {
+      Navigator.of(context).pushReplacementNamed('/settings');
+    }
+  }
+
   Future<void> _handleSubmit() async {
     setState(() => _errorMessage = null);
 
@@ -50,6 +60,7 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
       try {
         await UserService().updateUserOtpAuth(_otp);
         Notify.success('Authenticator setup successful.');
+        _navigateBack();
       } catch (err) {
         setState(() {
           _errorMessage = FormatUtils.cleanErrorMessage(err);
@@ -69,13 +80,7 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
     if (confirmed) {
       await UserService().removeUserOtpAuth();
       Notify.success('MFA setup removed successfully.');
-
-      if (!mounted) return;
-      if (Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
-      } else {
-        Navigator.of(context).pushReplacementNamed('/settings');
-      }
+      _navigateBack();
     }
   }
 
@@ -105,12 +110,12 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
           // QR Code Display (optional)
           if (_qrCodeUrl.isNotEmpty)
             Center(
-              child: Image.network(
-                _qrCodeUrl,
-                width: 200,
-                height: 200,
-                errorBuilder: (_, __, ___) =>
-                    const Text('Failed to load QR code.'),
+              child: QrImageView(
+                backgroundColor: Colors.white,
+                data: _qrCodeUrl,
+                version: QrVersions.auto,
+                size: 200.0, // adjust as needed
+                gapless: true,
               ),
             ),
 

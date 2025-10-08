@@ -21,6 +21,18 @@ class PiiAccess {
   }
 }
 
+class AuthenticationMode {
+  bool text;
+  bool email;
+  bool authenticator;
+
+  AuthenticationMode({
+    required this.text,
+    required this.email,
+    required this.authenticator,
+  });
+}
+
 class SessionUser {
   final String email;
   final String name;
@@ -32,7 +44,7 @@ class SessionUser {
   final String language;
   String mobileNo;
   final String roleName;
-  String authenticationMode;
+  AuthenticationMode authenticationMode;
   final int userId;
   final int accountId;
   final int roleId;
@@ -80,6 +92,8 @@ class SessionUser {
         expiry = DateTime.fromMillisecondsSinceEpoch(exp * 1000);
       }
 
+      final authMode = payload["AuthenticationMode"] as String;
+
       return SessionUser(
         email: payload["Username"] as String,
         name: payload["Name"] as String,
@@ -91,7 +105,11 @@ class SessionUser {
         language: payload["Language"] as String,
         mobileNo: payload["MobileNo"] as String,
         roleName: payload["Role"] as String,
-        authenticationMode: payload["AuthenticationMode"] as String,
+        authenticationMode: AuthenticationMode(
+          text: authMode.toLowerCase().contains("text"),
+          email: authMode.toLowerCase().contains("email"),
+          authenticator: authMode.toLowerCase().contains("authenticator"),
+        ),
         userId: payload["UserId"] as int,
         accountId: payload["AccountId"] as int,
         roleId: payload["RoleId"] as int,
