@@ -89,12 +89,11 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
       initialValue: selectedValue,
       hint: const Text("Select Bank Account"),
       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
-      ),
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
       decoration: InputDecoration(
         labelText: widget.label,
-        border: const OutlineInputBorder(),
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
       items: options.isNotEmpty

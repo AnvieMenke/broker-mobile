@@ -100,7 +100,7 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
 
   void _handleOnBlur(String value, List<Map<String, dynamic>> options) {
     final data = options.firstWhere(
-          (o) => o['accountNo'] == value,
+      (o) => o['accountNo'] == value,
       orElse: () => {},
     );
 
@@ -161,11 +161,11 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
       onSelected: (suggestion) {
         _controller.text = suggestion['accountNo'] ?? '';
         _setPropsValue(
-            suggestion['accountNo'] ?? '',
-            suggestion,
-            suggestion['correspondent'] ?? '',
-            suggestion['broker'] ?? '',
-            ConvertService.safeInt(suggestion['accountId']),
+          suggestion['accountNo'] ?? '',
+          suggestion,
+          suggestion['correspondent'] ?? '',
+          suggestion['broker'] ?? '',
+          ConvertService.safeInt(suggestion['accountId']),
         );
       },
       builder: (context, controller, focusNode) {
@@ -177,7 +177,6 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
             labelText: 'Account No',
             hintText: 'Account No',
             errorText: widget.error ? 'Invalid input' : null,
-            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             controller.text = value;

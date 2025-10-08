@@ -1,3 +1,5 @@
+import 'package:broker_mobile/components/buttons/button.dart';
+import 'package:broker_mobile/components/fields/field_password.dart';
 import 'package:broker_mobile/src/screens/auth/otp_verification_page.dart';
 import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   String _selectedAuthMethod = "Email";
 
   bool _loading = false;
-  bool _obscurePassword = true;
   String? _error;
 
   List<String> _correspondents = [];
@@ -131,37 +132,14 @@ class _LoginPageState extends State<LoginPage> {
           controller: _emailController,
           decoration: InputDecoration(
             hintText: 'Email',
-            hintStyle: const TextStyle(color: Colors.grey),
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide.none,
-            ),
           ),
         ),
         const SizedBox(height: 16),
-        TextField(
+        FieldPassword(
           controller: _passwordController,
-          obscureText: _obscurePassword,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            hintStyle: const TextStyle(color: Colors.grey),
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide.none,
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(
-                _obscurePassword ? Icons.visibility : Icons.visibility_off,
-              ),
-              onPressed: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
-              },
-            ),
-          ),
+          label: "Password",
+          validator: (v) =>
+              v == null || v.isEmpty ? "password is required" : null,
         ),
         const SizedBox(height: 16),
         _buildAuthMethodRadios(),
@@ -191,64 +169,14 @@ class _LoginPageState extends State<LoginPage> {
             },
             decoration: InputDecoration(
               labelText: "Correspondent",
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none,
-              ),
             ),
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _selectedCorrespondent == null ? null : _handleLogin,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: _loading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
-                  : const Text('Continue',
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
-            ),
-          ),
+          Button(
+              label: 'Continue', onPressed: _handleLogin, isLoading: _loading),
         ],
         if (!_showCorrespondentDropdown)
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _loading ? null : _handleLogin,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: _loading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
-                  : const Text('Login',
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
-            ),
-          ),
+          Button(label: 'Login', onPressed: _handleLogin, isLoading: _loading),
       ],
     );
   }

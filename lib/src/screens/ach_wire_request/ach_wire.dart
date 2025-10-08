@@ -389,7 +389,6 @@ class _AchWirePageState extends State<AchWirePage> {
                         child: TextFormField(
                           decoration: InputDecoration(
                             labelText: "Amount",
-                            border: const OutlineInputBorder(),
                             prefixText: "\$",
                             helperText: formData["transferType"] == "Withdrawal"
                                 ? "Withdrawable amount: ${maximumWithdrawable["withdrawableAmt"]}"
@@ -415,7 +414,6 @@ class _AchWirePageState extends State<AchWirePage> {
                             : TextFormField(
                                 decoration: const InputDecoration(
                                   labelText: "Fee",
-                                  border: OutlineInputBorder(),
                                   prefixText: "\$",
                                 ),
                                 readOnly: true,

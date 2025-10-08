@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:broker_mobile/components/buttons/button.dart';
+import 'package:broker_mobile/components/fields/field_otp.dart';
+import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../service/auth_service.dart';
 import '../auth/login.dart';
 
@@ -27,7 +29,8 @@ class OtpVerificationPage extends StatefulWidget {
 }
 
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
-  final _otpController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String _otp = '';
   bool _verifying = false;
   String? _error;
 
@@ -46,7 +49,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   @override
   void dispose() {
     _ticker?.cancel();
-    _otpController.dispose();
     super.dispose();
   }
 
@@ -75,54 +77,36 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   }
 
   void _verifyOtp() async {
-    if (_remainingSeconds <= 0) {
-      setState(() => _error = "OTP expired. Please request a new one.");
-      return;
-    }
+    if (_formKey.currentState?.validate() ?? false) {
+      try {
+        setState(() {
+          _verifying = true;
+          _error = null;
+        });
 
-    final otp = _otpController.text.trim();
-    if (otp.isEmpty) {
-      setState(() => _error = 'Please enter the OTP.');
-      return;
-    }
-
-    setState(() {
-      _verifying = true;
-      _error = null;
-    });
-
-    try {
-      await validateAuthCode(
-        email: widget.email,
-        password: widget.password,
-        authCode: otp,
-        authenticationMode: widget.authenticationMode,
-        sessionKey: widget.sessionKey,
-        correspondent: widget.correspondent,
-      );
-      setState(() => _verifying = false);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).pushReplacementNamed('/home');
-      });
-    } catch (e) {
-      setState(() {
-        _verifying = false;
-        _error = (e is Map && e['message'] != null)
-            ? e['message']
-            : (e.toString().contains('gRPC Error')
-                ? RegExp(r'message: ([^,]+)')
-                    .firstMatch(e.toString())
-                    ?.group(1)
-                    ?.trim()
-                : e.toString());
-      });
+        await validateAuthCode(
+          email: widget.email,
+          password: widget.password,
+          authCode: _otp,
+          authenticationMode: widget.authenticationMode,
+          sessionKey: widget.sessionKey,
+          correspondent: widget.correspondent,
+        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(context).pushReplacementNamed('/home');
+        });
+      } catch (err) {
+        setState(() {
+          _error = FormatUtils.cleanErrorMessage(err);
+        });
+      } finally {
+        setState(() => _verifying = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final seconds = _remainingSeconds;
-
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -144,78 +128,39 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  seconds > 0
-                      ? "Expires in ${_formatTime(seconds)}"
+                  _remainingSeconds > 0
+                      ? "Expires in ${_formatTime(_remainingSeconds)}"
                       : "OTP expired",
                   style: TextStyle(
-                    color: seconds > 0 ? Colors.grey : Colors.red,
+                    color: _remainingSeconds > 0 ? Colors.grey : Colors.red,
                     fontSize: 14,
                   ),
                 ),
                 const SizedBox(height: 16),
-                PinCodeTextField(
-                  controller: _otpController,
-                  appContext: context,
-                  length: 6,
-                  autoFocus: true,
-                  animationType: AnimationType.scale,
-                  keyboardType: TextInputType.number,
-                  cursorColor: Colors.white,
-                  pinTheme: PinTheme(
-                    shape: PinCodeFieldShape.box,
-                    borderRadius: BorderRadius.circular(8),
-                    fieldHeight: 55,
-                    fieldWidth: 45,
-                    activeFillColor: Colors.blueAccent,
-                    inactiveFillColor: Colors.grey,
-                    activeColor: Colors.blueAccent,
-                    selectedColor: Colors.blueAccent,
-                    inactiveColor: Colors.grey,
-                  ),
-                  textStyle: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  enableActiveFill: true,
-                  onChanged: (value) {},
-                  onCompleted: (value) {
-                    _otpController.text = value;
-                  },
-                ),
-                const SizedBox(height: 16),
-                if (_error != null)
-                  Text(
-                    _error!,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.redAccent),
-                  ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: 100,
-                  child: ElevatedButton(
-                    onPressed: (_verifying || seconds <= 0) ? null : _verifyOtp,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: _verifying
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : const Text(
-                            'Verify',
-                            style: TextStyle(color: Colors.white),
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        FieldOtp(onChanged: (value) => _otp = value),
+                        const SizedBox(height: 16),
+                        if (_error != null)
+                          Text(
+                            _error!,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.redAccent),
                           ),
-                  ),
-                ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: 100,
+                          child: Button(
+                            label: "Verify",
+                            isLoading: _verifying,
+                            isDisabled: _remainingSeconds <= 0,
+                            onPressed: _verifyOtp,
+                          ),
+                        ),
+                      ],
+                    )),
                 const SizedBox(height: 20),
                 TextButton.icon(
                   onPressed: () {

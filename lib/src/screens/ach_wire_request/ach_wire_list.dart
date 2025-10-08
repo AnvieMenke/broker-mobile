@@ -1,3 +1,4 @@
+import 'package:broker_mobile/utils/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
 import '../../../components/dropdowns/select_account_no.dart';
@@ -277,7 +278,6 @@ class _AchWireListState extends State<AchWireList> {
                             child: InputDecorator(
                               decoration: const InputDecoration(
                                 labelText: "From",
-                                border: OutlineInputBorder(),
                               ),
                               child: Text(
                                 selectedFromDate != null
@@ -294,7 +294,6 @@ class _AchWireListState extends State<AchWireList> {
                             child: InputDecorator(
                               decoration: const InputDecoration(
                                 labelText: "To",
-                                border: OutlineInputBorder(),
                               ),
                               child: Text(
                                 selectedToDate != null
@@ -361,7 +360,6 @@ class _AchWireListState extends State<AchWireList> {
                       child: TextField(
                         decoration: const InputDecoration(
                           labelText: 'External ID',
-                          border: OutlineInputBorder(),
                         ),
                         onChanged: (value) {
                           externalId = value;
@@ -411,6 +409,13 @@ class _AchWireListState extends State<AchWireList> {
                                   selectedSign = map?['data']['code'];
                                 });
                               },
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: AppTheme.defaultRadius,
+                                  bottomLeft: AppTheme.defaultRadius,
+                                ),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                           ),
                           Expanded(
@@ -418,7 +423,13 @@ class _AchWireListState extends State<AchWireList> {
                             child: TextField(
                               decoration: const InputDecoration(
                                 labelText: "Amount",
-                                border: OutlineInputBorder(),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: AppTheme.defaultRadius,
+                                    bottomRight: AppTheme.defaultRadius,
+                                  ),
+                                  borderSide: BorderSide.none,
+                                ),
                               ),
                               enabled: (selectedSign ?? "").isNotEmpty,
                               keyboardType: TextInputType.number,

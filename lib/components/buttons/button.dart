@@ -6,6 +6,7 @@ class Button extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final bool isLoading;
+  final bool isDisabled;
   final Color? backgroundColor;
   final Color foregroundColor;
   final double borderRadius;
@@ -26,6 +27,7 @@ class Button extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.isLoading = false,
+    this.isDisabled = false,
     this.variant = ButtonVariant.primary,
     this.backgroundColor = Colors.blueAccent,
     this.foregroundColor = Colors.white,
@@ -52,7 +54,7 @@ class Button extends StatelessWidget {
                 : foregroundColor;
           }),
           textStyle: WidgetStateProperty.all(
-            const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           padding: WidgetStateProperty.all(padding),
           shape: WidgetStateProperty.all(
@@ -61,7 +63,7 @@ class Button extends StatelessWidget {
             ),
           ),
         ),
-        onPressed: isLoading ? null : onPressed,
+        onPressed: isLoading || isDisabled ? null : onPressed,
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -71,8 +73,8 @@ class Button extends StatelessWidget {
             ),
             if (isLoading)
               const SizedBox(
-                width: 18,
-                height: 18,
+                width: 20,
+                height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),

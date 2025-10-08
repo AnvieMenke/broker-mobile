@@ -182,7 +182,6 @@ class _SelectStatusState extends State<SelectStatus> {
       isExpanded: true,
       decoration: InputDecoration(
         labelText: "Status",
-        border: const OutlineInputBorder(),
         errorText: widget.error ? "Invalid status" : null,
       ),
       initialValue: dropdownValue,

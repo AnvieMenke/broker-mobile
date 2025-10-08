@@ -1,17 +1,12 @@
+import 'package:broker_mobile/server/grpc_client_factory.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:broker_mobile/env.dart';
 import 'package:broker_mobile/proto/authpb/auth.pbgrpc.dart';
 
 import '../google/protobuf/empty.pb.dart';
-import '../server/auth_interceptor.dart';
-import '../server/grpc_client.dart';
 
-final _service = AuthServiceClient(
-  getGrpcChannel(),
-  interceptors: [AuthInterceptor()],
-);
+final _service = GrpcClientFactory.create(AuthServiceClient.new);
 
 Future<LoginResponse?> refreshToken(
   String refreshToken,

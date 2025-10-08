@@ -1,3 +1,4 @@
+import 'package:broker_mobile/utils/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/service/common_service.dart';
 import 'package:broker_mobile/proto/commonpb/list.pb.dart';
@@ -79,7 +80,6 @@ class _MultiSelectEntryTypeState extends State<MultiSelectEntryType> {
   @override
   Widget build(BuildContext context) {
     return MultiSelectDialogField<Map<String, String>>(
-
       items: _options
           .map((opt) => MultiSelectItem<Map<String, String>>(
                 opt,
@@ -94,11 +94,8 @@ class _MultiSelectEntryTypeState extends State<MultiSelectEntryType> {
           .where((opt) => _selectedValues.contains(opt['entryType']))
           .toList(),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline,
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(8),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: AppTheme.defaultBorderRadius,
       ),
       confirmText: Text(
         "OK",

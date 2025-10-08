@@ -33,12 +33,10 @@ class AutoCompleteRepAdvisor extends StatefulWidget {
   });
 
   @override
-  State<AutoCompleteRepAdvisor> createState() =>
-      _AutoCompleteRepAdvisorState();
+  State<AutoCompleteRepAdvisor> createState() => _AutoCompleteRepAdvisorState();
 }
 
-class _AutoCompleteRepAdvisorState
-    extends State<AutoCompleteRepAdvisor> {
+class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
   final TextEditingController _controller = TextEditingController();
   late final CommonService _service;
   List<Map<String, String>> _options = [];
@@ -97,7 +95,7 @@ class _AutoCompleteRepAdvisorState
     }
 
     final match = _options.firstWhere(
-          (o) => o['rep'] == value,
+      (o) => o['rep'] == value,
       orElse: () => {},
     );
 
@@ -148,7 +146,6 @@ class _AutoCompleteRepAdvisorState
             labelText: 'Rep/Advisor',
             hintText: 'Rep/Advisor',
             errorText: widget.error ? 'Invalid input' : null,
-            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             controller.text = value;

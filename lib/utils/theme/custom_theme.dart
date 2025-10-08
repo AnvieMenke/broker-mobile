@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppTheme {
+  static const Radius defaultRadius = Radius.circular(10);
+  static const BorderRadius defaultBorderRadius =
+      BorderRadius.all(defaultRadius);
+
+  static const InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
+    hintStyle: TextStyle(color: Colors.grey),
+    filled: true,
+    border: OutlineInputBorder(
+      borderRadius: defaultBorderRadius,
+      borderSide: BorderSide.none,
+    ),
+  );
+
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
@@ -14,6 +27,7 @@ class AppTheme {
     textTheme: const TextTheme(
       bodyMedium: TextStyle(color: Colors.black),
     ),
+    inputDecorationTheme: inputDecorationTheme,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -28,6 +42,7 @@ class AppTheme {
     textTheme: const TextTheme(
       bodyMedium: TextStyle(color: Colors.white),
     ),
+    inputDecorationTheme: inputDecorationTheme,
   );
 
   static void setSystemUIOverlayStyle() {
