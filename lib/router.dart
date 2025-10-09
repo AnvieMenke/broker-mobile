@@ -10,10 +10,12 @@ import 'package:broker_mobile/src/screens/settings/app_settings/app_settings_pag
 import 'package:broker_mobile/src/screens/settings/user-settings/user_settings_page.dart';
 import 'package:broker_mobile/src/screens/settings/change_password/change_password_page.dart';
 import 'package:broker_mobile/src/screens/settings/authenticator/authenticator_page.dart';
+import 'package:broker_mobile/src/screens/summary/summary.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   final routes = <String, WidgetBuilder>{
     '/home': (_) => const MainScreen(),
+    '/summary': (_) => const AccountSummaryPage(),
     '/reports/activity': (_) => const ActivityPage(),
     '/reports/position': (_) => const PositionPage(),
     '/reports/margin-call': (_) => const CallLogPage(),

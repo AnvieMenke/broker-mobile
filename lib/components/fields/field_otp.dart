@@ -31,7 +31,6 @@ class FieldOtp extends StatelessWidget {
           autoFocus: autoFocus,
           animationType: AnimationType.scale,
           keyboardType: TextInputType.number,
-          cursorColor: Colors.white,
           backgroundColor: Colors.transparent,
           validator: validator ??
               (v) => v == null || v.isEmpty || v.length != length
@@ -54,7 +53,6 @@ class FieldOtp extends StatelessWidget {
             errorBorderColor: Colors.redAccent,
           ),
           textStyle: const TextStyle(
-            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),

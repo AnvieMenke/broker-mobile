@@ -315,21 +315,6 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
                   Widget body;
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     body = const Center(child: CircularProgressIndicator());
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    body = RefreshIndicator(
-                      onRefresh: () async =>
-                          _futureRequests = _listBuyingPower(),
-                      child: ListView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        children: const [
-                          SizedBox(height: 200),
-                          Center(
-                            child: Text("No data found",
-                                style: TextStyle(fontSize: 20)),
-                          ),
-                        ],
-                      ),
-                    );
                   } else {
                     body = RefreshIndicator(
                       onRefresh: () async =>

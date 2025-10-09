@@ -114,4 +114,43 @@ class FormatUtils {
     if (value.length < 30) return value;
     return '${value.substring(0, 30)} ...';
   }
+
+  static String formatMoneySuffix(num value) {
+    final isNegative = value < 0;
+    final absValue = value.abs().toDouble();
+
+    String suffix = '';
+    double displayValue = absValue;
+
+    if (absValue >= 1_000_000_000) {
+      displayValue = absValue / 1_000_000_000;
+      suffix = 'B';
+    } else if (absValue >= 1_000_000) {
+      displayValue = absValue / 1_000_000;
+      suffix = 'M';
+    } else if (absValue >= 1_000) {
+      displayValue = absValue / 1_000;
+      suffix = 'K';
+    }
+
+    return '${isNegative ? '-' : ''}\$${displayValue.floor()}$suffix';
+  }
+
+  static String formatMonthAbbreviation(int month) {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    return months[(month - 1).clamp(0, 11)];
+  }
 }
