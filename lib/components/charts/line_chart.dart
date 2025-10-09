@@ -30,17 +30,18 @@ class LineChartWidget extends StatefulWidget {
 }
 
 class _LineChartWidgetState extends State<LineChartWidget> {
-  List<Color> get _colors => widget.gradientColors ?? [Colors.cyan, Colors.blue];
+  List<Color> get _colors =>
+      widget.gradientColors ?? [Colors.cyan, Colors.blue];
 
   num _scale(num value) => widget.scaleToThousands ? value / 1000 : value;
 
   List<FlSpot> get _spots => List.generate(
-    widget.data.length,
+        widget.data.length,
         (i) => FlSpot(
-      i.toDouble(),
-      _scale(widget.data[i][widget.yValueKey] as num).toDouble(),
-    ),
-  );
+          i.toDouble(),
+          _scale(widget.data[i][widget.yValueKey] as num).toDouble(),
+        ),
+      );
 
   double _getMinY() =>
       widget.data.map((e) => e[widget.yValueKey] as num).reduce(min).toDouble();
@@ -56,8 +57,8 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         final aspectRatio = width < 400
             ? 1.2
             : width < 800
-            ? 1.6
-            : 1.8;
+                ? 1.6
+                : 1.8;
 
         return AspectRatio(
           aspectRatio: aspectRatio,
@@ -77,9 +78,8 @@ class _LineChartWidgetState extends State<LineChartWidget> {
     final index = value.toInt();
     if (index >= 0 && index < widget.data.length) {
       final rawX = widget.data[index][widget.xValueKey]?.toString() ?? '';
-      text = widget.xLabelFormatter != null
-          ? widget.xLabelFormatter!(rawX)
-          : rawX;
+      text =
+          widget.xLabelFormatter != null ? widget.xLabelFormatter!(rawX) : rawX;
     }
 
     return SideTitleWidget(
@@ -96,15 +96,11 @@ class _LineChartWidgetState extends State<LineChartWidget> {
   }
 
   LineChartData _mainData() {
-    final rawMinY = _getMinY();
-    final rawMaxY = _getMaxY();
-    final scaledMinY = _scale(rawMinY).toDouble();
-    final scaledMaxY = _scale(rawMaxY).toDouble();
+    final minY = _getMinY();
+    final maxY = _getMaxY();
 
-    const buffer = 20.0;
-    final minY = scaledMinY - buffer;
-    final maxY = scaledMaxY + buffer;
-    final yInterval = (scaledMaxY - scaledMinY) / 5;
+    final yInterval = (maxY - minY) / 5;
+    final yIntervalTextBuffer = yInterval * 0.6;
 
     return LineChartData(
       lineTouchData: LineTouchData(
@@ -128,12 +124,11 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           }).toList(),
         ),
       ),
-      gridData: FlGridData(show: false),
+      gridData: FlGridData(show: true),
       titlesData: FlTitlesData(
         rightTitles:
-        const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        topTitles:
-        const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -149,15 +144,15 @@ class _LineChartWidgetState extends State<LineChartWidget> {
             interval: yInterval,
             getTitlesWidget: (value, meta) {
               // Avoid drawing min/max values too close to chart edges
-              if ((value - minY).abs() < yInterval * 0.6 ||
-                  (value - maxY).abs() < yInterval * 0.6) {
+              if (!(value == maxY || value == minY) &&
+                  (((value - minY).abs() < yIntervalTextBuffer ||
+                      (value - maxY).abs() < yIntervalTextBuffer))) {
                 return const SizedBox.shrink();
               }
 
-              final displayValue =
-              widget.scaleToThousands ? value * 1000 : value;
               final label = widget.yLabelFormatter != null
-                  ? widget.yLabelFormatter!(displayValue)
+                  ? widget.yLabelFormatter!(
+                      widget.scaleToThousands ? value * 1000 : value)
                   : value.toStringAsFixed(0);
 
               return SideTitleWidget(
@@ -179,9 +174,11 @@ class _LineChartWidgetState extends State<LineChartWidget> {
         LineChartBarData(
           spots: _spots,
           isCurved: true,
+          preventCurveOverShooting: true,
           gradient: LinearGradient(colors: _colors),
           barWidth: 3,
           isStrokeCapRound: true,
+          isStrokeJoinRound: true,
           dotData: const FlDotData(show: false),
           belowBarData: BarAreaData(
             show: true,
