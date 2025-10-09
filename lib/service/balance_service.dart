@@ -55,4 +55,19 @@ class BalanceService {
       rethrow;
     }
   }
+
+  Future<ListDashboardBalanceResponse> listDashboardBalance(
+      Map<String, dynamic> param) async {
+    final client = _balanceService();
+    final req = ListDashboardBalanceRequest()
+      ..periodType = param['periodType'] ?? ""
+      ..periodRange = ConvertService.safeInt(param['periodRange']);
+
+    try {
+      final response = await client.listDashboardBalance(req);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

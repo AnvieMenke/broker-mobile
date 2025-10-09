@@ -2,6 +2,7 @@ import 'package:broker_mobile/src/screens/ach_wire_request/ach_menu.dart';
 import 'package:broker_mobile/src/screens/dashboard/dashboard.dart';
 import 'package:broker_mobile/src/screens/reports/reports.dart';
 import 'package:broker_mobile/src/screens/settings/settings_page.dart';
+import 'package:broker_mobile/src/screens/summary/summary.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,8 +16,8 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   final _pages = const [
-    Dashboard(),
-    Center(child: Text('📊 Summary', style: TextStyle(fontSize: 24))),
+    DashboardPage(),
+    AccountSummaryPage(),
     Reports(),
     AchWireMenuPage(),
     SettingsPage(),

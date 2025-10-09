@@ -255,7 +255,7 @@ class GridViewCard extends StatelessWidget {
     ];
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      margin: const EdgeInsets.symmetric(vertical: 1.5),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -432,6 +432,33 @@ class GridWithPagination extends StatelessWidget {
 
     final int start = (totalRows == 0) ? 0 : (currentPage * rowsPerPage) + 1;
     final int end = start + items.length - 1;
+
+    if (items.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/no_data.png',
+                width: 80,
+                height: 80,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "No data found",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(2, 2, 2, 20),
