@@ -230,97 +230,97 @@ class _AchWireListState extends State<AchWireList> {
     String? selectedSign = queryData["sign"];
     String? amount = queryData["amount"];
     bool isOpen = queryData["isOpen"] ?? false;
+
     showDialog<bool>(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Text("Filter by:"),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              Future<void> pickDate({required bool isFrom}) async {
-                final DateTime? picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                );
-                if (picked != null) {
-                  setState(() {
-                    if (isFrom) {
-                      selectedFromDate = picked;
-                    } else {
-                      selectedToDate = picked;
-                    }
-                  });
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text("Filter by:"),
+            content: StatefulBuilder(
+              builder: (context, setState) {
+                Future<void> pickDate({required bool isFrom}) async {
+                  final DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      if (isFrom) {
+                        selectedFromDate = picked;
+                      } else {
+                        selectedToDate = picked;
+                      }
+                    });
+                  }
                 }
-              }
 
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      "Date Range",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        "Date Range",
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => pickDate(isFrom: true),
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: "From",
-                              ),
-                              child: Text(
-                                selectedFromDate != null
-                                    ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
-                                    : "Select date",
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => pickDate(isFrom: false),
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: "To",
-                              ),
-                              child: Text(
-                                selectedToDate != null
-                                    ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
-                                    : "Select date",
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => pickDate(isFrom: true),
+                              child: InputDecorator(
+                                decoration:
+                                    const InputDecoration(labelText: "From"),
+                                child: Text(
+                                  selectedFromDate != null
+                                      ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
+                                      : "Select date",
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: AutoCompleteCorrespondent(
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => pickDate(isFrom: false),
+                              child: InputDecorator(
+                                decoration:
+                                    const InputDecoration(labelText: "To"),
+                                child: Text(
+                                  selectedToDate != null
+                                      ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
+                                      : "Select date",
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteCorrespondent(
                         name: "correspondent",
                         value: selectedCorrespondent,
                         label: "Correspondent",
                         isAllStatus: false,
                         type: "",
-                        onChange: (value) => setState(() {
-                          selectedCorrespondent = value;
-                        }),
+                        onChange: (value) =>
+                            setState(() => selectedCorrespondent = value),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: AutoCompleteAccountNo(
+                      const SizedBox(height: 16),
+                      AutoCompleteAccountNo(
                         name: "accountNo",
                         freeSolo: true,
                         value: selectedAccountNo,
@@ -328,47 +328,39 @@ class _AchWireListState extends State<AchWireList> {
                         isAccessibleOnly: true,
                         correspondent: queryData["correspondent"],
                         type: "Client",
-                        onChange: (map) => setState(() {
-                          if (map['data'] != null &&
-                              map['data']['accountNo'] != null) {
-                            selectedAccountNo =
-                                map['data']['accountNo'] as String;
-                          }
-                        }),
+                        onChange: (map) {
+                          setState(() {
+                            if (map['data']?['accountNo'] != null) {
+                              selectedAccountNo = map['data']['accountNo'];
+                            }
+                          });
+                        },
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: AutoCompleteMasterAccountNo(
+                      const SizedBox(height: 16),
+                      AutoCompleteMasterAccountNo(
                         name: "masterAccountNo",
                         freeSolo: true,
                         value: selectedMasterAccountNo,
                         isAllStatus: false,
                         isAccessibleOnly: true,
                         correspondent: queryData["correspondent"],
-                        onChange: (map) => setState(() {
-                          if (map['data'] != null &&
-                              map['data']['masterAccountNo'] != null) {
-                            selectedAccountNo =
-                                map['data']['masterAccountNo'] as String;
-                          }
-                        }),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          labelText: 'External ID',
-                        ),
-                        onChanged: (value) {
-                          externalId = value;
+                        onChange: (map) {
+                          setState(() {
+                            if (map['data']?['masterAccountNo'] != null) {
+                              selectedMasterAccountNo =
+                                  map['data']['masterAccountNo'];
+                            }
+                          });
                         },
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: SelectSystemCode(
+                      const SizedBox(height: 16),
+                      TextField(
+                        decoration:
+                            const InputDecoration(labelText: 'External ID'),
+                        onChanged: (value) => externalId = value,
+                      ),
+                      const SizedBox(height: 16),
+                      SelectSystemCode(
                         label: "Request Type",
                         placeholder: "Select Request Type",
                         value: selectedRequestType,
@@ -378,10 +370,8 @@ class _AchWireListState extends State<AchWireList> {
                           selectedRequestType = map?['data']['code'];
                         }),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: SelectSystemCode(
+                      const SizedBox(height: 16),
+                      SelectSystemCode(
                         label: "Transfer Type",
                         placeholder: "Select Transfer Type",
                         value: selectedTransferType,
@@ -391,10 +381,8 @@ class _AchWireListState extends State<AchWireList> {
                           selectedTransferType = map?['data']['code'];
                         }),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Row(
+                      const SizedBox(height: 16),
+                      Row(
                         children: [
                           Expanded(
                             flex: 2,
@@ -405,58 +393,36 @@ class _AchWireListState extends State<AchWireList> {
                               type: "Sign",
                               subType: "Bank Request",
                               onChange: (map) {
-                                setState(() {
-                                  selectedSign = map?['data']['code'];
-                                });
+                                setState(
+                                    () => selectedSign = map?['data']['code']);
                               },
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: AppTheme.defaultRadius,
-                                  bottomLeft: AppTheme.defaultRadius,
-                                ),
-                                borderSide: BorderSide.none,
-                              ),
                             ),
                           ),
+                          const SizedBox(width: 8),
                           Expanded(
                             flex: 3,
                             child: TextField(
                               decoration: const InputDecoration(
                                 labelText: "Amount",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: AppTheme.defaultRadius,
-                                    bottomRight: AppTheme.defaultRadius,
-                                  ),
-                                  borderSide: BorderSide.none,
-                                ),
                               ),
                               enabled: (selectedSign ?? "").isNotEmpty,
                               keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                amount = value;
-                              },
+                              onChanged: (value) => amount = value,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: CheckboxListTile(
+                      const SizedBox(height: 16),
+                      CheckboxListTile(
                         title: const Text("Open"),
                         value: isOpen,
                         onChanged: (bool? value) {
-                          setState(() {
-                            isOpen = value ?? false;
-                          });
+                          setState(() => isOpen = value ?? false);
                         },
                         controlAffinity: ListTileControlAffinity.trailing,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: SelectSystemCode(
+                      const SizedBox(height: 16),
+                      SelectSystemCode(
                         label: "Status",
                         placeholder: "Select Status",
                         value: selectedStatus,
@@ -466,47 +432,47 @@ class _AchWireListState extends State<AchWireList> {
                           selectedStatus = map?['data']['code'];
                         }),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  if (amount != null &&
-                      amount!.isNotEmpty &&
-                      selectedSign!.isEmpty) {
-                    Notify.warning(
-                        "Please select a sign before entering amount.");
-                    return;
-                  }
-                  queryData["fromDate"] =
-                      ConvertService.dateToString(selectedFromDate);
-                  queryData["toDate"] =
-                      ConvertService.dateToString(selectedToDate);
-                  queryData["correspondent"] = selectedCorrespondent;
-                  queryData["accountNo"] = selectedAccountNo;
-                  queryData["externalId"] = externalId;
-                  queryData["requestType"] = selectedRequestType;
-                  queryData["masterAccountNo"] = selectedMasterAccountNo;
-                  queryData["sign"] = selectedSign;
-                  queryData["amount"] = amount;
-                  queryData["isOpen"] = isOpen;
-                  queryData["status"] = selectedStatus;
-                  _updateQueryData();
-                });
-                Navigator.pop(context, true);
+                    ],
+                  ),
+                );
               },
-              child: const Text("Search"),
             ),
-          ],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    if (amount != null &&
+                        amount!.isNotEmpty &&
+                        selectedSign!.isEmpty) {
+                      Notify.warning(
+                          "Please select a sign before entering amount.");
+                      return;
+                    }
+                    queryData["fromDate"] =
+                        ConvertService.dateToString(selectedFromDate);
+                    queryData["toDate"] =
+                        ConvertService.dateToString(selectedToDate);
+                    queryData["correspondent"] = selectedCorrespondent;
+                    queryData["accountNo"] = selectedAccountNo;
+                    queryData["externalId"] = externalId;
+                    queryData["requestType"] = selectedRequestType;
+                    queryData["masterAccountNo"] = selectedMasterAccountNo;
+                    queryData["sign"] = selectedSign;
+                    queryData["amount"] = amount;
+                    queryData["isOpen"] = isOpen;
+                    queryData["status"] = selectedStatus;
+                    _updateQueryData();
+                  });
+                  Navigator.pop(context, true);
+                },
+                child: const Text("Search"),
+              ),
+            ],
+          ),
         );
       },
     ).then((value) {
