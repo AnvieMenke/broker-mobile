@@ -129,94 +129,102 @@ class CallLogPageState extends State<CallLogPage> {
     showDialog<bool>(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text("Filter by:"),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 16),
-                    AutoCompleteCorrespondent(
-                      name: "correspondent",
-                      value: selectedCorrespondent,
-                      label: "Correspondent",
-                      isAllStatus: false,
-                      type: "",
-                      onChange: (value) => setState(() {
-                        selectedCorrespondent = value;
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteMasterAccountNo(
-                      name: "masterAccountNo",
-                      freeSolo: true,
-                      value: selectedMasterAccountNo,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['masterAccountNo'] != null) {
-                          selectedMasterAccountNo =
-                              map['data']['masterAccountNo'] as String;
-                        }
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteAccountName(
-                      name: "accountName",
-                      freeSolo: true,
-                      value: selectedAccountName,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['accountName'] != null) {
-                          selectedAccountName =
-                              map['data']['accountName'] as String;
-                        }
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    SelectSystemCode(
-                      label: "Margin Type",
-                      placeholder: "Select Margin Type",
-                      value: selectedMarginType,
-                      type: "Margin Type",
-                      onChange: (map) => setState(() {
-                        selectedMarginType = map?['data']['code'];
-                      }),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  queryData["correspondent"] = selectedCorrespondent;
-                  queryData["masterAccountNo"] = selectedMasterAccountNo;
-                  queryData["accountName"] = selectedAccountName;
-                  queryData["marginType"] = selectedMarginType;
-                  _updateQueryData();
-                });
-                Navigator.pop(context, true);
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: const Text("Filter by:"),
+            content: StatefulBuilder(
+              builder: (context, setState) {
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 16),
+                      AutoCompleteCorrespondent(
+                        name: "correspondent",
+                        value: selectedCorrespondent,
+                        label: "Correspondent",
+                        isAllStatus: false,
+                        type: "",
+                        onChange: (value) => setState(() {
+                          selectedCorrespondent = value;
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteMasterAccountNo(
+                        name: "masterAccountNo",
+                        freeSolo: true,
+                        value: selectedMasterAccountNo,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: queryData["correspondent"],
+                        onChange: (map) => setState(() {
+                          if (map['data'] != null &&
+                              map['data']['masterAccountNo'] != null) {
+                            selectedMasterAccountNo =
+                                map['data']['masterAccountNo'] as String;
+                          }
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteAccountName(
+                        name: "accountName",
+                        freeSolo: true,
+                        value: selectedAccountName,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: queryData["correspondent"],
+                        onChange: (map) => setState(() {
+                          if (map['data'] != null &&
+                              map['data']['accountName'] != null) {
+                            selectedAccountName =
+                                map['data']['accountName'] as String;
+                          }
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      SelectSystemCode(
+                        label: "Margin Type",
+                        placeholder: "Select Margin Type",
+                        value: selectedMarginType,
+                        type: "Margin Type",
+                        onChange: (map) => setState(() {
+                          selectedMarginType = map?['data']['code'];
+                        }),
+                      ),
+                    ],
+                  ),
+                );
               },
-              child: const Text("Search"),
             ),
-          ],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    queryData["correspondent"] = selectedCorrespondent;
+                    queryData["masterAccountNo"] = selectedMasterAccountNo;
+                    queryData["accountName"] = selectedAccountName;
+                    queryData["marginType"] = selectedMarginType;
+                    _updateQueryData();
+                  });
+                  Navigator.pop(context, true);
+                },
+                child: const Text("Search"),
+              ),
+            ],
+          ),
         );
       },
     ).then((value) {

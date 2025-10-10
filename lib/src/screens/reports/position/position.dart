@@ -169,214 +169,217 @@ class PositionPageState extends State<PositionPage> {
     showDialog<bool>(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text("Filter by:"),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              Future<void> pickDate({required bool isFrom}) async {
-                final DateTime? picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                );
-                if (picked != null) {
-                  setState(() {
-                    if (isFrom) {
-                      selectedFromDate = picked;
-                    } else {
-                      selectedToDate = picked;
-                    }
-                  });
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: const Text("Filter by:"),
+            content: StatefulBuilder(
+              builder: (context, setState) {
+                Future<void> pickDate({required bool isFrom}) async {
+                  final DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      if (isFrom) {
+                        selectedFromDate = picked;
+                      } else {
+                        selectedToDate = picked;
+                      }
+                    });
+                  }
                 }
-              }
 
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 8),
-                    SelectSystemCode(
-                      label: "Date Type",
-                      placeholder: "Select Date Type",
-                      value: selectedDateType,
-                      type: "Date Type",
-                      subType: "Position Report",
-                      onChange: (map) => setState(() {
-                        selectedDateType = map?['data']['code'];
-                      }),
-                    ),
-                    const Text("Date Range",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => pickDate(isFrom: true),
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: "From",
-                                border: OutlineInputBorder(),
-                              ),
-                              child: Text(
-                                selectedFromDate != null
-                                    ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
-                                    : "Select date",
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => pickDate(isFrom: false),
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: "To",
-                                border: OutlineInputBorder(),
-                              ),
-                              child: Text(
-                                selectedToDate != null
-                                    ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
-                                    : "Select date",
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 8),
+                      SelectSystemCode(
+                        label: "Date Type",
+                        placeholder: "Select Date Type",
+                        value: selectedDateType,
+                        type: "Date Type",
+                        subType: "Position Report",
+                        onChange: (map) => setState(() {
+                          selectedDateType = map?['data']['code'];
+                        }),
+                      ),
+                      const Text("Date Range",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => pickDate(isFrom: true),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  labelText: "From",
+                                  border: OutlineInputBorder(),
+                                ),
+                                child: Text(
+                                  selectedFromDate != null
+                                      ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
+                                      : "Select date",
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteCorrespondent(
-                      name: "correspondent",
-                      value: selectedCorrespondent,
-                      label: "Correspondent",
-                      isAllStatus: false,
-                      type: "",
-                      onChange: (value) => setState(() {
-                        selectedCorrespondent = value;
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteAccountNo(
-                      name: "accountNo",
-                      freeSolo: true,
-                      value: selectedAccountNo,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      type: "Client",
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['accountNo'] != null) {
-                          selectedAccountNo =
-                              map['data']['accountNo'] as String;
-                        }
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteMasterAccountNo(
-                      name: "masterAccountNo",
-                      freeSolo: true,
-                      value: selectedMasterAccountNo,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['masterAccountNo'] != null) {
-                          selectedMasterAccountNo =
-                              map['data']['masterAccountNo'] as String;
-                        }
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteRepAdvisor(
-                      name: "rep",
-                      freeSolo: true,
-                      value: selectedMasterAccountNo,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null && map['data']['rep'] != null) {
-                          selectedRep = map['data']['rep'] as String;
-                        }
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteBranch(
-                      name: "branch",
-                      freeSolo: true,
-                      value: selectedBranch,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['branch'] != null) {
-                          selectedBranch = map['data']['branch'] as String;
-                        }
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    SelectSystemCode(
-                      label: "Asset Type",
-                      placeholder: "Select Asset Type",
-                      value: selectedAssetType,
-                      type: "Asset Type",
-                      onChange: (map) => setState(() {
-                        selectedAssetType = map?['data']['code'];
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteSymbol(
-                      name: "symbol",
-                      freeSolo: true,
-                      value: selectedSymbol,
-                      isActive: true,
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['symbol'] != null) {
-                          selectedSymbol = map['data']['symbol'] as String;
-                        }
-                      }),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  queryData["dateType"] = selectedDateType;
-                  queryData["fromDate"] =
-                      ConvertService.dateToString(selectedFromDate);
-                  queryData["toDate"] =
-                      ConvertService.dateToString(selectedToDate);
-                  queryData["correspondent"] = selectedCorrespondent;
-                  queryData["accountNo"] = selectedAccountNo;
-                  queryData["masterAccountNo"] = selectedMasterAccountNo;
-                  queryData["rep"] = selectedRep;
-                  queryData["branch"] = selectedBranch;
-                  queryData["assetType"] = selectedAssetType;
-                  queryData["symbol"] = selectedSymbol;
-                  _updateQueryData();
-                });
-                Navigator.pop(context, true);
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => pickDate(isFrom: false),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  labelText: "To",
+                                  border: OutlineInputBorder(),
+                                ),
+                                child: Text(
+                                  selectedToDate != null
+                                      ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
+                                      : "Select date",
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteCorrespondent(
+                        name: "correspondent",
+                        value: selectedCorrespondent,
+                        label: "Correspondent",
+                        isAllStatus: false,
+                        type: "",
+                        onChange: (value) => setState(() {
+                          selectedCorrespondent = value;
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteAccountNo(
+                        name: "accountNo",
+                        freeSolo: true,
+                        value: selectedAccountNo,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: selectedCorrespondent,
+                        type: "Client",
+                        onChange: (map) => setState(() {
+                          if (map['data']?['accountNo'] != null) {
+                            selectedAccountNo = map['data']['accountNo'];
+                          }
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteMasterAccountNo(
+                        name: "masterAccountNo",
+                        freeSolo: true,
+                        value: selectedMasterAccountNo,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: selectedCorrespondent,
+                        onChange: (map) => setState(() {
+                          if (map['data']?['masterAccountNo'] != null) {
+                            selectedMasterAccountNo =
+                                map['data']['masterAccountNo'];
+                          }
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteRepAdvisor(
+                        name: "rep",
+                        freeSolo: true,
+                        value: selectedRep,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: selectedCorrespondent,
+                        onChange: (map) => setState(() {
+                          if (map['data']?['rep'] != null) {
+                            selectedRep = map['data']['rep'];
+                          }
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteBranch(
+                        name: "branch",
+                        freeSolo: true,
+                        value: selectedBranch,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: selectedCorrespondent,
+                        onChange: (map) => setState(() {
+                          if (map['data']?['branch'] != null) {
+                            selectedBranch = map['data']['branch'];
+                          }
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      SelectSystemCode(
+                        label: "Asset Type",
+                        placeholder: "Select Asset Type",
+                        value: selectedAssetType,
+                        type: "Asset Type",
+                        onChange: (map) => setState(() {
+                          selectedAssetType = map?['data']['code'];
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteSymbol(
+                        name: "symbol",
+                        freeSolo: true,
+                        value: selectedSymbol,
+                        isActive: true,
+                        onChange: (map) => setState(() {
+                          if (map['data']?['symbol'] != null) {
+                            selectedSymbol = map['data']['symbol'];
+                          }
+                        }),
+                      ),
+                    ],
+                  ),
+                );
               },
-              child: const Text("Search"),
             ),
-          ],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    queryData["dateType"] = selectedDateType;
+                    queryData["fromDate"] =
+                        ConvertService.dateToString(selectedFromDate);
+                    queryData["toDate"] =
+                        ConvertService.dateToString(selectedToDate);
+                    queryData["correspondent"] = selectedCorrespondent;
+                    queryData["accountNo"] = selectedAccountNo;
+                    queryData["masterAccountNo"] = selectedMasterAccountNo;
+                    queryData["rep"] = selectedRep;
+                    queryData["branch"] = selectedBranch;
+                    queryData["assetType"] = selectedAssetType;
+                    queryData["symbol"] = selectedSymbol;
+                    _updateQueryData();
+                  });
+                  Navigator.pop(context, true);
+                },
+                child: const Text("Search"),
+              ),
+            ],
+          ),
         );
       },
     ).then((value) {

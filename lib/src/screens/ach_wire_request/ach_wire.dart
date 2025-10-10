@@ -280,211 +280,221 @@ class _AchWirePageState extends State<AchWirePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("ACH/Wire Request")),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isTablet = constraints.maxWidth > 600;
-            final itemWidth = isTablet
-                ? (constraints.maxWidth - 32) / 2
-                : constraints.maxWidth;
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    spacing: 16,
-                    runSpacing: 24,
-                    children: [
-                      SizedBox(
-                        width: itemWidth,
-                        child: AutoCompleteCorrespondent(
-                          disabled: isEdit,
-                          name: "correspondent",
-                          value: formData["correspondent"],
-                          label: "Correspondent",
-                          isAllStatus: false,
-                          type: "",
-                          onChange: (value) => setState(() {
-                            formData["correspondent"] = value;
-                            _checkAndFetchMaxWithdrawable();
-                            _calculateFee();
-                          }),
-                        ),
-                      ),
-                      SizedBox(
-                        width: itemWidth,
-                        child: AutoCompleteAccountNo(
-                          disabled: isEdit,
-                          name: "accountNo",
-                          value: formData["accountNo"],
-                          isAllStatus: false,
-                          isAccessibleOnly: true,
-                          correspondent: formData["correspondent"],
-                          type: "",
-                          onChange: (map) => setState(() {
-                            formData["accountNo"] = map['data']['accountNo'];
-                            formData["correspondent"] =
-                                map['data']['correspondent'];
-                            formData["accountId"] = map['data']['accountId'];
-                            _checkAndFetchMaxWithdrawable();
-                            _calculateFee();
-                          }),
-                        ),
-                      ),
-                      SizedBox(
-                        width: itemWidth,
-                        child: SelectBankAccount(
-                          disabled: isEdit,
-                          label: "Bank Account",
-                          accountNo: formData["accountNo"],
-                          correspondent: formData["correspondent"],
-                          value: formData["bankId"],
-                          onChange: (map) {
-                            setState(() {
-                              formData["bankId"] = map['data']?['bankId'];
-                              formData["bank"] =
-                                  "${map['data']?['bankName']} - ${map['data']?['bankAccountNo']}";
-                            });
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        width: itemWidth,
-                        child: SelectSystemCode(
-                          disabled: isEdit,
-                          label: "Request Type",
-                          placeholder: "Select Request Type",
-                          value: formData["requestType"],
-                          type: "Type",
-                          subType: "Request Type",
-                          onChange: (map) => setState(() {
-                            if (map != null) {
-                              formData["requestType"] = map["data"]["code"];
-                              _calculateFee();
-                            }
-                          }),
-                        ),
-                      ),
-                      SizedBox(
-                        width: itemWidth,
-                        child: SelectSystemCode(
-                          disabled: isEdit,
-                          label: "Transfer Type",
-                          placeholder: "Select Transfer Type",
-                          value: formData["transferType"],
-                          type: "Type",
-                          subType: "Transfer Type",
-                          onChange: (map) => setState(() {
-                            if (map != null) {
-                              formData["transferType"] = map["data"]["code"];
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isTablet = constraints.maxWidth > 600;
+              final itemWidth = isTablet
+                  ? (constraints.maxWidth - 32) / 2
+                  : constraints.maxWidth;
+
+              return SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Wrap(
+                      spacing: 16,
+                      runSpacing: 24,
+                      children: [
+                        SizedBox(
+                          width: itemWidth,
+                          child: AutoCompleteCorrespondent(
+                            disabled: isEdit,
+                            name: "correspondent",
+                            value: formData["correspondent"],
+                            label: "Correspondent",
+                            isAllStatus: false,
+                            type: "",
+                            onChange: (value) => setState(() {
+                              formData["correspondent"] = value;
                               _checkAndFetchMaxWithdrawable();
                               _calculateFee();
-                            }
-                          }),
-                        ),
-                      ),
-                      SizedBox(
-                        width: itemWidth,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "Amount",
-                            prefixText: "\$",
-                            helperText: formData["transferType"] == "Withdrawal"
-                                ? "Withdrawable amount: ${maximumWithdrawable["withdrawableAmt"]}"
-                                : null,
+                            }),
                           ),
-                          keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
-                          onChanged: (value) {
-                            setState(() {
-                              formData["amt"] = double.tryParse(value) ?? 0.0;
+                        ),
+                        SizedBox(
+                          width: itemWidth,
+                          child: AutoCompleteAccountNo(
+                            disabled: isEdit,
+                            name: "accountNo",
+                            value: formData["accountNo"],
+                            isAllStatus: false,
+                            isAccessibleOnly: true,
+                            correspondent: formData["correspondent"],
+                            type: "",
+                            onChange: (map) => setState(() {
+                              formData["accountNo"] = map['data']['accountNo'];
+                              formData["correspondent"] =
+                                  map['data']['correspondent'];
+                              formData["accountId"] = map['data']['accountId'];
+                              _checkAndFetchMaxWithdrawable();
                               _calculateFee();
-                            });
-                          },
-                          initialValue:
-                              ConvertService.safeDouble(formData["amt"])
-                                  .toString(),
-                        ),
-                      ),
-                      SizedBox(
-                        width: itemWidth,
-                        child: isGettingFee
-                            ? const Center(child: CircularProgressIndicator())
-                            : TextFormField(
-                                decoration: const InputDecoration(
-                                  labelText: "Fee",
-                                  prefixText: "\$",
-                                ),
-                                readOnly: true,
-                                controller: TextEditingController(
-                                  text: formData["fee"].toString(),
-                                ),
-                              ),
-                      ),
-                      SizedBox(
-                        width: itemWidth,
-                        child: SelectStatus(
-                          disabled: !isEdit || disableEdit,
-                          value: formData["status"],
-                          requestType: formData["requestType"],
-                          onChange: (data) => setState(() {
-                            if (data != null) {
-                              formData["status"] = data;
-                            }
-                          }),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: isTablet
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.center,
-                    children: [
-                      ConstrainedBox(
-                        constraints:
-                            const BoxConstraints(minWidth: 120, maxWidth: 200),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 32),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            }),
                           ),
-                          onPressed: (isSubmitting ||
-                                  isGettingFee ||
-                                  isGettingMaxWithdrawal ||
-                                  disableEdit)
-                              ? null
-                              : () => handleSubmit(formData),
-                          child: isSubmitting
-                              ? const SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: itemWidth,
+                          child: SelectBankAccount(
+                            disabled: isEdit,
+                            label: "Bank Account",
+                            accountNo: formData["accountNo"],
+                            correspondent: formData["correspondent"],
+                            value: formData["bankId"],
+                            onChange: (map) {
+                              setState(() {
+                                formData["bankId"] = map['data']?['bankId'];
+                                formData["bank"] =
+                                    "${map['data']?['bankName']} - ${map['data']?['bankAccountNo']}";
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: itemWidth,
+                          child: SelectSystemCode(
+                            disabled: isEdit,
+                            label: "Request Type",
+                            placeholder: "Select Request Type",
+                            value: formData["requestType"],
+                            type: "Type",
+                            subType: "Request Type",
+                            onChange: (map) => setState(() {
+                              if (map != null) {
+                                formData["requestType"] = map["data"]["code"];
+                                _calculateFee();
+                              }
+                            }),
+                          ),
+                        ),
+                        SizedBox(
+                          width: itemWidth,
+                          child: SelectSystemCode(
+                            disabled: isEdit,
+                            label: "Transfer Type",
+                            placeholder: "Select Transfer Type",
+                            value: formData["transferType"],
+                            type: "Type",
+                            subType: "Transfer Type",
+                            onChange: (map) => setState(() {
+                              if (map != null) {
+                                formData["transferType"] = map["data"]["code"];
+                                _checkAndFetchMaxWithdrawable();
+                                _calculateFee();
+                              }
+                            }),
+                          ),
+                        ),
+                        SizedBox(
+                          width: itemWidth,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              labelText: "Amount",
+                              prefixText: "\$",
+                              helperText: formData["transferType"] ==
+                                      "Withdrawal"
+                                  ? "Withdrawable amount: ${maximumWithdrawable["withdrawableAmt"]}"
+                                  : null,
+                            ),
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: true),
+                            onChanged: (value) {
+                              setState(() {
+                                formData["amt"] = double.tryParse(value) ?? 0.0;
+                                _calculateFee();
+                              });
+                            },
+                            initialValue:
+                                ConvertService.safeDouble(formData["amt"])
+                                    .toString(),
+                          ),
+                        ),
+                        SizedBox(
+                          width: itemWidth,
+                          child: isGettingFee
+                              ? const Center(child: CircularProgressIndicator())
+                              : TextFormField(
+                                  decoration: const InputDecoration(
+                                    labelText: "Fee",
+                                    prefixText: "\$",
                                   ),
-                                )
-                              : const Text(
-                                  "Submit",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                  readOnly: true,
+                                  controller: TextEditingController(
+                                    text: formData["fee"].toString(),
+                                  ),
                                 ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
+                        SizedBox(
+                          width: itemWidth,
+                          child: SelectStatus(
+                            disabled: !isEdit || disableEdit,
+                            value: formData["status"],
+                            requestType: formData["requestType"],
+                            onChange: (data) => setState(() {
+                              if (data != null) {
+                                formData["status"] = data;
+                              }
+                            }),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: isTablet
+                          ? MainAxisAlignment.end
+                          : MainAxisAlignment.center,
+                      children: [
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(
+                              minWidth: 120, maxWidth: 200),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 16, horizontal: 32),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: (isSubmitting ||
+                                    isGettingFee ||
+                                    isGettingMaxWithdrawal ||
+                                    disableEdit)
+                                ? null
+                                : () => handleSubmit(formData),
+                            child: isSubmitting
+                                ? const SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Text(
+                                    "Submit",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

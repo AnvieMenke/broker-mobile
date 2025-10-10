@@ -129,168 +129,179 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
     showDialog<bool>(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text("Filter by:"),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              Future<void> pickDate({required bool isFrom}) async {
-                final DateTime? picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                );
-                if (picked != null) {
-                  setState(() {
-                    if (isFrom) {
-                      selectedFromDate = picked;
-                    } else {
-                      selectedToDate = picked;
-                    }
-                  });
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text("Filter by:"),
+            content: StatefulBuilder(
+              builder: (context, setState) {
+                Future<void> pickDate({required bool isFrom}) async {
+                  final DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      if (isFrom) {
+                        selectedFromDate = picked;
+                      } else {
+                        selectedToDate = picked;
+                      }
+                    });
+                  }
                 }
-              }
 
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text("Date Range",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => pickDate(isFrom: true),
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: "From",
-                                border: OutlineInputBorder(),
-                              ),
-                              child: Text(
-                                selectedFromDate != null
-                                    ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
-                                    : "Select date",
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => pickDate(isFrom: false),
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: "To",
-                                border: OutlineInputBorder(),
-                              ),
-                              child: Text(
-                                selectedToDate != null
-                                    ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
-                                    : "Select date",
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        "Date Range",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => pickDate(isFrom: true),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  labelText: "From",
+                                  border: OutlineInputBorder(),
+                                ),
+                                child: Text(
+                                  selectedFromDate != null
+                                      ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
+                                      : "Select date",
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteCorrespondent(
-                      name: "correspondent",
-                      value: selectedCorrespondent,
-                      label: "Correspondent",
-                      isAllStatus: false,
-                      type: "",
-                      onChange: (value) => setState(() {
-                        selectedCorrespondent = value;
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteMasterAccountNo(
-                      name: "masterAccountNo",
-                      freeSolo: true,
-                      value: selectedMasterAccountNo,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['masterAccountNo'] != null) {
-                          selectedMasterAccountNo =
-                              map['data']['masterAccountNo'] as String;
-                        }
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteAccountName(
-                      name: "accountName",
-                      freeSolo: true,
-                      value: selectedAccountName,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['accountName'] != null) {
-                          selectedAccountName =
-                              map['data']['accountName'] as String;
-                        }
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    SelectSystemCode(
-                      label: "Margin Type",
-                      placeholder: "Select Margin Type",
-                      value: selectedMarginType,
-                      type: "Margin Type",
-                      onChange: (map) => setState(() {
-                        selectedMarginType = map?['data']['code'];
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    CheckboxListTile(
-                      title: const Text("Hide  Zero"),
-                      value: hideZero,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          hideZero = value ?? false;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.trailing,
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  queryData["fromDate"] =
-                      ConvertService.dateToString(selectedFromDate);
-                  queryData["toDate"] =
-                      ConvertService.dateToString(selectedToDate);
-                  queryData["correspondent"] = selectedCorrespondent;
-                  queryData["masterAccountNo"] = selectedMasterAccountNo;
-                  queryData["accountName"] = selectedAccountName;
-                  queryData["marginType"] = selectedMarginType;
-                  queryData["hideZero"] = hideZero;
-                  _updateQueryData();
-                });
-                Navigator.pop(context, true);
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => pickDate(isFrom: false),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  labelText: "To",
+                                  border: OutlineInputBorder(),
+                                ),
+                                child: Text(
+                                  selectedToDate != null
+                                      ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
+                                      : "Select date",
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteCorrespondent(
+                        name: "correspondent",
+                        value: selectedCorrespondent,
+                        label: "Correspondent",
+                        isAllStatus: false,
+                        type: "",
+                        onChange: (value) => setState(() {
+                          selectedCorrespondent = value;
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteMasterAccountNo(
+                        name: "masterAccountNo",
+                        freeSolo: true,
+                        value: selectedMasterAccountNo,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: queryData["correspondent"],
+                        onChange: (map) => setState(() {
+                          if (map['data'] != null &&
+                              map['data']['masterAccountNo'] != null) {
+                            selectedMasterAccountNo =
+                                map['data']['masterAccountNo'] as String;
+                          }
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteAccountName(
+                        name: "accountName",
+                        freeSolo: true,
+                        value: selectedAccountName,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: queryData["correspondent"],
+                        onChange: (map) => setState(() {
+                          if (map['data'] != null &&
+                              map['data']['accountName'] != null) {
+                            selectedAccountName =
+                                map['data']['accountName'] as String;
+                          }
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      SelectSystemCode(
+                        label: "Margin Type",
+                        placeholder: "Select Margin Type",
+                        value: selectedMarginType,
+                        type: "Margin Type",
+                        onChange: (map) => setState(() {
+                          selectedMarginType = map?['data']['code'];
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      CheckboxListTile(
+                        title: const Text("Hide  Zero"),
+                        value: hideZero,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            hideZero = value ?? false;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity.trailing,
+                      ),
+                    ],
+                  ),
+                );
               },
-              child: const Text("Search"),
             ),
-          ],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    queryData["fromDate"] =
+                        ConvertService.dateToString(selectedFromDate);
+                    queryData["toDate"] =
+                        ConvertService.dateToString(selectedToDate);
+                    queryData["correspondent"] = selectedCorrespondent;
+                    queryData["masterAccountNo"] = selectedMasterAccountNo;
+                    queryData["accountName"] = selectedAccountName;
+                    queryData["marginType"] = selectedMarginType;
+                    queryData["hideZero"] = hideZero;
+                    _updateQueryData();
+                  });
+                  Navigator.pop(context, true);
+                },
+                child: const Text("Search"),
+              ),
+            ],
+          ),
         );
       },
     ).then((value) {

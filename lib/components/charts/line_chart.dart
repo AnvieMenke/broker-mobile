@@ -124,7 +124,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           }).toList(),
         ),
       ),
-      gridData: FlGridData(show: true),
+      gridData: FlGridData(show: false),
       titlesData: FlTitlesData(
         rightTitles:
             const AxisTitles(sideTitles: SideTitles(showTitles: false)),
