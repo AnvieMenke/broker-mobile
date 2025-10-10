@@ -28,7 +28,8 @@ class CallLogService {
       ..correspondent = param['correspondent'] ?? ""
       ..masterAccountNo = param['masterAccountNo'] ?? ""
       ..marginType = param['marginType'] ?? ""
-      ..accountName = param['accountName'] ?? "";
+      ..accountName = param['accountName'] ?? ""
+      ..callStatus = "Pending";
 
     if (paging != null && paging.isNotEmpty) {
       var paginationReq = Pagination()

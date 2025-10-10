@@ -7,6 +7,7 @@ import '../../../../components/dropdowns/select_master_account_no.dart';
 import '../../../../components/dropdowns/select_account_name.dart';
 import '../../../../components/dropdowns/select_system_code.dart';
 import '../../../../service/convert_service.dart';
+import 'package:broker_mobile/utils/theme/custom_theme.dart';
 
 class CallLogPage extends StatefulWidget {
   const CallLogPage({super.key});
@@ -43,14 +44,14 @@ class CallLogPageState extends State<CallLogPage> {
   }
 
   void _init() async {
-    _futureRequests = _listBuyingPower();
+    _futureRequests = _listCallLog();
   }
 
   void _updateQueryData() {
     queryDataNotifier.value++;
   }
 
-  Future<List<GridItem>> _listBuyingPower() async {
+  Future<List<GridItem>> _listCallLog() async {
     final callLogService = CallLogService();
     final resp = await callLogService.listCallLog(queryData, {
       'pageNo': pagination.pageNo,
@@ -83,13 +84,9 @@ class CallLogPageState extends State<CallLogPage> {
           "visible": false,
         },
         "marginType": {
+          "hideLabel": true,
           "label": "Margin Type",
           "value": e.marginType,
-          "visible": true,
-        },
-        "callType": {
-          "label": "Call Type",
-          "value": e.callType,
           "visible": true,
         },
         "callReq": {
@@ -98,16 +95,20 @@ class CallLogPageState extends State<CallLogPage> {
           "value": e.callReq,
           "type": "amount",
           "visible": true,
-          "gridPosition": "rightTitle",
+          "floatRight": true,
+        },
+        "callType": {
+          "hideLabel": true,
+          "label": "Call Type",
+          "value": e.callType,
+          "visible": true,
         },
         "age": {
+          "hideLabel": true,
           "label": "Age",
-          "value": e.age,
-          "visible": false,
-        },
-        "status": {
-          "label": "Status",
-          "value": e.callStatus,
+          "value": e.age == 1 ? "${e.age} day old" : "${e.age} days old",
+          "visible": true,
+          "floatRight": true,
         },
       });
     }).toList();
@@ -116,8 +117,15 @@ class CallLogPageState extends State<CallLogPage> {
   void _onPageChange(GridPagination newPagination) {
     setState(() {
       pagination = newPagination;
-      _futureRequests = _listBuyingPower();
+      _futureRequests = _listCallLog();
     });
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      _futureRequests = _listCallLog();
+    });
+    await _futureRequests;
   }
 
   void openFilterDialog() {
@@ -230,7 +238,7 @@ class CallLogPageState extends State<CallLogPage> {
     ).then((value) {
       if (value == true) {
         setState(() {
-          _futureRequests = _listBuyingPower();
+          _futureRequests = _listCallLog();
         });
       }
     });
@@ -241,23 +249,21 @@ class CallLogPageState extends State<CallLogPage> {
     return PageListContainer(
         title: "Margin Call",
         openFilterDialog: openFilterDialog,
+        onRefresh: _refresh,
         page: _futureRequests == null
-            ? Center(child: CircularProgressIndicator())
+            ? AppTheme.buildLoadingIndicator()
             : FutureBuilder<List<GridItem>>(
                 future: _futureRequests,
                 builder: (context, snapshot) {
                   Widget body;
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    body = const Center(child: CircularProgressIndicator());
+                    body = AppTheme.buildLoadingIndicator();
                   } else {
-                    body = RefreshIndicator(
-                      onRefresh: () async =>
-                          _futureRequests = _listBuyingPower(),
-                      child: GridWithPagination(
-                        items: snapshot.data!,
-                        pagination: pagination,
-                        onPageChange: _onPageChange,
-                      ),
+                    body = GridWithPagination(
+                      items: snapshot.data!,
+                      pagination: pagination,
+                      onPageChange: _onPageChange,
+                      onRefresh: _refresh,
                     );
                   }
 
@@ -312,7 +318,7 @@ class CallLogPageState extends State<CallLogPage> {
                                             entry.value is bool ? false : "";
 
                                         _updateQueryData();
-                                        _futureRequests = _listBuyingPower();
+                                        _futureRequests = _listCallLog();
                                       });
                                     },
                                   );

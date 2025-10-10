@@ -9,6 +9,7 @@ import 'package:broker_mobile/components/dropdowns/select_account_no.dart';
 import 'package:broker_mobile/components/dropdowns/select_bank_account.dart';
 import 'package:broker_mobile/components/dropdowns/select_system_code.dart';
 import 'package:broker_mobile/components/messages/notification.dart';
+import '../../../utils/theme/custom_theme.dart';
 
 class AchWirePage extends StatefulWidget {
   final Map<String, dynamic>? initialFormData;
@@ -419,7 +420,7 @@ class _AchWirePageState extends State<AchWirePage> {
                         SizedBox(
                           width: itemWidth,
                           child: isGettingFee
-                              ? const Center(child: CircularProgressIndicator())
+                              ? AppTheme.buildLoadingIndicator()
                               : TextFormField(
                                   decoration: const InputDecoration(
                                     labelText: "Fee",

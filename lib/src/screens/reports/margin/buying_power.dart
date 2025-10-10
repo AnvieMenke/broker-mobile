@@ -8,6 +8,7 @@ import '../../../../components/dropdowns/select_account_name.dart';
 import '../../../../components/dropdowns/select_system_code.dart';
 import '../../../../service/convert_service.dart';
 import '../../../../service/profile_service.dart';
+import '../../../../utils/theme/custom_theme.dart';
 
 class BuyingPowerPage extends StatefulWidget {
   const BuyingPowerPage({super.key});
@@ -102,7 +103,7 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
           "label": "Buying Power",
           "value": e.buyingPower,
           "type": "amount",
-          "floatRight": true,
+          "gridPosition": "rightTitle",
           "visible": true,
         },
       });
@@ -114,6 +115,13 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
       pagination = newPagination;
       _futureRequests = _listBuyingPower();
     });
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      _futureRequests = _listBuyingPower();
+    });
+    await _futureRequests;
   }
 
   void openFilterDialog() {
@@ -318,23 +326,21 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
     return PageListContainer(
         title: "Buying Power",
         openFilterDialog: openFilterDialog,
+        onRefresh: _refresh,
         page: _futureRequests == null
-            ? Center(child: CircularProgressIndicator())
+            ? AppTheme.buildLoadingIndicator()
             : FutureBuilder<List<GridItem>>(
                 future: _futureRequests,
                 builder: (context, snapshot) {
                   Widget body;
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    body = const Center(child: CircularProgressIndicator());
+                    body = AppTheme.buildLoadingIndicator();
                   } else {
-                    body = RefreshIndicator(
-                      onRefresh: () async =>
-                          _futureRequests = _listBuyingPower(),
-                      child: GridWithPagination(
-                        items: snapshot.data!,
-                        pagination: pagination,
-                        onPageChange: _onPageChange,
-                      ),
+                    body = GridWithPagination(
+                      items: snapshot.data!,
+                      pagination: pagination,
+                      onPageChange: _onPageChange,
+                      onRefresh: _refresh,
                     );
                   }
 
