@@ -230,7 +230,6 @@ class _AchWireListState extends State<AchWireList> {
     String? selectedSign = queryData["sign"];
     String? amount = queryData["amount"];
     bool isOpen = queryData["isOpen"] ?? false;
-
     showDialog<bool>(
       context: context,
       builder: (context) {
@@ -265,15 +264,15 @@ class _AchWireListState extends State<AchWireList> {
                 }
 
                 return SingleChildScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text(
                         "Date Range",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Row(
@@ -282,8 +281,9 @@ class _AchWireListState extends State<AchWireList> {
                             child: InkWell(
                               onTap: () => pickDate(isFrom: true),
                               child: InputDecorator(
-                                decoration:
-                                    const InputDecoration(labelText: "From"),
+                                decoration: const InputDecoration(
+                                  labelText: "From",
+                                ),
                                 child: Text(
                                   selectedFromDate != null
                                       ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
@@ -297,8 +297,9 @@ class _AchWireListState extends State<AchWireList> {
                             child: InkWell(
                               onTap: () => pickDate(isFrom: false),
                               child: InputDecorator(
-                                decoration:
-                                    const InputDecoration(labelText: "To"),
+                                decoration: const InputDecoration(
+                                  labelText: "To",
+                                ),
                                 child: Text(
                                   selectedToDate != null
                                       ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
@@ -309,128 +310,167 @@ class _AchWireListState extends State<AchWireList> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      AutoCompleteCorrespondent(
-                        name: "correspondent",
-                        value: selectedCorrespondent,
-                        label: "Correspondent",
-                        isAllStatus: false,
-                        type: "",
-                        onChange: (value) =>
-                            setState(() => selectedCorrespondent = value),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: AutoCompleteCorrespondent(
+                          name: "correspondent",
+                          value: selectedCorrespondent,
+                          label: "Correspondent",
+                          isAllStatus: false,
+                          type: "",
+                          onChange: (value) => setState(() {
+                            selectedCorrespondent = value;
+                          }),
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      AutoCompleteAccountNo(
-                        name: "accountNo",
-                        freeSolo: true,
-                        value: selectedAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
-                        correspondent: queryData["correspondent"],
-                        type: "Client",
-                        onChange: (map) {
-                          setState(() {
-                            if (map['data']?['accountNo'] != null) {
-                              selectedAccountNo = map['data']['accountNo'];
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: AutoCompleteAccountNo(
+                          name: "accountNo",
+                          freeSolo: true,
+                          value: selectedAccountNo,
+                          isAllStatus: false,
+                          isAccessibleOnly: true,
+                          correspondent: queryData["correspondent"],
+                          type: "Client",
+                          onChange: (map) => setState(() {
+                            if (map['data'] != null &&
+                                map['data']['accountNo'] != null) {
+                              selectedAccountNo =
+                                  map['data']['accountNo'] as String;
                             }
-                          });
-                        },
+                          }),
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      AutoCompleteMasterAccountNo(
-                        name: "masterAccountNo",
-                        freeSolo: true,
-                        value: selectedMasterAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
-                        correspondent: queryData["correspondent"],
-                        onChange: (map) {
-                          setState(() {
-                            if (map['data']?['masterAccountNo'] != null) {
-                              selectedMasterAccountNo =
-                                  map['data']['masterAccountNo'];
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: AutoCompleteMasterAccountNo(
+                          name: "masterAccountNo",
+                          freeSolo: true,
+                          value: selectedMasterAccountNo,
+                          isAllStatus: false,
+                          isAccessibleOnly: true,
+                          correspondent: queryData["correspondent"],
+                          onChange: (map) => setState(() {
+                            if (map['data'] != null &&
+                                map['data']['masterAccountNo'] != null) {
+                              selectedAccountNo =
+                                  map['data']['masterAccountNo'] as String;
                             }
-                          });
-                        },
+                          }),
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      TextField(
-                        decoration:
-                            const InputDecoration(labelText: 'External ID'),
-                        onChanged: (value) => externalId = value,
-                      ),
-                      const SizedBox(height: 16),
-                      SelectSystemCode(
-                        label: "Request Type",
-                        placeholder: "Select Request Type",
-                        value: selectedRequestType,
-                        type: "Type",
-                        subType: "Request Type",
-                        onChange: (map) => setState(() {
-                          selectedRequestType = map?['data']['code'];
-                        }),
-                      ),
-                      const SizedBox(height: 16),
-                      SelectSystemCode(
-                        label: "Transfer Type",
-                        placeholder: "Select Transfer Type",
-                        value: selectedTransferType,
-                        type: "Type",
-                        subType: "Transfer Type",
-                        onChange: (map) => setState(() {
-                          selectedTransferType = map?['data']['code'];
-                        }),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: SelectSystemCode(
-                              label: "Sign",
-                              placeholder: "Select Sign",
-                              value: selectedSign,
-                              type: "Sign",
-                              subType: "Bank Request",
-                              onChange: (map) {
-                                setState(
-                                    () => selectedSign = map?['data']['code']);
-                              },
-                            ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            labelText: 'External ID',
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            flex: 3,
-                            child: TextField(
-                              decoration: const InputDecoration(
-                                labelText: "Amount",
+                          onChanged: (value) {
+                            externalId = value;
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: SelectSystemCode(
+                          label: "Request Type",
+                          placeholder: "Select Request Type",
+                          value: selectedRequestType,
+                          type: "Type",
+                          subType: "Request Type",
+                          onChange: (map) => setState(() {
+                            selectedRequestType = map?['data']['code'];
+                          }),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: SelectSystemCode(
+                          label: "Transfer Type",
+                          placeholder: "Select Transfer Type",
+                          value: selectedTransferType,
+                          type: "Type",
+                          subType: "Transfer Type",
+                          onChange: (map) => setState(() {
+                            selectedTransferType = map?['data']['code'];
+                          }),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: SelectSystemCode(
+                                label: "Sign",
+                                placeholder: "Select Sign",
+                                value: selectedSign,
+                                type: "Sign",
+                                subType: "Bank Request",
+                                onChange: (map) {
+                                  setState(() {
+                                    selectedSign = map?['data']['code'];
+                                  });
+                                },
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: AppTheme.defaultRadius,
+                                    bottomLeft: AppTheme.defaultRadius,
+                                  ),
+                                  borderSide: BorderSide.none,
+                                ),
                               ),
-                              enabled: (selectedSign ?? "").isNotEmpty,
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) => amount = value,
                             ),
-                          ),
-                        ],
+                            Expanded(
+                              flex: 3,
+                              child: TextField(
+                                decoration: const InputDecoration(
+                                  labelText: "Amount",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: AppTheme.defaultRadius,
+                                      bottomRight: AppTheme.defaultRadius,
+                                    ),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                                enabled: (selectedSign ?? "").isNotEmpty,
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  amount = value;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      CheckboxListTile(
-                        title: const Text("Open"),
-                        value: isOpen,
-                        onChanged: (bool? value) {
-                          setState(() => isOpen = value ?? false);
-                        },
-                        controlAffinity: ListTileControlAffinity.trailing,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: CheckboxListTile(
+                          title: const Text("Open"),
+                          value: isOpen,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              isOpen = value ?? false;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.trailing,
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      SelectSystemCode(
-                        label: "Status",
-                        placeholder: "Select Status",
-                        value: selectedStatus,
-                        type: "Status",
-                        subType: "Bank Request",
-                        onChange: (map) => setState(() {
-                          selectedStatus = map?['data']['code'];
-                        }),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: SelectSystemCode(
+                          label: "Status",
+                          placeholder: "Select Status",
+                          value: selectedStatus,
+                          type: "Status",
+                          subType: "Bank Request",
+                          onChange: (map) => setState(() {
+                            selectedStatus = map?['data']['code'];
+                          }),
+                        ),
                       ),
                     ],
                   ),
