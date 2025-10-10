@@ -6,6 +6,7 @@ import 'package:broker_mobile/service/balance_service.dart';
 import 'package:broker_mobile/service/profile_service.dart';
 import 'package:broker_mobile/components/charts/line_chart.dart';
 import '../../../proto/reportpb/balance.pb.dart';
+import '../../../utils/theme/custom_theme.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -248,7 +249,7 @@ class _DashboardPageState extends State<DashboardPage> {
       builder: (context, snapshot) {
         if (_futureChartData == null ||
             snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return AppTheme.buildLoadingIndicator();
         }
         if (snapshot.hasError) {
           return const Center(child: Text("Error loading chart"));
@@ -275,18 +276,19 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       body: SafeArea(
         child: _futureBalances == null
-            ? const Center(child: CircularProgressIndicator())
+            ? AppTheme.buildLoadingIndicator()
             : FutureBuilder<List<Balance>>(
                 future: _futureBalances,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return AppTheme.buildLoadingIndicator();
                   }
                   if (snapshot.hasError) {
                     return Center(child: Text("Error: ${snapshot.error}"));
                   }
 
                   return RefreshIndicator(
+                    color: const Color(0xFF1565C0),
                     onRefresh: _refreshData,
                     child: ListView(
                       physics: const AlwaysScrollableScrollPhysics(),

@@ -12,6 +12,7 @@ import '../../../../components/dropdowns/select_rep.dart';
 import '../../../../components/dropdowns/select_branch.dart';
 import '../../../../components/dropdowns/select_symbol.dart';
 import '../../../../components/dropdowns/select_entry_type.dart';
+import '../../../../utils/theme/custom_theme.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
@@ -158,12 +159,6 @@ class ActivityPageState extends State<ActivityPage> {
           "type": "amount",
           "visible": false,
         },
-        "otherFees": {
-          "label": "Other Fees",
-          "value": e.otherFees,
-          "type": "amount",
-          "visible": false,
-        },
         "netAmt": {
           "hideLabel": true,
           "label": "Net Amount",
@@ -171,11 +166,6 @@ class ActivityPageState extends State<ActivityPage> {
           "type": "amount",
           "floatRight": true,
           "visible": true,
-        },
-        "status": {
-          "label": "Status",
-          "value": e.status,
-          "visible": false,
         },
       });
     }).toList();
@@ -186,6 +176,13 @@ class ActivityPageState extends State<ActivityPage> {
       pagination = newPagination;
       _futureRequests = _listActivity();
     });
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      _futureRequests = _listActivity();
+    });
+    await _futureRequests;
   }
 
   void openFilterDialog() {
@@ -473,22 +470,21 @@ class ActivityPageState extends State<ActivityPage> {
     return PageListContainer(
         title: "Activity",
         openFilterDialog: openFilterDialog,
+        onRefresh: _refresh,
         page: _futureRequests == null
-            ? Center(child: CircularProgressIndicator())
+            ? AppTheme.buildLoadingIndicator()
             : FutureBuilder<List<GridItem>>(
                 future: _futureRequests,
                 builder: (context, snapshot) {
                   Widget body;
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    body = const Center(child: CircularProgressIndicator());
+                    body = AppTheme.buildLoadingIndicator();
                   } else {
-                    body = RefreshIndicator(
-                      onRefresh: () async => _futureRequests = _listActivity(),
-                      child: GridWithPagination(
-                        items: snapshot.data!,
-                        pagination: pagination,
-                        onPageChange: _onPageChange,
-                      ),
+                    body = GridWithPagination(
+                      items: snapshot.data!,
+                      pagination: pagination,
+                      onPageChange: _onPageChange,
+                      onRefresh: _refresh,
                     );
                   }
 

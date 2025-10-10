@@ -67,4 +67,12 @@ class AppTheme {
       );
     }
   }
+
+  static Widget buildLoadingIndicator() {
+    return Center(
+      child: CircularProgressIndicator(
+        color: Colors.grey[400],
+      ),
+    );
+  }
 }

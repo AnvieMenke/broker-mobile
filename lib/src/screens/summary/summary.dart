@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:broker_mobile/service/balance_service.dart';
 import 'package:broker_mobile/service/profile_service.dart';
-
 import '../../../proto/reportpb/balance.pb.dart';
+import '../../../utils/theme/custom_theme.dart';
 
 class AccountSummaryPage extends StatefulWidget {
   const AccountSummaryPage({super.key});
@@ -72,8 +72,8 @@ class AccountSummaryState extends State<AccountSummaryPage> {
   @override
   Widget build(BuildContext context) {
     if (_futureBalances == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+      return Scaffold(
+        body: AppTheme.buildLoadingIndicator(),
       );
     }
 
@@ -83,13 +83,14 @@ class AccountSummaryState extends State<AccountSummaryPage> {
           future: _futureBalances,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return AppTheme.buildLoadingIndicator();
             } else if (snapshot.hasError) {
               return Center(
                 child: Text("Error: ${snapshot.error}"),
               );
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return RefreshIndicator(
+                color: const Color(0xFF1565C0),
                 onRefresh: _refreshData,
                 child: ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -97,7 +98,7 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                     SizedBox(height: 200),
                     Center(
                       child:
-                      Text("No data found", style: TextStyle(fontSize: 20)),
+                          Text("No data found", style: TextStyle(fontSize: 20)),
                     ),
                   ],
                 ),
@@ -107,6 +108,7 @@ class AccountSummaryState extends State<AccountSummaryPage> {
             final items = snapshot.data!;
 
             return RefreshIndicator(
+              color: const Color(0xFF1565C0),
               onRefresh: _refreshData,
               child: ListView(
                 padding: const EdgeInsets.all(12),
@@ -141,7 +143,7 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                                   const SizedBox(height: 12),
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
@@ -153,7 +155,7 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                                           Text(
                                             "Long Market Value\n${FormatUtils.formatCurrency(totalTdLongMarketValue)}",
                                             style:
-                                            const TextStyle(fontSize: 12),
+                                                const TextStyle(fontSize: 12),
                                           ),
                                         ],
                                       ),
@@ -168,7 +170,7 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                                             "Short Market Value\n${FormatUtils.formatCurrency(totalSdShortMarketValue)}",
                                             textAlign: TextAlign.right,
                                             style:
-                                            const TextStyle(fontSize: 12),
+                                                const TextStyle(fontSize: 12),
                                           ),
                                         ],
                                       ),
@@ -203,7 +205,7 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
@@ -225,7 +227,7 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                                 const SizedBox(height: 12),
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [

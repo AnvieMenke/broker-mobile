@@ -527,8 +527,8 @@ class _AchWireListState extends State<AchWireList> {
   @override
   Widget build(BuildContext context) {
     if (_futureRequests == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+      return Scaffold(
+        body: AppTheme.buildLoadingIndicator(),
       );
     }
 
@@ -537,9 +537,10 @@ class _AchWireListState extends State<AchWireList> {
       builder: (context, snapshot) {
         Widget body;
         if (snapshot.connectionState == ConnectionState.waiting) {
-          body = const Center(child: CircularProgressIndicator());
+          body = AppTheme.buildLoadingIndicator();
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           body = RefreshIndicator(
+            color: const Color(0xFF1565C0),
             onRefresh: () async => _futureRequests = _fetchRequests(),
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -553,6 +554,7 @@ class _AchWireListState extends State<AchWireList> {
           );
         } else {
           body = RefreshIndicator(
+            color: const Color(0xFF1565C0),
             onRefresh: () async => _futureRequests = _fetchRequests(),
             child: Padding(
               padding: const EdgeInsets.all(5),

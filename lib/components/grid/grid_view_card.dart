@@ -308,9 +308,7 @@ class GridViewCard extends StatelessWidget {
                 ),
               ],
             ),
-
             const SizedBox(height: 8),
-
             Column(
               children: () {
                 final rows = <Widget>[];
@@ -331,7 +329,6 @@ class GridViewCard extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Left-side field
                           Expanded(
                             flex: 2,
                             child: Row(
@@ -368,7 +365,6 @@ class GridViewCard extends StatelessWidget {
                               ],
                             ),
                           ),
-
                           if (rightField != null)
                             Expanded(
                               flex: 2,
@@ -440,6 +436,7 @@ class GridWithPagination extends StatelessWidget {
   final GridPagination pagination;
   final void Function(GridPagination newPagination) onPageChange;
   final List<PopupMenuEntry> Function(BuildContext, GridItem)? actionsBuilder;
+  final Future<void> Function()? onRefresh;
 
   const GridWithPagination({
     super.key,
@@ -447,6 +444,7 @@ class GridWithPagination extends StatelessWidget {
     required this.pagination,
     required this.onPageChange,
     this.actionsBuilder,
+    this.onRefresh,
   });
 
   List<int> _pageRange(int currentPage, int totalPages, int maxButtons) {
@@ -481,8 +479,10 @@ class GridWithPagination extends StatelessWidget {
     final int start = (totalRows == 0) ? 0 : (currentPage * rowsPerPage) + 1;
     final int end = start + items.length - 1;
 
+    Widget gridContent;
+
     if (items.isEmpty) {
-      return Center(
+      gridContent = Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -506,11 +506,8 @@ class GridWithPagination extends StatelessWidget {
           ),
         ),
       );
-    }
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(2, 2, 2, 20),
-      child: LayoutBuilder(
+    } else {
+      gridContent = LayoutBuilder(
         builder: (context, constraints) {
           final width = constraints.maxWidth;
 
@@ -566,6 +563,19 @@ class GridWithPagination extends StatelessWidget {
             ],
           );
         },
+      );
+    }
+
+    return RefreshIndicator(
+      color: const Color(0xFF1565C0),
+      onRefresh: onRefresh ?? () async {},
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(2, 2, 2, 20),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 300),
+          child: gridContent,
+        ),
       ),
     );
   }

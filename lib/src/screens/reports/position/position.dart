@@ -11,6 +11,7 @@ import '../../../../components/dropdowns/select_system_code.dart';
 import '../../../../components/dropdowns/select_rep.dart';
 import '../../../../components/dropdowns/select_branch.dart';
 import '../../../../components/dropdowns/select_symbol.dart';
+import '../../../../utils/theme/custom_theme.dart';
 
 class PositionPage extends StatefulWidget {
   const PositionPage({super.key});
@@ -123,12 +124,14 @@ class PositionPageState extends State<PositionPage> {
           "addAvatar": true,
         },
         "tdQty": {
+          "hideLabel": true,
           "label": "TD Qty",
           "value": e.tdQty,
           "type": "qty",
           "visible": true,
         },
         "costBasis": {
+          "hideLabel": true,
           "label": "Cost Basis",
           "value": e.costBasis,
           "type": "amount",
@@ -151,6 +154,13 @@ class PositionPageState extends State<PositionPage> {
       pagination = newPagination;
       _futureRequests = _listPosition();
     });
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      _futureRequests = _listPosition();
+    });
+    await _futureRequests;
   }
 
   void openFilterDialog() {
@@ -396,22 +406,21 @@ class PositionPageState extends State<PositionPage> {
     return PageListContainer(
         title: "Position",
         openFilterDialog: openFilterDialog,
+        onRefresh: _refresh,
         page: _futureRequests == null
-            ? Center(child: CircularProgressIndicator())
+            ? AppTheme.buildLoadingIndicator()
             : FutureBuilder<List<GridItem>>(
                 future: _futureRequests,
                 builder: (context, snapshot) {
                   Widget body;
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    body = const Center(child: CircularProgressIndicator());
+                    body = AppTheme.buildLoadingIndicator();
                   } else {
-                    body = RefreshIndicator(
-                      onRefresh: () async => _futureRequests = _listPosition(),
-                      child: GridWithPagination(
-                        items: snapshot.data!,
-                        pagination: pagination,
-                        onPageChange: _onPageChange,
-                      ),
+                    body = GridWithPagination(
+                      items: snapshot.data!,
+                      pagination: pagination,
+                      onPageChange: _onPageChange,
+                      onRefresh: _refresh,
                     );
                   }
 
