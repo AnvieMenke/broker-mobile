@@ -199,9 +199,7 @@ class GridViewCard extends StatelessWidget {
         return AlertDialog(
           title: const Text("Details"),
           content: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxHeight: 400,
-            ),
+            constraints: const BoxConstraints(maxHeight: 400),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,6 +251,10 @@ class GridViewCard extends StatelessWidget {
       ...defaultActions,
       if (actions != null) ...actions!,
     ];
+
+    final bodyFields = item.fields
+        .where((f) => f.visible && f.gridPosition == "body")
+        .toList();
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 1.5),
@@ -306,50 +308,96 @@ class GridViewCard extends StatelessWidget {
                 ),
               ],
             ),
+
             const SizedBox(height: 8),
-            ...item.fields
-                .where((f) => f.visible && f.gridPosition == "body")
-                .map(
-                  (f) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
-                      mainAxisAlignment: f.floatRight
-                          ? MainAxisAlignment.spaceBetween
-                          : MainAxisAlignment.start,
-                      children: [
-                        if (!f.hideLabel)
-                          Text(
-                            "${f.label}: ",
-                            style: textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          )
-                        else
-                          const SizedBox.shrink(),
-                        if (f.addAvatar && f.value.isNotEmpty) ...[
-                          CircleAvatar(
-                            radius: 16,
-                            backgroundColor: Colors.blue.shade100,
-                            child: Text(
-                              f.value[0].toUpperCase(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
+
+            Column(
+              children: () {
+                final rows = <Widget>[];
+
+                for (int i = 0; i < bodyFields.length; i++) {
+                  final f = bodyFields[i];
+                  if (f.floatRight) continue;
+
+                  GridField? rightField;
+                  if (i + 1 < bodyFields.length &&
+                      bodyFields[i + 1].floatRight) {
+                    rightField = bodyFields[i + 1];
+                  }
+
+                  rows.add(
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Left-side field
                           Expanded(
-                            child: Text(
-                              f.value,
-                              style: textTheme.bodyMedium,
+                            flex: 2,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (!f.hideLabel)
+                                  Text(
+                                    "${f.label}: ",
+                                    style: textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                if (f.addAvatar && f.value.isNotEmpty) ...[
+                                  CircleAvatar(
+                                    radius: 16,
+                                    backgroundColor: Colors.blue.shade100,
+                                    child: Text(
+                                      f.value[0].toUpperCase(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      f.value,
+                                      style: textTheme.bodyMedium,
+                                    ),
+                                  ),
+                                ] else
+                                  f.displayValue,
+                              ],
                             ),
                           ),
-                        ] else
-                          f.displayValue,
-                      ],
+
+                          if (rightField != null)
+                            Expanded(
+                              flex: 2,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (!rightField.hideLabel)
+                                      Text(
+                                        "${rightField.label}: ",
+                                        style: textTheme.bodyMedium?.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    rightField.displayValue,
+                                  ],
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }
+
+                return rows;
+              }(),
+            ),
           ],
         ),
       ),
