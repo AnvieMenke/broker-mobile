@@ -26,7 +26,7 @@ class ActivityService {
       Map<String, dynamic> param, Map<String, dynamic>? paging) async {
     final client = _activityService();
     final req = ListActivityRequest()
-      ..dateType = param['dateType'] ?? ""
+      ..dateType = "Trade Date"
       ..fromDate = ConvertService.stringToPBObjectDate(
         param["fromDate"] != null
             ? DateTime.parse(param["fromDate"])
