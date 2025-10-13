@@ -1,4 +1,3 @@
-import 'package:broker_mobile/utils/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/service/common_service.dart';
 import 'package:broker_mobile/proto/commonpb/list.pb.dart';
@@ -61,7 +60,9 @@ class _MultiSelectEntryTypeState extends State<MultiSelectEntryType> {
 
       data.entryTypes.add(
         AdmEntryType(
-            entryType: "NON TRD", entryTypeDescription: "Non Trade Entry"),
+          entryType: "NON TRD",
+          entryTypeDescription: "Non Trade Entry",
+        ),
       );
 
       setState(() {
@@ -79,76 +80,82 @@ class _MultiSelectEntryTypeState extends State<MultiSelectEntryType> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiSelectDialogField<Map<String, String>>(
-      items: _options
-          .map((opt) => MultiSelectItem<Map<String, String>>(
-                opt,
-                "${opt['entryType']} - ${opt['entryTypeDescription']}",
-              ))
-          .toList(),
-      title: const Text("Entry Type"),
-      buttonText: const Text("Select Entry Type"),
-      searchable: true,
-      searchHint: "Search entry type...",
-      initialValue: _options
-          .where((opt) => _selectedValues.contains(opt['entryType']))
-          .toList(),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: AppTheme.defaultBorderRadius,
-      ),
-      confirmText: Text(
-        "OK",
-        style: TextStyle(color: Theme.of(context).colorScheme.primary),
-      ),
-      cancelText: Text(
-        "CANCEL",
-        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-      ),
-      itemsTextStyle: TextStyle(
-        color: Theme.of(context).textTheme.bodyLarge?.color,
-      ),
-      selectedItemsTextStyle: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontWeight: FontWeight.bold,
-      ),
-      onConfirm: (selected) {
-        final values = selected.map((e) => e['entryType'] ?? '').toList();
-        setState(() {
-          _selectedValues = values;
-        });
-        widget.onChange({
-          'name': widget.name,
-          'value': values,
-          'data': selected,
-        });
-      },
-      chipDisplay: MultiSelectChipDisplay(
-        onTap: (item) {
-          setState(() {
-            _selectedValues.remove(item['entryType']);
-          });
-          widget.onChange({
-            'name': widget.name,
-            'value': _selectedValues,
-            'data': _options
-                .where((opt) => _selectedValues.contains(opt['entryType']))
-                .toList(),
-          });
-        },
-        items: _selectedValues.map((entryType) {
-          final opt = _options.firstWhere(
-            (o) => o['entryType'] == entryType,
-            orElse: () => {
-              'entryType': entryType,
-              'entryTypeDescription': '',
-            },
-          );
-          return MultiSelectItem<Map<String, String>>(
-            opt,
-            "${opt['entryType']} - ${opt['entryTypeDescription']}",
-          );
-        }).toList(),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxHeight: 42),
+      child: IntrinsicHeight(
+        child: MultiSelectDialogField<Map<String, String>>(
+          items: _options
+              .map(
+                (opt) => MultiSelectItem<Map<String, String>>(
+                  opt,
+                  "${opt['entryType']} - ${opt['entryTypeDescription']}",
+                ),
+              )
+              .toList(),
+          title: const Text("Entry Type"),
+          searchable: true,
+          searchHint: "Search entry type...",
+          initialValue: _options
+              .where((opt) => _selectedValues.contains(opt['entryType']))
+              .toList(),
+          buttonIcon: const Icon(
+            Icons.arrow_drop_down,
+            size: 18,
+          ),
+          buttonText: Text(
+            _selectedValues.isEmpty
+                ? "Entry Type"
+                : _selectedValues.map((v) {
+                    final match = _options.firstWhere(
+                      (opt) => opt['entryType'] == v,
+                      orElse: () => {
+                        'entryType': v,
+                        'entryTypeDescription': '',
+                      },
+                    );
+                    return "${match['entryType']}";
+                  }).join(', '),
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          decoration: BoxDecoration(
+            color: Colors.grey[900]?.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(40),
+            border: Border.all(
+              color: Colors.grey.shade400,
+              width: 0.8,
+            ),
+          ),
+          confirmText: Text(
+            "OK",
+            style: TextStyle(color: Theme.of(context).colorScheme.primary),
+          ),
+          cancelText: Text(
+            "CANCEL",
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
+          itemsTextStyle: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+          ),
+          selectedItemsTextStyle: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
+          onConfirm: (selected) {
+            final values = selected.map((e) => e['entryType'] ?? '').toList();
+            setState(() {
+              _selectedValues = values;
+            });
+            widget.onChange({
+              'name': widget.name,
+              'value': values,
+              'data': selected,
+            });
+          },
+          chipDisplay: MultiSelectChipDisplay.none(),
+        ),
       ),
     );
   }

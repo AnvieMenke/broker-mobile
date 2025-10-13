@@ -1,3 +1,4 @@
+import 'package:broker_mobile/google/type/date.pb.dart';
 import 'package:broker_mobile/proto/admpb/profile.pbgrpc.dart';
 import '../server/auth_interceptor.dart';
 import 'package:grpc/grpc_connection_interface.dart';
@@ -26,7 +27,11 @@ class ProfileService {
     final req = ReadProfileRequest();
     final response = await svc.readProfile(req);
 
-    final dateValue = response.profile.systemDate;
+    Date? dateValue;
+
+    dateValue = type == "systemDate"
+        ? response.profile.systemDate
+        : response.profile.previousDate;
 
     final year = dateValue.year;
     final month = dateValue.month;
@@ -40,5 +45,9 @@ class ProfileService {
 
   Future<String> getSystemDate() async {
     return await getDate('systemDate');
+  }
+
+  Future<String> getPreviousDate() async {
+    return await getDate('previousDate');
   }
 }

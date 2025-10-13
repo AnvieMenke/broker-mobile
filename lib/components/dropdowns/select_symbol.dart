@@ -11,7 +11,6 @@ class AutoCompleteSymbol extends StatefulWidget {
   final bool error;
   final String assetType;
   final bool isActive;
-
   final Function(Map<String, dynamic>) onChange;
   final bool reset;
 
@@ -35,8 +34,12 @@ class AutoCompleteSymbol extends StatefulWidget {
 
 class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
   final TextEditingController _controller = TextEditingController();
+  final SuggestionsController<Map<String, String>> _suggestionsController =
+      SuggestionsController<Map<String, String>>();
+
   late final AdmService _service;
   List<Map<String, String>> _options = [];
+  bool _isSelecting = false;
 
   @override
   void initState() {
@@ -45,12 +48,13 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
     _service = AdmService();
 
     if (widget.reset) {
-      _controller.clear();
-      widget.onChange({'name': widget.name, 'value': ''});
+      _clearField();
     }
   }
 
   Future<List<Map<String, String>>> _getOptions(String input) async {
+    if (_isSelecting) return [];
+
     try {
       final data = await _service.lazyLoadSecurities(
         input,
@@ -87,8 +91,7 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
       return;
     }
 
-    _controller.clear();
-    _setPropsValue('', {});
+    _clearField();
   }
 
   void _setPropsValue(String value, Map<String, String> data) {
@@ -99,50 +102,109 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
     });
   }
 
+  void _clearField() {
+    _controller.clear();
+    _suggestionsController.close();
+    _setPropsValue('', {});
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<Map<String, String>>(
+      controller: _controller,
+      suggestionsController: _suggestionsController,
       suggestionsCallback: (pattern) async {
-        _options = await _getOptions(pattern);
-
+        final query = pattern.isEmpty ? '' : pattern;
+        _options = await _getOptions(query);
         return _options;
       },
       itemBuilder: (context, suggestion) {
         return ListTile(
           title: Text(
             suggestion['symbol'] ?? '',
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           ),
           subtitle: Text(suggestion['cusip'] ?? ''),
         );
       },
-      onSelected: (suggestion) {
+      onSelected: (suggestion) async {
+        _isSelecting = true;
         final val = suggestion['symbol'] ?? '';
         _controller.text = val;
-        _setPropsValue(
-          val,
-          suggestion,
-        );
+        _setPropsValue(val, suggestion);
+        await Future.delayed(const Duration(milliseconds: 300));
+        _isSelecting = false;
+        setState(() {});
       },
       builder: (context, controller, focusNode) {
-        return TextField(
-          controller: _controller,
-          focusNode: focusNode,
-          enabled: !widget.disabled,
-          decoration: InputDecoration(
-            labelText: 'Symbol',
-            hintText: 'Symbol',
-            errorText: widget.error ? 'Invalid input' : null,
+        return ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 42),
+          child: IntrinsicHeight(
+            child: TextField(
+              controller: _controller,
+              focusNode: focusNode,
+              enabled: !widget.disabled,
+              style: const TextStyle(fontSize: 14, color: Colors.white),
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _controller.text.isNotEmpty
+                        ? Icons.close_rounded
+                        : Icons.search,
+                    size: 18,
+                  ),
+                  tooltip:
+                      _controller.text.isNotEmpty ? 'Clear' : 'Search symbol',
+                  onPressed: widget.disabled
+                      ? null
+                      : _controller.text.isNotEmpty
+                          ? _clearField
+                          : null,
+                ),
+                hintText: 'Symbol',
+                hintStyle: const TextStyle(fontSize: 14),
+                isDense: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                filled: true,
+                fillColor: Colors.grey[900]?.withValues(alpha: 0.1),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                  borderSide:
+                      BorderSide(color: Colors.grey.shade400, width: 0.8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 1.2,
+                  ),
+                ),
+              ),
+              onTap: () async {
+                if (_controller.text.isEmpty) {
+                  final results = await _getOptions('');
+                  _options = results;
+                  _suggestionsController.suggestions = results;
+                  _suggestionsController.open();
+                }
+              },
+              onChanged: (value) {
+                if (widget.freeSolo) {
+                  _setPropsValue(value, {});
+                }
+                setState(() {});
+              },
+              onEditingComplete: () {
+                _handleOnBlur(_controller.text);
+              },
+            ),
           ),
-          onChanged: (value) {
-            controller.text = value;
-            if (widget.freeSolo) {
-              _setPropsValue(value, {});
-            }
-          },
-          onEditingComplete: () {
-            _handleOnBlur(_controller.text);
-          },
         );
       },
     );

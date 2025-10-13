@@ -1,6 +1,7 @@
 import 'package:broker_mobile/components/containers/page_list_container.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
+import '../../../../components/datepicker/datepicker.dart';
 import '../../../../components/dropdowns/select_account_no.dart';
 import '../../../../components/dropdowns/select_correspondent.dart';
 import '../../../../components/dropdowns/select_master_account_no.dart';
@@ -24,7 +25,6 @@ class PositionPageState extends State<PositionPage> {
   Future<List<GridItem>>? _futureRequests;
 
   final Map<String, dynamic> queryData = {
-    "dateType": "",
     "correspondent": "",
     "accountNo": "",
     "masterAccountNo": "",
@@ -52,10 +52,10 @@ class PositionPageState extends State<PositionPage> {
 
   void _init() async {
     final profileService = ProfileService();
-    final systemDate = await profileService.getSystemDate();
+    final previousDate = await profileService.getPreviousDate();
     setState(() {
-      queryData['fromDate'] = systemDate;
-      queryData['toDate'] = systemDate;
+      queryData['fromDate'] = previousDate;
+      queryData['toDate'] = previousDate;
       _futureRequests = _listPosition();
     });
   }
@@ -164,17 +164,12 @@ class PositionPageState extends State<PositionPage> {
   }
 
   void openFilterDialog() {
-    String selectedDateType = queryData["dateType"];
     String selectedCorrespondent = queryData["correspondent"];
     String selectedAccountNo = queryData["accountNo"];
     String selectedMasterAccountNo = queryData["masterAccountNo"];
     String selectedRep = queryData["rep"];
     String selectedBranch = queryData["branch"];
     String selectedAssetType = queryData["assetType"];
-    String selectedSymbol = queryData["symbol"];
-    DateTime? selectedFromDate =
-        ConvertService.stringToDate(queryData["fromDate"]);
-    DateTime? selectedToDate = ConvertService.stringToDate(queryData["toDate"]);
 
     showDialog<bool>(
       context: context,
@@ -190,24 +185,6 @@ class PositionPageState extends State<PositionPage> {
             title: const Text("Filter by:"),
             content: StatefulBuilder(
               builder: (context, setState) {
-                Future<void> pickDate({required bool isFrom}) async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                  );
-                  if (picked != null) {
-                    setState(() {
-                      if (isFrom) {
-                        selectedFromDate = picked;
-                      } else {
-                        selectedToDate = picked;
-                      }
-                    });
-                  }
-                }
-
                 return SingleChildScrollView(
                   keyboardDismissBehavior:
                       ScrollViewKeyboardDismissBehavior.onDrag,
@@ -215,57 +192,6 @@ class PositionPageState extends State<PositionPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 8),
-                      SelectSystemCode(
-                        label: "Date Type",
-                        placeholder: "Select Date Type",
-                        value: selectedDateType,
-                        type: "Date Type",
-                        subType: "Position Report",
-                        onChange: (map) => setState(() {
-                          selectedDateType = map?['data']['code'];
-                        }),
-                      ),
-                      const Text("Date Range",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () => pickDate(isFrom: true),
-                              child: InputDecorator(
-                                decoration: const InputDecoration(
-                                  labelText: "From",
-                                  border: OutlineInputBorder(),
-                                ),
-                                child: Text(
-                                  selectedFromDate != null
-                                      ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
-                                      : "Select date",
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () => pickDate(isFrom: false),
-                              child: InputDecorator(
-                                decoration: const InputDecoration(
-                                  labelText: "To",
-                                  border: OutlineInputBorder(),
-                                ),
-                                child: Text(
-                                  selectedToDate != null
-                                      ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
-                                      : "Select date",
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                       const SizedBox(height: 16),
                       AutoCompleteCorrespondent(
                         name: "correspondent",
@@ -345,18 +271,6 @@ class PositionPageState extends State<PositionPage> {
                           selectedAssetType = map?['data']['code'];
                         }),
                       ),
-                      const SizedBox(height: 16),
-                      AutoCompleteSymbol(
-                        name: "symbol",
-                        freeSolo: true,
-                        value: selectedSymbol,
-                        isActive: true,
-                        onChange: (map) => setState(() {
-                          if (map['data']?['symbol'] != null) {
-                            selectedSymbol = map['data']['symbol'];
-                          }
-                        }),
-                      ),
                     ],
                   ),
                 );
@@ -364,27 +278,25 @@ class PositionPageState extends State<PositionPage> {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context, false),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                  FocusScope.of(context).unfocus();
+                },
                 child: const Text("Cancel"),
               ),
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    queryData["dateType"] = selectedDateType;
-                    queryData["fromDate"] =
-                        ConvertService.dateToString(selectedFromDate);
-                    queryData["toDate"] =
-                        ConvertService.dateToString(selectedToDate);
                     queryData["correspondent"] = selectedCorrespondent;
                     queryData["accountNo"] = selectedAccountNo;
                     queryData["masterAccountNo"] = selectedMasterAccountNo;
                     queryData["rep"] = selectedRep;
                     queryData["branch"] = selectedBranch;
                     queryData["assetType"] = selectedAssetType;
-                    queryData["symbol"] = selectedSymbol;
                     _updateQueryData();
                   });
                   Navigator.pop(context, true);
+                  FocusScope.of(context).unfocus();
                 },
                 child: const Text("Search"),
               ),
@@ -403,7 +315,12 @@ class PositionPageState extends State<PositionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PageListContainer(
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: PageListContainer(
         title: "Position",
         openFilterDialog: openFilterDialog,
         onRefresh: _refresh,
@@ -459,31 +376,23 @@ class PositionPageState extends State<PositionPage> {
                                   }
                                   return true;
                                 }).map((entry) {
-                                  return Chip(
-                                    label: Text(
-                                      entry.value is bool
-                                          ? ConvertService.camelToTitle(
-                                                  entry.key)
-                                              .replaceAll("Is ", "")
-                                          : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
-                                      style: const TextStyle(fontSize: 9),
-                                    ),
-                                    deleteIcon: entry.key
-                                                .toLowerCase()
-                                                .contains("fromdate") ||
-                                            entry.key
-                                                .toLowerCase()
-                                                .contains("todate")
-                                        ? null
-                                        : const Icon(Icons.close),
-                                    onDeleted: entry.key
-                                                .toLowerCase()
-                                                .contains("fromdate") ||
-                                            entry.key
-                                                .toLowerCase()
-                                                .contains("todate")
-                                        ? null
-                                        : () {
+                                  return [
+                                    "fromDate",
+                                    "toDate",
+                                    "symbol",
+                                  ].contains(entry.key)
+                                      ? const SizedBox.shrink()
+                                      : Chip(
+                                          label: Text(
+                                            entry.value is bool
+                                                ? ConvertService.camelToTitle(
+                                                        entry.key)
+                                                    .replaceAll("Is ", "")
+                                                : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                                            style: const TextStyle(fontSize: 9),
+                                          ),
+                                          deleteIcon: const Icon(Icons.close),
+                                          onDeleted: () {
                                             setState(() {
                                               queryData[entry.key] =
                                                   entry.value is bool
@@ -494,17 +403,74 @@ class PositionPageState extends State<PositionPage> {
                                               _futureRequests = _listPosition();
                                             });
                                           },
-                                  );
+                                        );
                                 }).toList(),
                               ),
                             );
                           },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 12),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 150,
+                                  child: AutoCompleteSymbol(
+                                    name: "symbol",
+                                    freeSolo: true,
+                                    value: queryData['symbol'],
+                                    isActive: true,
+                                    onChange: (map) => setState(() {
+                                      final symbol =
+                                          map['data']?['symbol'] ?? '';
+                                      final name = map['name'];
+
+                                      queryData[name] = symbol;
+                                      _updateQueryData();
+
+                                      if (symbol.isNotEmpty ||
+                                          (map['value'] == '' &&
+                                              (map['data']?.isEmpty ?? true))) {
+                                        _futureRequests = _listPosition();
+                                      }
+                                    }),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                CustomDatePicker(
+                                  initialFromDate: queryData['fromDate'] != null
+                                      ? DateTime.tryParse(queryData['fromDate'])
+                                      : null,
+                                  initialToDate: queryData['toDate'] != null
+                                      ? DateTime.tryParse(queryData['toDate'])
+                                      : null,
+                                  onApply: (range, from, to) {
+                                    setState(() {
+                                      queryData['fromDate'] = from != null
+                                          ? ConvertService.dateToString(from)
+                                          : queryData['fromDate'];
+                                      queryData['toDate'] = to != null
+                                          ? ConvertService.dateToString(to)
+                                          : queryData['toDate'];
+                                      _updateQueryData();
+                                      _futureRequests = _listPosition();
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                         Expanded(child: body),
                       ],
                     ),
                   );
                 },
-              ));
+              ),
+      ),
+    );
   }
 }
