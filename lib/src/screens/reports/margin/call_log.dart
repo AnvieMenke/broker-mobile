@@ -19,7 +19,7 @@ class CallLogPage extends StatefulWidget {
 class CallLogPageState extends State<CallLogPage> {
   Future<List<GridItem>>? _futureRequests;
 
-  final Map<String, dynamic> queryData = {
+  late Map<String, dynamic> queryData = {
     "correspondent": "",
     "accountNo": "",
     "masterAccountNo": "",
@@ -155,7 +155,6 @@ class CallLogPageState extends State<CallLogPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 16),
                       AutoCompleteCorrespondent(
                         name: "correspondent",
                         value: selectedCorrespondent,
@@ -221,12 +220,16 @@ class CallLogPageState extends State<CallLogPage> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    queryData["correspondent"] = selectedCorrespondent;
-                    queryData["masterAccountNo"] = selectedMasterAccountNo;
-                    queryData["accountName"] = selectedAccountName;
-                    queryData["marginType"] = selectedMarginType;
+                    queryData = {
+                      ...queryData,
+                      "correspondent": selectedCorrespondent,
+                      "masterAccountNo": selectedMasterAccountNo,
+                      "accountName": selectedAccountName,
+                      "marginType": selectedMarginType,
+                    };
                     _updateQueryData();
                   });
+
                   Navigator.pop(context, true);
                 },
                 child: const Text("Search"),

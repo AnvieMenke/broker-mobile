@@ -23,8 +23,9 @@ class PositionPage extends StatefulWidget {
 
 class PositionPageState extends State<PositionPage> {
   Future<List<GridItem>>? _futureRequests;
+  final FocusScopeNode _focusScopeNode = FocusScopeNode();
 
-  final Map<String, dynamic> queryData = {
+  late Map<String, dynamic> queryData = {
     "correspondent": "",
     "accountNo": "",
     "masterAccountNo": "",
@@ -48,6 +49,12 @@ class PositionPageState extends State<PositionPage> {
     super.initState();
     queryDataNotifier = ValueNotifier(0);
     _init();
+  }
+
+  @override
+  void dispose() {
+    _focusScopeNode.dispose();
+    super.dispose();
   }
 
   void _init() async {
@@ -163,7 +170,8 @@ class PositionPageState extends State<PositionPage> {
     await _futureRequests;
   }
 
-  void openFilterDialog() {
+  Future<void> openFilterDialog() async {
+    _focusScopeNode.unfocus();
     String selectedCorrespondent = queryData["correspondent"];
     String selectedAccountNo = queryData["accountNo"];
     String selectedMasterAccountNo = queryData["masterAccountNo"];
@@ -171,14 +179,12 @@ class PositionPageState extends State<PositionPage> {
     String selectedBranch = queryData["branch"];
     String selectedAssetType = queryData["assetType"];
 
-    showDialog<bool>(
+    final value = await showDialog<bool>(
       context: context,
       builder: (context) {
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
+          onTap: () => FocusScope.of(context).unfocus(),
           child: AlertDialog(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -192,16 +198,14 @@ class PositionPageState extends State<PositionPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 16),
                       AutoCompleteCorrespondent(
                         name: "correspondent",
                         value: selectedCorrespondent,
                         label: "Correspondent",
                         isAllStatus: false,
                         type: "",
-                        onChange: (value) => setState(() {
-                          selectedCorrespondent = value;
-                        }),
+                        onChange: (value) =>
+                            setState(() => selectedCorrespondent = value),
                       ),
                       const SizedBox(height: 16),
                       AutoCompleteAccountNo(
@@ -267,9 +271,8 @@ class PositionPageState extends State<PositionPage> {
                         placeholder: "Select Asset Type",
                         value: selectedAssetType,
                         type: "Asset Type",
-                        onChange: (map) => setState(() {
-                          selectedAssetType = map?['data']['code'];
-                        }),
+                        onChange: (map) => setState(
+                            () => selectedAssetType = map?['data']['code']),
                       ),
                     ],
                   ),
@@ -278,25 +281,24 @@ class PositionPageState extends State<PositionPage> {
             ),
             actions: [
               TextButton(
-                onPressed: () {
-                  Navigator.pop(context, false);
-                  FocusScope.of(context).unfocus();
-                },
+                onPressed: () => Navigator.pop(context, false),
                 child: const Text("Cancel"),
               ),
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    queryData["correspondent"] = selectedCorrespondent;
-                    queryData["accountNo"] = selectedAccountNo;
-                    queryData["masterAccountNo"] = selectedMasterAccountNo;
-                    queryData["rep"] = selectedRep;
-                    queryData["branch"] = selectedBranch;
-                    queryData["assetType"] = selectedAssetType;
+                    queryData = {
+                      ...queryData,
+                      "correspondent": selectedCorrespondent,
+                      "accountNo": selectedAccountNo,
+                      "masterAccountNo": selectedMasterAccountNo,
+                      "rep": selectedRep,
+                      "branch": selectedBranch,
+                      "assetType": selectedAssetType,
+                    };
                     _updateQueryData();
                   });
                   Navigator.pop(context, true);
-                  FocusScope.of(context).unfocus();
                 },
                 child: const Text("Search"),
               ),
@@ -304,172 +306,183 @@ class PositionPageState extends State<PositionPage> {
           ),
         );
       },
-    ).then((value) {
-      if (value == true) {
-        setState(() {
-          _futureRequests = _listPosition();
-        });
-      }
-    });
+    );
+
+    _focusScopeNode.unfocus();
+
+    if (value == true) {
+      setState(() {
+        _futureRequests = _listPosition();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: PageListContainer(
-        title: "Position",
-        openFilterDialog: openFilterDialog,
-        onRefresh: _refresh,
-        page: _futureRequests == null
-            ? AppTheme.buildLoadingIndicator()
-            : FutureBuilder<List<GridItem>>(
-                future: _futureRequests,
-                builder: (context, snapshot) {
-                  Widget body;
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    body = AppTheme.buildLoadingIndicator();
-                  } else {
-                    body = GridWithPagination(
-                      items: snapshot.data!,
-                      pagination: pagination,
-                      onPageChange: _onPageChange,
-                      onRefresh: _refresh,
-                    );
-                  }
+    return FocusScope(
+      node: _focusScopeNode,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => _focusScopeNode.unfocus(),
+        child: PageListContainer(
+          title: "Position",
+          openFilterDialog: openFilterDialog,
+          onRefresh: _refresh,
+          page: _futureRequests == null
+              ? AppTheme.buildLoadingIndicator()
+              : FutureBuilder<List<GridItem>>(
+                  future: _futureRequests,
+                  builder: (context, snapshot) {
+                    Widget body;
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      body = AppTheme.buildLoadingIndicator();
+                    } else {
+                      body = GridWithPagination(
+                        items: snapshot.data!,
+                        pagination: pagination,
+                        onPageChange: _onPageChange,
+                        onRefresh: _refresh,
+                      );
+                    }
 
-                  return Scaffold(
-                    body: Column(
-                      children: [
-                        ValueListenableBuilder(
-                          valueListenable: queryDataNotifier,
-                          builder: (_, __, ___) {
-                            final activeFilters = queryData.entries
-                                .where((e) =>
-                                    e.value != null &&
-                                    e.value.toString().isNotEmpty &&
-                                    e.value.toString() != "0")
-                                .toList();
+                    return Scaffold(
+                      body: Column(
+                        children: [
+                          ValueListenableBuilder(
+                            valueListenable: queryDataNotifier,
+                            builder: (_, __, ___) {
+                              final activeFilters = queryData.entries
+                                  .where((e) =>
+                                      e.value != null &&
+                                      e.value.toString().isNotEmpty &&
+                                      e.value.toString() != "0")
+                                  .toList();
 
-                            if (activeFilters.isEmpty) {
-                              return const SizedBox.shrink();
-                            }
+                              if (activeFilters.isEmpty) {
+                                return const SizedBox.shrink();
+                              }
 
-                            return Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              child: Wrap(
-                                spacing: 6,
-                                runSpacing: 6,
-                                children: activeFilters.where((entry) {
-                                  if (entry.value is bool) {
-                                    return entry.value == true;
-                                  }
+                              return Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                child: Wrap(
+                                  spacing: 6,
+                                  runSpacing: 6,
+                                  children: activeFilters.where((entry) {
+                                    if (entry.value is bool) {
+                                      return entry.value == true;
+                                    }
 
-                                  if (entry.value == null ||
-                                      entry.value.toString().isEmpty) {
-                                    return false;
-                                  }
-                                  return true;
-                                }).map((entry) {
-                                  return [
-                                    "fromDate",
-                                    "toDate",
-                                    "symbol",
-                                  ].contains(entry.key)
-                                      ? const SizedBox.shrink()
-                                      : Chip(
-                                          label: Text(
-                                            entry.value is bool
-                                                ? ConvertService.camelToTitle(
-                                                        entry.key)
-                                                    .replaceAll("Is ", "")
-                                                : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
-                                            style: const TextStyle(fontSize: 9),
-                                          ),
-                                          deleteIcon: const Icon(Icons.close),
-                                          onDeleted: () {
-                                            setState(() {
-                                              queryData[entry.key] =
-                                                  entry.value is bool
-                                                      ? false
-                                                      : "";
+                                    if (entry.value == null ||
+                                        entry.value.toString().isEmpty) {
+                                      return false;
+                                    }
+                                    return true;
+                                  }).map((entry) {
+                                    return [
+                                      "fromDate",
+                                      "toDate",
+                                      "symbol",
+                                    ].contains(entry.key)
+                                        ? const SizedBox.shrink()
+                                        : Chip(
+                                            label: Text(
+                                              entry.value is bool
+                                                  ? ConvertService.camelToTitle(
+                                                          entry.key)
+                                                      .replaceAll("Is ", "")
+                                                  : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                                              style:
+                                                  const TextStyle(fontSize: 9),
+                                            ),
+                                            deleteIcon: const Icon(Icons.close),
+                                            onDeleted: () {
+                                              setState(() {
+                                                queryData[entry.key] =
+                                                    entry.value is bool
+                                                        ? false
+                                                        : "";
+                                                _updateQueryData();
+                                                _futureRequests =
+                                                    _listPosition();
+                                              });
+                                            },
+                                          );
+                                  }).toList(),
+                                ),
+                              );
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 12),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 150,
+                                    child: AutoCompleteSymbol(
+                                      name: "symbol",
+                                      freeSolo: true,
+                                      value: queryData['symbol'],
+                                      isActive: true,
+                                      onChange: (map) {
+                                        _focusScopeNode.unfocus();
+                                        setState(() {
+                                          final symbol =
+                                              map['data']?['symbol'] ?? '';
+                                          final name = map['name'];
 
-                                              _updateQueryData();
-                                              _futureRequests = _listPosition();
-                                            });
-                                          },
-                                        );
-                                }).toList(),
-                              ),
-                            );
-                          },
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 12),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 150,
-                                  child: AutoCompleteSymbol(
-                                    name: "symbol",
-                                    freeSolo: true,
-                                    value: queryData['symbol'],
-                                    isActive: true,
-                                    onChange: (map) => setState(() {
-                                      final symbol =
-                                          map['data']?['symbol'] ?? '';
-                                      final name = map['name'];
+                                          queryData[name] = symbol;
+                                          _updateQueryData();
 
-                                      queryData[name] = symbol;
-                                      _updateQueryData();
-
-                                      if (symbol.isNotEmpty ||
-                                          (map['value'] == '' &&
-                                              (map['data']?.isEmpty ?? true))) {
-                                        _futureRequests = _listPosition();
-                                      }
-                                    }),
+                                          if (symbol.isNotEmpty ||
+                                              (map['value'] == '' &&
+                                                  (map['data']?.isEmpty ??
+                                                      true))) {
+                                            _futureRequests = _listPosition();
+                                          }
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 12),
-                                CustomDatePicker(
-                                  initialFromDate: queryData['fromDate'] != null
-                                      ? DateTime.tryParse(queryData['fromDate'])
-                                      : null,
-                                  initialToDate: queryData['toDate'] != null
-                                      ? DateTime.tryParse(queryData['toDate'])
-                                      : null,
-                                  onApply: (range, from, to) {
-                                    setState(() {
-                                      queryData['fromDate'] = from != null
-                                          ? ConvertService.dateToString(from)
-                                          : queryData['fromDate'];
-                                      queryData['toDate'] = to != null
-                                          ? ConvertService.dateToString(to)
-                                          : queryData['toDate'];
-                                      _updateQueryData();
-                                      _futureRequests = _listPosition();
-                                    });
-                                  },
-                                ),
-                              ],
+                                  const SizedBox(width: 12),
+                                  CustomDatePicker(
+                                    initialFromDate:
+                                        queryData['fromDate'] != null
+                                            ? DateTime.tryParse(
+                                                queryData['fromDate'])
+                                            : null,
+                                    initialToDate: queryData['toDate'] != null
+                                        ? DateTime.tryParse(queryData['toDate'])
+                                        : null,
+                                    onApply: (range, from, to) {
+                                      _focusScopeNode.unfocus();
+                                      setState(() {
+                                        queryData['fromDate'] = from != null
+                                            ? ConvertService.dateToString(from)
+                                            : queryData['fromDate'];
+                                        queryData['toDate'] = to != null
+                                            ? ConvertService.dateToString(to)
+                                            : queryData['toDate'];
+                                        _updateQueryData();
+                                        _futureRequests = _listPosition();
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(child: body),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                          Expanded(child: body),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+        ),
       ),
     );
   }

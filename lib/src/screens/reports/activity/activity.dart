@@ -25,7 +25,7 @@ class ActivityPage extends StatefulWidget {
 class ActivityPageState extends State<ActivityPage> {
   Future<List<GridItem>>? _futureRequests;
 
-  final Map<String, dynamic> queryData = {
+  late Map<String, dynamic> queryData = {
     "correspondent": "",
     "accountNo": "",
     "masterAccountNo": "",
@@ -38,8 +38,9 @@ class ActivityPageState extends State<ActivityPage> {
   };
 
   List<String> selectedEntryTypes = [];
-
   late final ValueNotifier<int> queryDataNotifier;
+  final FocusScopeNode _focusScopeNode =
+      FocusScopeNode();
 
   GridPagination pagination = GridPagination(
     pageNo: 0,
@@ -53,6 +54,12 @@ class ActivityPageState extends State<ActivityPage> {
     super.initState();
     queryDataNotifier = ValueNotifier(0);
     _init();
+  }
+
+  @override
+  void dispose() {
+    _focusScopeNode.dispose();
+    super.dispose();
   }
 
   void _init() async {
@@ -187,7 +194,8 @@ class ActivityPageState extends State<ActivityPage> {
     await _futureRequests;
   }
 
-  void openFilterDialog() {
+  Future<void> openFilterDialog() async {
+    _focusScopeNode.unfocus();
     String selectedCorrespondent = queryData["correspondent"];
     String selectedAccountNo = queryData["accountNo"];
     String selectedMasterAccountNo = queryData["masterAccountNo"];
@@ -199,331 +207,327 @@ class ActivityPageState extends State<ActivityPage> {
     final TextEditingController descriptionController =
         TextEditingController(text: description);
 
-    showDialog<bool>(
+    final result = await showDialog<bool>(
       context: context,
       builder: (context) {
-        return GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: const Text("Filter by:"),
-            content: StatefulBuilder(
-              builder: (context, setState) {
-                return SingleChildScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 16),
-                      AutoCompleteCorrespondent(
-                        name: "correspondent",
-                        value: selectedCorrespondent,
-                        label: "Correspondent",
-                        isAllStatus: false,
-                        type: "",
-                        onChange: (value) => setState(() {
-                          selectedCorrespondent = value;
-                        }),
-                      ),
-                      const SizedBox(height: 16),
-                      AutoCompleteAccountNo(
-                        name: "accountNo",
-                        freeSolo: true,
-                        value: selectedAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
-                        correspondent: queryData["correspondent"],
-                        type: "Client",
-                        onChange: (map) => setState(() {
-                          if (map['data'] != null &&
-                              map['data']['accountNo'] != null) {
-                            selectedAccountNo =
-                                map['data']['accountNo'] as String;
-                          }
-                        }),
-                      ),
-                      const SizedBox(height: 16),
-                      AutoCompleteMasterAccountNo(
-                        name: "masterAccountNo",
-                        freeSolo: true,
-                        value: selectedMasterAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
-                        correspondent: queryData["correspondent"],
-                        onChange: (map) => setState(() {
-                          if (map['data'] != null &&
-                              map['data']['masterAccountNo'] != null) {
-                            selectedMasterAccountNo =
-                                map['data']['masterAccountNo'] as String;
-                          }
-                        }),
-                      ),
-                      const SizedBox(height: 16),
-                      AutoCompleteRepAdvisor(
-                        name: "rep",
-                        freeSolo: true,
-                        value: selectedRep,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
-                        correspondent: queryData["correspondent"],
-                        onChange: (map) => setState(() {
-                          if (map['data'] != null &&
-                              map['data']['rep'] != null) {
-                            selectedRep = map['data']['rep'] as String;
-                          }
-                        }),
-                      ),
-                      const SizedBox(height: 16),
-                      AutoCompleteBranch(
-                        name: "branch",
-                        freeSolo: true,
-                        value: selectedBranch,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
-                        correspondent: queryData["correspondent"],
-                        onChange: (map) => setState(() {
-                          if (map['data'] != null &&
-                              map['data']['branch'] != null) {
-                            selectedBranch = map['data']['branch'] as String;
-                          }
-                        }),
-                      ),
-                      const SizedBox(height: 16),
-                      SelectSystemCode(
-                        label: "Asset Type",
-                        placeholder: "Select Asset Type",
-                        value: selectedAssetType,
-                        type: "Asset Type",
-                        onChange: (map) => setState(() {
-                          selectedAssetType = map?['data']['code'];
-                        }),
-                      ),
-                      const SizedBox(height: 16),
-                      TextField(
-                        controller: descriptionController,
-                        decoration: const InputDecoration(
-                          labelText: "Description",
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            description = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, false);
-                  FocusScope.of(context).unfocus();
-                },
-                child: const Text("Cancel"),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    queryData["correspondent"] = selectedCorrespondent;
-                    queryData["accountNo"] = selectedAccountNo;
-                    queryData["masterAccountNo"] = selectedMasterAccountNo;
-                    queryData["rep"] = selectedRep;
-                    queryData["branch"] = selectedBranch;
-                    queryData["assetType"] = selectedAssetType;
-                    queryData["entryType"] = selectedEntryTypes.join(",");
-                    queryData["description"] = description;
-                    _updateQueryData();
-                  });
-                  Navigator.pop(context, true);
-                  FocusScope.of(context).unfocus();
-                },
-                child: const Text("Search"),
-              ),
-            ],
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text("Filter by:"),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    AutoCompleteCorrespondent(
+                      name: "correspondent",
+                      value: selectedCorrespondent,
+                      label: "Correspondent",
+                      isAllStatus: false,
+                      type: "",
+                      onChange: (value) => setState(() {
+                        selectedCorrespondent = value;
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    AutoCompleteAccountNo(
+                      name: "accountNo",
+                      freeSolo: true,
+                      value: selectedAccountNo,
+                      isAllStatus: false,
+                      isAccessibleOnly: true,
+                      correspondent: queryData["correspondent"],
+                      type: "Client",
+                      onChange: (map) => setState(() {
+                        if (map['data'] != null &&
+                            map['data']['accountNo'] != null) {
+                          selectedAccountNo =
+                              map['data']['accountNo'] as String;
+                        }
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    AutoCompleteMasterAccountNo(
+                      name: "masterAccountNo",
+                      freeSolo: true,
+                      value: selectedMasterAccountNo,
+                      isAllStatus: false,
+                      isAccessibleOnly: true,
+                      correspondent: queryData["correspondent"],
+                      onChange: (map) => setState(() {
+                        if (map['data'] != null &&
+                            map['data']['masterAccountNo'] != null) {
+                          selectedMasterAccountNo =
+                              map['data']['masterAccountNo'] as String;
+                        }
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    AutoCompleteRepAdvisor(
+                      name: "rep",
+                      freeSolo: true,
+                      value: selectedRep,
+                      isAllStatus: false,
+                      isAccessibleOnly: true,
+                      correspondent: queryData["correspondent"],
+                      onChange: (map) => setState(() {
+                        if (map['data'] != null && map['data']['rep'] != null) {
+                          selectedRep = map['data']['rep'] as String;
+                        }
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    AutoCompleteBranch(
+                      name: "branch",
+                      freeSolo: true,
+                      value: selectedBranch,
+                      isAllStatus: false,
+                      isAccessibleOnly: true,
+                      correspondent: queryData["correspondent"],
+                      onChange: (map) => setState(() {
+                        if (map['data'] != null &&
+                            map['data']['branch'] != null) {
+                          selectedBranch = map['data']['branch'] as String;
+                        }
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    SelectSystemCode(
+                      label: "Asset Type",
+                      placeholder: "Select Asset Type",
+                      value: selectedAssetType,
+                      type: "Asset Type",
+                      onChange: (map) => setState(() {
+                        selectedAssetType = map?['data']['code'];
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: descriptionController,
+                      decoration:
+                          const InputDecoration(labelText: "Description"),
+                      onChanged: (value) => description = value,
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  queryData = {
+                    ...queryData,
+                    "correspondent": selectedCorrespondent,
+                    "accountNo": selectedAccountNo,
+                    "masterAccountNo": selectedMasterAccountNo,
+                    "rep": selectedRep,
+                    "branch": selectedBranch,
+                    "assetType": selectedAssetType,
+                    "description": description,
+                  };
+                  _updateQueryData();
+                });
+
+                Navigator.pop(context, true);
+              },
+              child: const Text("Search"),
+            ),
+          ],
         );
       },
-    ).then((value) {
-      if (value == true) {
-        setState(() {
-          _futureRequests = _listActivity();
-        });
-      }
-    });
+    );
+
+    _focusScopeNode.unfocus();
+
+    if (result == true) {
+      setState(() {
+        _futureRequests = _listActivity();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: PageListContainer(
-        title: "Activity",
-        openFilterDialog: openFilterDialog,
-        onRefresh: _refresh,
-        page: _futureRequests == null
-            ? AppTheme.buildLoadingIndicator()
-            : FutureBuilder<List<GridItem>>(
-                future: _futureRequests,
-                builder: (context, snapshot) {
-                  Widget body;
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    body = AppTheme.buildLoadingIndicator();
-                  } else {
-                    body = GridWithPagination(
-                      items: snapshot.data ?? [],
-                      pagination: pagination,
-                      onPageChange: _onPageChange,
-                      onRefresh: _refresh,
-                    );
-                  }
+    return FocusScope(
+      node: _focusScopeNode,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => _focusScopeNode.unfocus(),
+        child: PageListContainer(
+          title: "Activity",
+          openFilterDialog: openFilterDialog,
+          onRefresh: _refresh,
+          page: _futureRequests == null
+              ? AppTheme.buildLoadingIndicator()
+              : FutureBuilder<List<GridItem>>(
+                  future: _futureRequests,
+                  builder: (context, snapshot) {
+                    Widget body;
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      body = AppTheme.buildLoadingIndicator();
+                    } else {
+                      body = GridWithPagination(
+                        items: snapshot.data ?? [],
+                        pagination: pagination,
+                        onPageChange: _onPageChange,
+                        onRefresh: _refresh,
+                      );
+                    }
 
-                  return Scaffold(
-                    body: Column(
-                      children: [
-                        ValueListenableBuilder(
-                          valueListenable: queryDataNotifier,
-                          builder: (_, __, ___) {
-                            final activeFilters = queryData.entries
-                                .where((e) =>
-                                    e.value != null &&
-                                    e.value.toString().isNotEmpty &&
-                                    e.value.toString() != "0")
-                                .toList();
+                    return Scaffold(
+                      body: Column(
+                        children: [
+                          ValueListenableBuilder(
+                            valueListenable: queryDataNotifier,
+                            builder: (_, __, ___) {
+                              final activeFilters = queryData.entries
+                                  .where((e) =>
+                                      e.value != null &&
+                                      e.value.toString().isNotEmpty &&
+                                      e.value.toString() != "0")
+                                  .toList();
 
-                            if (activeFilters.isEmpty) {
-                              return const SizedBox.shrink();
-                            }
+                              if (activeFilters.isEmpty) {
+                                return const SizedBox.shrink();
+                              }
 
-                            return Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              child: Wrap(
-                                spacing: 6,
-                                runSpacing: 6,
-                                children: activeFilters.where((entry) {
-                                  if (entry.value is bool) {
-                                    return entry.value == true;
-                                  }
-                                  if (entry.value == null ||
-                                      entry.value.toString().isEmpty) {
-                                    return false;
-                                  }
-                                  return true;
-                                }).map((entry) {
-                                  return [
-                                    "fromDate",
-                                    "toDate",
-                                    "symbol",
-                                    "entryType"
-                                  ].contains(entry.key)
-                                      ? const SizedBox.shrink()
-                                      : Chip(
-                                          label: Text(
-                                            "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
-                                            style: const TextStyle(fontSize: 9),
-                                          ),
-                                          deleteIcon: const Icon(Icons.close),
-                                          onDeleted: () {
-                                            setState(() {
-                                              queryData[entry.key] = "";
-                                              _updateQueryData();
-                                              _futureRequests = _listActivity();
-                                            });
-                                          },
-                                        );
-                                }).toList(),
-                              ),
-                            );
-                          },
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 12),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 150,
-                                  child: AutoCompleteSymbol(
-                                    name: "symbol",
-                                    freeSolo: true,
-                                    value: queryData['symbol'],
-                                    isActive: true,
+                              return Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                child: Wrap(
+                                  spacing: 6,
+                                  runSpacing: 6,
+                                  children: activeFilters.where((entry) {
+                                    if (entry.value is bool) {
+                                      return entry.value == true;
+                                    }
+                                    if (entry.value == null ||
+                                        entry.value.toString().isEmpty) {
+                                      return false;
+                                    }
+                                    return true;
+                                  }).map((entry) {
+                                    return [
+                                      "fromDate",
+                                      "toDate",
+                                      "symbol",
+                                      "entryType"
+                                    ].contains(entry.key)
+                                        ? const SizedBox.shrink()
+                                        : Chip(
+                                            label: Text(
+                                              "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                                              style:
+                                                  const TextStyle(fontSize: 9),
+                                            ),
+                                            deleteIcon: const Icon(Icons.close),
+                                            onDeleted: () {
+                                              setState(() {
+                                                queryData[entry.key] = "";
+                                                _updateQueryData();
+                                                _futureRequests =
+                                                    _listActivity();
+                                              });
+                                            },
+                                          );
+                                  }).toList(),
+                                ),
+                              );
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 12),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 150,
+                                    child: AutoCompleteSymbol(
+                                      name: "symbol",
+                                      freeSolo: true,
+                                      value: queryData['symbol'],
+                                      isActive: true,
+                                      onChange: (map) => setState(() {
+                                        final symbol =
+                                            map['data']?['symbol'] ?? '';
+                                        final name = map['name'];
+
+                                        queryData[name] = symbol;
+                                        _updateQueryData();
+
+                                        if (symbol.isNotEmpty ||
+                                            (map['value'] == '' &&
+                                                (map['data']?.isEmpty ??
+                                                    true))) {
+                                          _futureRequests = _listActivity();
+                                        }
+                                      }),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  CustomDatePicker(
+                                    initialFromDate:
+                                        queryData['fromDate'] != null
+                                            ? DateTime.tryParse(
+                                                queryData['fromDate'])
+                                            : null,
+                                    initialToDate: queryData['toDate'] != null
+                                        ? DateTime.tryParse(queryData['toDate'])
+                                        : null,
+                                    onApply: (range, from, to) {
+                                      _focusScopeNode.unfocus();
+                                      setState(() {
+                                        queryData['fromDate'] = from != null
+                                            ? ConvertService.dateToString(from)
+                                            : queryData['fromDate'];
+                                        queryData['toDate'] = to != null
+                                            ? ConvertService.dateToString(to)
+                                            : queryData['toDate'];
+                                        _updateQueryData();
+                                        _futureRequests = _listActivity();
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(width: 12),
+                                  MultiSelectEntryType(
+                                    name: "entryType",
+                                    value: selectedEntryTypes,
                                     onChange: (map) => setState(() {
-                                      final symbol =
-                                          map['data']?['symbol'] ?? '';
-                                      final name = map['name'];
-
-                                      queryData[name] = symbol;
-                                      _updateQueryData();
-
-                                      if (symbol.isNotEmpty ||
-                                          (map['value'] == '' &&
-                                              (map['data']?.isEmpty ?? true))) {
+                                      _focusScopeNode.unfocus();
+                                      if (map['value'] != null) {
+                                        selectedEntryTypes = List<String>.from(
+                                            map['value'] as List);
+                                        queryData["entryType"] =
+                                            selectedEntryTypes.join(",");
+                                        _updateQueryData();
                                         _futureRequests = _listActivity();
                                       }
                                     }),
                                   ),
-                                ),
-                                const SizedBox(width: 12),
-                                CustomDatePicker(
-                                  initialFromDate: queryData['fromDate'] != null
-                                      ? DateTime.tryParse(queryData['fromDate'])
-                                      : null,
-                                  initialToDate: queryData['toDate'] != null
-                                      ? DateTime.tryParse(queryData['toDate'])
-                                      : null,
-                                  onApply: (range, from, to) {
-                                    setState(() {
-                                      queryData['fromDate'] = from != null
-                                          ? ConvertService.dateToString(from)
-                                          : queryData['fromDate'];
-                                      queryData['toDate'] = to != null
-                                          ? ConvertService.dateToString(to)
-                                          : queryData['toDate'];
-                                      _updateQueryData();
-                                      _futureRequests = _listActivity();
-                                    });
-                                  },
-                                ),
-                                const SizedBox(width: 12),
-                                MultiSelectEntryType(
-                                  name: "entryType",
-                                  value: selectedEntryTypes,
-                                  onChange: (map) => setState(() {
-                                    if (map['value'] != null) {
-                                      selectedEntryTypes = List<String>.from(
-                                          map['value'] as List);
-                                      queryData["entryType"] =
-                                          selectedEntryTypes.join(",");
-                                      _updateQueryData();
-                                      _futureRequests = _listActivity();
-                                    }
-                                  }),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(child: body),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                          Expanded(child: body),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+        ),
       ),
     );
   }

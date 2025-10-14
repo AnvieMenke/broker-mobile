@@ -2,6 +2,7 @@ import 'package:broker_mobile/components/containers/page_list_container.dart';
 import 'package:broker_mobile/service/buying_power_service.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
+import '../../../../components/datepicker/datepicker.dart';
 import '../../../../components/dropdowns/select_correspondent.dart';
 import '../../../../components/dropdowns/select_master_account_no.dart';
 import '../../../../components/dropdowns/select_account_name.dart';
@@ -20,7 +21,7 @@ class BuyingPowerPage extends StatefulWidget {
 class BuyingPowerPageState extends State<BuyingPowerPage> {
   Future<List<GridItem>>? _futureRequests;
 
-  final Map<String, dynamic> queryData = {
+  late Map<String, dynamic> queryData = {
     "correspondent": "",
     "accountNo": "",
     "masterAccountNo": "",
@@ -47,10 +48,10 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
 
   void _init() async {
     final profileService = ProfileService();
-    final systemDate = await profileService.getSystemDate();
+    final previousDate = await profileService.getPreviousDate();
     setState(() {
-      queryData['fromDate'] = systemDate;
-      queryData['toDate'] = systemDate;
+      queryData['fromDate'] = previousDate;
+      queryData['toDate'] = previousDate;
       _futureRequests = _listBuyingPower();
     });
   }
@@ -130,9 +131,6 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
     String selectedAccountName = queryData["accountName"];
     String selectedMarginType = queryData["marginType"];
     bool hideZero = queryData["hideZero"] ?? false;
-    DateTime? selectedFromDate =
-        ConvertService.stringToDate(queryData["fromDate"]);
-    DateTime? selectedToDate = ConvertService.stringToDate(queryData["toDate"]);
 
     showDialog<bool>(
       context: context,
@@ -149,24 +147,6 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
             title: const Text("Filter by:"),
             content: StatefulBuilder(
               builder: (context, setState) {
-                Future<void> pickDate({required bool isFrom}) async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                  );
-                  if (picked != null) {
-                    setState(() {
-                      if (isFrom) {
-                        selectedFromDate = picked;
-                      } else {
-                        selectedToDate = picked;
-                      }
-                    });
-                  }
-                }
-
                 return SingleChildScrollView(
                   keyboardDismissBehavior:
                       ScrollViewKeyboardDismissBehavior.onDrag,
@@ -174,49 +154,6 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text(
-                        "Date Range",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () => pickDate(isFrom: true),
-                              child: InputDecorator(
-                                decoration: const InputDecoration(
-                                  labelText: "From",
-                                  border: OutlineInputBorder(),
-                                ),
-                                child: Text(
-                                  selectedFromDate != null
-                                      ? "${selectedFromDate!.month}/${selectedFromDate!.day}/${selectedFromDate!.year}"
-                                      : "Select date",
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () => pickDate(isFrom: false),
-                              child: InputDecorator(
-                                decoration: const InputDecoration(
-                                  labelText: "To",
-                                  border: OutlineInputBorder(),
-                                ),
-                                child: Text(
-                                  selectedToDate != null
-                                      ? "${selectedToDate!.month}/${selectedToDate!.day}/${selectedToDate!.year}"
-                                      : "Select date",
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
                       AutoCompleteCorrespondent(
                         name: "correspondent",
                         value: selectedCorrespondent,
@@ -293,15 +230,14 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    queryData["fromDate"] =
-                        ConvertService.dateToString(selectedFromDate);
-                    queryData["toDate"] =
-                        ConvertService.dateToString(selectedToDate);
-                    queryData["correspondent"] = selectedCorrespondent;
-                    queryData["masterAccountNo"] = selectedMasterAccountNo;
-                    queryData["accountName"] = selectedAccountName;
-                    queryData["marginType"] = selectedMarginType;
-                    queryData["hideZero"] = hideZero;
+                    queryData = {
+                      ...queryData,
+                      "correspondent": selectedCorrespondent,
+                      "masterAccountNo": selectedMasterAccountNo,
+                      "accountName": selectedAccountName,
+                      "marginType": selectedMarginType,
+                      "hideZero": hideZero,
+                    };
                     _updateQueryData();
                   });
                   Navigator.pop(context, true);
@@ -379,48 +315,72 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
                                   }
                                   return true;
                                 }).map((entry) {
-                                  return Chip(
-                                    label: Text(
-                                      entry.value is bool
-                                          ? ConvertService.camelToTitle(
-                                                  entry.key)
-                                              .replaceAll("Is ", "")
-                                          : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
-                                      style: const TextStyle(fontSize: 9),
-                                    ),
-                                    deleteIcon: entry.key
-                                                .toLowerCase()
-                                                .contains("fromdate") ||
-                                            entry.key
-                                                .toLowerCase()
-                                                .contains("todate")
-                                        ? null
-                                        : const Icon(Icons.close),
-                                    onDeleted: entry.key
-                                                .toLowerCase()
-                                                .contains("fromdate") ||
-                                            entry.key
-                                                .toLowerCase()
-                                                .contains("todate")
-                                        ? null
-                                        : () {
-                                            setState(() {
-                                              queryData[entry.key] =
-                                                  entry.value is bool
-                                                      ? false
-                                                      : "";
+                                  return ["fromDate", "toDate"]
+                                          .contains(entry.key)
+                                      ? const SizedBox.shrink()
+                                      : Chip(
+                                          label: Text(
+                                            entry.value is bool
+                                                ? ConvertService.camelToTitle(
+                                                        entry.key)
+                                                    .replaceAll("Is ", "")
+                                                : "${ConvertService.camelToTitle(entry.key)}: ${entry.value}",
+                                            style: const TextStyle(fontSize: 9),
+                                          ),
+                                          deleteIcon: entry.key
+                                                      .toLowerCase()
+                                                      .contains("fromdate") ||
+                                                  entry.key
+                                                      .toLowerCase()
+                                                      .contains("todate")
+                                              ? null
+                                              : const Icon(Icons.close),
+                                          onDeleted: entry.key
+                                                      .toLowerCase()
+                                                      .contains("fromdate") ||
+                                                  entry.key
+                                                      .toLowerCase()
+                                                      .contains("todate")
+                                              ? null
+                                              : () {
+                                                  setState(() {
+                                                    queryData[entry.key] =
+                                                        entry.value is bool
+                                                            ? false
+                                                            : "";
 
-                                              _updateQueryData();
-                                              _futureRequests =
-                                                  _listBuyingPower();
-                                            });
-                                          },
-                                  );
+                                                    _updateQueryData();
+                                                    _futureRequests =
+                                                        _listBuyingPower();
+                                                  });
+                                                },
+                                        );
                                 }).toList(),
                               ),
                             );
                           },
                         ),
+                        CustomDatePicker(
+                          initialFromDate: queryData['fromDate'] != null
+                              ? DateTime.tryParse(queryData['fromDate'])
+                              : null,
+                          initialToDate: queryData['toDate'] != null
+                              ? DateTime.tryParse(queryData['toDate'])
+                              : null,
+                          onApply: (range, from, to) {
+                            setState(() {
+                              queryData['fromDate'] = from != null
+                                  ? ConvertService.dateToString(from)
+                                  : queryData['fromDate'];
+                              queryData['toDate'] = to != null
+                                  ? ConvertService.dateToString(to)
+                                  : queryData['toDate'];
+                              _updateQueryData();
+                              _futureRequests = _listBuyingPower();
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 12),
                         Expanded(child: body),
                       ],
                     ),
