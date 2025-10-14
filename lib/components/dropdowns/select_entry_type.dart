@@ -58,15 +58,30 @@ class _MultiSelectEntryTypeState extends State<MultiSelectEntryType> {
         widget.note,
       );
 
-      data.entryTypes.add(
+      final excludeData = await _service.listSystemCode(
+        "Entry Type Exceptions",
+        "Mobile",
+        "",
+      );
+
+      final excludeCodes = excludeData.map((e) => e.code).toSet();
+
+      final filteredEntryTypes = data.entryTypes
+          .where((res) => !excludeCodes.contains(res.entryType))
+          .toList();
+
+      filteredEntryTypes.add(
         AdmEntryType(
           entryType: "NON TRD",
           entryTypeDescription: "Non Trade Entry",
         ),
       );
 
+      final uniqueEntryTypes =
+          {for (var e in filteredEntryTypes) e.entryType: e}.values.toList();
+
       setState(() {
-        _options = data.entryTypes.map<Map<String, String>>((res) {
+        _options = uniqueEntryTypes.map<Map<String, String>>((res) {
           return {
             'entryType': res.entryType,
             'entryTypeDescription': res.entryTypeDescription,

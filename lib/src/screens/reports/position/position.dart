@@ -173,7 +173,6 @@ class PositionPageState extends State<PositionPage> {
   Future<void> openFilterDialog() async {
     _focusScopeNode.unfocus();
     String selectedCorrespondent = queryData["correspondent"];
-    String selectedAccountNo = queryData["accountNo"];
     String selectedMasterAccountNo = queryData["masterAccountNo"];
     String selectedRep = queryData["rep"];
     String selectedBranch = queryData["branch"];
@@ -206,21 +205,6 @@ class PositionPageState extends State<PositionPage> {
                         type: "",
                         onChange: (value) =>
                             setState(() => selectedCorrespondent = value),
-                      ),
-                      const SizedBox(height: 16),
-                      AutoCompleteAccountNo(
-                        name: "accountNo",
-                        freeSolo: true,
-                        value: selectedAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
-                        correspondent: selectedCorrespondent,
-                        type: "Client",
-                        onChange: (map) => setState(() {
-                          if (map['data']?['accountNo'] != null) {
-                            selectedAccountNo = map['data']['accountNo'];
-                          }
-                        }),
                       ),
                       const SizedBox(height: 16),
                       AutoCompleteMasterAccountNo(
@@ -290,7 +274,6 @@ class PositionPageState extends State<PositionPage> {
                     queryData = {
                       ...queryData,
                       "correspondent": selectedCorrespondent,
-                      "accountNo": selectedAccountNo,
                       "masterAccountNo": selectedMasterAccountNo,
                       "rep": selectedRep,
                       "branch": selectedBranch,
@@ -384,6 +367,7 @@ class PositionPageState extends State<PositionPage> {
                                       "fromDate",
                                       "toDate",
                                       "symbol",
+                                      "accountNo",
                                     ].contains(entry.key)
                                         ? const SizedBox.shrink()
                                         : Chip(
@@ -413,6 +397,31 @@ class PositionPageState extends State<PositionPage> {
                                 ),
                               );
                             },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 400),
+                              child: AutoCompleteAccountNo(
+                                name: "accountNo",
+                                freeSolo: true,
+                                value: queryData["accountNo"],
+                                isAllStatus: false,
+                                isAccessibleOnly: true,
+                                correspondent: queryData["correspondent"],
+                                type: "Client",
+                                onChange: (map) => setState(() {
+                                  if (map['data'] != null &&
+                                      map['data']['accountNo'] != null) {
+                                    queryData["accountNo"] =
+                                        map['data']['accountNo'] as String;
+                                    _updateQueryData();
+                                    _futureRequests = _listPosition();
+                                  }
+                                }),
+                              ),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(
