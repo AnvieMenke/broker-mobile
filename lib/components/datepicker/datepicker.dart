@@ -41,7 +41,8 @@ class _CustomDatePickerState extends State<CustomDatePicker>
   }
 
   void _initController() {
-    _tabController = TabController(length: widget.isDateRange ? 2 : 1, vsync: this);
+    _tabController =
+        TabController(length: widget.isDateRange ? 2 : 1, vsync: this);
   }
 
   @override
@@ -61,13 +62,13 @@ class _CustomDatePickerState extends State<CustomDatePicker>
   }
 
   Future<void> _selectDate(
-      BuildContext context,
-      bool isFromDate,
-      void Function(void Function()) innerSetState,
-      DateTime? tempFromDate,
-      DateTime? tempToDate,
-      void Function(DateTime?, DateTime?) onChange,
-      ) async {
+    BuildContext context,
+    bool isFromDate,
+    void Function(void Function()) innerSetState,
+    DateTime? tempFromDate,
+    DateTime? tempToDate,
+    void Function(DateTime?, DateTime?) onChange,
+  ) async {
     final picked = await showDatePicker(
       context: context,
       initialDate: tempFromDate ?? DateTime.now(),
@@ -157,13 +158,26 @@ class _CustomDatePickerState extends State<CustomDatePicker>
 
   @override
   Widget build(BuildContext context) {
+    final presetLabels = [
+      "Past 10 days",
+      "Past 30 days",
+      "Past 60 days",
+      "Past 90 days",
+      "Q1 (Jan - Mar)",
+      "Q2 (Apr - Jun)",
+      "Q3 (July - Sept)",
+      "Q4 (Oct - Dec)",
+    ];
+
     String displayText = selectedRecent;
-    if (fromDate != null && toDate != null) {
-      if (fromDate!.isAtSameMomentAs(toDate!)) {
-        displayText = "${fromDate!.month}/${fromDate!.day}/${fromDate!.year}";
-      } else {
-        displayText =
-        "${fromDate!.month}/${fromDate!.day}/${fromDate!.year} - ${toDate!.month}/${toDate!.day}/${toDate!.year}";
+    if (!presetLabels.contains(selectedRecent)) {
+      if (fromDate != null && toDate != null) {
+        if (fromDate!.isAtSameMomentAs(toDate!)) {
+          displayText = "${fromDate!.month}/${fromDate!.day}/${fromDate!.year}";
+        } else {
+          displayText =
+              "${fromDate!.month}/${fromDate!.day}/${fromDate!.year} - ${toDate!.month}/${toDate!.day}/${toDate!.year}";
+        }
       }
     }
 
@@ -176,16 +190,7 @@ class _CustomDatePickerState extends State<CustomDatePicker>
       tempToDate = to;
     }
 
-    final recentItems = [
-      "Past 10 days",
-      "Past 30 days",
-      "Past 60 days",
-      "Past 90 days",
-      "Q1 (Jan - Mar)",
-      "Q2 (Apr - Jun)",
-      "Q3 (July - Sept)",
-      "Q4 (Oct - Dec)",
-    ];
+    final recentItems = presetLabels;
 
     return PopupMenuButton<int>(
       offset: const Offset(0, 45),
@@ -218,98 +223,98 @@ class _CustomDatePickerState extends State<CustomDatePicker>
                           controller: _tabController,
                           children: widget.isDateRange
                               ? [
-                            SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  ...recentItems.map((item) {
-                                    final isSelected =
-                                        tempSelectedRecent == item;
-                                    return InkWell(
-                                      onTap: () {
-                                        setInnerState(() {
-                                          tempSelectedRecent = item;
-                                        });
-                                      },
-                                      child: Container(
-                                        padding:
-                                        const EdgeInsets.symmetric(
-                                            vertical: 12,
-                                            horizontal: 24),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: 20,
-                                              height: 20,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: isSelected
-                                                      ? Colors.blue
-                                                      : Colors.grey,
-                                                  width: 2,
-                                                ),
-                                              ),
-                                              child: isSelected
-                                                  ? Center(
-                                                child: Container(
-                                                  width: 10,
-                                                  height: 10,
-                                                  decoration:
-                                                  const BoxDecoration(
-                                                    shape: BoxShape
-                                                        .circle,
-                                                    color:
-                                                    Colors.blue,
+                                  SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        ...recentItems.map((item) {
+                                          final isSelected =
+                                              tempSelectedRecent == item;
+                                          return InkWell(
+                                            onTap: () {
+                                              setInnerState(() {
+                                                tempSelectedRecent = item;
+                                              });
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 24),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    width: 20,
+                                                    height: 20,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color: isSelected
+                                                            ? Colors.blue
+                                                            : Colors.grey,
+                                                        width: 2,
+                                                      ),
+                                                    ),
+                                                    child: isSelected
+                                                        ? Center(
+                                                            child: Container(
+                                                              width: 10,
+                                                              height: 10,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                                color:
+                                                                    Colors.blue,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : null,
                                                   ),
-                                                ),
-                                              )
-                                                  : null,
+                                                  const SizedBox(width: 12),
+                                                  Expanded(child: Text(item)),
+                                                ],
+                                              ),
                                             ),
-                                            const SizedBox(width: 12),
-                                            Expanded(child: Text(item)),
-                                          ],
+                                          );
+                                        }),
+                                        const SizedBox(height: 8),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              selectedRecent =
+                                                  tempSelectedRecent;
+                                              fromDate = null;
+                                              toDate = null;
+                                            });
+                                            _apply(
+                                                tempSelectedRecent, null, null);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color(0xFF1565C0),
+                                            minimumSize:
+                                                const Size.fromHeight(40),
+                                          ),
+                                          child: const Text("Apply"),
                                         ),
-                                      ),
-                                    );
-                                  }),
-                                  const SizedBox(height: 8),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        selectedRecent =
-                                            tempSelectedRecent;
-                                        fromDate = null;
-                                        toDate = null;
-                                      });
-                                      _apply(
-                                          tempSelectedRecent, null, null);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                      const Color(0xFF1565C0),
-                                      minimumSize:
-                                      const Size.fromHeight(40),
+                                      ],
                                     ),
-                                    child: const Text("Apply"),
                                   ),
-                                ],
-                              ),
-                            ),
-                            _buildCustomTab(
-                                context,
-                                setInnerState,
-                                tempFromDate,
-                                tempToDate,
-                                updateTempDates),
-                          ]
+                                  _buildCustomTab(
+                                      context,
+                                      setInnerState,
+                                      tempFromDate,
+                                      tempToDate,
+                                      updateTempDates),
+                                ]
                               : [
-                            _buildCustomTab(
-                                context,
-                                setInnerState,
-                                tempFromDate,
-                                tempToDate,
-                                updateTempDates),
-                          ],
+                                  _buildCustomTab(
+                                      context,
+                                      setInnerState,
+                                      tempFromDate,
+                                      tempToDate,
+                                      updateTempDates),
+                                ],
                         ),
                       ),
                     ],
@@ -347,12 +352,12 @@ class _CustomDatePickerState extends State<CustomDatePicker>
   }
 
   Widget _buildCustomTab(
-      BuildContext context,
-      void Function(void Function()) setInnerState,
-      DateTime? tempFromDate,
-      DateTime? tempToDate,
-      void Function(DateTime?, DateTime?) updateTempDates,
-      ) {
+    BuildContext context,
+    void Function(void Function()) setInnerState,
+    DateTime? tempFromDate,
+    DateTime? tempToDate,
+    void Function(DateTime?, DateTime?) updateTempDates,
+  ) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -415,31 +420,27 @@ class _CustomDatePickerState extends State<CustomDatePicker>
               children: [
                 OutlinedButton(
                   onPressed: () {
-                    setInnerState(() {
-                      tempFromDate = null;
-                      tempToDate = null;
-                    });
+                    Navigator.of(context).pop();
                   },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xFF1565C0),
                     side: const BorderSide(color: Color(0xFF1565C0)),
                   ),
-                  child: const Text("Clear"),
+                  child: const Text("Close"),
                 ),
                 ElevatedButton(
                   onPressed: tempFromDate != null
                       ? () {
-                    setState(() {
-                      selectedRecent = widget.isDateRange
-                          ? "Custom Range"
-                          : "Selected Date";
-                      fromDate = tempFromDate;
-                      toDate = widget.isDateRange
-                          ? tempToDate
-                          : tempFromDate;
-                    });
-                    _apply("Custom", fromDate, toDate);
-                  }
+                          setState(() {
+                            selectedRecent = widget.isDateRange
+                                ? "Custom Range"
+                                : "Selected Date";
+                            fromDate = tempFromDate;
+                            toDate =
+                                widget.isDateRange ? tempToDate : tempFromDate;
+                          });
+                          _apply("Custom", fromDate, toDate);
+                        }
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: tempFromDate != null
