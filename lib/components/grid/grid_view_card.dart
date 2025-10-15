@@ -96,7 +96,6 @@ class GridField {
         );
       case 'price':
         final text = FormatUtils.formatCurrency(value);
-
         return Text(text);
       case 'note':
         return Html(
@@ -123,11 +122,14 @@ class GridItem {
   final GridField? rightField;
   final List<GridField> fields;
 
+  final List<GridItem>? subItems;
+
   const GridItem({
     this.titleField,
     this.subTitleField,
     this.rightField,
     this.fields = const [],
+    this.subItems,
   });
 
   factory GridItem.fromMap(Map<String, dynamic> map) {
@@ -136,8 +138,14 @@ class GridItem {
     GridField? extractedRightField;
 
     final parsedFields = <GridField>[];
+    List<GridItem>? subItems;
 
     map.forEach((k, v) {
+      if (k == 'subItems' && v is List) {
+        subItems = v.map((sub) => GridItem.fromMap(sub)).toList();
+        return;
+      }
+
       if (v is Map && v.containsKey("value")) {
         final field = GridField(
           keyName: k,
@@ -176,6 +184,7 @@ class GridItem {
       subTitleField: extractedSubTitleField,
       rightField: extractedRightField,
       fields: parsedFields,
+      subItems: subItems,
     );
   }
 }
@@ -184,10 +193,13 @@ class GridViewCard extends StatelessWidget {
   final GridItem item;
   final List<PopupMenuEntry>? actions;
 
+  final bool isSubItem;
+
   const GridViewCard({
     super.key,
     required this.item,
     this.actions,
+    this.isSubItem = false,
   });
 
   void _showDetails(BuildContext context) {
@@ -256,148 +268,193 @@ class GridViewCard extends StatelessWidget {
         .where((f) => f.visible && f.gridPosition == "body")
         .toList();
 
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 1.5),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (item.titleField != null)
+                    DefaultTextStyle(
+                      style: textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      child: item.titleField!.displayValue,
+                    ),
+                  if (item.subTitleField != null)
+                    DefaultTextStyle(
+                      style: textTheme.bodySmall!.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                      child: item.subTitleField!.displayValue,
+                    ),
+                ],
+              ),
+            ),
+            if (!isSubItem)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: PopupMenuButton(
+                      icon: const Icon(Icons.more_horiz),
+                      itemBuilder: (context) => mergedActions,
+                    ),
+                  ),
+                  if (item.rightField != null)
+                    DefaultTextStyle(
+                      style: textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      child: item.rightField!.displayValue,
+                    ),
+                ],
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Column(
+          children: () {
+            final rows = <Widget>[];
+
+            for (int i = 0; i < bodyFields.length; i++) {
+              final f = bodyFields[i];
+              if (f.floatRight) continue;
+
+              GridField? rightField;
+              if (i + 1 < bodyFields.length && bodyFields[i + 1].floatRight) {
+                rightField = bodyFields[i + 1];
+              }
+
+              rows.add(
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (item.titleField != null)
-                        DefaultTextStyle(
-                          style: textTheme.titleMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          child: item.titleField!.displayValue,
+                      Expanded(
+                        flex: 2,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (!f.hideLabel)
+                              Text(
+                                "${f.label}: ",
+                                style: textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            if (f.addAvatar && f.value.isNotEmpty) ...[
+                              CircleAvatar(
+                                radius: 16,
+                                backgroundColor: Colors.blue.shade100,
+                                child: Text(
+                                  f.value[0].toUpperCase(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  f.value,
+                                  style: textTheme.bodyMedium,
+                                ),
+                              ),
+                            ] else
+                              f.displayValue,
+                          ],
                         ),
-                      if (item.subTitleField != null)
-                        DefaultTextStyle(
-                          style: textTheme.bodySmall!.copyWith(
-                            color: Colors.grey[600],
-                          ),
-                          child: item.subTitleField!.displayValue,
-                        ),
-                    ],
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: PopupMenuButton(
-                        icon: const Icon(Icons.more_horiz),
-                        itemBuilder: (context) => mergedActions,
                       ),
-                    ),
-                    if (item.rightField != null)
-                      DefaultTextStyle(
-                        style: textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                        child: item.rightField!.displayValue,
-                      ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Column(
-              children: () {
-                final rows = <Widget>[];
-
-                for (int i = 0; i < bodyFields.length; i++) {
-                  final f = bodyFields[i];
-                  if (f.floatRight) continue;
-
-                  GridField? rightField;
-                  if (i + 1 < bodyFields.length &&
-                      bodyFields[i + 1].floatRight) {
-                    rightField = bodyFields[i + 1];
-                  }
-
-                  rows.add(
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            flex: 2,
+                      if (rightField != null)
+                        Expanded(
+                          flex: 2,
+                          child: Align(
+                            alignment: Alignment.centerRight,
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                if (!f.hideLabel)
+                                if (!rightField.hideLabel)
                                   Text(
-                                    "${f.label}: ",
+                                    "${rightField.label}: ",
                                     style: textTheme.bodyMedium?.copyWith(
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                if (f.addAvatar && f.value.isNotEmpty) ...[
-                                  CircleAvatar(
-                                    radius: 16,
-                                    backgroundColor: Colors.blue.shade100,
-                                    child: Text(
-                                      f.value[0].toUpperCase(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      f.value,
-                                      style: textTheme.bodyMedium,
-                                    ),
-                                  ),
-                                ] else
-                                  f.displayValue,
+                                rightField.displayValue,
                               ],
                             ),
                           ),
-                          if (rightField != null)
-                            Expanded(
-                              flex: 2,
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    if (!rightField.hideLabel)
-                                      Text(
-                                        "${rightField.label}: ",
-                                        style: textTheme.bodyMedium?.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    rightField.displayValue,
-                                  ],
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            }
 
-                return rows;
-              }(),
-            ),
-          ],
+            return rows;
+          }(),
         ),
-      ),
+        if (item.subItems != null && item.subItems!.isNotEmpty) ...[
+          const Divider(height: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: item.subItems!.asMap().entries.map((entry) {
+              final index = entry.key;
+              final sub = entry.value;
+              final isEven = index % 2 == 0;
+
+              final backgroundColor = isEven
+                  ? Theme.of(context)
+                      .colorScheme
+                      .surface
+                      .withValues(alpha: 0.03)
+                  : Theme.of(context)
+                      .colorScheme
+                      .surface
+                      .withValues(alpha: 0.15);
+
+              return Container(
+                color: backgroundColor,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: isSubItem ? 0 : 16.0,
+                    top: 4,
+                    bottom: 4,
+                  ),
+                  child: GridViewCard(
+                    item: sub,
+                    isSubItem: true,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ],
     );
+
+    if (isSubItem) {
+      return SizedBox(
+        width: double.infinity,
+        child: content,
+      );
+    } else {
+      return Card(
+        margin: const EdgeInsets.symmetric(vertical: 1.5),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: content,
+        ),
+      );
+    }
   }
 }
 

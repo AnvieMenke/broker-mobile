@@ -294,6 +294,7 @@ class _CustomDatePickerState extends State<CustomDatePicker>
                                                 const Color(0xFF1565C0),
                                             minimumSize:
                                                 const Size.fromHeight(40),
+                                            foregroundColor: Colors.white,
                                           ),
                                           child: const Text("Apply"),
                                         ),
@@ -446,6 +447,7 @@ class _CustomDatePickerState extends State<CustomDatePicker>
                     backgroundColor: tempFromDate != null
                         ? const Color(0xFF1565C0)
                         : Colors.grey,
+                    foregroundColor: Colors.white,
                   ),
                   child: const Text("Apply"),
                 ),

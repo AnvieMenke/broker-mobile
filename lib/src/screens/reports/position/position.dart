@@ -77,83 +77,98 @@ class PositionPageState extends State<PositionPage> {
       'pageNo': pagination.pageNo,
       'rowsPerPage': pagination.rowsPerPage,
     });
+
     setState(() {
       pagination = pagination.copyWith(
         totalRows: resp.summary.totalRows,
         reload: false,
       );
     });
-    return resp.positions.map((e) {
-      return GridItem.fromMap({
+
+    // Group positions by accountNo
+    final Map<String, List> grouped = {};
+    for (var e in resp.positions) {
+      grouped.putIfAbsent(e.accountNo, () => []).add(e);
+    }
+
+    List<GridItem> items = [];
+
+    grouped.forEach((accountNo, positions) {
+      // Create subItems list from all positions of this account
+      final subItems = positions
+          .map((e) => {
+                "symbol": {
+                  "hideLabel": true,
+                  "label": "Symbol",
+                  "value": e.symbol,
+                  "visible": true,
+                  "addAvatar": true,
+                },
+                "tdQty": {
+                  "hideLabel": true,
+                  "label": "TD Qty",
+                  "value": e.tdQty,
+                  "type": "qty",
+                  "visible": true,
+                },
+                "costBasis": {
+                  "hideLabel": true,
+                  "label": "Cost Basis",
+                  "value": e.costBasis,
+                  "type": "amount",
+                  "visible": true,
+                },
+                "tdMarketValue": {
+                  "hideLabel": true,
+                  "label": "TD Market Value",
+                  "value": e.tdMarketValue,
+                  "type": "amount",
+                  "floatRight": true,
+                  "visible": true,
+                },
+              })
+          .toList();
+
+      // Add GridItem per account
+      items.add(GridItem.fromMap({
         "accountNo": {
           "label": "Account No",
-          "value": e.accountNo,
+          "value": accountNo,
           "visible": true,
           "gridPosition": "title",
         },
         "correspondent": {
           "label": "Correspondent",
-          "value": e.correspondent,
-          "visible": false,
-        },
-        "masterAccountNo": {
-          "label": "Master Account No",
-          "value": e.masterAccountNo,
+          "value": positions.first.correspondent,
           "visible": false,
         },
         "rep": {
           "label": "Rep",
-          "value": e.rep,
+          "value": positions.first.rep,
           "visible": false,
         },
         "branch": {
           "label": "Branch",
-          "value": e.branch,
+          "value": positions.first.branch,
           "visible": false,
         },
         "date": {
           "label": "Date",
-          "value": e.date,
+          "value": positions.first.date,
           "type": "date",
           "visible": true,
           "gridPosition": "subTitle",
         },
         "assetType": {
           "label": "Asset Type",
-          "value": e.assetType,
+          "value": positions.first.assetType,
           "visible": false,
         },
-        "symbol": {
-          "hideLabel": true,
-          "label": "Symbol",
-          "value": e.symbol,
-          "visible": true,
-          "addAvatar": true,
-        },
-        "tdQty": {
-          "hideLabel": true,
-          "label": "TD Qty",
-          "value": e.tdQty,
-          "type": "qty",
-          "visible": true,
-        },
-        "costBasis": {
-          "hideLabel": true,
-          "label": "Cost Basis",
-          "value": e.costBasis,
-          "type": "amount",
-          "visible": true,
-        },
-        "tdMarketValue": {
-          "hideLabel": true,
-          "label": "TD Market Value",
-          "value": e.tdMarketValue,
-          "type": "amount",
-          "floatRight": true,
-          "visible": true,
-        },
-      });
-    }).toList();
+        "subItems": subItems,
+      }));
+    });
+
+    return items;
   }
 
   void _onPageChange(GridPagination newPagination) {
