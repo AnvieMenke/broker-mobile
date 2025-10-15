@@ -218,7 +218,7 @@ class _CustomDatePickerState extends State<CustomDatePicker>
                           ],
                         ),
                       SizedBox(
-                        height: widget.isDateRange ? 360 : 180,
+                        height: widget.isDateRange ? 420 : 180,
                         child: TabBarView(
                           controller: _tabController,
                           children: widget.isDateRange
