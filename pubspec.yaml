@@ -41,3 +41,4 @@ flutter:
   assets:
     - .env
     - assets/images/no_data.png
+    - assets/images/sas_logo.png
