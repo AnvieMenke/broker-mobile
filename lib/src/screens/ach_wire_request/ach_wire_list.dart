@@ -566,6 +566,7 @@ class _AchWireListState extends State<AchWireList> {
                         },
                       ),
                       CustomDatePicker(
+                        isDateRange: true,
                         initialFromDate: queryData['fromDate'] != null
                             ? DateTime.tryParse(queryData['fromDate'])
                             : null,

@@ -1,4 +1,5 @@
 import 'package:broker_mobile/components/containers/page_container.dart';
+import 'package:broker_mobile/env.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:local_auth/local_auth.dart';
@@ -193,29 +194,31 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 24),
-              const Divider(thickness: 1),
-
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: Text(
-                  "Security",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              if (_biometricAvailable)
-                SwitchListTile(
-                  secondary: const Icon(Icons.fingerprint),
-                  title: const Text("Enable Biometric Login"),
-                  value: _useBiometrics,
-                  onChanged: _toggleBiometrics,
-                ),
-
-              const SizedBox(height: 8),
+              _biometricAvailable && AppEnv.enableBiometrics
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Divider(thickness: 1),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            "Security",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SwitchListTile(
+                          secondary: const Icon(Icons.fingerprint),
+                          title: const Text("Enable Biometric Login"),
+                          value: _useBiometrics,
+                          onChanged: _toggleBiometrics,
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
         ),
