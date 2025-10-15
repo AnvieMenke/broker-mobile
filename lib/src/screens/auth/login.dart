@@ -5,6 +5,7 @@ import 'package:broker_mobile/components/fields/field_password.dart';
 import 'package:broker_mobile/src/screens/auth/otp_verification_page.dart';
 import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:broker_mobile/components/messages/notification.dart';
 import '../../../service/auth_service.dart';
 import '../../../service/common_service.dart';
@@ -20,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _commonService = CommonService();
+  final _storage = const FlutterSecureStorage();
 
   String _selectedAuthMethod = "Email";
   bool _loading = false;
@@ -36,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _loadAppConfig();
+    _loadSavedCredentials();
   }
 
   Future<void> _loadAppConfig() async {
@@ -49,7 +52,19 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _handleLogin() async {
+  Future<void> _loadSavedCredentials() async {
+    final savedEmail = await _storage.read(key: 'email');
+    final savedPassword = await _storage.read(key: 'password');
+
+    if (savedEmail != null && savedPassword != null) {
+      setState(() {
+        _emailController.text = savedEmail;
+        _passwordController.text = savedPassword;
+      });
+    }
+  }
+
+  void _handleLogin({bool auto = false}) async {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
@@ -67,7 +82,11 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final response = await loginWeb(
-          email, password, _selectedCorrespondent ?? '', _selectedAuthMethod);
+        email,
+        password,
+        _selectedCorrespondent ?? '',
+        _selectedAuthMethod,
+      );
       _session = response.sessionKey;
 
       setState(() {
@@ -75,6 +94,41 @@ class _LoginPageState extends State<LoginPage> {
         _error = null;
         _correspondents = response.correspondents;
       });
+
+      final savedEmail = await _storage.read(key: 'email');
+      final savedPassword = await _storage.read(key: 'password');
+      final neverSave = await _storage.read(key: 'never_save');
+
+      if ((savedEmail == null || savedPassword == null) &&
+          neverSave != 'true') {
+        if (!mounted) return;
+        final saveChoice = await showDialog<String>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Save Password?'),
+            content:
+                const Text('Do you want to save your password for next time?'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(ctx, 'save'),
+                  child: const Text('Save')),
+              TextButton(
+                  onPressed: () => Navigator.pop(ctx, 'not_this_time'),
+                  child: const Text('Not this time')),
+              TextButton(
+                  onPressed: () => Navigator.pop(ctx, 'never'),
+                  child: const Text('Never')),
+            ],
+          ),
+        );
+
+        if (saveChoice == 'save') {
+          await _storage.write(key: 'email', value: email);
+          await _storage.write(key: 'password', value: password);
+        } else if (saveChoice == 'never') {
+          await _storage.write(key: 'never_save', value: 'true');
+        }
+      }
 
       if (_correspondents.length > 1) {
         Notify.info(
