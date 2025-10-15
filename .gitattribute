@@ -1,0 +1,3 @@
+# Force consistent line endings and ignore generated plugin registrants
+*.cc text eol=lf
+*.cmake text eol=lf

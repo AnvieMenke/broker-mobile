@@ -5,6 +5,7 @@ class CustomDatePicker extends StatefulWidget {
   final String? initialRecent;
   final DateTime? initialFromDate;
   final DateTime? initialToDate;
+  final bool isDateRange;
 
   const CustomDatePicker({
     super.key,
@@ -12,6 +13,7 @@ class CustomDatePicker extends StatefulWidget {
     this.initialRecent,
     this.initialFromDate,
     this.initialToDate,
+    this.isDateRange = false,
   });
 
   @override
@@ -21,7 +23,6 @@ class CustomDatePicker extends StatefulWidget {
 class _CustomDatePickerState extends State<CustomDatePicker>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
   late String selectedRecent;
   DateTime? fromDate;
   DateTime? toDate;
@@ -29,15 +30,35 @@ class _CustomDatePickerState extends State<CustomDatePicker>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-
+    _initController();
     selectedRecent = widget.initialRecent ?? "Past 10 days";
     fromDate = widget.initialFromDate;
     toDate = widget.initialToDate;
 
     if (fromDate != null && toDate != null) {
-      selectedRecent = "Custom Range";
+      selectedRecent = widget.isDateRange ? "Custom Range" : "Selected Date";
     }
+  }
+
+  void _initController() {
+    _tabController =
+        TabController(length: widget.isDateRange ? 2 : 1, vsync: this);
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomDatePicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isDateRange != widget.isDateRange) {
+      _tabController.dispose();
+      _initController();
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   Future<void> _selectDate(
@@ -50,16 +71,21 @@ class _CustomDatePickerState extends State<CustomDatePicker>
   ) async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: tempFromDate ?? DateTime.now(),
       firstDate: DateTime(DateTime.now().year - 5),
       lastDate: DateTime.now(),
     );
 
     if (picked != null) {
       innerSetState(() {
-        if (isFromDate) {
-          tempFromDate = picked;
+        if (widget.isDateRange) {
+          if (isFromDate) {
+            tempFromDate = picked;
+          } else {
+            tempToDate = picked;
+          }
         } else {
+          tempFromDate = picked;
           tempToDate = picked;
         }
         onChange(tempFromDate, tempToDate);
@@ -76,7 +102,10 @@ class _CustomDatePickerState extends State<CustomDatePicker>
     DateTime? computedFrom;
     DateTime? computedTo;
 
-    if (type == "Custom") {
+    if (!widget.isDateRange) {
+      computedFrom = from;
+      computedTo = from;
+    } else if (type == "Custom") {
       computedFrom = from;
       computedTo = to;
     } else {
@@ -117,26 +146,38 @@ class _CustomDatePickerState extends State<CustomDatePicker>
     }
 
     setState(() {
-      selectedRecent = type == "Custom" ? "Custom Range" : type;
+      selectedRecent = widget.isDateRange
+          ? (type == "Custom" ? "Custom Range" : type)
+          : "Selected Date";
       fromDate = computedFrom;
       toDate = computedTo;
     });
 
-    widget.onApply?.call(type, computedFrom, computedTo);
+    widget.onApply?.call(selectedRecent, computedFrom, computedTo);
   }
 
   @override
   Widget build(BuildContext context) {
-    String displayText = selectedRecent;
+    final presetLabels = [
+      "Past 10 days",
+      "Past 30 days",
+      "Past 60 days",
+      "Past 90 days",
+      "Q1 (Jan - Mar)",
+      "Q2 (Apr - Jun)",
+      "Q3 (July - Sept)",
+      "Q4 (Oct - Dec)",
+    ];
 
-    if (selectedRecent == "Custom Range" &&
-        fromDate != null &&
-        toDate != null) {
-      if (fromDate!.isAtSameMomentAs(toDate!)) {
-        displayText = "${fromDate!.month}/${fromDate!.day}/${fromDate!.year}";
-      } else {
-        displayText =
-            "${fromDate!.month}/${fromDate!.day}/${fromDate!.year} - ${toDate!.month}/${toDate!.day}/${toDate!.year}";
+    String displayText = selectedRecent;
+    if (!presetLabels.contains(selectedRecent)) {
+      if (fromDate != null && toDate != null) {
+        if (fromDate!.isAtSameMomentAs(toDate!)) {
+          displayText = "${fromDate!.month}/${fromDate!.day}/${fromDate!.year}";
+        } else {
+          displayText =
+              "${fromDate!.month}/${fromDate!.day}/${fromDate!.year} - ${toDate!.month}/${toDate!.day}/${toDate!.year}";
+        }
       }
     }
 
@@ -149,16 +190,7 @@ class _CustomDatePickerState extends State<CustomDatePicker>
       tempToDate = to;
     }
 
-    final recentItems = [
-      "Past 10 days",
-      "Past 30 days",
-      "Past 60 days",
-      "Past 90 days",
-      "Q1 (Jan - Mar)",
-      "Q2 (Apr - Jun)",
-      "Q3 (July - Sept)",
-      "Q4 (Oct - Dec)",
-    ];
+    final recentItems = presetLabels;
 
     return PopupMenuButton<int>(
       offset: const Offset(0, 45),
@@ -172,197 +204,117 @@ class _CustomDatePickerState extends State<CustomDatePicker>
               return SizedBox(
                 width: 280,
                 child: DefaultTabController(
-                  length: 2,
+                  length: widget.isDateRange ? 2 : 1,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      TabBar(
-                        controller: _tabController,
-                        labelColor: const Color(0xFF1565C0),
-                        tabs: const [
-                          Tab(text: "Recent"),
-                          Tab(text: "Custom"),
-                        ],
-                      ),
+                      if (widget.isDateRange)
+                        TabBar(
+                          controller: _tabController,
+                          labelColor: const Color(0xFF1565C0),
+                          tabs: const [
+                            Tab(text: "Recent"),
+                            Tab(text: "Custom"),
+                          ],
+                        ),
                       SizedBox(
-                        height: 360,
+                        height: widget.isDateRange ? 420 : 180,
                         child: TabBarView(
                           controller: _tabController,
-                          children: [
-                            SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  ...recentItems.map((item) {
-                                    final isSelected =
-                                        tempSelectedRecent == item;
-                                    return InkWell(
-                                      onTap: () {
-                                        setInnerState(() {
-                                          tempSelectedRecent = item;
-                                        });
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 12, horizontal: 24),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              width: 20,
-                                              height: 20,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: isSelected
-                                                      ? Colors.blue
-                                                      : Colors.grey,
-                                                  width: 2,
-                                                ),
-                                              ),
-                                              child: isSelected
-                                                  ? Center(
-                                                      child: Container(
-                                                        width: 10,
-                                                        height: 10,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          color: Colors.blue,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : null,
-                                            ),
-                                            const SizedBox(width: 12),
-                                            Expanded(child: Text(item)),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                                  const SizedBox(height: 8),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        selectedRecent = tempSelectedRecent;
-                                        fromDate = null;
-                                        toDate = null;
-                                      });
-                                      _apply(tempSelectedRecent, null, null);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF1565C0),
-                                      minimumSize: const Size.fromHeight(40),
-                                    ),
-                                    child: const Text("Apply"),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SingleChildScrollView(
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 16),
-                                    const Text("From Date"),
-                                    InkWell(
-                                      onTap: () => _selectDate(
-                                        context,
-                                        true,
-                                        setInnerState,
-                                        tempFromDate,
-                                        tempToDate,
-                                        updateTempDates,
-                                      ),
-                                      child: InputDecorator(
-                                        decoration: const InputDecoration(
-                                          hintText: "mm/dd/yyyy",
-                                          border: OutlineInputBorder(),
-                                          isDense: true,
-                                        ),
-                                        child: Text(
-                                          tempFromDate == null
-                                              ? ''
-                                              : "${tempFromDate?.month}/${tempFromDate?.day}/${tempFromDate?.year}",
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    const Text("To Date"),
-                                    InkWell(
-                                      onTap: () => _selectDate(
-                                        context,
-                                        false,
-                                        setInnerState,
-                                        tempFromDate,
-                                        tempToDate,
-                                        updateTempDates,
-                                      ),
-                                      child: InputDecorator(
-                                        decoration: const InputDecoration(
-                                          hintText: "mm/dd/yyyy",
-                                          border: OutlineInputBorder(),
-                                          isDense: true,
-                                        ),
-                                        child: Text(
-                                          tempToDate == null
-                                              ? ''
-                                              : "${tempToDate?.month}/${tempToDate?.day}/${tempToDate?.year}",
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 24),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                          children: widget.isDateRange
+                              ? [
+                                  SingleChildScrollView(
+                                    child: Column(
                                       children: [
-                                        OutlinedButton(
-                                          onPressed: () {
-                                            setInnerState(() {
-                                              tempFromDate = null;
-                                              tempToDate = null;
-                                            });
-                                          },
-                                          style: OutlinedButton.styleFrom(
-                                            foregroundColor:
-                                                const Color(0xFF1565C0),
-                                            side: const BorderSide(
-                                                color: Color(0xFF1565C0)),
-                                          ),
-                                          child: const Text("Clear"),
-                                        ),
+                                        ...recentItems.map((item) {
+                                          final isSelected =
+                                              tempSelectedRecent == item;
+                                          return InkWell(
+                                            onTap: () {
+                                              setInnerState(() {
+                                                tempSelectedRecent = item;
+                                              });
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 24),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    width: 20,
+                                                    height: 20,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color: isSelected
+                                                            ? Colors.blue
+                                                            : Colors.grey,
+                                                        width: 2,
+                                                      ),
+                                                    ),
+                                                    child: isSelected
+                                                        ? Center(
+                                                            child: Container(
+                                                              width: 10,
+                                                              height: 10,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                                color:
+                                                                    Colors.blue,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : null,
+                                                  ),
+                                                  const SizedBox(width: 12),
+                                                  Expanded(child: Text(item)),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                        const SizedBox(height: 8),
                                         ElevatedButton(
-                                          onPressed: (tempFromDate != null &&
-                                                  tempToDate != null)
-                                              ? () {
-                                                  setState(() {
-                                                    selectedRecent =
-                                                        "Custom Range";
-                                                    fromDate = tempFromDate;
-                                                    toDate = tempToDate;
-                                                  });
-                                                  _apply("Custom", fromDate,
-                                                      toDate);
-                                                }
-                                              : null,
+                                          onPressed: () {
+                                            setState(() {
+                                              selectedRecent =
+                                                  tempSelectedRecent;
+                                              fromDate = null;
+                                              toDate = null;
+                                            });
+                                            _apply(
+                                                tempSelectedRecent, null, null);
+                                          },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
-                                                (tempFromDate != null &&
-                                                        tempToDate != null)
-                                                    ? const Color(0xFF1565C0)
-                                                    : Colors.grey,
+                                                const Color(0xFF1565C0),
+                                            minimumSize:
+                                                const Size.fromHeight(40),
                                           ),
                                           child: const Text("Apply"),
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                                  ),
+                                  _buildCustomTab(
+                                      context,
+                                      setInnerState,
+                                      tempFromDate,
+                                      tempToDate,
+                                      updateTempDates),
+                                ]
+                              : [
+                                  _buildCustomTab(
+                                      context,
+                                      setInnerState,
+                                      tempFromDate,
+                                      tempToDate,
+                                      updateTempDates),
+                                ],
                         ),
                       ),
                     ],
@@ -379,10 +331,7 @@ class _CustomDatePickerState extends State<CustomDatePicker>
         decoration: BoxDecoration(
           color: Colors.grey[900]?.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(40),
-          border: Border.all(
-            color: Colors.grey.shade400,
-            width: 0.8,
-          ),
+          border: Border.all(color: Colors.grey.shade400, width: 0.8),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -396,6 +345,112 @@ class _CustomDatePickerState extends State<CustomDatePicker>
             ),
             const SizedBox(width: 4),
             const Icon(Icons.arrow_drop_down, size: 18),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCustomTab(
+    BuildContext context,
+    void Function(void Function()) setInnerState,
+    DateTime? tempFromDate,
+    DateTime? tempToDate,
+    void Function(DateTime?, DateTime?) updateTempDates,
+  ) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            Text(widget.isDateRange ? "From Date" : "Select Date"),
+            InkWell(
+              onTap: () => _selectDate(
+                context,
+                true,
+                setInnerState,
+                tempFromDate,
+                tempToDate,
+                updateTempDates,
+              ),
+              child: InputDecorator(
+                decoration: const InputDecoration(
+                  hintText: "mm/dd/yyyy",
+                  border: OutlineInputBorder(),
+                  isDense: true,
+                ),
+                child: Text(
+                  tempFromDate == null
+                      ? ''
+                      : "${tempFromDate.month}/${tempFromDate.day}/${tempFromDate.year}",
+                ),
+              ),
+            ),
+            if (widget.isDateRange) ...[
+              const SizedBox(height: 12),
+              const Text("To Date"),
+              InkWell(
+                onTap: () => _selectDate(
+                  context,
+                  false,
+                  setInnerState,
+                  tempFromDate,
+                  tempToDate,
+                  updateTempDates,
+                ),
+                child: InputDecorator(
+                  decoration: const InputDecoration(
+                    hintText: "mm/dd/yyyy",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                  child: Text(
+                    tempToDate == null
+                        ? ''
+                        : "${tempToDate.month}/${tempToDate.day}/${tempToDate.year}",
+                  ),
+                ),
+              ),
+            ],
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF1565C0),
+                    side: const BorderSide(color: Color(0xFF1565C0)),
+                  ),
+                  child: const Text("Close"),
+                ),
+                ElevatedButton(
+                  onPressed: tempFromDate != null
+                      ? () {
+                          setState(() {
+                            selectedRecent = widget.isDateRange
+                                ? "Custom Range"
+                                : "Selected Date";
+                            fromDate = tempFromDate;
+                            toDate =
+                                widget.isDateRange ? tempToDate : tempFromDate;
+                          });
+                          _apply("Custom", fromDate, toDate);
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: tempFromDate != null
+                        ? const Color(0xFF1565C0)
+                        : Colors.grey,
+                  ),
+                  child: const Text("Apply"),
+                ),
+              ],
+            ),
           ],
         ),
       ),

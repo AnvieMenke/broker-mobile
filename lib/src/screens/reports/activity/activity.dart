@@ -485,6 +485,7 @@ class ActivityPageState extends State<ActivityPage> {
                                   ),
                                   const SizedBox(width: 12),
                                   CustomDatePicker(
+                                    isDateRange: true,
                                     initialFromDate:
                                         queryData['fromDate'] != null
                                             ? DateTime.tryParse(

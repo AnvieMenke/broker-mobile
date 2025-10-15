@@ -17,4 +17,9 @@ class AppEnv {
     final parsed = int.tryParse(value);
     return parsed ?? 5;
   }
+  static bool get enableBiometrics {
+    final value = dotenv.env['ENABLE_BIOMETRICS'] ?? 'false';
+    return value.toLowerCase() == 'true';
+  }
+
 }
