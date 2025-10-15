@@ -5,7 +5,7 @@ class CustomDatePicker extends StatefulWidget {
   final String? initialRecent;
   final DateTime? initialFromDate;
   final DateTime? initialToDate;
-  final bool isDateRange; // ✅ flag for range mode
+  final bool isDateRange;
 
   const CustomDatePicker({
     super.key,
