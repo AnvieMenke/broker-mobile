@@ -67,64 +67,158 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     }
   }
 
-  @override
-  void dispose() {
-    themeManager.removeListener(_onThemeChanged);
-    super.dispose();
-  }
-
   void _onThemeChanged() {
     setState(() {
       _themeMode = themeManager.themeMode;
     });
   }
 
-  void _toggleTheme(bool isDark) {
-    themeManager.setTheme(isDark ? ThemeMode.dark : ThemeMode.light);
+  @override
+  void dispose() {
+    themeManager.removeListener(_onThemeChanged);
+    super.dispose();
   }
 
-  bool _isDarkMode(BuildContext context) {
-    if (_themeMode == ThemeMode.system) {
-      final brightness = MediaQuery.of(context).platformBrightness;
-      return brightness == Brightness.dark;
-    }
-    return _themeMode == ThemeMode.dark;
+  Widget _buildThemeOption({
+    required ThemeMode value,
+    required String label,
+    required IconData icon,
+  }) {
+    final isSelected = _themeMode == value;
+    final isSystem = value == ThemeMode.system;
+
+    final brightness = isSystem
+        ? WidgetsBinding.instance.platformDispatcher.platformBrightness
+        : (value == ThemeMode.dark ? Brightness.dark : Brightness.light);
+
+    final iconColor =
+        brightness == Brightness.dark ? Colors.white : Colors.black;
+
+    final textColor = value == ThemeMode.dark
+        ? Colors.white
+        : (isSystem
+            ? (brightness == Brightness.dark ? Colors.white : Colors.black)
+            : Colors.black);
+
+    return GestureDetector(
+      onTap: () => themeManager.setTheme(value),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: brightness == Brightness.dark
+              ? Colors.grey[850]
+              : Colors.grey[200],
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Colors.grey.shade400,
+            width: isSelected ? 3 : 1,
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 48, color: iconColor),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: textColor,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Icon(
+              isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.grey,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDark = _isDarkMode(context);
-
     return PageContainer(
       title: "App Settings",
-      page: Column(
-        children: [
-          // Dark mode toggle
-          SwitchListTile(
-            secondary: Icon(isDark ? Icons.dark_mode : Icons.light_mode),
-            title: Text(isDark ? "Dark Mode" : "Light Mode"),
-            value: isDark,
-            onChanged: _toggleTheme,
+      page: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  "Display",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const ListTile(
+                leading: Icon(Icons.color_lens),
+                title: Text("Theme Mode"),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildThemeOption(
+                      value: ThemeMode.light,
+                      label: 'Light',
+                      icon: Icons.wb_sunny,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildThemeOption(
+                      value: ThemeMode.system,
+                      label: 'System',
+                      icon: Icons.brightness_auto,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildThemeOption(
+                      value: ThemeMode.dark,
+                      label: 'Dark',
+                      icon: Icons.nightlight_round,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+              const Divider(thickness: 1),
+
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  "Security",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              if (_biometricAvailable)
+                SwitchListTile(
+                  secondary: const Icon(Icons.fingerprint),
+                  title: const Text("Enable Biometric Login"),
+                  value: _useBiometrics,
+                  onChanged: _toggleBiometrics,
+                ),
+
+              const SizedBox(height: 8),
+            ],
           ),
-
-          // Biometric toggle
-          if (_biometricAvailable)
-            SwitchListTile(
-              secondary: const Icon(Icons.fingerprint),
-              title: const Text("Enable Biometric Login"),
-              value: _useBiometrics,
-              onChanged: _toggleBiometrics,
-            ),
-
-          // Add more settings here if needed
-          // ListTile(
-          //   leading: const Icon(Icons.language),
-          //   title: const Text("Language"),
-          //   subtitle: const Text("English"),
-          //   trailing: const Icon(Icons.chevron_right),
-          //   onTap: () {},
-          // ),
-        ],
+        ),
       ),
     );
   }
