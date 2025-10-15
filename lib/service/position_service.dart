@@ -42,13 +42,14 @@ class PositionService {
       ..rep = param['rep'] ?? ""
       ..branch = param['branch'] ?? ""
       ..assetType = param['assetType'] ?? ""
-      ..symbol = param['symbol'] ?? "";
+      ..symbol = param['symbol'] ?? ""
+      ..rollUp = "Account No";
 
     if (paging != null && paging.isNotEmpty) {
       var paginationReq = Pagination()
         ..pageNo = paging["pageNo"] ?? 0
         ..pageSize = paging["rowsPerPage"] ?? 100
-        ..sortName = paging["sortName"] ?? "report_position_id"
+        ..sortName = paging["sortName"] ?? "account_no"
         ..sortDirection = paging["sortDirection"] ?? "ASC";
 
       req.pagination = paginationReq;
