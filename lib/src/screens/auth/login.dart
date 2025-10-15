@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:broker_mobile/components/buttons/button.dart';
 import 'package:broker_mobile/components/fields/field_password.dart';
 import 'package:broker_mobile/src/screens/auth/otp_verification_page.dart';
 import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
-import '../../../service/auth_service.dart';
 import 'package:broker_mobile/components/messages/notification.dart';
+import '../../../service/auth_service.dart';
+import '../../../service/common_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,8 +19,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  String _selectedAuthMethod = "Email";
+  final _commonService = CommonService();
 
+  String _selectedAuthMethod = "Email";
   bool _loading = false;
   String? _error;
 
@@ -25,6 +29,25 @@ class _LoginPageState extends State<LoginPage> {
   String? _selectedCorrespondent;
   bool _showCorrespondentDropdown = false;
   String _session = "";
+
+  String configPhoto = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppConfig();
+  }
+
+  Future<void> _loadAppConfig() async {
+    try {
+      final config = await _commonService.getAppConfig();
+      setState(() {
+        configPhoto = config.photo;
+      });
+    } catch (e) {
+      debugPrint("❌ Failed to load AppConfig: $e");
+    }
+  }
 
   void _handleLogin() async {
     final email = _emailController.text.trim();
@@ -121,10 +144,25 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.lock_outline, size: 80, color: Colors.blueAccent),
+        configPhoto.isNotEmpty
+            ? Image.memory(
+                base64Decode(
+                  configPhoto
+                      .replaceAll(RegExp(r'data:image/[^;]+;base64,'), '')
+                      .trim(),
+                ),
+                width: 100,
+                height: 100,
+              )
+            : Image.asset(
+                'assets/images/sas_logo.png',
+                width: 100,
+                height: 100,
+                fit: BoxFit.contain,
+              ),
         const SizedBox(height: 24),
         const Text(
-          'Login',
+          'Login Account',
           style: TextStyle(fontSize: 28),
         ),
         const SizedBox(height: 32),
@@ -132,6 +170,7 @@ class _LoginPageState extends State<LoginPage> {
           controller: _emailController,
           decoration: InputDecoration(
             hintText: 'Email',
+            labelText: 'Email',
           ),
         ),
         const SizedBox(height: 16),

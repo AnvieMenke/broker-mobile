@@ -1,6 +1,8 @@
 import 'package:broker_mobile/proto/commonpb/lazylist.pbgrpc.dart';
 import 'package:broker_mobile/proto/commonpb/list.pbgrpc.dart';
 import 'package:broker_mobile/proto/commonpb/systemcode.pbgrpc.dart';
+import 'package:broker_mobile/proto/commonpb/appconfig.pbgrpc.dart';
+import 'package:broker_mobile/google/protobuf/empty.pb.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import 'package:protobuf/protobuf.dart';
 import '../server/grpc_client.dart';
@@ -39,6 +41,18 @@ class CommonService {
     final channel = _createChannel();
 
     final client = SystemCodeServiceClient(
+      channel,
+      options: CallOptions(timeout: Duration(seconds: 30)),
+      interceptors: [AuthInterceptor()],
+    );
+
+    return client;
+  }
+
+  AppConfigServiceClient _appConfigClient() {
+    final channel = _createChannel();
+
+    final client = AppConfigServiceClient(
       channel,
       options: CallOptions(timeout: Duration(seconds: 30)),
       interceptors: [AuthInterceptor()],
@@ -214,6 +228,18 @@ class CommonService {
     try {
       final response = await client.accessibleAccountName(req);
       return response.accountNames;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<AppConfig> getAppConfig() async {
+    final client = _appConfigClient();
+
+
+    try {
+      final response = await client.getAppConfig(Empty());
+      return response;
     } catch (e) {
       rethrow;
     }
