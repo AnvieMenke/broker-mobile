@@ -104,3 +104,18 @@ make dart-proto
 ```
 
 ---
+
+### Generate Icons
+1. add your path in pubsec.yaml
+```yaml
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/sas_logo.png"
+  remove_alpha_ios: true
+```
+
+Example command:
+```bash
+flutter pub run flutter_launcher_icons
+```
