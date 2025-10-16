@@ -295,25 +295,20 @@ class GridViewCard extends StatelessWidget {
                 ],
               ),
             ),
+            if (item.rightField != null)
+              DefaultTextStyle(
+                style: textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+                child: item.rightField!.displayValue,
+              ),
             if (!isSubItem)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: PopupMenuButton(
-                      icon: const Icon(Icons.more_horiz),
-                      itemBuilder: (context) => mergedActions,
-                    ),
-                  ),
-                  if (item.rightField != null)
-                    DefaultTextStyle(
-                      style: textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                      child: item.rightField!.displayValue,
-                    ),
-                ],
+              Align(
+                alignment: Alignment.centerRight,
+                child: PopupMenuButton(
+                  icon: const Icon(Icons.more_horiz),
+                  itemBuilder: (context) => mergedActions,
+                ),
               ),
           ],
         ),
@@ -350,23 +345,30 @@ class GridViewCard extends StatelessWidget {
                                 ),
                               ),
                             if (f.addAvatar && f.value.isNotEmpty) ...[
-                              CircleAvatar(
-                                radius: 16,
-                                backgroundColor: Colors.blue.shade100,
-                                child: Text(
-                                  f.value[0].toUpperCase(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 16,
+                                    backgroundColor: Colors.blue.shade100,
+                                    child: Text(
+                                      f.value[0].toUpperCase(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  f.value,
-                                  style: textTheme.bodyMedium,
-                                ),
+                                  const SizedBox(width: 8),
+                                  Flexible(
+                                    child: Text(
+                                      f.value,
+                                      style: textTheme.bodyMedium,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ] else
                               f.displayValue,

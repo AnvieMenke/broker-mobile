@@ -1,4 +1,5 @@
 import 'package:broker_mobile/components/containers/page_list_container.dart';
+import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
 import '../../../../components/datepicker/datepicker.dart';
@@ -107,8 +108,7 @@ class PositionPageState extends State<PositionPage> {
                 "tdQty": {
                   "hideLabel": true,
                   "label": "TD Qty",
-                  "value": e.tdQty,
-                  "type": "qty",
+                  "value": "${FormatUtils.formatQty(e.tdQty)} shares",
                   "visible": true,
                 },
                 "costBasis": {
