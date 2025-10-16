@@ -31,6 +31,7 @@ dependencies:
   fl_chart: ^0.69.0
   flutter_secure_storage: ^9.0.0
   local_auth: ^2.3.0
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -44,3 +45,9 @@ flutter:
     - .env
     - assets/images/no_data.png
     - assets/images/sas_logo.png
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/sas_logo.png"
+  remove_alpha_ios: true
