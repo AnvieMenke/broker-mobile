@@ -208,109 +208,113 @@ class ActivityPageState extends State<ActivityPage> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text("Filter by:"),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    AutoCompleteCorrespondent(
-                      name: "correspondent",
-                      value: selectedCorrespondent,
-                      label: "Correspondent",
-                      isAllStatus: false,
-                      type: "",
-                      onChange: (value) => setState(() {
-                        selectedCorrespondent = value;
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteMasterAccountNo(
-                      name: "masterAccountNo",
-                      value: selectedMasterAccountNo,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        selectedMasterAccountNo =
-                            map['data']?['masterAccountNo'] as String? ?? '';
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteRepAdvisor(
-                      name: "rep",
-                      value: selectedRep,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        selectedRep = map['data']?['rep'] as String? ?? '';
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    AutoCompleteBranch(
-                      name: "branch",
-                      value: selectedBranch,
-                      isAllStatus: false,
-                      isAccessibleOnly: true,
-                      correspondent: queryData["correspondent"],
-                      onChange: (map) => setState(() {
-                        selectedBranch =
-                            map['data']?['branch'] as String? ?? '';
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    SelectSystemCode(
-                      label: "Asset Type",
-                      placeholder: "Select Asset Type",
-                      value: selectedAssetType,
-                      type: "Asset Type",
-                      onChange: (map) => setState(() {
-                        selectedAssetType = map?['data']['code'] ?? '';
-                      }),
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: descriptionController,
-                      decoration:
-                          const InputDecoration(labelText: "Description"),
-                      onChanged: (value) => description = value,
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  queryData = {
-                    ...queryData,
-                    "correspondent": selectedCorrespondent,
-                    "masterAccountNo": selectedMasterAccountNo,
-                    "rep": selectedRep,
-                    "branch": selectedBranch,
-                    "assetType": selectedAssetType,
-                    "description": description,
-                  };
-                  _updateQueryData();
-                });
-
-                Navigator.pop(context, true);
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: const Text("Filter by:"),
+            content: StatefulBuilder(
+              builder: (context, setState) {
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      AutoCompleteCorrespondent(
+                        name: "correspondent",
+                        value: selectedCorrespondent,
+                        label: "Correspondent",
+                        isAllStatus: false,
+                        type: "",
+                        onChange: (value) => setState(() {
+                          selectedCorrespondent = value;
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteMasterAccountNo(
+                        name: "masterAccountNo",
+                        value: selectedMasterAccountNo,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: queryData["correspondent"],
+                        onChange: (map) => setState(() {
+                          selectedMasterAccountNo =
+                              map['data']?['masterAccountNo'] as String? ?? '';
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteRepAdvisor(
+                        name: "rep",
+                        value: selectedRep,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: queryData["correspondent"],
+                        onChange: (map) => setState(() {
+                          selectedRep = map['data']?['rep'] as String? ?? '';
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      AutoCompleteBranch(
+                        name: "branch",
+                        value: selectedBranch,
+                        isAllStatus: false,
+                        isAccessibleOnly: true,
+                        correspondent: queryData["correspondent"],
+                        onChange: (map) => setState(() {
+                          selectedBranch =
+                              map['data']?['branch'] as String? ?? '';
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      SelectSystemCode(
+                        label: "Asset Type",
+                        placeholder: "Select Asset Type",
+                        value: selectedAssetType,
+                        type: "Asset Type",
+                        onChange: (map) => setState(() {
+                          selectedAssetType = map?['data']['code'] ?? '';
+                        }),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: descriptionController,
+                        decoration:
+                            const InputDecoration(labelText: "Description"),
+                        onChanged: (value) => description = value,
+                      ),
+                    ],
+                  ),
+                );
               },
-              child: const Text("Search"),
             ),
-          ],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    queryData = {
+                      ...queryData,
+                      "correspondent": selectedCorrespondent,
+                      "masterAccountNo": selectedMasterAccountNo,
+                      "rep": selectedRep,
+                      "branch": selectedBranch,
+                      "assetType": selectedAssetType,
+                      "description": description,
+                    };
+                    _updateQueryData();
+                  });
+
+                  Navigator.pop(context, true);
+                },
+                child: const Text("Search"),
+              ),
+            ],
+          ),
         );
       },
     );
