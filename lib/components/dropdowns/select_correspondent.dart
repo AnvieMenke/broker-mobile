@@ -36,6 +36,7 @@ class AutoCompleteCorrespondent extends StatefulWidget {
 class _AutoCompleteCorrespondentState extends State<AutoCompleteCorrespondent> {
   final TextEditingController _controller = TextEditingController();
   late final CommonService _service;
+  List<String> _options = [];
 
   @override
   void initState() {
@@ -47,7 +48,6 @@ class _AutoCompleteCorrespondentState extends State<AutoCompleteCorrespondent> {
   @override
   void didUpdateWidget(covariant AutoCompleteCorrespondent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // ✅ Update the text field if parent-provided value changes
     if (widget.value != oldWidget.value && widget.value != _controller.text) {
       _controller.text = widget.value;
     }
@@ -59,7 +59,7 @@ class _AutoCompleteCorrespondentState extends State<AutoCompleteCorrespondent> {
         isAllStatus: widget.isAllStatus,
         type: widget.type,
       );
-
+      _options = response;
       return response
           .where((c) => c.toUpperCase().contains(pattern.toUpperCase()))
           .toList();
@@ -69,19 +69,24 @@ class _AutoCompleteCorrespondentState extends State<AutoCompleteCorrespondent> {
     }
   }
 
-  void _handleOnBlur(String value, List<String> options) {
+  void _handleOnBlur(String value) {
     if (widget.freeSolo) {
       widget.onChange(value);
       return;
     }
 
-    if (options.contains(value)) {
+    if (!_options.contains(value)) {
+      _controller.clear();
+      widget.onChange('');
+    } else {
       widget.onChange(value);
-      return;
     }
+  }
 
+  void _clearField() {
     _controller.clear();
     widget.onChange('');
+    setState(() {});
   }
 
   @override
@@ -98,26 +103,45 @@ class _AutoCompleteCorrespondentState extends State<AutoCompleteCorrespondent> {
       onSelected: (suggestion) {
         _controller.text = suggestion;
         widget.onChange(suggestion);
+        setState(() {});
       },
       builder: (context, controller, focusNode) {
-        return TextField(
-          controller: controller,
-          focusNode: focusNode,
-          enabled: !widget.disabled,
-          decoration: InputDecoration(
-            labelText: widget.label ?? 'Correspondent',
-            hintText: widget.label ?? 'Correspondent',
-            errorText: widget.error ? 'Invalid input' : null,
-          ),
-          onChanged: (value) {
-            if (widget.freeSolo) {
-              widget.onChange(value);
+        return Focus(
+          onFocusChange: (hasFocus) {
+            if (!hasFocus) {
+              _handleOnBlur(_controller.text);
             }
           },
-          onEditingComplete: () async {
-            final options = await _getOptions(_controller.text);
-            _handleOnBlur(_controller.text, options);
-          },
+          child: TextField(
+            controller: controller,
+            focusNode: focusNode,
+            enabled: !widget.disabled,
+            decoration: InputDecoration(
+              labelText: widget.label ?? 'Correspondent',
+              hintText: widget.label ?? 'Correspondent',
+              errorText: widget.error ? 'Invalid input' : null,
+              suffixIcon: controller.text.isNotEmpty && !widget.disabled
+                  ? IconButton(
+                      icon: const Icon(Icons.clear, size: 20),
+                      onPressed: _clearField,
+                    )
+                  : null,
+            ),
+            onChanged: (value) {
+              setState(() {});
+              if (widget.freeSolo) {
+                widget.onChange(value);
+                return;
+              }
+              if (value.isEmpty) {
+                widget.onChange('');
+                return;
+              }
+            },
+            onEditingComplete: () {
+              _handleOnBlur(_controller.text);
+            },
+          ),
         );
       },
     );

@@ -16,6 +16,7 @@ class AutoCompleteAccountNo extends StatefulWidget {
   final String type;
   final String correspondent;
   final Function(Map<String, dynamic>) onChange;
+  final Function(Map<String, dynamic>)? onClear;
   final bool reset;
 
   const AutoCompleteAccountNo({
@@ -32,6 +33,7 @@ class AutoCompleteAccountNo extends StatefulWidget {
     this.type = '',
     this.correspondent = '',
     required this.onChange,
+    this.onClear,
     this.reset = false,
   });
 
@@ -42,13 +44,25 @@ class AutoCompleteAccountNo extends StatefulWidget {
 class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
   final TextEditingController _controller = TextEditingController();
   late final CommonService _service;
+  List<Map<String, dynamic>> _options = [];
 
   @override
   void initState() {
     super.initState();
     _controller.text = widget.value;
     _service = CommonService();
+  }
 
+  @override
+  void didUpdateWidget(covariant AutoCompleteAccountNo oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      if (!(widget.freeSolo &&
+          _controller.text != oldWidget.value &&
+          _controller.text != widget.value)) {
+        _controller.text = widget.value;
+      }
+    }
     if (widget.reset) {
       _controller.clear();
       widget.onChange({'name': widget.name, 'value': ''});
@@ -64,15 +78,14 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
           widget.isAllStatus,
           widget.type,
         );
-
-        return data.map((acc) {
-          return {
-            'accountNo': acc.accountNo,
-            'correspondent': acc.correspondent,
-            'accountName': acc.accountName,
-            'accountId': acc.accountId,
-          };
-        }).toList();
+        _options = data
+            .map((acc) => {
+                  'accountNo': acc.accountNo,
+                  'correspondent': acc.correspondent,
+                  'accountName': acc.accountName,
+                  'accountId': acc.accountId,
+                })
+            .toList();
       } else {
         final data = await _service.lazyLoadAccount(
           input,
@@ -81,37 +94,40 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
           widget.isActive,
           widget.correspondent,
         );
-
-        return data.accounts.map((acc) {
-          return {
-            'accountId': acc.accountId,
-            'accountNo': acc.accountNo,
-            'correspondent': acc.correspondent,
-            'broker': acc.broker,
-            'accountName': acc.accountName,
-          };
-        }).toList();
+        _options = data.accounts
+            .map((acc) => {
+                  'accountId': acc.accountId,
+                  'accountNo': acc.accountNo,
+                  'correspondent': acc.correspondent,
+                  'broker': acc.broker,
+                  'accountName': acc.accountName,
+                })
+            .toList();
       }
+      return _options;
     } catch (e) {
-      debugPrint('Error fetching account options: $e');
+      debugPrint('Error fetching accounts: $e');
       return [];
     }
   }
 
-  void _handleOnBlur(String value, List<Map<String, dynamic>> options) {
-    final data = options.firstWhere(
-      (o) => o['accountNo'] == value,
-      orElse: () => {},
-    );
+  void _handleOnBlur(String value) {
+    final exists = _options.any((o) => o['accountNo'] == value);
 
-    if (data.isNotEmpty) {
-      _setPropsValue(data['accountNo'], data, data['correspondent'],
-          data['broker'], ConvertService.safeInt(data['accountId']));
+    if (exists) {
+      final match = _options.firstWhere((o) => o['accountNo'] == value);
+      _setPropsValue(
+        match['accountNo'],
+        match,
+        match['correspondent'] ?? '',
+        match['broker'] ?? '',
+        ConvertService.safeInt(match['accountId']),
+      );
       return;
     }
 
     if (widget.freeSolo) {
-      _setPropsValue(value, {}, '', '');
+      _setPropsValue(value, {});
       return;
     }
 
@@ -121,34 +137,36 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
 
   void _setPropsValue(String value, Map<String, dynamic> data,
       [String correspondent = '', String broker = '', int accountId = 0]) {
-    final result = {
+    widget.onChange({
       'name': widget.name,
       'value': value,
       'data': data,
       'correspondent': correspondent,
       'broker': broker,
       'accountId': accountId,
-    };
-    widget.onChange(result);
+    });
+  }
+
+  void _clearField() {
+    final hadValue = widget.value.isNotEmpty;
+    _controller.clear();
+    widget.onChange({});
+    _setPropsValue('', {});
+    if (hadValue) {
+      widget.onClear!({
+        'name': widget.name,
+        'value': '',
+        'data': {},
+      });
+    }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<Map<String, dynamic>>(
-      suggestionsCallback: (pattern) async {
-        final options = await _getOptions(pattern);
-
-        if (widget.value.isNotEmpty &&
-            !options.any((o) => o['accountNo'] == widget.value)) {
-          options.insert(0, {
-            'accountNo': widget.value,
-            'correspondent': '',
-            'broker': '',
-          });
-        }
-
-        return options;
-      },
+      controller: _controller,
+      suggestionsCallback: (pattern) async => await _getOptions(pattern),
       itemBuilder: (context, suggestion) {
         return ListTile(
           title: Text(
@@ -167,27 +185,41 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
           suggestion['broker'] ?? '',
           ConvertService.safeInt(suggestion['accountId']),
         );
+        setState(() {});
       },
       builder: (context, controller, focusNode) {
-        return TextField(
-          controller: _controller,
-          focusNode: focusNode,
-          enabled: !widget.disabled,
-          decoration: InputDecoration(
-            labelText: 'Account No',
-            hintText: 'Account No',
-            errorText: widget.error ? 'Invalid input' : null,
+        return Focus(
+          onFocusChange: (hasFocus) {
+            if (!hasFocus) _handleOnBlur(_controller.text);
+          },
+          child: TextField(
+            controller: controller,
+            focusNode: focusNode,
+            enabled: !widget.disabled,
+            decoration: InputDecoration(
+              labelText: 'Account No',
+              hintText: 'Account No',
+              errorText: widget.error ? 'Invalid input' : null,
+              suffixIcon: controller.text.isNotEmpty && !widget.disabled
+                  ? IconButton(
+                      icon: const Icon(Icons.clear, size: 20),
+                      onPressed: _clearField,
+                    )
+                  : null,
+            ),
+            onChanged: (value) {
+              setState(() {});
+              if (widget.freeSolo) {
+                _setPropsValue(controller.text, {});
+                return;
+              }
+              if (value.isEmpty) {
+                _setPropsValue('', {});
+                widget.onChange({});
+              }
+            },
+            onEditingComplete: () => _handleOnBlur(_controller.text),
           ),
-          onChanged: (value) {
-            controller.text = value;
-            if (widget.freeSolo) {
-              _setPropsValue(value, {});
-            }
-          },
-          onEditingComplete: () async {
-            final opts = await _getOptions(_controller.text);
-            _handleOnBlur(_controller.text, opts);
-          },
         );
       },
     );

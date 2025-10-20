@@ -215,8 +215,6 @@ class ActivityPageState extends State<ActivityPage> {
           content: StatefulBuilder(
             builder: (context, setState) {
               return SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -234,46 +232,36 @@ class ActivityPageState extends State<ActivityPage> {
                     const SizedBox(height: 16),
                     AutoCompleteMasterAccountNo(
                       name: "masterAccountNo",
-                      freeSolo: true,
                       value: selectedMasterAccountNo,
                       isAllStatus: false,
                       isAccessibleOnly: true,
                       correspondent: queryData["correspondent"],
                       onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['masterAccountNo'] != null) {
-                          selectedMasterAccountNo =
-                              map['data']['masterAccountNo'] as String;
-                        }
+                        selectedMasterAccountNo =
+                            map['data']?['masterAccountNo'] as String? ?? '';
                       }),
                     ),
                     const SizedBox(height: 16),
                     AutoCompleteRepAdvisor(
                       name: "rep",
-                      freeSolo: true,
                       value: selectedRep,
                       isAllStatus: false,
                       isAccessibleOnly: true,
                       correspondent: queryData["correspondent"],
                       onChange: (map) => setState(() {
-                        if (map['data'] != null && map['data']['rep'] != null) {
-                          selectedRep = map['data']['rep'] as String;
-                        }
+                        selectedRep = map['data']?['rep'] as String? ?? '';
                       }),
                     ),
                     const SizedBox(height: 16),
                     AutoCompleteBranch(
                       name: "branch",
-                      freeSolo: true,
                       value: selectedBranch,
                       isAllStatus: false,
                       isAccessibleOnly: true,
                       correspondent: queryData["correspondent"],
                       onChange: (map) => setState(() {
-                        if (map['data'] != null &&
-                            map['data']['branch'] != null) {
-                          selectedBranch = map['data']['branch'] as String;
-                        }
+                        selectedBranch =
+                            map['data']?['branch'] as String? ?? '';
                       }),
                     ),
                     const SizedBox(height: 16),
@@ -283,7 +271,7 @@ class ActivityPageState extends State<ActivityPage> {
                       value: selectedAssetType,
                       type: "Asset Type",
                       onChange: (map) => setState(() {
-                        selectedAssetType = map?['data']['code'];
+                        selectedAssetType = map?['data']['code'] ?? '';
                       }),
                     ),
                     const SizedBox(height: 16),
@@ -434,7 +422,6 @@ class ActivityPageState extends State<ActivityPage> {
                               constraints: const BoxConstraints(maxWidth: 400),
                               child: AutoCompleteAccountNo(
                                 name: "accountNo",
-                                freeSolo: true,
                                 value: queryData["accountNo"],
                                 isAllStatus: false,
                                 isAccessibleOnly: true,
@@ -449,12 +436,17 @@ class ActivityPageState extends State<ActivityPage> {
                                     _futureRequests = _listActivity();
                                   }
                                 }),
+                                onClear: (map) => setState(() {
+                                  queryData["accountNo"] = "";
+                                  _updateQueryData();
+                                  _futureRequests = _listActivity();
+                                }),
                               ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 12),
+                                horizontal: 8, vertical: 16),
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
@@ -463,21 +455,19 @@ class ActivityPageState extends State<ActivityPage> {
                                     width: 150,
                                     child: AutoCompleteSymbol(
                                       name: "symbol",
-                                      freeSolo: true,
                                       value: queryData['symbol'],
                                       isActive: true,
-                                      onChange: (map) => setState(() {
-                                        final symbol =
-                                            map['data']?['symbol'] ?? '';
-                                        final name = map['name'];
-
-                                        queryData[name] = symbol;
+                                      onClear: (map) => setState(() {
+                                        queryData["symbol"] = "";
                                         _updateQueryData();
-
-                                        if (symbol.isNotEmpty ||
-                                            (map['value'] == '' &&
-                                                (map['data']?.isEmpty ??
-                                                    true))) {
+                                        _futureRequests = _listActivity();
+                                      }),
+                                      onChange: (map) => setState(() {
+                                        if (map['data'] != null &&
+                                            map['data']['symbol'] != null) {
+                                          queryData["symbol"] =
+                                              map['data']['symbol'] as String;
+                                          _updateQueryData();
                                           _futureRequests = _listActivity();
                                         }
                                       }),

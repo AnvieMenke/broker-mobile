@@ -83,6 +83,7 @@ class CommonService {
     final client = _lazyClient();
     final req = AccessibleRequest()
       ..key = key
+      ..correspondent= correspondent
       ..isAllStatus = isAllStatus
       ..type = type;
 
@@ -155,6 +156,7 @@ class CommonService {
     final client = _lazyClient();
     final req = AccessibleRequest()
       ..key = key
+      ..correspondent = correspondent
       ..isAllStatus = isAllStatus;
 
     try {

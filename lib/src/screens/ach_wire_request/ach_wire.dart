@@ -198,10 +198,14 @@ class _AchWirePageState extends State<AchWirePage> {
       return Notify.warning('Please select a request type.');
     }
 
+    if (ConvertService.safeDouble(data["amt"]) == 0) {
+      return Notify.warning('Amount is required.');
+    }
+
     if (data["transferType"] == 'Withdrawal') {
       if (double.tryParse(maximumWithdrawable["pendingCallLog"])! > 0) {
         return Notify.error('Cannot withdraw with pending calls.');
-      } else if (data["amt"] >
+      } else if (ConvertService.safeDouble(data["amt"]) >
           double.tryParse(maximumWithdrawable["withdrawableAmt"])!) {
         return Notify.error('Amount is greater than Maximum Withdrawable.');
       }
@@ -296,8 +300,6 @@ class _AchWirePageState extends State<AchWirePage> {
                   : constraints.maxWidth;
 
               return SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -332,10 +334,13 @@ class _AchWirePageState extends State<AchWirePage> {
                             correspondent: formData["correspondent"],
                             type: "",
                             onChange: (map) => setState(() {
-                              formData["accountNo"] = map['data']['accountNo'];
+                              final data = map['data'] ?? {};
+
+                              formData["accountNo"] = data?['accountNo'] ?? '';
                               formData["correspondent"] =
-                                  map['data']['correspondent'];
-                              formData["accountId"] = map['data']['accountId'];
+                                  data?['correspondent'] ?? '';
+                              formData["accountId"] = data?['accountId'] ?? 0;
+
                               _checkAndFetchMaxWithdrawable();
                               _calculateFee();
                             }),
@@ -368,10 +373,9 @@ class _AchWirePageState extends State<AchWirePage> {
                             type: "Type",
                             subType: "Request Type",
                             onChange: (map) => setState(() {
-                              if (map != null) {
-                                formData["requestType"] = map["data"]["code"];
-                                _calculateFee();
-                              }
+                              formData["requestType"] =
+                                  map?["data"]["code"] ?? '';
+                              _calculateFee();
                             }),
                           ),
                         ),
@@ -385,11 +389,10 @@ class _AchWirePageState extends State<AchWirePage> {
                             type: "Type",
                             subType: "Transfer Type",
                             onChange: (map) => setState(() {
-                              if (map != null) {
-                                formData["transferType"] = map["data"]["code"];
-                                _checkAndFetchMaxWithdrawable();
-                                _calculateFee();
-                              }
+                              formData["transferType"] =
+                                  map?["data"]["code"] ?? '';
+                              _checkAndFetchMaxWithdrawable();
+                              _calculateFee();
                             }),
                           ),
                         ),
@@ -439,9 +442,7 @@ class _AchWirePageState extends State<AchWirePage> {
                             value: formData["status"],
                             requestType: formData["requestType"],
                             onChange: (data) => setState(() {
-                              if (data != null) {
-                                formData["status"] = data;
-                              }
+                              formData["status"] = data ?? '';
                             }),
                           ),
                         ),

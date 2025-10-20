@@ -39,21 +39,32 @@ class AutoCompleteRepAdvisor extends StatefulWidget {
 class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
   final TextEditingController _controller = TextEditingController();
   late final CommonService _service;
-  List<Map<String, String>> _options = [];
+  List<Map<String, dynamic>> _options = [];
 
   @override
   void initState() {
     super.initState();
     _controller.text = widget.value;
     _service = CommonService();
+  }
 
+  @override
+  void didUpdateWidget(covariant AutoCompleteRepAdvisor oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      if (!(widget.freeSolo &&
+          _controller.text != oldWidget.value &&
+          _controller.text != widget.value)) {
+        _controller.text = widget.value;
+      }
+    }
     if (widget.reset) {
       _controller.clear();
       widget.onChange({'name': widget.name, 'value': ''});
     }
   }
 
-  Future<List<Map<String, String>>> _getOptions(String input) async {
+  Future<List<Map<String, dynamic>>> _getOptions(String input) async {
     try {
       if (widget.isAccessibleOnly) {
         final data = await _service.accessibleRep(
@@ -61,12 +72,7 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
           widget.correspondent,
           widget.isAllStatus,
         );
-
-        return data.map<Map<String, String>>((acc) {
-          return {
-            'rep': acc.rep,
-          };
-        }).toList();
+        _options = data.map((acc) => {'rep': acc.rep}).toList();
       } else {
         final data = await _service.lazyLoadAccount(
           input,
@@ -75,13 +81,9 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
           widget.isActive,
           widget.correspondent,
         );
-
-        return data.accounts.map<Map<String, String>>((acc) {
-          return {
-            'rep': acc.rep,
-          };
-        }).toList();
+        _options = data.accounts.map((acc) => {'rep': acc.rep}).toList();
       }
+      return _options;
     } catch (e) {
       debugPrint('Error fetching rep advisor options: $e');
       return [];
@@ -89,18 +91,16 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
   }
 
   void _handleOnBlur(String value) {
-    if (widget.freeSolo) {
-      _setPropsValue(value, {});
+    final exists = _options.any((o) => o['rep'] == value);
+
+    if (exists) {
+      final match = _options.firstWhere((o) => o['rep'] == value);
+      _setPropsValue(match['rep'] ?? '', match);
       return;
     }
 
-    final match = _options.firstWhere(
-      (o) => o['rep'] == value,
-      orElse: () => {},
-    );
-
-    if (match.isNotEmpty) {
-      _setPropsValue(match['rep'] ?? '', match);
+    if (widget.freeSolo) {
+      _setPropsValue(value, {});
       return;
     }
 
@@ -108,7 +108,7 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
     _setPropsValue('', {});
   }
 
-  void _setPropsValue(String value, Map<String, String> data) {
+  void _setPropsValue(String value, Map<String, dynamic> data) {
     widget.onChange({
       'name': widget.name,
       'value': value,
@@ -116,14 +116,17 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
     });
   }
 
+  void _clearField() {
+    _controller.clear();
+    widget.onChange({});
+    _setPropsValue('', {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return TypeAheadField<Map<String, String>>(
-      suggestionsCallback: (pattern) async {
-        _options = await _getOptions(pattern);
-
-        return _options;
-      },
+    return TypeAheadField<Map<String, dynamic>>(
+      controller: _controller,
+      suggestionsCallback: (pattern) async => await _getOptions(pattern),
       itemBuilder: (context, suggestion) {
         return ListTile(
           title: Text(
@@ -133,29 +136,46 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
         );
       },
       onSelected: (suggestion) {
-        final val = suggestion['rep'] ?? '';
-        _controller.text = val;
-        _setPropsValue(val, suggestion);
+        _controller.text = suggestion['rep'] ?? '';
+        _setPropsValue(suggestion['rep'] ?? '', suggestion);
+        setState(() {});
       },
       builder: (context, controller, focusNode) {
-        return TextField(
-          controller: _controller,
-          focusNode: focusNode,
-          enabled: !widget.disabled,
-          decoration: InputDecoration(
-            labelText: 'Rep/Advisor',
-            hintText: 'Rep/Advisor',
-            errorText: widget.error ? 'Invalid input' : null,
+        return Focus(
+          onFocusChange: (hasFocus) {
+            if (!hasFocus) _handleOnBlur(_controller.text);
+          },
+          child: TextField(
+            controller: controller,
+            focusNode: focusNode,
+            enabled: !widget.disabled,
+            decoration: InputDecoration(
+              labelText: 'Rep/Advisor',
+              hintText: 'Rep/Advisor',
+              errorText: widget.error ? 'Invalid input' : null,
+              suffixIcon: controller.text.isNotEmpty && !widget.disabled
+                  ? IconButton(
+                      icon: const Icon(Icons.clear, size: 20),
+                      onPressed: _clearField,
+                    )
+                  : null,
+            ),
+            onChanged: (value) {
+              controller.text = value;
+              setState(() {});
+              if (value.trim().isEmpty) {
+                if (_controller.text.isEmpty) return;
+                _setPropsValue('', {});
+                widget.onChange({});
+                return;
+              }
+
+              if (widget.freeSolo) {
+                _setPropsValue(value, {});
+              }
+            },
+            onEditingComplete: () => _handleOnBlur(_controller.text),
           ),
-          onChanged: (value) {
-            controller.text = value;
-            if (widget.freeSolo) {
-              _setPropsValue(value, {});
-            }
-          },
-          onEditingComplete: () {
-            _handleOnBlur(_controller.text);
-          },
         );
       },
     );

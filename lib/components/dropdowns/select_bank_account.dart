@@ -101,11 +101,13 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
               return DropdownMenuItem<BankAccount>(
                 value: account,
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.6,
+                  width: MediaQuery.of(context).size.width * 0.7,
                   child: Text(
-                    "${account.bankName}: Bank Acct# ${account.bankAccountNo}",
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    "${account.bankName}: ${account.bankAccountNo}",
+                    softWrap: true,
+                    overflow: TextOverflow.visible,
+                    maxLines: null,
+                    style: const TextStyle(fontSize: 14),
                   ),
                 ),
               );
