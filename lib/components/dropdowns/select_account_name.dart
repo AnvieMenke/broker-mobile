@@ -40,21 +40,32 @@ class AutoCompleteAccountName extends StatefulWidget {
 class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
   final TextEditingController _controller = TextEditingController();
   late final CommonService _service;
-  List<Map<String, String>> _options = [];
+  List<Map<String, dynamic>> _options = [];
 
   @override
   void initState() {
     super.initState();
     _controller.text = widget.value;
     _service = CommonService();
+  }
 
+  @override
+  void didUpdateWidget(covariant AutoCompleteAccountName oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      if (!(widget.freeSolo &&
+          _controller.text != oldWidget.value &&
+          _controller.text != widget.value)) {
+        _controller.text = widget.value;
+      }
+    }
     if (widget.reset) {
       _controller.clear();
       widget.onChange({'name': widget.name, 'value': ''});
     }
   }
 
-  Future<List<Map<String, String>>> _getOptions(String input) async {
+  Future<List<Map<String, dynamic>>> _getOptions(String input) async {
     try {
       if (widget.isAccessibleOnly) {
         final data = await _service.accessibleAccountName(
@@ -62,12 +73,7 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
           widget.correspondent,
           widget.isAllStatus,
         );
-
-        return data.map<Map<String, String>>((accountName) {
-          return {
-            'accountName': accountName,
-          };
-        }).toList();
+        _options = data.map((acc) => {'accountName': acc}).toList();
       } else {
         final data = await _service.lazyLoadAccount(
           input,
@@ -76,13 +82,10 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
           widget.isActive,
           widget.correspondent,
         );
-
-        return data.accounts.map<Map<String, String>>((acc) {
-          return {
-            'account_name': acc.accountName,
-          };
-        }).toList();
+        _options =
+            data.accounts.map((acc) => {'accountName': acc.accountName}).toList();
       }
+      return _options;
     } catch (e) {
       debugPrint('Error fetching account name options: $e');
       return [];
@@ -90,18 +93,16 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
   }
 
   void _handleOnBlur(String value) {
-    if (widget.freeSolo) {
-      _setPropsValue(value, {});
+    final exists = _options.any((o) => o['accountName'] == value);
+
+    if (exists) {
+      final match = _options.firstWhere((o) => o['accountName'] == value);
+      _setPropsValue(match['accountName'] ?? '', match);
       return;
     }
 
-    final match = _options.firstWhere(
-      (o) => o['accountName'] == value,
-      orElse: () => {},
-    );
-
-    if (match.isNotEmpty) {
-      _setPropsValue(match['accountName'] ?? '', match);
+    if (widget.freeSolo) {
+      _setPropsValue(value, {});
       return;
     }
 
@@ -109,7 +110,7 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
     _setPropsValue('', {});
   }
 
-  void _setPropsValue(String value, Map<String, String> data) {
+  void _setPropsValue(String value, Map<String, dynamic> data) {
     widget.onChange({
       'name': widget.name,
       'value': value,
@@ -117,14 +118,17 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
     });
   }
 
+  void _clearField() {
+    _controller.clear();
+    widget.onChange({});
+    _setPropsValue('', {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return TypeAheadField<Map<String, String>>(
-      suggestionsCallback: (pattern) async {
-        _options = await _getOptions(pattern);
-
-        return _options;
-      },
+    return TypeAheadField<Map<String, dynamic>>(
+      controller: _controller,
+      suggestionsCallback: (pattern) async => await _getOptions(pattern),
       itemBuilder: (context, suggestion) {
         return ListTile(
           title: Text(
@@ -134,29 +138,44 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
         );
       },
       onSelected: (suggestion) {
-        final val = suggestion['accountName'] ?? '';
-        _controller.text = val;
-        _setPropsValue(val, suggestion);
+        _controller.text = suggestion['accountName'] ?? '';
+        _setPropsValue(suggestion['accountName'] ?? '', suggestion);
+        setState(() {});
       },
       builder: (context, controller, focusNode) {
-        return TextField(
-          controller: _controller,
-          focusNode: focusNode,
-          enabled: !widget.disabled,
-          decoration: InputDecoration(
-            labelText: 'Account Name',
-            hintText: 'Account Name',
-            errorText: widget.error ? 'Invalid input' : null,
+        return Focus(
+          onFocusChange: (hasFocus) {
+            if (!hasFocus) _handleOnBlur(_controller.text);
+          },
+          child: TextField(
+            controller: controller,
+            focusNode: focusNode,
+            enabled: !widget.disabled,
+            decoration: InputDecoration(
+              labelText: 'Account Name',
+              hintText: 'Account Name',
+              errorText: widget.error ? 'Invalid input' : null,
+              suffixIcon: controller.text.isNotEmpty && !widget.disabled
+                  ? IconButton(
+                icon: const Icon(Icons.clear, size: 20),
+                onPressed: _clearField,
+              )
+                  : null,
+            ),
+            onChanged: (value) {
+              setState(() {});
+              if (widget.freeSolo) {
+                _setPropsValue(_controller.text, {});
+                return;
+              }
+              if (value.isEmpty) {
+                _setPropsValue('', {});
+                widget.onChange({});
+                return;
+              }
+            },
+            onEditingComplete: () => _handleOnBlur(_controller.text),
           ),
-          onChanged: (value) {
-            controller.text = value;
-            if (widget.freeSolo) {
-              _setPropsValue(value, {});
-            }
-          },
-          onEditingComplete: () {
-            _handleOnBlur(_controller.text);
-          },
         );
       },
     );

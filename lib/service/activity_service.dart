@@ -37,6 +37,7 @@ class ActivityService {
             ? DateTime.parse(param["toDate"])
             : DateTime.now(),
       )
+      ..accountNo = param['accountNo'] ?? ""
       ..correspondent = param['correspondent'] ?? ""
       ..masterAccountNo = param['masterAccountNo'] ?? ""
       ..rep = param['rep'] ?? ""

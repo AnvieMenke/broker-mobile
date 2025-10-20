@@ -12,6 +12,7 @@ class AutoCompleteSymbol extends StatefulWidget {
   final String assetType;
   final bool isActive;
   final Function(Map<String, dynamic>) onChange;
+  final Function(Map<String, dynamic>) onClear;
   final bool reset;
 
   const AutoCompleteSymbol({
@@ -25,6 +26,7 @@ class AutoCompleteSymbol extends StatefulWidget {
     this.assetType = '',
     this.isActive = true,
     required this.onChange,
+    required this.onClear,
     this.reset = false,
   });
 
@@ -103,11 +105,23 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
   }
 
   void _clearField() {
+    final hadValue = widget.value.isNotEmpty;
+
     _controller.clear();
     _suggestionsController.close();
     _setPropsValue('', {});
+
+    if (hadValue) {
+      widget.onClear({
+        'name': widget.name,
+        'value': '',
+        'data': {},
+      });
+    }
+
     setState(() {});
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +159,7 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
               controller: _controller,
               focusNode: focusNode,
               enabled: !widget.disabled,
-              style: const TextStyle(fontSize: 14, color: Colors.white),
+              style: const TextStyle(fontSize: 14),
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   icon: Icon(

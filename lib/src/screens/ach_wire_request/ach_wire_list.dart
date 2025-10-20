@@ -266,31 +266,25 @@ class _AchWireListState extends State<AchWireList> {
                       const SizedBox(height: 16),
                       AutoCompleteAccountNo(
                         name: "accountNo",
-                        freeSolo: true,
                         value: selectedAccountNo,
                         isAllStatus: false,
                         isAccessibleOnly: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
-                          if (map['data']?['accountNo'] != null) {
-                            selectedAccountNo =
-                                map['data']['accountNo'] as String;
-                          }
+                          selectedAccountNo =
+                              map['data']?['accountNo'] as String? ?? '';
                         }),
                       ),
                       const SizedBox(height: 16),
                       AutoCompleteMasterAccountNo(
                         name: "masterAccountNo",
-                        freeSolo: true,
                         value: selectedMasterAccountNo,
                         isAllStatus: false,
                         isAccessibleOnly: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
-                          if (map['data']?['masterAccountNo'] != null) {
-                            selectedMasterAccountNo =
-                                map['data']['masterAccountNo'] as String;
-                          }
+                          selectedMasterAccountNo =
+                              map['data']?['masterAccountNo'] as String? ?? '';
                         }),
                       ),
                       const SizedBox(height: 16),
@@ -310,7 +304,7 @@ class _AchWireListState extends State<AchWireList> {
                         type: "Type",
                         subType: "Request Type",
                         onChange: (map) => setState(() {
-                          selectedRequestType = map?['data']['code'];
+                          selectedRequestType = map?['data']['code'] ?? '';
                         }),
                       ),
                       const SizedBox(height: 16),
@@ -321,7 +315,7 @@ class _AchWireListState extends State<AchWireList> {
                         type: "Type",
                         subType: "Transfer Type",
                         onChange: (map) => setState(() {
-                          selectedTransferType = map?['data']['code'];
+                          selectedTransferType = map?['data']['code'] ?? '';
                         }),
                       ),
                       const SizedBox(height: 16),
@@ -337,7 +331,7 @@ class _AchWireListState extends State<AchWireList> {
                               subType: "Bank Request",
                               onChange: (map) {
                                 setState(() {
-                                  selectedSign = map?['data']['code'];
+                                  selectedSign = map?['data']['code'] ?? '';
                                 });
                               },
                               border: OutlineInputBorder(
@@ -387,7 +381,7 @@ class _AchWireListState extends State<AchWireList> {
                         type: "Status",
                         subType: "Bank Request",
                         onChange: (map) => setState(() {
-                          selectedStatus = map?['data']['code'];
+                          selectedStatus = map?['data']['code'] ?? '';
                         }),
                       ),
                     ],

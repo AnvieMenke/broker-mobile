@@ -219,10 +219,16 @@ class GridViewCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   ...item.fields.map(
                     (f) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: Row(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          Text("${f.label}: ", style: textTheme.bodyMedium),
+                          Text(
+                            "${f.label}: ",
+                            style: textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           f.displayValue,
                         ],
                       ),

@@ -5,7 +5,6 @@ import 'package:broker_mobile/components/grid/grid_view_card.dart';
 import '../../../../components/datepicker/datepicker.dart';
 import '../../../../components/dropdowns/select_account_no.dart';
 import '../../../../components/dropdowns/select_correspondent.dart';
-import '../../../../components/dropdowns/select_master_account_no.dart';
 import '../../../../service/position_service.dart';
 import '../../../../service/convert_service.dart';
 import '../../../../service/profile_service.dart';
@@ -29,7 +28,6 @@ class PositionPageState extends State<PositionPage> {
   late Map<String, dynamic> queryData = {
     "correspondent": "",
     "accountNo": "",
-    "masterAccountNo": "",
     "rep": "",
     "branch": "",
     "assetType": "",
@@ -188,7 +186,6 @@ class PositionPageState extends State<PositionPage> {
   Future<void> openFilterDialog() async {
     _focusScopeNode.unfocus();
     String selectedCorrespondent = queryData["correspondent"];
-    String selectedMasterAccountNo = queryData["masterAccountNo"];
     String selectedRep = queryData["rep"];
     String selectedBranch = queryData["branch"];
     String selectedAssetType = queryData["assetType"];
@@ -206,8 +203,6 @@ class PositionPageState extends State<PositionPage> {
             content: StatefulBuilder(
               builder: (context, setState) {
                 return SingleChildScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -222,46 +217,25 @@ class PositionPageState extends State<PositionPage> {
                             setState(() => selectedCorrespondent = value),
                       ),
                       const SizedBox(height: 16),
-                      AutoCompleteMasterAccountNo(
-                        name: "masterAccountNo",
-                        freeSolo: true,
-                        value: selectedMasterAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
-                        correspondent: selectedCorrespondent,
-                        onChange: (map) => setState(() {
-                          if (map['data']?['masterAccountNo'] != null) {
-                            selectedMasterAccountNo =
-                                map['data']['masterAccountNo'];
-                          }
-                        }),
-                      ),
-                      const SizedBox(height: 16),
                       AutoCompleteRepAdvisor(
                         name: "rep",
-                        freeSolo: true,
                         value: selectedRep,
                         isAllStatus: false,
                         isAccessibleOnly: true,
                         correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
-                          if (map['data']?['rep'] != null) {
-                            selectedRep = map['data']['rep'];
-                          }
+                          selectedRep = map['data']['rep'] ?? '';
                         }),
                       ),
                       const SizedBox(height: 16),
                       AutoCompleteBranch(
                         name: "branch",
-                        freeSolo: true,
                         value: selectedBranch,
                         isAllStatus: false,
                         isAccessibleOnly: true,
                         correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
-                          if (map['data']?['branch'] != null) {
-                            selectedBranch = map['data']['branch'];
-                          }
+                          selectedBranch = map['data']['branch'] ?? '';
                         }),
                       ),
                       const SizedBox(height: 16),
@@ -270,8 +244,8 @@ class PositionPageState extends State<PositionPage> {
                         placeholder: "Select Asset Type",
                         value: selectedAssetType,
                         type: "Asset Type",
-                        onChange: (map) => setState(
-                            () => selectedAssetType = map?['data']['code']),
+                        onChange: (map) => setState(() =>
+                            selectedAssetType = map?['data']['code'] ?? ''),
                       ),
                     ],
                   ),
@@ -289,7 +263,6 @@ class PositionPageState extends State<PositionPage> {
                     queryData = {
                       ...queryData,
                       "correspondent": selectedCorrespondent,
-                      "masterAccountNo": selectedMasterAccountNo,
                       "rep": selectedRep,
                       "branch": selectedBranch,
                       "assetType": selectedAssetType,
@@ -420,7 +393,6 @@ class PositionPageState extends State<PositionPage> {
                               constraints: const BoxConstraints(maxWidth: 400),
                               child: AutoCompleteAccountNo(
                                 name: "accountNo",
-                                freeSolo: true,
                                 value: queryData["accountNo"],
                                 isAllStatus: false,
                                 isAccessibleOnly: true,
@@ -430,10 +402,16 @@ class PositionPageState extends State<PositionPage> {
                                   if (map['data'] != null &&
                                       map['data']['accountNo'] != null) {
                                     queryData["accountNo"] =
-                                        map['data']['accountNo'] as String;
+                                        map['data']?['accountNo'] as String? ??
+                                            '';
                                     _updateQueryData();
                                     _futureRequests = _listPosition();
                                   }
+                                }),
+                                onClear: (map) => setState(() {
+                                  queryData["accountNo"] = "";
+                                  _updateQueryData();
+                                  _futureRequests = _listPosition();
                                 }),
                               ),
                             ),
@@ -449,27 +427,22 @@ class PositionPageState extends State<PositionPage> {
                                     width: 150,
                                     child: AutoCompleteSymbol(
                                       name: "symbol",
-                                      freeSolo: true,
                                       value: queryData['symbol'],
                                       isActive: true,
-                                      onChange: (map) {
-                                        _focusScopeNode.unfocus();
-                                        setState(() {
-                                          final symbol =
-                                              map['data']?['symbol'] ?? '';
-                                          final name = map['name'];
-
-                                          queryData[name] = symbol;
+                                      onClear: (map) => setState(() {
+                                        queryData["symbol"] = "";
+                                        _updateQueryData();
+                                        _refresh();
+                                      }),
+                                      onChange: (map) => setState(() {
+                                        if (map['data'] != null &&
+                                            map['data']['symbol'] != null) {
+                                          queryData["symbol"] =
+                                              map['data']['symbol'] as String;
                                           _updateQueryData();
-
-                                          if (symbol.isNotEmpty ||
-                                              (map['value'] == '' &&
-                                                  (map['data']?.isEmpty ??
-                                                      true))) {
-                                            _futureRequests = _listPosition();
-                                          }
-                                        });
-                                      },
+                                          _refresh();
+                                        }
+                                      }),
                                     ),
                                   ),
                                   const SizedBox(width: 12),

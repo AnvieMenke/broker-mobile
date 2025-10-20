@@ -148,8 +148,6 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
             content: StatefulBuilder(
               builder: (context, setState) {
                 return SingleChildScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -167,33 +165,25 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
                       const SizedBox(height: 16),
                       AutoCompleteMasterAccountNo(
                         name: "masterAccountNo",
-                        freeSolo: true,
                         value: selectedMasterAccountNo,
                         isAllStatus: false,
                         isAccessibleOnly: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
-                          if (map['data'] != null &&
-                              map['data']['masterAccountNo'] != null) {
-                            selectedMasterAccountNo =
-                                map['data']['masterAccountNo'] as String;
-                          }
+                          selectedMasterAccountNo =
+                              map['data']?['masterAccountNo'] as String? ?? '';
                         }),
                       ),
                       const SizedBox(height: 16),
                       AutoCompleteAccountName(
                         name: "accountName",
-                        freeSolo: true,
                         value: selectedAccountName,
                         isAllStatus: false,
                         isAccessibleOnly: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
-                          if (map['data'] != null &&
-                              map['data']['accountName'] != null) {
-                            selectedAccountName =
-                                map['data']['accountName'] as String;
-                          }
+                          selectedAccountName =
+                              map['data']?['accountName'] as String? ?? '';
                         }),
                       ),
                       const SizedBox(height: 16),
@@ -203,7 +193,7 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
                         value: selectedMarginType,
                         type: "Margin Type",
                         onChange: (map) => setState(() {
-                          selectedMarginType = map?['data']['code'];
+                          selectedMarginType = map?['data']['code'] ?? '';
                         }),
                       ),
                       const SizedBox(height: 16),
