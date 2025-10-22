@@ -67,6 +67,11 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
       _controller.clear();
       widget.onChange({'name': widget.name, 'value': ''});
     }
+    if (widget.correspondent != oldWidget.correspondent) {
+      _options.clear();
+      _getOptions('');
+      setState(() {});
+    }
   }
 
   Future<List<Map<String, dynamic>>> _getOptions(String input) async {
@@ -112,6 +117,7 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
   }
 
   void _handleOnBlur(String value) {
+    if (widget.value == _controller.text) return;
     final exists = _options.any((o) => o['accountNo'] == value);
 
     if (exists) {
@@ -152,19 +158,21 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
     _controller.clear();
     widget.onChange({});
     _setPropsValue('', {});
-    if (hadValue) {
+    if (hadValue && widget.onClear != null) {
       widget.onClear!({
         'name': widget.name,
         'value': '',
         'data': {},
       });
     }
+    FocusScope.of(context).unfocus();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<Map<String, dynamic>>(
+      key: ValueKey('${widget.correspondent}-${_controller.text}'),
       controller: _controller,
       suggestionsCallback: (pattern) async => await _getOptions(pattern),
       itemBuilder: (context, suggestion) {
@@ -185,6 +193,7 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
           suggestion['broker'] ?? '',
           ConvertService.safeInt(suggestion['accountId']),
         );
+        FocusScope.of(context).unfocus();
         setState(() {});
       },
       builder: (context, controller, focusNode) {

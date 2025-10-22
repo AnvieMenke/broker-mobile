@@ -64,6 +64,11 @@ class _AutoCompleteMasterAccountNoState
       _controller.clear();
       widget.onChange({'name': widget.name, 'value': ''});
     }
+    if (widget.correspondent != oldWidget.correspondent) {
+      _options.clear();
+      _getOptions('');
+      setState(() {});
+    }
   }
 
   Future<List<Map<String, dynamic>>> _getOptions(String input) async {
@@ -137,11 +142,14 @@ class _AutoCompleteMasterAccountNoState
     _controller.clear();
     widget.onChange({});
     _setPropsValue('', {});
+    FocusScope.of(context).unfocus();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<Map<String, dynamic>>(
+      key: ValueKey('${widget.correspondent}-${_controller.text}'),
       controller: _controller,
       suggestionsCallback: (pattern) async => await _getOptions(pattern),
       itemBuilder: (context, suggestion) {
@@ -157,6 +165,8 @@ class _AutoCompleteMasterAccountNoState
         final val = suggestion['masterAccountNo'] ?? '';
         _controller.text = val;
         _setPropsValue(val, suggestion);
+        FocusScope.of(context).unfocus();
+        setState(() {});
       },
       builder: (context, controller, focusNode) {
         return Focus(

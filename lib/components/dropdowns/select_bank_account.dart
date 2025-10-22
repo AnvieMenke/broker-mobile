@@ -50,10 +50,12 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
 
   Future<void> _getBankAccounts(String value) async {
     if (widget.correspondent == null || widget.accountNo == null) {
-      setState(() {
-        options = [];
-        selectedValue = null;
-      });
+      if (mounted) {
+        setState(() {
+          options = [];
+          selectedValue = null;
+        });
+      }
       return;
     }
 
@@ -63,6 +65,9 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
         widget.correspondent!,
         'Active',
       );
+
+      if (!mounted) return;
+
       setState(() {
         options = bankAccountsList;
         if (options.isEmpty) {
@@ -70,18 +75,21 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
         }
 
         final matches =
-            options.where((account) => account.bankId == widget.value).toList();
+        options.where((account) => account.bankId == widget.value).toList();
 
         selectedValue = matches.isNotEmpty ? matches.first : null;
       });
     } catch (e) {
-      setState(() {
-        options = [];
-        selectedValue = null;
-      });
+      if (mounted) {
+        setState(() {
+          options = [];
+          selectedValue = null;
+        });
+      }
       debugPrint("Error fetching bank accounts: $e");
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
