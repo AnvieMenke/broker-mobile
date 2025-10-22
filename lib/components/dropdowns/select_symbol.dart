@@ -176,7 +176,7 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
                 hintText: 'Symbol',
                 hintStyle: const TextStyle(fontSize: 14),
                 filled: true,
-                fillColor: Colors.grey[900]?.withOpacity(0.05),
+                fillColor: Colors.grey[900]?.withValues(alpha: 0.05),
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 border: OutlineInputBorder(
