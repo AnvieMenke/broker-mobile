@@ -83,7 +83,7 @@ class CommonService {
     final client = _lazyClient();
     final req = AccessibleRequest()
       ..key = key
-      ..correspondent= correspondent
+      ..correspondent = correspondent
       ..isAllStatus = isAllStatus
       ..type = type;
 
@@ -199,8 +199,8 @@ class CommonService {
     }
   }
 
-  Future<ListAdmEntryTypeResponse> listEntryType(
-      String entryType, screenType, correspondent, accountNo, status, note) async {
+  Future<ListAdmEntryTypeResponse> listEntryType(String entryType, screenType,
+      correspondent, accountNo, status, note) async {
     final client = _listClient();
     final req = ListAdmEntryTypeRequest()
       ..entryType = entryType
@@ -237,7 +237,6 @@ class CommonService {
 
   Future<AppConfig> getAppConfig() async {
     final client = _appConfigClient();
-
 
     try {
       final response = await client.getAppConfig(Empty());

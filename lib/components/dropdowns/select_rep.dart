@@ -62,6 +62,11 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
       _controller.clear();
       widget.onChange({'name': widget.name, 'value': ''});
     }
+    if (widget.correspondent != oldWidget.correspondent) {
+      _options.clear();
+      _getOptions('');
+      setState(() {});
+    }
   }
 
   Future<List<Map<String, dynamic>>> _getOptions(String input) async {
@@ -120,11 +125,14 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
     _controller.clear();
     widget.onChange({});
     _setPropsValue('', {});
+    FocusScope.of(context).unfocus();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<Map<String, dynamic>>(
+      key: ValueKey('${widget.correspondent}-${_controller.text}'),
       controller: _controller,
       suggestionsCallback: (pattern) async => await _getOptions(pattern),
       itemBuilder: (context, suggestion) {
@@ -138,6 +146,7 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
       onSelected: (suggestion) {
         _controller.text = suggestion['rep'] ?? '';
         _setPropsValue(suggestion['rep'] ?? '', suggestion);
+        FocusScope.of(context).unfocus();
         setState(() {});
       },
       builder: (context, controller, focusNode) {

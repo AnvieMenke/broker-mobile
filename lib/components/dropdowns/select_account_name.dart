@@ -63,6 +63,11 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
       _controller.clear();
       widget.onChange({'name': widget.name, 'value': ''});
     }
+    if (widget.correspondent != oldWidget.correspondent) {
+      _options.clear();
+      _getOptions('');
+      setState(() {});
+    }
   }
 
   Future<List<Map<String, dynamic>>> _getOptions(String input) async {
@@ -82,8 +87,9 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
           widget.isActive,
           widget.correspondent,
         );
-        _options =
-            data.accounts.map((acc) => {'accountName': acc.accountName}).toList();
+        _options = data.accounts
+            .map((acc) => {'accountName': acc.accountName})
+            .toList();
       }
       return _options;
     } catch (e) {
@@ -122,11 +128,14 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
     _controller.clear();
     widget.onChange({});
     _setPropsValue('', {});
+    FocusScope.of(context).unfocus();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<Map<String, dynamic>>(
+      key: ValueKey('${widget.correspondent}-${_controller.text}'),
       controller: _controller,
       suggestionsCallback: (pattern) async => await _getOptions(pattern),
       itemBuilder: (context, suggestion) {
@@ -140,6 +149,7 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
       onSelected: (suggestion) {
         _controller.text = suggestion['accountName'] ?? '';
         _setPropsValue(suggestion['accountName'] ?? '', suggestion);
+        FocusScope.of(context).unfocus();
         setState(() {});
       },
       builder: (context, controller, focusNode) {
@@ -157,9 +167,9 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
               errorText: widget.error ? 'Invalid input' : null,
               suffixIcon: controller.text.isNotEmpty && !widget.disabled
                   ? IconButton(
-                icon: const Icon(Icons.clear, size: 20),
-                onPressed: _clearField,
-              )
+                      icon: const Icon(Icons.clear, size: 20),
+                      onPressed: _clearField,
+                    )
                   : null,
             ),
             onChanged: (value) {

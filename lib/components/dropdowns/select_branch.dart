@@ -59,10 +59,14 @@ class _AutoCompleteBranchState extends State<AutoCompleteBranch> {
         _controller.text = widget.value;
       }
     }
-
     if (widget.reset) {
       _controller.clear();
       widget.onChange({'name': widget.name, 'value': ''});
+    }
+    if (widget.correspondent != oldWidget.correspondent) {
+      _options.clear();
+      _getOptions('');
+      setState(() {});
     }
   }
 
@@ -130,11 +134,14 @@ class _AutoCompleteBranchState extends State<AutoCompleteBranch> {
     _controller.clear();
     widget.onChange({});
     _setPropsValue('', {});
+    FocusScope.of(context).unfocus();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<Map<String, dynamic>>(
+      key: ValueKey('${widget.correspondent}-${_controller.text}'),
       controller: _controller,
       suggestionsCallback: (pattern) async => await _getOptions(pattern),
       itemBuilder: (context, suggestion) {
@@ -151,6 +158,7 @@ class _AutoCompleteBranchState extends State<AutoCompleteBranch> {
           suggestion['branch'] ?? '',
           suggestion,
         );
+        FocusScope.of(context).unfocus();
         setState(() {});
       },
       builder: (context, controller, focusNode) {

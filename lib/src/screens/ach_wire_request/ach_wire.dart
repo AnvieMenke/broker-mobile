@@ -23,6 +23,7 @@ class AchWirePage extends StatefulWidget {
 class _AchWirePageState extends State<AchWirePage> {
   late final AchWireService _achWireService;
   late final BankAccountService _bankAccountService;
+  late final TextEditingController _amountController;
 
   late Map<String, dynamic> formData;
 
@@ -65,6 +66,10 @@ class _AchWirePageState extends State<AchWirePage> {
       ...?widget.initialFormData,
     };
 
+    _amountController = TextEditingController(
+      text: ConvertService.safeDouble(formData["amt"]).toString(),
+    );
+
     maximumWithdrawable = Map<String, dynamic>.from(initialMaximumWithdrawable);
 
     if (formData["correspondent"].isNotEmpty &&
@@ -78,6 +83,12 @@ class _AchWirePageState extends State<AchWirePage> {
         isEdit = true;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
   }
 
   void setMaximumWithdrawable(Map<String, dynamic> value) {
@@ -255,7 +266,9 @@ class _AchWirePageState extends State<AchWirePage> {
               children: [
                 Text("Correspondent: ${data["correspondent"]}"),
                 Text("Account No: ${data["accountNo"]}"),
-                Text("Bank: ${data["bank"]}"),
+                Text(
+                  "Bank: ${data["bank"]?.isNotEmpty == true ? data["bank"] : "${data["bankName"] ?? ''} - ${data["bankAccountNo"] ?? ''}"}",
+                ),
                 Text("Request Type: ${data["requestType"]}"),
                 Text("Transfer Type: ${data["transferType"]}"),
                 Text("Amount: ${FormatUtils.formatCurrency(data["amt"])}"),
@@ -335,12 +348,13 @@ class _AchWirePageState extends State<AchWirePage> {
                             type: "",
                             onChange: (map) => setState(() {
                               final data = map['data'] ?? {};
-
                               formData["accountNo"] = data?['accountNo'] ?? '';
-                              formData["correspondent"] =
-                                  data?['correspondent'] ?? '';
                               formData["accountId"] = data?['accountId'] ?? 0;
-
+                              if ((formData["correspondent"] ?? '').isEmpty) {
+                                formData["correspondent"] =
+                                    data?['correspondent'] ?? '';
+                              }
+                              formData["bankId"] = "";
                               _checkAndFetchMaxWithdrawable();
                               _calculateFee();
                             }),
@@ -399,6 +413,7 @@ class _AchWirePageState extends State<AchWirePage> {
                         SizedBox(
                           width: itemWidth,
                           child: TextFormField(
+                            controller: _amountController,
                             decoration: InputDecoration(
                               labelText: "Amount",
                               prefixText: "\$",
@@ -409,15 +424,20 @@ class _AchWirePageState extends State<AchWirePage> {
                             ),
                             keyboardType: const TextInputType.numberWithOptions(
                                 decimal: true),
+                            onTap: () {
+                              final text = _amountController.text.trim();
+                              if (text == '0' ||
+                                  text == '0.0' ||
+                                  text == '0.00') {
+                                _amountController.clear();
+                              }
+                            },
                             onChanged: (value) {
                               setState(() {
                                 formData["amt"] = double.tryParse(value) ?? 0.0;
                                 _calculateFee();
                               });
                             },
-                            initialValue:
-                                ConvertService.safeDouble(formData["amt"])
-                                    .toString(),
                           ),
                         ),
                         SizedBox(

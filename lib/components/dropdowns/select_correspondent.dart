@@ -86,12 +86,14 @@ class _AutoCompleteCorrespondentState extends State<AutoCompleteCorrespondent> {
   void _clearField() {
     _controller.clear();
     widget.onChange('');
+    FocusScope.of(context).unfocus();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<String>(
+      key: ValueKey(_controller.text),
       controller: _controller,
       suggestionsCallback: (pattern) async => _getOptions(pattern),
       itemBuilder: (context, suggestion) => ListTile(
@@ -103,6 +105,7 @@ class _AutoCompleteCorrespondentState extends State<AutoCompleteCorrespondent> {
       onSelected: (suggestion) {
         _controller.text = suggestion;
         widget.onChange(suggestion);
+        FocusScope.of(context).unfocus();
         setState(() {});
       },
       builder: (context, controller, focusNode) {

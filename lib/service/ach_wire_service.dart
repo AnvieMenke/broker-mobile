@@ -111,7 +111,7 @@ class AchWireService {
         ..pageNo = paging["pageNo"] ?? 0
         ..pageSize = paging["rowsPerPage"] ?? 100
         ..sortName = paging["sortName"] ?? "request_id"
-        ..sortDirection = paging["sortDirection"] ?? "ASC";
+        ..sortDirection = paging["sortDirection"] ?? "DESC";
 
       req.pagination = paginationReq;
     }

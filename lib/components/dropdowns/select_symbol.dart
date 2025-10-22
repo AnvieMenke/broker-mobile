@@ -122,7 +122,6 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
     setState(() {});
   }
 
-
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<Map<String, String>>(
@@ -137,7 +136,7 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
         return ListTile(
           title: Text(
             suggestion['symbol'] ?? '',
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
           ),
           subtitle: Text(suggestion['cusip'] ?? ''),
         );
@@ -168,8 +167,6 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
                         : Icons.search,
                     size: 18,
                   ),
-                  tooltip:
-                      _controller.text.isNotEmpty ? 'Clear' : 'Search symbol',
                   onPressed: widget.disabled
                       ? null
                       : _controller.text.isNotEmpty
@@ -178,22 +175,21 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
                 ),
                 hintText: 'Symbol',
                 hintStyle: const TextStyle(fontSize: 14),
-                isDense: true,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 filled: true,
-                fillColor: Colors.grey[900]?.withValues(alpha: 0.1),
+                fillColor: Colors.grey[900]?.withOpacity(0.05),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide.none,
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.circular(20),
                   borderSide:
                       BorderSide(color: Colors.grey.shade400, width: 0.8),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(
                     color: Theme.of(context).colorScheme.primary,
                     width: 1.2,

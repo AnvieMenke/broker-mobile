@@ -71,7 +71,9 @@ class _CustomDatePickerState extends State<CustomDatePicker>
   ) async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: tempFromDate ?? DateTime.now(),
+      initialDate: isFromDate
+          ? (tempFromDate ?? DateTime.now())
+          : (tempToDate ?? DateTime.now()),
       firstDate: DateTime(DateTime.now().year - 5),
       lastDate: DateTime.now(),
     );
@@ -327,11 +329,11 @@ class _CustomDatePickerState extends State<CustomDatePicker>
         ),
       ],
       child: Container(
-        height: 42,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        height: 44,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
           color: Colors.grey[900]?.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.grey.shade400, width: 0.8),
         ),
         child: Row(
@@ -340,11 +342,11 @@ class _CustomDatePickerState extends State<CustomDatePicker>
             Flexible(
               child: Text(
                 displayText,
-                style: const TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 12),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: 6),
             const Icon(Icons.arrow_drop_down, size: 18),
           ],
         ),
