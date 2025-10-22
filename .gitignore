@@ -79,4 +79,12 @@ linux/flutter/ephemeral/
 android/app/src/main/res/mipmap-*/
 android/app/src/main/res/drawable-*/ic_launcher.png
 ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App*.png
+# iOS/macOS
+
+ios/Pods/
+macos/Pods/
+ios/Flutter/Flutter.framework
+macos/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+
 
