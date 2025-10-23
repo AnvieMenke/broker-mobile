@@ -609,6 +609,7 @@ class ListBalanceRequest extends $pb.GeneratedMessage {
     $2.Pagination? pagination,
     $core.String? dateType,
     $core.String? rollUp,
+    $core.bool? hideZero,
   }) {
     final result = create();
     if (correspondent != null) result.correspondent = correspondent;
@@ -623,6 +624,7 @@ class ListBalanceRequest extends $pb.GeneratedMessage {
     if (pagination != null) result.pagination = pagination;
     if (dateType != null) result.dateType = dateType;
     if (rollUp != null) result.rollUp = rollUp;
+    if (hideZero != null) result.hideZero = hideZero;
     return result;
   }
 
@@ -644,6 +646,7 @@ class ListBalanceRequest extends $pb.GeneratedMessage {
     ..aOM<$2.Pagination>(10, _omitFieldNames ? '' : 'pagination', subBuilder: $2.Pagination.create)
     ..aOS(11, _omitFieldNames ? '' : 'dateType')
     ..aOS(12, _omitFieldNames ? '' : 'rollUp')
+    ..aOB(13, _omitFieldNames ? '' : 'hideZero')
     ..hasRequiredFields = false
   ;
 
@@ -777,6 +780,15 @@ class ListBalanceRequest extends $pb.GeneratedMessage {
   $core.bool hasRollUp() => $_has(11);
   @$pb.TagNumber(12)
   void clearRollUp() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.bool get hideZero => $_getBF(12);
+  @$pb.TagNumber(13)
+  set hideZero($core.bool value) => $_setBool(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasHideZero() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearHideZero() => $_clearField(13);
 }
 
 class ListBalanceResponse extends $pb.GeneratedMessage {
