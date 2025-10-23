@@ -19,7 +19,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.anviemenke.brokermobile"
+        applicationId "com.anviemenke.broker"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
