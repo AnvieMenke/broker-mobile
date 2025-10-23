@@ -118,6 +118,7 @@ const ListBalanceRequest$json = {
     {'1': 'pagination', '3': 10, '4': 1, '5': 11, '6': '.utilspb.Pagination', '10': 'pagination'},
     {'1': 'date_type', '3': 11, '4': 1, '5': 9, '10': 'dateType'},
     {'1': 'roll_up', '3': 12, '4': 1, '5': 9, '10': 'rollUp'},
+    {'1': 'hide_zero', '3': 13, '4': 1, '5': 8, '10': 'hideZero'},
   ],
 };
 
@@ -130,7 +131,8 @@ final $typed_data.Uint8List listBalanceRequestDescriptor = $convert.base64Decode
     'ZRgHIAEoCzIRLmdvb2dsZS50eXBlLkRhdGVSCGZyb21EYXRlEioKB3RvX2RhdGUYCCABKAsyES'
     '5nb29nbGUudHlwZS5EYXRlUgZ0b0RhdGUSFQoGdXNyX2lkGAkgASgNUgV1c3JJZBIzCgpwYWdp'
     'bmF0aW9uGAogASgLMhMudXRpbHNwYi5QYWdpbmF0aW9uUgpwYWdpbmF0aW9uEhsKCWRhdGVfdH'
-    'lwZRgLIAEoCVIIZGF0ZVR5cGUSFwoHcm9sbF91cBgMIAEoCVIGcm9sbFVw');
+    'lwZRgLIAEoCVIIZGF0ZVR5cGUSFwoHcm9sbF91cBgMIAEoCVIGcm9sbFVwEhsKCWhpZGVfemVy'
+    'bxgNIAEoCFIIaGlkZVplcm8=');
 
 @$core.Deprecated('Use listBalanceResponseDescriptor instead')
 const ListBalanceResponse$json = {

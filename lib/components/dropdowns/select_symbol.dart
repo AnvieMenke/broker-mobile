@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:broker_mobile/service/adm_service.dart';
+import 'package:broker_mobile/service/common_service.dart';
 
 class AutoCompleteSymbol extends StatefulWidget {
   final String name;
@@ -39,7 +39,7 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
   final SuggestionsController<Map<String, String>> _suggestionsController =
       SuggestionsController<Map<String, String>>();
 
-  late final AdmService _service;
+  late final CommonService _service;
   List<Map<String, String>> _options = [];
   bool _isSelecting = false;
 
@@ -47,7 +47,7 @@ class _AutoCompleteSymbolState extends State<AutoCompleteSymbol> {
   void initState() {
     super.initState();
     _controller.text = widget.value;
-    _service = AdmService();
+    _service = CommonService();
 
     if (widget.reset) {
       _clearField();

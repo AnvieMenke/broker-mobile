@@ -38,7 +38,7 @@ class PositionPageState extends State<PositionPage> {
 
   GridPagination pagination = GridPagination(
     pageNo: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 100,
     totalRows: 0,
     reload: true,
   );
@@ -313,6 +313,8 @@ class PositionPageState extends State<PositionPage> {
                         pagination: pagination,
                         onPageChange: _onPageChange,
                         onRefresh: _refresh,
+                        hidePageInfo: true,
+                        disableGridSystem: true,
                       );
                     }
 

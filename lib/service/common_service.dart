@@ -7,6 +7,7 @@ import 'package:grpc/grpc_connection_interface.dart';
 import 'package:protobuf/protobuf.dart';
 import '../server/grpc_client.dart';
 import '../server/auth_interceptor.dart';
+import 'convert_service.dart';
 
 class CommonService {
   ClientChannelBase _createChannel() {
@@ -240,6 +241,23 @@ class CommonService {
 
     try {
       final response = await client.getAppConfig(Empty());
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<LazyLoadSecurityResponse> lazyLoadSecurities(
+      String key, assetType, int limit, bool isActive) async {
+    final client = _lazyClient();
+    final req = LazyLoadSecurityRequest()
+      ..key = key
+      ..limit = ConvertService.safeInt(limit)
+      ..assetType = assetType
+      ..isActive = isActive;
+
+    try {
+      final response = await client.lazySecurity(req);
       return response;
     } catch (e) {
       rethrow;
