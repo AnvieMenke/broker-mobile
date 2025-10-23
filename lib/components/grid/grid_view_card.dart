@@ -502,6 +502,8 @@ class GridWithPagination extends StatelessWidget {
   final void Function(GridPagination newPagination) onPageChange;
   final List<PopupMenuEntry> Function(BuildContext, GridItem)? actionsBuilder;
   final Future<void> Function()? onRefresh;
+  final bool hidePageInfo;
+  final bool disableGridSystem;
 
   const GridWithPagination({
     super.key,
@@ -510,6 +512,8 @@ class GridWithPagination extends StatelessWidget {
     required this.onPageChange,
     this.actionsBuilder,
     this.onRefresh,
+    this.hidePageInfo = false,
+    this.disableGridSystem = false,
   });
 
   List<int> _pageRange(int currentPage, int totalPages, int maxButtons) {
@@ -576,20 +580,22 @@ class GridWithPagination extends StatelessWidget {
         builder: (context, constraints) {
           final width = constraints.maxWidth;
 
-          final breakpoints = [
-            {'width': 1200, 'columns': 4, 'maxButtons': 9},
-            {'width': 900, 'columns': 3, 'maxButtons': 7},
-            {'width': 600, 'columns': 2, 'maxButtons': 5},
-          ];
-
           int columns = 1;
           int maxPageButtons = 3;
 
-          for (final bp in breakpoints) {
-            if (width >= bp['width']!) {
-              columns = bp['columns']!;
-              maxPageButtons = bp['maxButtons']!;
-              break;
+          if (!disableGridSystem) {
+            final breakpoints = [
+              {'width': 1200, 'columns': 4, 'maxButtons': 9},
+              {'width': 900, 'columns': 3, 'maxButtons': 7},
+              {'width': 600, 'columns': 2, 'maxButtons': 5},
+            ];
+
+            for (final bp in breakpoints) {
+              if (width >= bp['width']!) {
+                columns = bp['columns']!;
+                maxPageButtons = bp['maxButtons']!;
+                break;
+              }
             }
           }
 
@@ -599,13 +605,23 @@ class GridWithPagination extends StatelessWidget {
           return Column(
             children: [
               Wrap(
+                alignment: disableGridSystem
+                    ? WrapAlignment.center
+                    : WrapAlignment.start,
                 spacing: 8,
                 runSpacing: 8,
                 children: items.map((item) {
                   final actions = actionsBuilder != null
                       ? actionsBuilder!(context, item)
                       : null;
-                  final cardWidth = (width - (columns - 1) * 8) / columns;
+
+                  double cardWidth;
+                  if (disableGridSystem) {
+                    cardWidth = width > 420 ? 400 : width - 20;
+                  } else {
+                    cardWidth = (width - (columns - 1) * 8) / columns;
+                  }
+
                   return SizedBox(
                     width: cardWidth,
                     child: GridViewCard(item: item, actions: actions),
@@ -662,42 +678,45 @@ class GridWithPagination extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                totalRows == 0
-                    ? "No results"
-                    : "Showing $start-${end.clamp(0, totalRows)} of $totalRows",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text("Rows per page: "),
-                  DropdownButton<int>(
-                    value: rowsPerPage,
-                    items: [5, 10, 20, 50, 100].map((rowPerPage) {
-                      return DropdownMenuItem<int>(
-                        value: rowPerPage,
-                        child: Text('$rowPerPage'),
-                      );
-                    }).toList(),
-                    onChanged: (newRowsPerPage) {
-                      if (newRowsPerPage != null) {
-                        onPageChange(pagination.copyWith(
-                          pageNo: 0,
-                          rowsPerPage: newRowsPerPage,
-                          reload: true,
-                        ));
-                      }
-                    },
-                    underline: const SizedBox(),
-                  ),
-                ],
-              ),
-            ],
-          ),
+          if (!hidePageInfo)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  totalRows == 0
+                      ? "No results"
+                      : "Showing $start-${end.clamp(0, totalRows)} of $totalRows",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text("Rows per page: "),
+                    DropdownButton<int>(
+                      value: rowsPerPage,
+                      items: [5, 10, 20, 50, 100].map((rowPerPage) {
+                        return DropdownMenuItem<int>(
+                          value: rowPerPage,
+                          child: Text('$rowPerPage'),
+                        );
+                      }).toList(),
+                      onChanged: (newRowsPerPage) {
+                        if (newRowsPerPage != null) {
+                          onPageChange(
+                            pagination.copyWith(
+                              pageNo: 0,
+                              rowsPerPage: newRowsPerPage,
+                              reload: true,
+                            ),
+                          );
+                        }
+                      },
+                      underline: const SizedBox(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           const SizedBox(height: 8),
           Center(
             child: SingleChildScrollView(
@@ -710,7 +729,8 @@ class GridWithPagination extends StatelessWidget {
                     icon: const Icon(Icons.first_page),
                     onPressed: currentPage > 0
                         ? () => onPageChange(
-                            pagination.copyWith(pageNo: 0, reload: true))
+                              pagination.copyWith(pageNo: 0, reload: true),
+                            )
                         : null,
                   ),
                   IconButton(
@@ -719,7 +739,9 @@ class GridWithPagination extends StatelessWidget {
                     onPressed: currentPage > 0
                         ? () => onPageChange(
                               pagination.copyWith(
-                                  pageNo: currentPage - 1, reload: true),
+                                pageNo: currentPage - 1,
+                                reload: true,
+                              ),
                             )
                         : null,
                   ),
@@ -735,7 +757,9 @@ class GridWithPagination extends StatelessWidget {
                               ? Colors.white
                               : Theme.of(context).textTheme.bodyMedium?.color,
                           padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 8),
+                            vertical: 4,
+                            horizontal: 8,
+                          ),
                           minimumSize: const Size(30, 30),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(
@@ -760,7 +784,9 @@ class GridWithPagination extends StatelessWidget {
                     onPressed: currentPage < totalPages - 1
                         ? () => onPageChange(
                               pagination.copyWith(
-                                  pageNo: currentPage + 1, reload: true),
+                                pageNo: currentPage + 1,
+                                reload: true,
+                              ),
                             )
                         : null,
                   ),
@@ -770,14 +796,16 @@ class GridWithPagination extends StatelessWidget {
                     onPressed: currentPage < totalPages - 1
                         ? () => onPageChange(
                               pagination.copyWith(
-                                  pageNo: totalPages - 1, reload: true),
+                                pageNo: totalPages - 1,
+                                reload: true,
+                              ),
                             )
                         : null,
                   ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
