@@ -1,4 +1,4 @@
-name: broker
+name: broker_mobile
 description: "SAS Broker App"
 publish_to: 'none'
 
