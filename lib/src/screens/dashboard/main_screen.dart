@@ -1,7 +1,7 @@
 import 'package:broker_mobile/src/screens/ach_wire_request/ach_menu.dart';
 import 'package:broker_mobile/src/screens/dashboard/dashboard.dart';
 import 'package:broker_mobile/src/screens/reports/reports.dart';
-import 'package:broker_mobile/src/screens/settings/settings_page.dart';
+import 'package:broker_mobile/src/screens/misc/misc_page.dart';
 import 'package:broker_mobile/src/screens/summary/summary.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
     AccountSummaryPage(),
     Reports(),
     AchWireMenuPage(),
-    SettingsPage(),
+    MiscPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -59,9 +59,9 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Transfers',
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.category_outlined),
+            selectedIcon: Icon(Icons.category),
+            label: 'Misc',
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:broker_mobile/src/screens/misc/feedback/feedback.dart';
 import 'package:broker_mobile/src/screens/reports/activity/activity.dart';
 import 'package:broker_mobile/src/screens/reports/margin/buying_power.dart';
 import 'package:broker_mobile/src/screens/reports/margin/call_log.dart';
@@ -6,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:broker_mobile/src/screens/auth/login.dart';
 import 'package:broker_mobile/src/screens/dashboard/main_screen.dart';
-import 'package:broker_mobile/src/screens/settings/app_settings/app_settings_page.dart';
-import 'package:broker_mobile/src/screens/settings/user-settings/user_settings_page.dart';
-import 'package:broker_mobile/src/screens/settings/change_password/change_password_page.dart';
-import 'package:broker_mobile/src/screens/settings/authenticator/authenticator_page.dart';
+import 'package:broker_mobile/src/screens/misc/app_settings/app_settings_page.dart';
+import 'package:broker_mobile/src/screens/misc/user-settings/user_settings_page.dart';
+import 'package:broker_mobile/src/screens/misc/change_password/change_password_page.dart';
+import 'package:broker_mobile/src/screens/misc/authenticator/authenticator_page.dart';
 import 'package:broker_mobile/src/screens/summary/summary.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -20,10 +21,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     '/reports/position': (_) => const PositionPage(),
     '/reports/margin-call': (_) => const CallLogPage(),
     '/reports/buying-power': (_) => const BuyingPowerPage(),
-    '/settings/app': (_) => const AppSettingsPage(),
-    '/settings/user': (_) => const UserSettingsPage(),
-    '/settings/change-password': (_) => const ChangePasswordPage(),
-    '/settings/authenticator': (_) => const AuthenticatorPage(),
+    '/misc/app': (_) => const AppSettingsPage(),
+    '/misc/user': (_) => const UserSettingsPage(),
+    '/misc/change-password': (_) => const ChangePasswordPage(),
+    '/misc/authenticator': (_) => const AuthenticatorPage(),
+    '/misc/feedback': (_) => const FeedbackPage(),
   };
 
   // Redirect to login if not authenticated or accessing root
