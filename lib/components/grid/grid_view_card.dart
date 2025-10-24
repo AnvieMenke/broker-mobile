@@ -13,6 +13,7 @@ class GridField {
   final bool hideLabel;
   final String gridPosition;
   final bool addAvatar;
+  final bool hideDetails;
 
   const GridField({
     required this.keyName,
@@ -24,6 +25,7 @@ class GridField {
     this.hideLabel = false,
     this.gridPosition = "body",
     this.addAvatar = false,
+    this.hideDetails = false,
   });
 
   Widget get displayValue {
@@ -67,11 +69,15 @@ class GridField {
       case 'date':
         final text = FormatUtils.formatPbDate(value);
         return Text(text);
+
+      case 'dateTime':
+        final text = FormatUtils.formatPbDateTime(value);
+        return Text(text);
+
       case 'qty':
         final text = FormatUtils.formatQty(value);
         final qtyValue = Decimal.tryParse(value) ?? Decimal.zero;
         final color = qtyValue < Decimal.zero ? Colors.red : null;
-
         return Text(
           text,
           style: TextStyle(
@@ -121,7 +127,6 @@ class GridItem {
   final GridField? subTitleField;
   final GridField? rightField;
   final List<GridField> fields;
-
   final List<GridItem>? subItems;
 
   const GridItem({
@@ -157,6 +162,7 @@ class GridItem {
           hideLabel: v["hideLabel"] as bool? ?? false,
           gridPosition: v["gridPosition"]?.toString() ?? "body",
           addAvatar: v["addAvatar"] as bool? ?? false,
+          hideDetails: v["hideDetails"] as bool? ?? false,
         );
 
         if (field.gridPosition == "title") {
@@ -217,23 +223,25 @@ class GridViewCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8),
-                  ...item.fields.map(
-                    (f) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Text(
-                            "${f.label}: ",
-                            style: textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                  ...item.fields
+                      .where((f) => !f.hideDetails)
+                      .map(
+                        (f) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Text(
+                                "${f.label}: ",
+                                style: textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              f.displayValue,
+                            ],
                           ),
-                          f.displayValue,
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
                 ],
               ),
             ),

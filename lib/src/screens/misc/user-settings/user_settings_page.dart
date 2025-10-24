@@ -3,7 +3,7 @@ import 'package:broker_mobile/session/session_user.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:broker_mobile/service/user_service.dart';
-import 'package:broker_mobile/src/screens/settings/user-settings/user_settings_form.dart';
+import 'package:broker_mobile/src/screens/misc/user-settings/user_settings_form.dart';
 
 class UserSettingsPage extends StatelessWidget {
   const UserSettingsPage({super.key});

@@ -263,4 +263,16 @@ class CommonService {
       rethrow;
     }
   }
+
+  Future<ListPageResponse> listPage() async {
+    final client = _listClient();
+    final req = ListPageRequest()..limit = 50;
+
+    try {
+      final response = await client.listPage(req);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

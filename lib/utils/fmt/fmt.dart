@@ -153,4 +153,52 @@ class FormatUtils {
     ];
     return months[(month - 1).clamp(0, 11)];
   }
+
+  static String formatPbDateTime(dynamic d, {String separator = '/'}) {
+    if (d == null) return '';
+
+    try {
+      if (d is String) {
+        final regex = RegExp(r'seconds:\s*(\d+)');
+        final match = regex.firstMatch(d.replaceAll("\n", " "));
+        if (match != null) {
+          final seconds = int.tryParse(match.group(1) ?? '');
+          if (seconds == null) return '--';
+          final date = DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
+          final month = date.month.toString().padLeft(2, '0');
+          final day = date.day.toString().padLeft(2, '0');
+          final year = date.year.toString();
+          final hour = date.hour.toString().padLeft(2, '0');
+          final minute = date.minute.toString().padLeft(2, '0');
+          return '$month$separator$day$separator$year $hour:$minute';
+        }
+        return '--';
+      }
+
+      if (d is Map && d.containsKey('seconds')) {
+        final seconds = d['seconds'];
+        if (seconds == null) return '--';
+        final date = DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
+        final month = date.month.toString().padLeft(2, '0');
+        final day = date.day.toString().padLeft(2, '0');
+        final year = date.year.toString();
+        final hour = date.hour.toString().padLeft(2, '0');
+        final minute = date.minute.toString().padLeft(2, '0');
+        return '$month$separator$day$separator$year $hour:$minute';
+      }
+
+      if (d is DateTime) {
+        final month = d.month.toString().padLeft(2, '0');
+        final day = d.day.toString().padLeft(2, '0');
+        final year = d.year.toString();
+        final hour = d.hour.toString().padLeft(2, '0');
+        final minute = d.minute.toString().padLeft(2, '0');
+        return '$month$separator$day$separator$year $hour:$minute';
+      }
+
+      return '--';
+    } catch (e) {
+      return '--';
+    }
+  }
 }
