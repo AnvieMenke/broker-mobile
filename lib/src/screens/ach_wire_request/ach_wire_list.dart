@@ -251,8 +251,8 @@ class _AchWireListState extends State<AchWireList> {
             content: StatefulBuilder(
               builder: (context, setState) {
                 return SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                  child: Wrap(
+                    runSpacing: 16,
                     children: [
                       AutoCompleteCorrespondent(
                         name: "correspondent",
@@ -263,7 +263,6 @@ class _AchWireListState extends State<AchWireList> {
                         onChange: (value) =>
                             setState(() => selectedCorrespondent = value),
                       ),
-                      const SizedBox(height: 16),
                       AutoCompleteAccountNo(
                         name: "accountNo",
                         value: selectedAccountNo,
@@ -275,7 +274,6 @@ class _AchWireListState extends State<AchWireList> {
                               map['data']?['accountNo'] as String? ?? '';
                         }),
                       ),
-                      const SizedBox(height: 16),
                       AutoCompleteMasterAccountNo(
                         name: "masterAccountNo",
                         value: selectedMasterAccountNo,
@@ -287,16 +285,11 @@ class _AchWireListState extends State<AchWireList> {
                               map['data']?['masterAccountNo'] as String? ?? '';
                         }),
                       ),
-                      const SizedBox(height: 16),
                       TextField(
-                        decoration: const InputDecoration(
-                          labelText: 'External ID',
-                        ),
-                        onChanged: (value) {
-                          externalId = value;
-                        },
+                        decoration:
+                            const InputDecoration(labelText: 'External ID'),
+                        onChanged: (value) => externalId = value,
                       ),
-                      const SizedBox(height: 16),
                       SelectSystemCode(
                         label: "Request Type",
                         placeholder: "Request Type",
@@ -307,7 +300,6 @@ class _AchWireListState extends State<AchWireList> {
                           selectedRequestType = map?['data']['code'] ?? '';
                         }),
                       ),
-                      const SizedBox(height: 16),
                       SelectSystemCode(
                         label: "Transfer Type",
                         placeholder: "Select Transfer Type",
@@ -318,7 +310,6 @@ class _AchWireListState extends State<AchWireList> {
                           selectedTransferType = map?['data']['code'] ?? '';
                         }),
                       ),
-                      const SizedBox(height: 16),
                       Row(
                         children: [
                           Expanded(
@@ -358,14 +349,11 @@ class _AchWireListState extends State<AchWireList> {
                               ),
                               enabled: (selectedSign ?? "").isNotEmpty,
                               keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                amount = value;
-                              },
+                              onChanged: (value) => amount = value,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
                       CheckboxListTile(
                         title: const Text("Open"),
                         value: isOpen,
@@ -373,7 +361,6 @@ class _AchWireListState extends State<AchWireList> {
                             setState(() => isOpen = val ?? false),
                         controlAffinity: ListTileControlAffinity.trailing,
                       ),
-                      const SizedBox(height: 16),
                       SelectSystemCode(
                         label: "Status",
                         placeholder: "Select Status",

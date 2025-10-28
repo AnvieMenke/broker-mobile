@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:broker_mobile/service/common_service.dart';
+import 'package:broker_mobile/session/session.dart';
 
 class AutoCompleteAccountName extends StatefulWidget {
   final String name;
@@ -126,14 +127,19 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
 
   void _clearField() {
     _controller.clear();
-    widget.onChange({});
     _setPropsValue('', {});
+    widget.onChange({});
     FocusScope.of(context).unfocus();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = sessionManager.user!;
+    final isNotVisible = (!user.isMultipleAccount ||
+        (widget.isActive && !user.isMultipleActiveAccount));
+    if (isNotVisible) return const SizedBox.shrink();
+
     return TypeAheadField<Map<String, dynamic>>(
       key: ValueKey('${widget.correspondent}-${_controller.text}'),
       controller: _controller,

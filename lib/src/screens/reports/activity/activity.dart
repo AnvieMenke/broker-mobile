@@ -218,9 +218,8 @@ class ActivityPageState extends State<ActivityPage> {
             content: StatefulBuilder(
               builder: (context, setState) {
                 return SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                  child: Wrap(
+                    runSpacing: 16,
                     children: [
                       AutoCompleteCorrespondent(
                         name: "correspondent",
@@ -232,7 +231,6 @@ class ActivityPageState extends State<ActivityPage> {
                           selectedCorrespondent = value;
                         }),
                       ),
-                      const SizedBox(height: 16),
                       AutoCompleteMasterAccountNo(
                         name: "masterAccountNo",
                         value: selectedMasterAccountNo,
@@ -244,7 +242,6 @@ class ActivityPageState extends State<ActivityPage> {
                               map['data']?['masterAccountNo'] as String? ?? '';
                         }),
                       ),
-                      const SizedBox(height: 16),
                       AutoCompleteRepAdvisor(
                         name: "rep",
                         value: selectedRep,
@@ -255,7 +252,6 @@ class ActivityPageState extends State<ActivityPage> {
                           selectedRep = map['data']?['rep'] as String? ?? '';
                         }),
                       ),
-                      const SizedBox(height: 16),
                       AutoCompleteBranch(
                         name: "branch",
                         value: selectedBranch,
@@ -267,7 +263,6 @@ class ActivityPageState extends State<ActivityPage> {
                               map['data']?['branch'] as String? ?? '';
                         }),
                       ),
-                      const SizedBox(height: 16),
                       SelectSystemCode(
                         label: "Asset Type",
                         placeholder: "Select Asset Type",
@@ -277,7 +272,6 @@ class ActivityPageState extends State<ActivityPage> {
                           selectedAssetType = map?['data']['code'] ?? '';
                         }),
                       ),
-                      const SizedBox(height: 16),
                       TextField(
                         controller: descriptionController,
                         decoration:
