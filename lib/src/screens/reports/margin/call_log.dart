@@ -149,9 +149,8 @@ class CallLogPageState extends State<CallLogPage> {
             content: StatefulBuilder(
               builder: (context, setState) {
                 return SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                  child: Wrap(
+                    runSpacing: 16,
                     children: [
                       AutoCompleteCorrespondent(
                         name: "correspondent",

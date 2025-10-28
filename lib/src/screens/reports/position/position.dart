@@ -203,9 +203,8 @@ class PositionPageState extends State<PositionPage> {
             content: StatefulBuilder(
               builder: (context, setState) {
                 return SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                  child: Wrap(
+                    runSpacing: 16,
                     children: [
                       AutoCompleteCorrespondent(
                         name: "correspondent",
@@ -216,7 +215,6 @@ class PositionPageState extends State<PositionPage> {
                         onChange: (value) =>
                             setState(() => selectedCorrespondent = value),
                       ),
-                      const SizedBox(height: 16),
                       AutoCompleteRepAdvisor(
                         name: "rep",
                         value: selectedRep,
@@ -227,7 +225,6 @@ class PositionPageState extends State<PositionPage> {
                           selectedRep = map['data']['rep'] ?? '';
                         }),
                       ),
-                      const SizedBox(height: 16),
                       AutoCompleteBranch(
                         name: "branch",
                         value: selectedBranch,
@@ -238,14 +235,14 @@ class PositionPageState extends State<PositionPage> {
                           selectedBranch = map['data']['branch'] ?? '';
                         }),
                       ),
-                      const SizedBox(height: 16),
                       SelectSystemCode(
                         label: "Asset Type",
                         placeholder: "Select Asset Type",
                         value: selectedAssetType,
                         type: "Asset Type",
-                        onChange: (map) => setState(() =>
-                            selectedAssetType = map?['data']['code'] ?? ''),
+                        onChange: (map) => setState(() {
+                          selectedAssetType = map?['data']['code'] ?? '';
+                        }),
                       ),
                     ],
                   ),

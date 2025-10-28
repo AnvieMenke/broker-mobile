@@ -9,6 +9,7 @@ import 'package:broker_mobile/components/dropdowns/select_account_no.dart';
 import 'package:broker_mobile/components/dropdowns/select_bank_account.dart';
 import 'package:broker_mobile/components/dropdowns/select_system_code.dart';
 import 'package:broker_mobile/components/messages/notification.dart';
+import '../../../session/session.dart';
 import '../../../utils/theme/custom_theme.dart';
 
 class AchWirePage extends StatefulWidget {
@@ -24,6 +25,7 @@ class _AchWirePageState extends State<AchWirePage> {
   late final AchWireService _achWireService;
   late final BankAccountService _bankAccountService;
   late final TextEditingController _amountController;
+  final user = sessionManager.user!;
 
   late Map<String, dynamic> formData;
 
@@ -49,8 +51,13 @@ class _AchWirePageState extends State<AchWirePage> {
     _bankAccountService = BankAccountService();
 
     formData = {
-      "correspondent": "",
-      "accountNo": "",
+      "correspondent":
+          (!user.isMultipleAccount || !user.isMultipleActiveAccount)
+              ? user.correspondent
+              : '',
+      "accountNo": (!user.isMultipleAccount || !user.isMultipleActiveAccount)
+          ? user.accountNo
+          : '',
       "accountId": "",
       "bankId": "",
       "amt": 0.0,
@@ -178,8 +185,8 @@ class _AchWirePageState extends State<AchWirePage> {
 
   Future<void> getBankAccount() async {
     try {
-      final resp =
-          await _bankAccountService.readBankAccount(formData["bankId"]);
+      final resp = await _bankAccountService
+          .readBankAccount(ConvertService.safeInt(formData["bankId"]));
       String bic = resp.bankAccount.bankIdentifierCode;
       bool isInternational = bic.isNotEmpty;
       setState(() {
@@ -202,13 +209,12 @@ class _AchWirePageState extends State<AchWirePage> {
     if (data["bankId"] == null || data["bankId"] == "") {
       return Notify.warning('Please select a bank account.');
     }
-    if (data["transferType"] == null || data["transferType"] == "") {
-      return Notify.warning('Please select a transfer type.');
-    }
     if (data["requestType"] == null || data["requestType"] == "") {
       return Notify.warning('Please select a request type.');
     }
-
+    if (data["transferType"] == null || data["transferType"] == "") {
+      return Notify.warning('Please select a transfer type.');
+    }
     if (ConvertService.safeDouble(data["amt"]) == 0) {
       return Notify.warning('Amount is required.');
     }
@@ -320,46 +326,50 @@ class _AchWirePageState extends State<AchWirePage> {
                       spacing: 16,
                       runSpacing: 24,
                       children: [
-                        SizedBox(
-                          width: itemWidth,
-                          child: AutoCompleteCorrespondent(
-                            disabled: isEdit,
-                            name: "correspondent",
-                            value: formData["correspondent"],
-                            label: "Correspondent",
-                            isAllStatus: false,
-                            type: "",
-                            onChange: (value) => setState(() {
-                              formData["correspondent"] = value;
-                              _checkAndFetchMaxWithdrawable();
-                              _calculateFee();
-                            }),
+                        if (user.isMultipleAccount ||
+                            user.isMultipleActiveAccount) ...[
+                          SizedBox(
+                            width: itemWidth,
+                            child: AutoCompleteCorrespondent(
+                              disabled: isEdit,
+                              name: "correspondent",
+                              value: formData["correspondent"],
+                              label: "Correspondent",
+                              isAllStatus: false,
+                              type: "",
+                              onChange: (value) => setState(() {
+                                formData["correspondent"] = value;
+                                _checkAndFetchMaxWithdrawable();
+                                _calculateFee();
+                              }),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: itemWidth,
-                          child: AutoCompleteAccountNo(
-                            disabled: isEdit,
-                            name: "accountNo",
-                            value: formData["accountNo"],
-                            isAllStatus: false,
-                            isAccessibleOnly: true,
-                            correspondent: formData["correspondent"],
-                            type: "",
-                            onChange: (map) => setState(() {
-                              final data = map['data'] ?? {};
-                              formData["accountNo"] = data?['accountNo'] ?? '';
-                              formData["accountId"] = data?['accountId'] ?? 0;
-                              if ((formData["correspondent"] ?? '').isEmpty) {
-                                formData["correspondent"] =
-                                    data?['correspondent'] ?? '';
-                              }
-                              formData["bankId"] = "";
-                              _checkAndFetchMaxWithdrawable();
-                              _calculateFee();
-                            }),
+                          SizedBox(
+                            width: itemWidth,
+                            child: AutoCompleteAccountNo(
+                              disabled: isEdit,
+                              name: "accountNo",
+                              value: formData["accountNo"],
+                              isAllStatus: false,
+                              isAccessibleOnly: true,
+                              correspondent: formData["correspondent"],
+                              type: "",
+                              onChange: (map) => setState(() {
+                                final data = map['data'] ?? {};
+                                formData["accountNo"] =
+                                    data?['accountNo'] ?? '';
+                                formData["accountId"] = data?['accountId'] ?? 0;
+                                if ((formData["correspondent"] ?? '').isEmpty) {
+                                  formData["correspondent"] =
+                                      data?['correspondent'] ?? '';
+                                }
+                                formData["bankId"] = "";
+                                _checkAndFetchMaxWithdrawable();
+                                _calculateFee();
+                              }),
+                            ),
                           ),
-                        ),
+                        ],
                         SizedBox(
                           width: itemWidth,
                           child: SelectBankAccount(
@@ -373,6 +383,7 @@ class _AchWirePageState extends State<AchWirePage> {
                                 formData["bankId"] = map['data']?['bankId'];
                                 formData["bank"] =
                                     "${map['data']?['bankName']} - ${map['data']?['bankAccountNo']}";
+                                getBankAccount();
                               });
                             },
                           ),
