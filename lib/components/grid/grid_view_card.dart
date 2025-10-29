@@ -6,7 +6,7 @@ import 'package:flutter_html/flutter_html.dart';
 class GridField {
   final String keyName;
   final String label;
-  final String value;
+  final dynamic value;
   final String? type;
   final bool visible;
   final bool floatRight;
@@ -29,15 +29,19 @@ class GridField {
   });
 
   Widget get displayValue {
+    if (value is Widget) return value as Widget;
+
+    final strValue = value?.toString() ?? "";
+
     switch (type) {
       case 'bool':
-        final normalized = value.toLowerCase();
+        final normalized = strValue.toLowerCase();
         final text = (normalized == 'true' || normalized == '1') ? "✔" : "✖";
         return Text(text);
 
       case 'status':
         Color bg;
-        switch (value.toLowerCase()) {
+        switch (strValue.toLowerCase()) {
           case 'pending':
             bg = Colors.orange;
             break;
@@ -59,24 +63,25 @@ class GridField {
             borderRadius: BorderRadius.circular(6),
           ),
           child: Text(
-            value,
+            strValue,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
         );
+
       case 'date':
-        final text = FormatUtils.formatPbDate(value);
+        final text = FormatUtils.formatPbDate(strValue);
         return Text(text);
 
       case 'dateTime':
-        final text = FormatUtils.formatPbDateTime(value);
+        final text = FormatUtils.formatPbDateTime(strValue);
         return Text(text);
 
       case 'qty':
-        final text = FormatUtils.formatQty(value);
-        final qtyValue = Decimal.tryParse(value) ?? Decimal.zero;
+        final text = FormatUtils.formatQty(strValue);
+        final qtyValue = Decimal.tryParse(strValue) ?? Decimal.zero;
         final color = qtyValue < Decimal.zero ? Colors.red : null;
         return Text(
           text,
@@ -87,8 +92,8 @@ class GridField {
         );
 
       case 'amount':
-        final text = FormatUtils.formatCurrency(value);
-        final amtValue = Decimal.tryParse(value) ?? Decimal.zero;
+        final text = FormatUtils.formatCurrency(strValue);
+        final amtValue = Decimal.tryParse(strValue) ?? Decimal.zero;
         final color = amtValue < Decimal.zero
             ? Colors.red
             : (amtValue > Decimal.zero ? Colors.green : Colors.grey);
@@ -100,12 +105,14 @@ class GridField {
             color: color,
           ),
         );
+
       case 'price':
-        final text = FormatUtils.formatCurrency(value);
+        final text = FormatUtils.formatCurrency(strValue);
         return Text(text);
+
       case 'note':
         return Html(
-          data: value,
+          data: strValue,
           style: {
             "p": Style(
               margin: Margins.all(0),
@@ -116,8 +123,9 @@ class GridField {
             ),
           },
         );
+
       default:
-        return Text(value);
+        return Text(strValue);
     }
   }
 }
@@ -155,7 +163,7 @@ class GridItem {
         final field = GridField(
           keyName: k,
           label: v["label"]?.toString() ?? "",
-          value: v["value"]?.toString() ?? "",
+          value: v["value"],
           type: v["type"]?.toString(),
           visible: v["visible"] as bool? ?? true,
           floatRight: v["floatRight"] as bool? ?? false,
@@ -178,7 +186,7 @@ class GridItem {
         final field = GridField(
           keyName: k,
           label: k,
-          value: v?.toString() ?? "",
+          value: v,
           gridPosition: "body",
         );
         parsedFields.add(field);
@@ -223,9 +231,7 @@ class GridViewCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8),
-                  ...item.fields
-                      .where((f) => !f.hideDetails)
-                      .map(
+                  ...item.fields.where((f) => !f.hideDetails).map(
                         (f) => Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: Wrap(
@@ -339,80 +345,83 @@ class GridViewCard extends StatelessWidget {
               if (i + 1 < bodyFields.length && bodyFields[i + 1].floatRight) {
                 rightField = bodyFields[i + 1];
               }
-
-              rows.add(
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (!f.hideLabel)
-                              Text(
-                                "${f.label}: ",
-                                style: textTheme.bodyMedium?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            if (f.addAvatar && f.value.isNotEmpty) ...[
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 16,
-                                    backgroundColor: Colors.blue.shade100,
-                                    child: Text(
-                                      f.value[0].toUpperCase(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Flexible(
-                                    child: Text(
-                                      f.value,
-                                      style: textTheme.bodyMedium,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ] else
-                              f.displayValue,
-                          ],
-                        ),
-                      ),
-                      if (rightField != null)
+              if (f.value is Widget) {
+                rows.add(f.value);
+              } else {
+                rows.add(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Expanded(
                           flex: 2,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (!rightField.hideLabel)
-                                  Text(
-                                    "${rightField.label}: ",
-                                    style: textTheme.bodyMedium?.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (!f.hideLabel)
+                                Text(
+                                  "${f.label}: ",
+                                  style: textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                rightField.displayValue,
-                              ],
-                            ),
+                                ),
+                              if (f.addAvatar && f.value.isNotEmpty) ...[
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 16,
+                                      backgroundColor: Colors.blue.shade100,
+                                      child: Text(
+                                        f.value[0].toUpperCase(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Flexible(
+                                      child: Text(
+                                        f.value,
+                                        style: textTheme.bodyMedium,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ] else
+                                f.displayValue,
+                            ],
                           ),
                         ),
-                    ],
+                        if (rightField != null)
+                          Expanded(
+                            flex: 2,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (!rightField.hideLabel)
+                                    Text(
+                                      "${rightField.label}: ",
+                                      style: textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  rightField.displayValue,
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-              );
+                );
+              }
             }
 
             return rows;
@@ -439,16 +448,9 @@ class GridViewCard extends StatelessWidget {
 
               return Container(
                 color: backgroundColor,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: isSubItem ? 0 : 16.0,
-                    top: 4,
-                    bottom: 4,
-                  ),
-                  child: GridViewCard(
-                    item: sub,
-                    isSubItem: true,
-                  ),
+                child: GridViewCard(
+                  item: sub,
+                  isSubItem: true,
                 ),
               );
             }).toList(),
@@ -466,7 +468,7 @@ class GridViewCard extends StatelessWidget {
       return Card(
         margin: const EdgeInsets.symmetric(vertical: 1.5),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(8),
           child: content,
         ),
       );

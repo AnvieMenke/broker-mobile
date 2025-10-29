@@ -66,6 +66,14 @@ class Balance extends $pb.GeneratedMessage {
     $core.String? fixedIncomeMarketValue,
     $core.String? mutualFundMarketValue,
     $core.String? optionMarketValue,
+    $core.String? accountType,
+    $core.String? cashPercent,
+    $core.String? tdEquityChangeValue,
+    $core.String? tdEquityChangePercent,
+    $core.String? plValue,
+    $core.String? plPercent,
+    $core.String? sdMarketValue,
+    $core.String? tdMarketValue,
   }) {
     final result = create();
     if (accountId != null) result.accountId = accountId;
@@ -113,6 +121,14 @@ class Balance extends $pb.GeneratedMessage {
     if (fixedIncomeMarketValue != null) result.fixedIncomeMarketValue = fixedIncomeMarketValue;
     if (mutualFundMarketValue != null) result.mutualFundMarketValue = mutualFundMarketValue;
     if (optionMarketValue != null) result.optionMarketValue = optionMarketValue;
+    if (accountType != null) result.accountType = accountType;
+    if (cashPercent != null) result.cashPercent = cashPercent;
+    if (tdEquityChangeValue != null) result.tdEquityChangeValue = tdEquityChangeValue;
+    if (tdEquityChangePercent != null) result.tdEquityChangePercent = tdEquityChangePercent;
+    if (plValue != null) result.plValue = plValue;
+    if (plPercent != null) result.plPercent = plPercent;
+    if (sdMarketValue != null) result.sdMarketValue = sdMarketValue;
+    if (tdMarketValue != null) result.tdMarketValue = tdMarketValue;
     return result;
   }
 
@@ -167,6 +183,14 @@ class Balance extends $pb.GeneratedMessage {
     ..aOS(49, _omitFieldNames ? '' : 'fixedIncomeMarketValue')
     ..aOS(50, _omitFieldNames ? '' : 'mutualFundMarketValue')
     ..aOS(51, _omitFieldNames ? '' : 'optionMarketValue')
+    ..aOS(52, _omitFieldNames ? '' : 'accountType')
+    ..aOS(53, _omitFieldNames ? '' : 'cashPercent')
+    ..aOS(54, _omitFieldNames ? '' : 'tdEquityChangeValue')
+    ..aOS(55, _omitFieldNames ? '' : 'tdEquityChangePercent')
+    ..aOS(56, _omitFieldNames ? '' : 'plValue')
+    ..aOS(57, _omitFieldNames ? '' : 'plPercent')
+    ..aOS(58, _omitFieldNames ? '' : 'sdMarketValue')
+    ..aOS(59, _omitFieldNames ? '' : 'tdMarketValue')
     ..hasRequiredFields = false
   ;
 
@@ -593,6 +617,78 @@ class Balance extends $pb.GeneratedMessage {
   $core.bool hasOptionMarketValue() => $_has(44);
   @$pb.TagNumber(51)
   void clearOptionMarketValue() => $_clearField(51);
+
+  @$pb.TagNumber(52)
+  $core.String get accountType => $_getSZ(45);
+  @$pb.TagNumber(52)
+  set accountType($core.String value) => $_setString(45, value);
+  @$pb.TagNumber(52)
+  $core.bool hasAccountType() => $_has(45);
+  @$pb.TagNumber(52)
+  void clearAccountType() => $_clearField(52);
+
+  @$pb.TagNumber(53)
+  $core.String get cashPercent => $_getSZ(46);
+  @$pb.TagNumber(53)
+  set cashPercent($core.String value) => $_setString(46, value);
+  @$pb.TagNumber(53)
+  $core.bool hasCashPercent() => $_has(46);
+  @$pb.TagNumber(53)
+  void clearCashPercent() => $_clearField(53);
+
+  @$pb.TagNumber(54)
+  $core.String get tdEquityChangeValue => $_getSZ(47);
+  @$pb.TagNumber(54)
+  set tdEquityChangeValue($core.String value) => $_setString(47, value);
+  @$pb.TagNumber(54)
+  $core.bool hasTdEquityChangeValue() => $_has(47);
+  @$pb.TagNumber(54)
+  void clearTdEquityChangeValue() => $_clearField(54);
+
+  @$pb.TagNumber(55)
+  $core.String get tdEquityChangePercent => $_getSZ(48);
+  @$pb.TagNumber(55)
+  set tdEquityChangePercent($core.String value) => $_setString(48, value);
+  @$pb.TagNumber(55)
+  $core.bool hasTdEquityChangePercent() => $_has(48);
+  @$pb.TagNumber(55)
+  void clearTdEquityChangePercent() => $_clearField(55);
+
+  @$pb.TagNumber(56)
+  $core.String get plValue => $_getSZ(49);
+  @$pb.TagNumber(56)
+  set plValue($core.String value) => $_setString(49, value);
+  @$pb.TagNumber(56)
+  $core.bool hasPlValue() => $_has(49);
+  @$pb.TagNumber(56)
+  void clearPlValue() => $_clearField(56);
+
+  @$pb.TagNumber(57)
+  $core.String get plPercent => $_getSZ(50);
+  @$pb.TagNumber(57)
+  set plPercent($core.String value) => $_setString(50, value);
+  @$pb.TagNumber(57)
+  $core.bool hasPlPercent() => $_has(50);
+  @$pb.TagNumber(57)
+  void clearPlPercent() => $_clearField(57);
+
+  @$pb.TagNumber(58)
+  $core.String get sdMarketValue => $_getSZ(51);
+  @$pb.TagNumber(58)
+  set sdMarketValue($core.String value) => $_setString(51, value);
+  @$pb.TagNumber(58)
+  $core.bool hasSdMarketValue() => $_has(51);
+  @$pb.TagNumber(58)
+  void clearSdMarketValue() => $_clearField(58);
+
+  @$pb.TagNumber(59)
+  $core.String get tdMarketValue => $_getSZ(52);
+  @$pb.TagNumber(59)
+  set tdMarketValue($core.String value) => $_setString(52, value);
+  @$pb.TagNumber(59)
+  $core.bool hasTdMarketValue() => $_has(52);
+  @$pb.TagNumber(59)
+  void clearTdMarketValue() => $_clearField(59);
 }
 
 class ListBalanceRequest extends $pb.GeneratedMessage {

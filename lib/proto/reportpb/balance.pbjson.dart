@@ -63,6 +63,14 @@ const Balance$json = {
     {'1': 'fixed_income_market_value', '3': 49, '4': 1, '5': 9, '10': 'fixedIncomeMarketValue'},
     {'1': 'mutual_fund_market_value', '3': 50, '4': 1, '5': 9, '10': 'mutualFundMarketValue'},
     {'1': 'option_market_value', '3': 51, '4': 1, '5': 9, '10': 'optionMarketValue'},
+    {'1': 'account_type', '3': 52, '4': 1, '5': 9, '10': 'accountType'},
+    {'1': 'cash_percent', '3': 53, '4': 1, '5': 9, '10': 'cashPercent'},
+    {'1': 'td_equity_change_value', '3': 54, '4': 1, '5': 9, '10': 'tdEquityChangeValue'},
+    {'1': 'td_equity_change_percent', '3': 55, '4': 1, '5': 9, '10': 'tdEquityChangePercent'},
+    {'1': 'pl_value', '3': 56, '4': 1, '5': 9, '10': 'plValue'},
+    {'1': 'pl_percent', '3': 57, '4': 1, '5': 9, '10': 'plPercent'},
+    {'1': 'sd_market_value', '3': 58, '4': 1, '5': 9, '10': 'sdMarketValue'},
+    {'1': 'td_market_value', '3': 59, '4': 1, '5': 9, '10': 'tdMarketValue'},
   ],
 };
 
@@ -100,7 +108,12 @@ final $typed_data.Uint8List balanceDescriptor = $convert.base64Decode(
     '1hcmtldFZhbHVlEjkKGWZpeGVkX2luY29tZV9tYXJrZXRfdmFsdWUYMSABKAlSFmZpeGVkSW5j'
     'b21lTWFya2V0VmFsdWUSNwoYbXV0dWFsX2Z1bmRfbWFya2V0X3ZhbHVlGDIgASgJUhVtdXR1YW'
     'xGdW5kTWFya2V0VmFsdWUSLgoTb3B0aW9uX21hcmtldF92YWx1ZRgzIAEoCVIRb3B0aW9uTWFy'
-    'a2V0VmFsdWU=');
+    'a2V0VmFsdWUSIQoMYWNjb3VudF90eXBlGDQgASgJUgthY2NvdW50VHlwZRIhCgxjYXNoX3Blcm'
+    'NlbnQYNSABKAlSC2Nhc2hQZXJjZW50EjMKFnRkX2VxdWl0eV9jaGFuZ2VfdmFsdWUYNiABKAlS'
+    'E3RkRXF1aXR5Q2hhbmdlVmFsdWUSNwoYdGRfZXF1aXR5X2NoYW5nZV9wZXJjZW50GDcgASgJUh'
+    'V0ZEVxdWl0eUNoYW5nZVBlcmNlbnQSGQoIcGxfdmFsdWUYOCABKAlSB3BsVmFsdWUSHQoKcGxf'
+    'cGVyY2VudBg5IAEoCVIJcGxQZXJjZW50EiYKD3NkX21hcmtldF92YWx1ZRg6IAEoCVINc2RNYX'
+    'JrZXRWYWx1ZRImCg90ZF9tYXJrZXRfdmFsdWUYOyABKAlSDXRkTWFya2V0VmFsdWU=');
 
 @$core.Deprecated('Use listBalanceRequestDescriptor instead')
 const ListBalanceRequest$json = {

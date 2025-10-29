@@ -94,38 +94,228 @@ class PositionPageState extends State<PositionPage> {
 
     grouped.forEach((accountNo, positions) {
       // Create subItems list from all positions of this account
-      final subItems = positions
-          .map((e) => {
-                "symbol": {
-                  "hideLabel": true,
-                  "label": "Symbol",
-                  "value": e.symbol,
-                  "visible": true,
-                  "addAvatar": true,
-                },
-                "tdQty": {
-                  "hideLabel": true,
-                  "label": "TD Qty",
-                  "value": "${FormatUtils.formatQty(e.tdQty)} shares",
-                  "visible": true,
-                },
-                "costBasis": {
-                  "hideLabel": true,
-                  "label": "Cost Basis",
-                  "value": e.costBasis,
-                  "type": "amount",
-                  "visible": true,
-                },
-                "tdMarketValue": {
-                  "hideLabel": true,
-                  "label": "TD Market Value",
-                  "value": e.tdMarketValue,
-                  "type": "amount",
-                  "floatRight": true,
-                  "visible": true,
-                },
-              })
-          .toList();
+      final subItems = positions.where((e) => e != null).map((e) {
+        final symbol = e.symbol ?? '';
+        final tdQty = e.tdQty ?? 0;
+        final tdMarketValue = e.tdMarketValue ?? 0;
+        final plValue = e.unrealizedPlValue ?? 0;
+        final plPercent = e.unrealizedPlPercent ?? 0;
+
+        return {
+          "positionSummary": {
+            "value": LayoutBuilder(
+              builder: (context, constraints) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 18,
+                              backgroundColor: Colors.blue.shade100,
+                              child: Text(
+                                (symbol.isNotEmpty ? symbol[0].toUpperCase() : '?'),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            symbol,
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      InkWell(
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.vertical(
+                                                top: Radius.circular(16),
+                                              ),
+                                            ),
+                                            builder: (context) => Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    symbol,
+                                                    style: const TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 12),
+                                                  Text(
+                                                    "TD Qty: ${FormatUtils.formatQty(tdQty)}",
+                                                    style:
+                                                    const TextStyle(fontSize: 14),
+                                                  ),
+                                                  Text(
+                                                    "Market Value: ${FormatUtils.formatCurrency(tdMarketValue)}",
+                                                    style:
+                                                    const TextStyle(fontSize: 14),
+                                                  ),
+                                                  Text(
+                                                    "Unrealized P/L: ${FormatUtils.formatCurrency(plValue)}",
+                                                    style:
+                                                    const TextStyle(fontSize: 14),
+                                                  ),
+                                                  Text(
+                                                    "P/L %: ${FormatUtils.formatPercentage(plPercent)}",
+                                                    style:
+                                                    const TextStyle(fontSize: 14),
+                                                  ),
+                                                  const SizedBox(height: 12),
+                                                  Align(
+                                                    alignment: Alignment.centerRight,
+                                                    child: TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(context),
+                                                      child: const Text("Close"),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: const Icon(
+                                          Icons.info_outline,
+                                          color: Colors.grey,
+                                          size: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "${FormatUtils.formatQty(tdQty)} shares",
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                FormatUtils.formatCurrency(tdMarketValue),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Flexible(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      "${ConvertService.safeDouble(plValue) > 0 ? '+' : ''}${FormatUtils.formatCurrency(plValue)}",
+                                      style: TextStyle(
+                                        color: ConvertService.safeDouble(plValue) > 0
+                                            ? Colors.greenAccent[400]
+                                            : ConvertService.safeDouble(plValue) < 0
+                                            ? Colors.redAccent
+                                            : Colors.grey,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: ConvertService.safeDouble(plPercent) > 0
+                                        ? Colors.greenAccent[700]
+                                        : ConvertService.safeDouble(plPercent) < 0
+                                        ? Colors.redAccent[700]
+                                        : Colors.grey[700],
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      FormatUtils.formatPercentage(plPercent),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          },
+        };
+      }).toList();
+
+
+
+
+
 
       // Add GridItem per account
       items.add(GridItem.fromMap({
