@@ -12,6 +12,7 @@ import '../../../../components/dropdowns/select_system_code.dart';
 import '../../../../components/dropdowns/select_rep.dart';
 import '../../../../components/dropdowns/select_branch.dart';
 import '../../../../components/dropdowns/select_symbol.dart';
+import '../../../../utils/financial_modeling_prep/financial_modeling_prep.dart';
 import '../../../../utils/theme/custom_theme.dart';
 
 class PositionPage extends StatefulWidget {
@@ -96,6 +97,9 @@ class PositionPageState extends State<PositionPage> {
       // Create subItems list from all positions of this account
       final subItems = positions.where((e) => e != null).map((e) {
         final symbol = e.symbol ?? '';
+        final symbolAvatar = e.assetType == 'O'
+            ? (RegExp(r'^[A-Z]+').firstMatch(symbol)?.group(0) ?? '')
+            : symbol;
         final tdQty = e.tdQty ?? 0;
         final tdMarketValue = e.tdMarketValue ?? 0;
         final plValue = e.unrealizedPlValue ?? 0;
@@ -106,7 +110,8 @@ class PositionPageState extends State<PositionPage> {
             "value": LayoutBuilder(
               builder: (context, constraints) {
                 return Container(
-                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -115,38 +120,26 @@ class PositionPageState extends State<PositionPage> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.blue.shade100,
-                              child: Text(
-                                (symbol.isNotEmpty ? symbol[0].toUpperCase() : '?'),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
+                            SymbolAvatar(
+                              symbol: symbolAvatar,
                             ),
                             const SizedBox(width: 8),
-
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     children: [
-                                      Expanded(
-                                        child: FittedBox(
-                                          fit: BoxFit.scaleDown,
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            symbol,
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
+                                      Flexible(
+                                        child: Text(
+                                          symbol,
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ),
@@ -156,7 +149,8 @@ class PositionPageState extends State<PositionPage> {
                                           showModalBottomSheet(
                                             context: context,
                                             shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.vertical(
+                                              borderRadius:
+                                                  BorderRadius.vertical(
                                                 top: Radius.circular(16),
                                               ),
                                             ),
@@ -165,43 +159,47 @@ class PositionPageState extends State<PositionPage> {
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     symbol,
                                                     style: const TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 16,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 12),
                                                   Text(
                                                     "TD Qty: ${FormatUtils.formatQty(tdQty)}",
-                                                    style:
-                                                    const TextStyle(fontSize: 14),
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
                                                   ),
                                                   Text(
                                                     "Market Value: ${FormatUtils.formatCurrency(tdMarketValue)}",
-                                                    style:
-                                                    const TextStyle(fontSize: 14),
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
                                                   ),
                                                   Text(
                                                     "Unrealized P/L: ${FormatUtils.formatCurrency(plValue)}",
-                                                    style:
-                                                    const TextStyle(fontSize: 14),
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
                                                   ),
                                                   Text(
-                                                    "P/L %: ${FormatUtils.formatPercentage(plPercent)}",
-                                                    style:
-                                                    const TextStyle(fontSize: 14),
+                                                    "P/L: ${FormatUtils.formatPercentage(plPercent)}",
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
                                                   ),
                                                   const SizedBox(height: 12),
                                                   Align(
-                                                    alignment: Alignment.centerRight,
+                                                    alignment:
+                                                        Alignment.centerRight,
                                                     child: TextButton(
                                                       onPressed: () =>
-                                                          Navigator.pop(context),
-                                                      child: const Text("Close"),
+                                                          Navigator.pop(
+                                                              context),
+                                                      child:
+                                                          const Text("Close"),
                                                     ),
                                                   ),
                                                 ],
@@ -217,16 +215,13 @@ class PositionPageState extends State<PositionPage> {
                                       ),
                                     ],
                                   ),
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      "${FormatUtils.formatQty(tdQty)} shares",
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                      ),
+                                  Text(
+                                    "${FormatUtils.formatQty(tdQty)} shares",
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
                                     ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -234,7 +229,6 @@ class PositionPageState extends State<PositionPage> {
                           ],
                         ),
                       ),
-
                       Expanded(
                         flex: 2,
                         child: Column(
@@ -246,7 +240,8 @@ class PositionPageState extends State<PositionPage> {
                               child: Text(
                                 FormatUtils.formatCurrency(tdMarketValue),
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
                                 ),
@@ -263,11 +258,15 @@ class PositionPageState extends State<PositionPage> {
                                     child: Text(
                                       "${ConvertService.safeDouble(plValue) > 0 ? '+' : ''}${FormatUtils.formatCurrency(plValue)}",
                                       style: TextStyle(
-                                        color: ConvertService.safeDouble(plValue) > 0
-                                            ? Colors.greenAccent[400]
-                                            : ConvertService.safeDouble(plValue) < 0
-                                            ? Colors.redAccent
-                                            : Colors.grey,
+                                        color:
+                                            ConvertService.safeDouble(plValue) >
+                                                    0
+                                                ? Colors.greenAccent[400]
+                                                : ConvertService.safeDouble(
+                                                            plValue) <
+                                                        0
+                                                    ? Colors.redAccent
+                                                    : Colors.grey,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 13,
                                       ),
@@ -279,11 +278,14 @@ class PositionPageState extends State<PositionPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 3),
                                   decoration: BoxDecoration(
-                                    color: ConvertService.safeDouble(plPercent) > 0
-                                        ? Colors.greenAccent[700]
-                                        : ConvertService.safeDouble(plPercent) < 0
-                                        ? Colors.redAccent[700]
-                                        : Colors.grey[700],
+                                    color:
+                                        ConvertService.safeDouble(plPercent) > 0
+                                            ? Colors.greenAccent[700]
+                                            : ConvertService.safeDouble(
+                                                        plPercent) <
+                                                    0
+                                                ? Colors.redAccent[700]
+                                                : Colors.grey[700],
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: FittedBox(
@@ -311,11 +313,6 @@ class PositionPageState extends State<PositionPage> {
           },
         };
       }).toList();
-
-
-
-
-
 
       // Add GridItem per account
       items.add(GridItem.fromMap({
