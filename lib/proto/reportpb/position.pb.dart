@@ -21,58 +21,76 @@ export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 class Position extends $pb.GeneratedMessage {
   factory Position({
-    $core.int? accountId,
-    $core.String? correspondent,
-    $core.String? branch,
-    $core.String? accountNo,
-    $core.String? accountName,
-    $core.String? masterAccountNo,
-    $core.String? rep,
-    $core.String? subAccountNo,
-    $core.String? broker,
-    $core.String? marginType,
-    $core.String? type,
-    $core.String? originalCusip,
-    $core.String? symbol,
-    $core.String? cusip,
-    $core.String? symbolDescription,
-    $core.String? assetType,
-    $core.String? closingPrice,
-    $core.String? qty,
-    $core.String? marketValue,
-    $core.String? costBasis,
     $core.String? dateType,
     $1.Date? date,
+    $core.int? accountId,
+    $core.String? correspondent,
+    $core.String? accountNo,
+    $core.String? subAccountNo,
+    $core.String? accountName,
+    $core.String? masterAccountNo,
+    $core.String? branch,
+    $core.String? rep,
+    $core.String? marginType,
+    $core.String? accountType,
     $core.String? accountStatus,
-    $core.String? tdMarketValue,
+    $core.String? originalCusip,
+    $core.String? assetType,
+    $core.String? symbol,
+    $core.String? symbolDescription,
+    $core.String? closingPrice,
+    $core.String? closingPriceChange,
     $core.String? tdQty,
+    $core.String? tdMarketValue,
+    $core.String? tdShortMarketValue,
+    $core.String? tdLongMarketValue,
+    $core.String? sdQty,
+    $core.String? sdMarketValue,
+    $core.String? sdShortMarketValue,
+    $core.String? sdLongMarketValue,
+    $core.String? accountValuePercent,
+    $core.String? avgCostPrice,
+    $core.String? costBasis,
+    $core.String? unrealizedPlValue,
+    $core.String? unrealizedPlPercent,
+    $core.String? lowPrice,
+    $core.String? highPrice,
   }) {
     final result = create();
-    if (accountId != null) result.accountId = accountId;
-    if (correspondent != null) result.correspondent = correspondent;
-    if (branch != null) result.branch = branch;
-    if (accountNo != null) result.accountNo = accountNo;
-    if (accountName != null) result.accountName = accountName;
-    if (masterAccountNo != null) result.masterAccountNo = masterAccountNo;
-    if (rep != null) result.rep = rep;
-    if (subAccountNo != null) result.subAccountNo = subAccountNo;
-    if (broker != null) result.broker = broker;
-    if (marginType != null) result.marginType = marginType;
-    if (type != null) result.type = type;
-    if (originalCusip != null) result.originalCusip = originalCusip;
-    if (symbol != null) result.symbol = symbol;
-    if (cusip != null) result.cusip = cusip;
-    if (symbolDescription != null) result.symbolDescription = symbolDescription;
-    if (assetType != null) result.assetType = assetType;
-    if (closingPrice != null) result.closingPrice = closingPrice;
-    if (qty != null) result.qty = qty;
-    if (marketValue != null) result.marketValue = marketValue;
-    if (costBasis != null) result.costBasis = costBasis;
     if (dateType != null) result.dateType = dateType;
     if (date != null) result.date = date;
+    if (accountId != null) result.accountId = accountId;
+    if (correspondent != null) result.correspondent = correspondent;
+    if (accountNo != null) result.accountNo = accountNo;
+    if (subAccountNo != null) result.subAccountNo = subAccountNo;
+    if (accountName != null) result.accountName = accountName;
+    if (masterAccountNo != null) result.masterAccountNo = masterAccountNo;
+    if (branch != null) result.branch = branch;
+    if (rep != null) result.rep = rep;
+    if (marginType != null) result.marginType = marginType;
+    if (accountType != null) result.accountType = accountType;
     if (accountStatus != null) result.accountStatus = accountStatus;
-    if (tdMarketValue != null) result.tdMarketValue = tdMarketValue;
+    if (originalCusip != null) result.originalCusip = originalCusip;
+    if (assetType != null) result.assetType = assetType;
+    if (symbol != null) result.symbol = symbol;
+    if (symbolDescription != null) result.symbolDescription = symbolDescription;
+    if (closingPrice != null) result.closingPrice = closingPrice;
+    if (closingPriceChange != null) result.closingPriceChange = closingPriceChange;
     if (tdQty != null) result.tdQty = tdQty;
+    if (tdMarketValue != null) result.tdMarketValue = tdMarketValue;
+    if (tdShortMarketValue != null) result.tdShortMarketValue = tdShortMarketValue;
+    if (tdLongMarketValue != null) result.tdLongMarketValue = tdLongMarketValue;
+    if (sdQty != null) result.sdQty = sdQty;
+    if (sdMarketValue != null) result.sdMarketValue = sdMarketValue;
+    if (sdShortMarketValue != null) result.sdShortMarketValue = sdShortMarketValue;
+    if (sdLongMarketValue != null) result.sdLongMarketValue = sdLongMarketValue;
+    if (accountValuePercent != null) result.accountValuePercent = accountValuePercent;
+    if (avgCostPrice != null) result.avgCostPrice = avgCostPrice;
+    if (costBasis != null) result.costBasis = costBasis;
+    if (unrealizedPlValue != null) result.unrealizedPlValue = unrealizedPlValue;
+    if (unrealizedPlPercent != null) result.unrealizedPlPercent = unrealizedPlPercent;
+    if (lowPrice != null) result.lowPrice = lowPrice;
+    if (highPrice != null) result.highPrice = highPrice;
     return result;
   }
 
@@ -82,31 +100,40 @@ class Position extends $pb.GeneratedMessage {
   factory Position.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Position', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
-    ..a<$core.int>(1, _omitFieldNames ? '' : 'accountId', $pb.PbFieldType.OU3)
-    ..aOS(2, _omitFieldNames ? '' : 'correspondent')
-    ..aOS(3, _omitFieldNames ? '' : 'branch')
-    ..aOS(4, _omitFieldNames ? '' : 'accountNo')
-    ..aOS(5, _omitFieldNames ? '' : 'accountName')
-    ..aOS(6, _omitFieldNames ? '' : 'masterAccountNo')
-    ..aOS(7, _omitFieldNames ? '' : 'rep')
-    ..aOS(8, _omitFieldNames ? '' : 'subAccountNo')
-    ..aOS(9, _omitFieldNames ? '' : 'broker')
-    ..aOS(10, _omitFieldNames ? '' : 'marginType')
-    ..aOS(11, _omitFieldNames ? '' : 'type')
-    ..aOS(12, _omitFieldNames ? '' : 'originalCusip')
-    ..aOS(13, _omitFieldNames ? '' : 'symbol')
-    ..aOS(14, _omitFieldNames ? '' : 'cusip')
-    ..aOS(15, _omitFieldNames ? '' : 'symbolDescription')
-    ..aOS(16, _omitFieldNames ? '' : 'assetType')
-    ..aOS(17, _omitFieldNames ? '' : 'closingPrice')
-    ..aOS(18, _omitFieldNames ? '' : 'qty')
-    ..aOS(19, _omitFieldNames ? '' : 'marketValue')
-    ..aOS(20, _omitFieldNames ? '' : 'costBasis')
-    ..aOS(21, _omitFieldNames ? '' : 'dateType')
-    ..aOM<$1.Date>(22, _omitFieldNames ? '' : 'date', subBuilder: $1.Date.create)
-    ..aOS(23, _omitFieldNames ? '' : 'accountStatus')
-    ..aOS(24, _omitFieldNames ? '' : 'tdMarketValue')
-    ..aOS(25, _omitFieldNames ? '' : 'tdQty')
+    ..aOS(1, _omitFieldNames ? '' : 'dateType')
+    ..aOM<$1.Date>(2, _omitFieldNames ? '' : 'date', subBuilder: $1.Date.create)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'accountId', $pb.PbFieldType.OU3)
+    ..aOS(4, _omitFieldNames ? '' : 'correspondent')
+    ..aOS(5, _omitFieldNames ? '' : 'accountNo')
+    ..aOS(6, _omitFieldNames ? '' : 'subAccountNo')
+    ..aOS(7, _omitFieldNames ? '' : 'accountName')
+    ..aOS(8, _omitFieldNames ? '' : 'masterAccountNo')
+    ..aOS(9, _omitFieldNames ? '' : 'branch')
+    ..aOS(10, _omitFieldNames ? '' : 'rep')
+    ..aOS(11, _omitFieldNames ? '' : 'marginType')
+    ..aOS(12, _omitFieldNames ? '' : 'accountType')
+    ..aOS(13, _omitFieldNames ? '' : 'accountStatus')
+    ..aOS(14, _omitFieldNames ? '' : 'originalCusip')
+    ..aOS(15, _omitFieldNames ? '' : 'assetType')
+    ..aOS(16, _omitFieldNames ? '' : 'symbol')
+    ..aOS(17, _omitFieldNames ? '' : 'symbolDescription')
+    ..aOS(18, _omitFieldNames ? '' : 'closingPrice')
+    ..aOS(19, _omitFieldNames ? '' : 'closingPriceChange')
+    ..aOS(20, _omitFieldNames ? '' : 'tdQty')
+    ..aOS(21, _omitFieldNames ? '' : 'tdMarketValue')
+    ..aOS(22, _omitFieldNames ? '' : 'tdShortMarketValue')
+    ..aOS(23, _omitFieldNames ? '' : 'tdLongMarketValue')
+    ..aOS(24, _omitFieldNames ? '' : 'sdQty')
+    ..aOS(25, _omitFieldNames ? '' : 'sdMarketValue')
+    ..aOS(26, _omitFieldNames ? '' : 'sdShortMarketValue')
+    ..aOS(27, _omitFieldNames ? '' : 'sdLongMarketValue')
+    ..aOS(28, _omitFieldNames ? '' : 'accountValuePercent')
+    ..aOS(29, _omitFieldNames ? '' : 'avgCostPrice')
+    ..aOS(30, _omitFieldNames ? '' : 'costBasis')
+    ..aOS(31, _omitFieldNames ? '' : 'unrealizedPlValue')
+    ..aOS(32, _omitFieldNames ? '' : 'unrealizedPlPercent')
+    ..aOS(33, _omitFieldNames ? '' : 'lowPrice')
+    ..aOS(34, _omitFieldNames ? '' : 'highPrice')
     ..hasRequiredFields = false
   ;
 
@@ -128,273 +155,346 @@ class Position extends $pb.GeneratedMessage {
   static Position? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.int get accountId => $_getIZ(0);
+  $core.String get dateType => $_getSZ(0);
   @$pb.TagNumber(1)
-  set accountId($core.int value) => $_setUnsignedInt32(0, value);
+  set dateType($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
-  $core.bool hasAccountId() => $_has(0);
+  $core.bool hasDateType() => $_has(0);
   @$pb.TagNumber(1)
-  void clearAccountId() => $_clearField(1);
+  void clearDateType() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get correspondent => $_getSZ(1);
+  $1.Date get date => $_getN(1);
   @$pb.TagNumber(2)
-  set correspondent($core.String value) => $_setString(1, value);
+  set date($1.Date value) => $_setField(2, value);
   @$pb.TagNumber(2)
-  $core.bool hasCorrespondent() => $_has(1);
+  $core.bool hasDate() => $_has(1);
   @$pb.TagNumber(2)
-  void clearCorrespondent() => $_clearField(2);
+  void clearDate() => $_clearField(2);
+  @$pb.TagNumber(2)
+  $1.Date ensureDate() => $_ensure(1);
 
   @$pb.TagNumber(3)
-  $core.String get branch => $_getSZ(2);
+  $core.int get accountId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set branch($core.String value) => $_setString(2, value);
+  set accountId($core.int value) => $_setUnsignedInt32(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasBranch() => $_has(2);
+  $core.bool hasAccountId() => $_has(2);
   @$pb.TagNumber(3)
-  void clearBranch() => $_clearField(3);
+  void clearAccountId() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get accountNo => $_getSZ(3);
+  $core.String get correspondent => $_getSZ(3);
   @$pb.TagNumber(4)
-  set accountNo($core.String value) => $_setString(3, value);
+  set correspondent($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
-  $core.bool hasAccountNo() => $_has(3);
+  $core.bool hasCorrespondent() => $_has(3);
   @$pb.TagNumber(4)
-  void clearAccountNo() => $_clearField(4);
+  void clearCorrespondent() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get accountName => $_getSZ(4);
+  $core.String get accountNo => $_getSZ(4);
   @$pb.TagNumber(5)
-  set accountName($core.String value) => $_setString(4, value);
+  set accountNo($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
-  $core.bool hasAccountName() => $_has(4);
+  $core.bool hasAccountNo() => $_has(4);
   @$pb.TagNumber(5)
-  void clearAccountName() => $_clearField(5);
+  void clearAccountNo() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get masterAccountNo => $_getSZ(5);
+  $core.String get subAccountNo => $_getSZ(5);
   @$pb.TagNumber(6)
-  set masterAccountNo($core.String value) => $_setString(5, value);
+  set subAccountNo($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
-  $core.bool hasMasterAccountNo() => $_has(5);
+  $core.bool hasSubAccountNo() => $_has(5);
   @$pb.TagNumber(6)
-  void clearMasterAccountNo() => $_clearField(6);
+  void clearSubAccountNo() => $_clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get rep => $_getSZ(6);
+  $core.String get accountName => $_getSZ(6);
   @$pb.TagNumber(7)
-  set rep($core.String value) => $_setString(6, value);
+  set accountName($core.String value) => $_setString(6, value);
   @$pb.TagNumber(7)
-  $core.bool hasRep() => $_has(6);
+  $core.bool hasAccountName() => $_has(6);
   @$pb.TagNumber(7)
-  void clearRep() => $_clearField(7);
+  void clearAccountName() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get subAccountNo => $_getSZ(7);
+  $core.String get masterAccountNo => $_getSZ(7);
   @$pb.TagNumber(8)
-  set subAccountNo($core.String value) => $_setString(7, value);
+  set masterAccountNo($core.String value) => $_setString(7, value);
   @$pb.TagNumber(8)
-  $core.bool hasSubAccountNo() => $_has(7);
+  $core.bool hasMasterAccountNo() => $_has(7);
   @$pb.TagNumber(8)
-  void clearSubAccountNo() => $_clearField(8);
+  void clearMasterAccountNo() => $_clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get broker => $_getSZ(8);
+  $core.String get branch => $_getSZ(8);
   @$pb.TagNumber(9)
-  set broker($core.String value) => $_setString(8, value);
+  set branch($core.String value) => $_setString(8, value);
   @$pb.TagNumber(9)
-  $core.bool hasBroker() => $_has(8);
+  $core.bool hasBranch() => $_has(8);
   @$pb.TagNumber(9)
-  void clearBroker() => $_clearField(9);
+  void clearBranch() => $_clearField(9);
 
   @$pb.TagNumber(10)
-  $core.String get marginType => $_getSZ(9);
+  $core.String get rep => $_getSZ(9);
   @$pb.TagNumber(10)
-  set marginType($core.String value) => $_setString(9, value);
+  set rep($core.String value) => $_setString(9, value);
   @$pb.TagNumber(10)
-  $core.bool hasMarginType() => $_has(9);
+  $core.bool hasRep() => $_has(9);
   @$pb.TagNumber(10)
-  void clearMarginType() => $_clearField(10);
+  void clearRep() => $_clearField(10);
 
   @$pb.TagNumber(11)
-  $core.String get type => $_getSZ(10);
+  $core.String get marginType => $_getSZ(10);
   @$pb.TagNumber(11)
-  set type($core.String value) => $_setString(10, value);
+  set marginType($core.String value) => $_setString(10, value);
   @$pb.TagNumber(11)
-  $core.bool hasType() => $_has(10);
+  $core.bool hasMarginType() => $_has(10);
   @$pb.TagNumber(11)
-  void clearType() => $_clearField(11);
+  void clearMarginType() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.String get originalCusip => $_getSZ(11);
+  $core.String get accountType => $_getSZ(11);
   @$pb.TagNumber(12)
-  set originalCusip($core.String value) => $_setString(11, value);
+  set accountType($core.String value) => $_setString(11, value);
   @$pb.TagNumber(12)
-  $core.bool hasOriginalCusip() => $_has(11);
+  $core.bool hasAccountType() => $_has(11);
   @$pb.TagNumber(12)
-  void clearOriginalCusip() => $_clearField(12);
+  void clearAccountType() => $_clearField(12);
 
   @$pb.TagNumber(13)
-  $core.String get symbol => $_getSZ(12);
+  $core.String get accountStatus => $_getSZ(12);
   @$pb.TagNumber(13)
-  set symbol($core.String value) => $_setString(12, value);
+  set accountStatus($core.String value) => $_setString(12, value);
   @$pb.TagNumber(13)
-  $core.bool hasSymbol() => $_has(12);
+  $core.bool hasAccountStatus() => $_has(12);
   @$pb.TagNumber(13)
-  void clearSymbol() => $_clearField(13);
+  void clearAccountStatus() => $_clearField(13);
 
   @$pb.TagNumber(14)
-  $core.String get cusip => $_getSZ(13);
+  $core.String get originalCusip => $_getSZ(13);
   @$pb.TagNumber(14)
-  set cusip($core.String value) => $_setString(13, value);
+  set originalCusip($core.String value) => $_setString(13, value);
   @$pb.TagNumber(14)
-  $core.bool hasCusip() => $_has(13);
+  $core.bool hasOriginalCusip() => $_has(13);
   @$pb.TagNumber(14)
-  void clearCusip() => $_clearField(14);
+  void clearOriginalCusip() => $_clearField(14);
 
   @$pb.TagNumber(15)
-  $core.String get symbolDescription => $_getSZ(14);
+  $core.String get assetType => $_getSZ(14);
   @$pb.TagNumber(15)
-  set symbolDescription($core.String value) => $_setString(14, value);
+  set assetType($core.String value) => $_setString(14, value);
   @$pb.TagNumber(15)
-  $core.bool hasSymbolDescription() => $_has(14);
+  $core.bool hasAssetType() => $_has(14);
   @$pb.TagNumber(15)
-  void clearSymbolDescription() => $_clearField(15);
+  void clearAssetType() => $_clearField(15);
 
   @$pb.TagNumber(16)
-  $core.String get assetType => $_getSZ(15);
+  $core.String get symbol => $_getSZ(15);
   @$pb.TagNumber(16)
-  set assetType($core.String value) => $_setString(15, value);
+  set symbol($core.String value) => $_setString(15, value);
   @$pb.TagNumber(16)
-  $core.bool hasAssetType() => $_has(15);
+  $core.bool hasSymbol() => $_has(15);
   @$pb.TagNumber(16)
-  void clearAssetType() => $_clearField(16);
+  void clearSymbol() => $_clearField(16);
 
   @$pb.TagNumber(17)
-  $core.String get closingPrice => $_getSZ(16);
+  $core.String get symbolDescription => $_getSZ(16);
   @$pb.TagNumber(17)
-  set closingPrice($core.String value) => $_setString(16, value);
+  set symbolDescription($core.String value) => $_setString(16, value);
   @$pb.TagNumber(17)
-  $core.bool hasClosingPrice() => $_has(16);
+  $core.bool hasSymbolDescription() => $_has(16);
   @$pb.TagNumber(17)
-  void clearClosingPrice() => $_clearField(17);
+  void clearSymbolDescription() => $_clearField(17);
 
   @$pb.TagNumber(18)
-  $core.String get qty => $_getSZ(17);
+  $core.String get closingPrice => $_getSZ(17);
   @$pb.TagNumber(18)
-  set qty($core.String value) => $_setString(17, value);
+  set closingPrice($core.String value) => $_setString(17, value);
   @$pb.TagNumber(18)
-  $core.bool hasQty() => $_has(17);
+  $core.bool hasClosingPrice() => $_has(17);
   @$pb.TagNumber(18)
-  void clearQty() => $_clearField(18);
+  void clearClosingPrice() => $_clearField(18);
 
   @$pb.TagNumber(19)
-  $core.String get marketValue => $_getSZ(18);
+  $core.String get closingPriceChange => $_getSZ(18);
   @$pb.TagNumber(19)
-  set marketValue($core.String value) => $_setString(18, value);
+  set closingPriceChange($core.String value) => $_setString(18, value);
   @$pb.TagNumber(19)
-  $core.bool hasMarketValue() => $_has(18);
+  $core.bool hasClosingPriceChange() => $_has(18);
   @$pb.TagNumber(19)
-  void clearMarketValue() => $_clearField(19);
+  void clearClosingPriceChange() => $_clearField(19);
 
   @$pb.TagNumber(20)
-  $core.String get costBasis => $_getSZ(19);
+  $core.String get tdQty => $_getSZ(19);
   @$pb.TagNumber(20)
-  set costBasis($core.String value) => $_setString(19, value);
+  set tdQty($core.String value) => $_setString(19, value);
   @$pb.TagNumber(20)
-  $core.bool hasCostBasis() => $_has(19);
+  $core.bool hasTdQty() => $_has(19);
   @$pb.TagNumber(20)
-  void clearCostBasis() => $_clearField(20);
+  void clearTdQty() => $_clearField(20);
 
   @$pb.TagNumber(21)
-  $core.String get dateType => $_getSZ(20);
+  $core.String get tdMarketValue => $_getSZ(20);
   @$pb.TagNumber(21)
-  set dateType($core.String value) => $_setString(20, value);
+  set tdMarketValue($core.String value) => $_setString(20, value);
   @$pb.TagNumber(21)
-  $core.bool hasDateType() => $_has(20);
+  $core.bool hasTdMarketValue() => $_has(20);
   @$pb.TagNumber(21)
-  void clearDateType() => $_clearField(21);
+  void clearTdMarketValue() => $_clearField(21);
 
   @$pb.TagNumber(22)
-  $1.Date get date => $_getN(21);
+  $core.String get tdShortMarketValue => $_getSZ(21);
   @$pb.TagNumber(22)
-  set date($1.Date value) => $_setField(22, value);
+  set tdShortMarketValue($core.String value) => $_setString(21, value);
   @$pb.TagNumber(22)
-  $core.bool hasDate() => $_has(21);
+  $core.bool hasTdShortMarketValue() => $_has(21);
   @$pb.TagNumber(22)
-  void clearDate() => $_clearField(22);
-  @$pb.TagNumber(22)
-  $1.Date ensureDate() => $_ensure(21);
+  void clearTdShortMarketValue() => $_clearField(22);
 
   @$pb.TagNumber(23)
-  $core.String get accountStatus => $_getSZ(22);
+  $core.String get tdLongMarketValue => $_getSZ(22);
   @$pb.TagNumber(23)
-  set accountStatus($core.String value) => $_setString(22, value);
+  set tdLongMarketValue($core.String value) => $_setString(22, value);
   @$pb.TagNumber(23)
-  $core.bool hasAccountStatus() => $_has(22);
+  $core.bool hasTdLongMarketValue() => $_has(22);
   @$pb.TagNumber(23)
-  void clearAccountStatus() => $_clearField(23);
+  void clearTdLongMarketValue() => $_clearField(23);
 
   @$pb.TagNumber(24)
-  $core.String get tdMarketValue => $_getSZ(23);
+  $core.String get sdQty => $_getSZ(23);
   @$pb.TagNumber(24)
-  set tdMarketValue($core.String value) => $_setString(23, value);
+  set sdQty($core.String value) => $_setString(23, value);
   @$pb.TagNumber(24)
-  $core.bool hasTdMarketValue() => $_has(23);
+  $core.bool hasSdQty() => $_has(23);
   @$pb.TagNumber(24)
-  void clearTdMarketValue() => $_clearField(24);
+  void clearSdQty() => $_clearField(24);
 
   @$pb.TagNumber(25)
-  $core.String get tdQty => $_getSZ(24);
+  $core.String get sdMarketValue => $_getSZ(24);
   @$pb.TagNumber(25)
-  set tdQty($core.String value) => $_setString(24, value);
+  set sdMarketValue($core.String value) => $_setString(24, value);
   @$pb.TagNumber(25)
-  $core.bool hasTdQty() => $_has(24);
+  $core.bool hasSdMarketValue() => $_has(24);
   @$pb.TagNumber(25)
-  void clearTdQty() => $_clearField(25);
+  void clearSdMarketValue() => $_clearField(25);
+
+  @$pb.TagNumber(26)
+  $core.String get sdShortMarketValue => $_getSZ(25);
+  @$pb.TagNumber(26)
+  set sdShortMarketValue($core.String value) => $_setString(25, value);
+  @$pb.TagNumber(26)
+  $core.bool hasSdShortMarketValue() => $_has(25);
+  @$pb.TagNumber(26)
+  void clearSdShortMarketValue() => $_clearField(26);
+
+  @$pb.TagNumber(27)
+  $core.String get sdLongMarketValue => $_getSZ(26);
+  @$pb.TagNumber(27)
+  set sdLongMarketValue($core.String value) => $_setString(26, value);
+  @$pb.TagNumber(27)
+  $core.bool hasSdLongMarketValue() => $_has(26);
+  @$pb.TagNumber(27)
+  void clearSdLongMarketValue() => $_clearField(27);
+
+  @$pb.TagNumber(28)
+  $core.String get accountValuePercent => $_getSZ(27);
+  @$pb.TagNumber(28)
+  set accountValuePercent($core.String value) => $_setString(27, value);
+  @$pb.TagNumber(28)
+  $core.bool hasAccountValuePercent() => $_has(27);
+  @$pb.TagNumber(28)
+  void clearAccountValuePercent() => $_clearField(28);
+
+  @$pb.TagNumber(29)
+  $core.String get avgCostPrice => $_getSZ(28);
+  @$pb.TagNumber(29)
+  set avgCostPrice($core.String value) => $_setString(28, value);
+  @$pb.TagNumber(29)
+  $core.bool hasAvgCostPrice() => $_has(28);
+  @$pb.TagNumber(29)
+  void clearAvgCostPrice() => $_clearField(29);
+
+  @$pb.TagNumber(30)
+  $core.String get costBasis => $_getSZ(29);
+  @$pb.TagNumber(30)
+  set costBasis($core.String value) => $_setString(29, value);
+  @$pb.TagNumber(30)
+  $core.bool hasCostBasis() => $_has(29);
+  @$pb.TagNumber(30)
+  void clearCostBasis() => $_clearField(30);
+
+  @$pb.TagNumber(31)
+  $core.String get unrealizedPlValue => $_getSZ(30);
+  @$pb.TagNumber(31)
+  set unrealizedPlValue($core.String value) => $_setString(30, value);
+  @$pb.TagNumber(31)
+  $core.bool hasUnrealizedPlValue() => $_has(30);
+  @$pb.TagNumber(31)
+  void clearUnrealizedPlValue() => $_clearField(31);
+
+  @$pb.TagNumber(32)
+  $core.String get unrealizedPlPercent => $_getSZ(31);
+  @$pb.TagNumber(32)
+  set unrealizedPlPercent($core.String value) => $_setString(31, value);
+  @$pb.TagNumber(32)
+  $core.bool hasUnrealizedPlPercent() => $_has(31);
+  @$pb.TagNumber(32)
+  void clearUnrealizedPlPercent() => $_clearField(32);
+
+  @$pb.TagNumber(33)
+  $core.String get lowPrice => $_getSZ(32);
+  @$pb.TagNumber(33)
+  set lowPrice($core.String value) => $_setString(32, value);
+  @$pb.TagNumber(33)
+  $core.bool hasLowPrice() => $_has(32);
+  @$pb.TagNumber(33)
+  void clearLowPrice() => $_clearField(33);
+
+  @$pb.TagNumber(34)
+  $core.String get highPrice => $_getSZ(33);
+  @$pb.TagNumber(34)
+  set highPrice($core.String value) => $_setString(33, value);
+  @$pb.TagNumber(34)
+  $core.bool hasHighPrice() => $_has(33);
+  @$pb.TagNumber(34)
+  void clearHighPrice() => $_clearField(34);
 }
 
 class ListPositionRequest extends $pb.GeneratedMessage {
   factory ListPositionRequest({
+    $2.Pagination? pagination,
+    $core.String? dateType,
+    $1.Date? fromDate,
+    $1.Date? toDate,
     $core.String? correspondent,
     $core.String? accountNo,
     $core.String? accountName,
     $core.String? masterAccountNo,
-    $core.bool? unpricedSecurity,
-    $core.String? broker,
-    $core.String? type,
-    $core.String? symbol,
-    $core.String? cusip,
-    $1.Date? fromDate,
-    $1.Date? toDate,
     $core.String? branch,
     $core.String? rep,
-    $core.int? usrId,
-    $2.Pagination? pagination,
-    $core.String? dateType,
     $core.String? assetType,
+    $core.String? symbol,
     $core.String? rollUp,
+    $core.bool? includeCash,
   }) {
     final result = create();
+    if (pagination != null) result.pagination = pagination;
+    if (dateType != null) result.dateType = dateType;
+    if (fromDate != null) result.fromDate = fromDate;
+    if (toDate != null) result.toDate = toDate;
     if (correspondent != null) result.correspondent = correspondent;
     if (accountNo != null) result.accountNo = accountNo;
     if (accountName != null) result.accountName = accountName;
     if (masterAccountNo != null) result.masterAccountNo = masterAccountNo;
-    if (unpricedSecurity != null) result.unpricedSecurity = unpricedSecurity;
-    if (broker != null) result.broker = broker;
-    if (type != null) result.type = type;
-    if (symbol != null) result.symbol = symbol;
-    if (cusip != null) result.cusip = cusip;
-    if (fromDate != null) result.fromDate = fromDate;
-    if (toDate != null) result.toDate = toDate;
     if (branch != null) result.branch = branch;
     if (rep != null) result.rep = rep;
-    if (usrId != null) result.usrId = usrId;
-    if (pagination != null) result.pagination = pagination;
-    if (dateType != null) result.dateType = dateType;
     if (assetType != null) result.assetType = assetType;
+    if (symbol != null) result.symbol = symbol;
     if (rollUp != null) result.rollUp = rollUp;
+    if (includeCash != null) result.includeCash = includeCash;
     return result;
   }
 
@@ -404,24 +504,20 @@ class ListPositionRequest extends $pb.GeneratedMessage {
   factory ListPositionRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListPositionRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'correspondent')
-    ..aOS(2, _omitFieldNames ? '' : 'accountNo')
-    ..aOS(3, _omitFieldNames ? '' : 'accountName')
-    ..aOS(4, _omitFieldNames ? '' : 'masterAccountNo')
-    ..aOB(5, _omitFieldNames ? '' : 'unpricedSecurity')
-    ..aOS(6, _omitFieldNames ? '' : 'broker')
-    ..aOS(7, _omitFieldNames ? '' : 'type')
-    ..aOS(8, _omitFieldNames ? '' : 'symbol')
-    ..aOS(9, _omitFieldNames ? '' : 'cusip')
-    ..aOM<$1.Date>(10, _omitFieldNames ? '' : 'fromDate', subBuilder: $1.Date.create)
-    ..aOM<$1.Date>(11, _omitFieldNames ? '' : 'toDate', subBuilder: $1.Date.create)
-    ..aOS(12, _omitFieldNames ? '' : 'branch')
-    ..aOS(13, _omitFieldNames ? '' : 'rep')
-    ..a<$core.int>(14, _omitFieldNames ? '' : 'usrId', $pb.PbFieldType.OU3)
-    ..aOM<$2.Pagination>(15, _omitFieldNames ? '' : 'pagination', subBuilder: $2.Pagination.create)
-    ..aOS(16, _omitFieldNames ? '' : 'dateType')
-    ..aOS(17, _omitFieldNames ? '' : 'assetType')
-    ..aOS(18, _omitFieldNames ? '' : 'rollUp')
+    ..aOM<$2.Pagination>(1, _omitFieldNames ? '' : 'pagination', subBuilder: $2.Pagination.create)
+    ..aOS(2, _omitFieldNames ? '' : 'dateType')
+    ..aOM<$1.Date>(3, _omitFieldNames ? '' : 'fromDate', subBuilder: $1.Date.create)
+    ..aOM<$1.Date>(4, _omitFieldNames ? '' : 'toDate', subBuilder: $1.Date.create)
+    ..aOS(5, _omitFieldNames ? '' : 'correspondent')
+    ..aOS(6, _omitFieldNames ? '' : 'accountNo')
+    ..aOS(7, _omitFieldNames ? '' : 'accountName')
+    ..aOS(8, _omitFieldNames ? '' : 'masterAccountNo')
+    ..aOS(9, _omitFieldNames ? '' : 'branch')
+    ..aOS(10, _omitFieldNames ? '' : 'rep')
+    ..aOS(11, _omitFieldNames ? '' : 'assetType')
+    ..aOS(12, _omitFieldNames ? '' : 'symbol')
+    ..aOS(13, _omitFieldNames ? '' : 'rollUp')
+    ..aOB(14, _omitFieldNames ? '' : 'includeCash')
     ..hasRequiredFields = false
   ;
 
@@ -443,172 +539,136 @@ class ListPositionRequest extends $pb.GeneratedMessage {
   static ListPositionRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get correspondent => $_getSZ(0);
+  $2.Pagination get pagination => $_getN(0);
   @$pb.TagNumber(1)
-  set correspondent($core.String value) => $_setString(0, value);
+  set pagination($2.Pagination value) => $_setField(1, value);
   @$pb.TagNumber(1)
-  $core.bool hasCorrespondent() => $_has(0);
+  $core.bool hasPagination() => $_has(0);
   @$pb.TagNumber(1)
-  void clearCorrespondent() => $_clearField(1);
+  void clearPagination() => $_clearField(1);
+  @$pb.TagNumber(1)
+  $2.Pagination ensurePagination() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $core.String get accountNo => $_getSZ(1);
+  $core.String get dateType => $_getSZ(1);
   @$pb.TagNumber(2)
-  set accountNo($core.String value) => $_setString(1, value);
+  set dateType($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
-  $core.bool hasAccountNo() => $_has(1);
+  $core.bool hasDateType() => $_has(1);
   @$pb.TagNumber(2)
-  void clearAccountNo() => $_clearField(2);
+  void clearDateType() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get accountName => $_getSZ(2);
+  $1.Date get fromDate => $_getN(2);
   @$pb.TagNumber(3)
-  set accountName($core.String value) => $_setString(2, value);
+  set fromDate($1.Date value) => $_setField(3, value);
   @$pb.TagNumber(3)
-  $core.bool hasAccountName() => $_has(2);
+  $core.bool hasFromDate() => $_has(2);
   @$pb.TagNumber(3)
-  void clearAccountName() => $_clearField(3);
+  void clearFromDate() => $_clearField(3);
+  @$pb.TagNumber(3)
+  $1.Date ensureFromDate() => $_ensure(2);
 
   @$pb.TagNumber(4)
-  $core.String get masterAccountNo => $_getSZ(3);
+  $1.Date get toDate => $_getN(3);
   @$pb.TagNumber(4)
-  set masterAccountNo($core.String value) => $_setString(3, value);
+  set toDate($1.Date value) => $_setField(4, value);
   @$pb.TagNumber(4)
-  $core.bool hasMasterAccountNo() => $_has(3);
+  $core.bool hasToDate() => $_has(3);
   @$pb.TagNumber(4)
-  void clearMasterAccountNo() => $_clearField(4);
+  void clearToDate() => $_clearField(4);
+  @$pb.TagNumber(4)
+  $1.Date ensureToDate() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $core.bool get unpricedSecurity => $_getBF(4);
+  $core.String get correspondent => $_getSZ(4);
   @$pb.TagNumber(5)
-  set unpricedSecurity($core.bool value) => $_setBool(4, value);
+  set correspondent($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
-  $core.bool hasUnpricedSecurity() => $_has(4);
+  $core.bool hasCorrespondent() => $_has(4);
   @$pb.TagNumber(5)
-  void clearUnpricedSecurity() => $_clearField(5);
+  void clearCorrespondent() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get broker => $_getSZ(5);
+  $core.String get accountNo => $_getSZ(5);
   @$pb.TagNumber(6)
-  set broker($core.String value) => $_setString(5, value);
+  set accountNo($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
-  $core.bool hasBroker() => $_has(5);
+  $core.bool hasAccountNo() => $_has(5);
   @$pb.TagNumber(6)
-  void clearBroker() => $_clearField(6);
+  void clearAccountNo() => $_clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get type => $_getSZ(6);
+  $core.String get accountName => $_getSZ(6);
   @$pb.TagNumber(7)
-  set type($core.String value) => $_setString(6, value);
+  set accountName($core.String value) => $_setString(6, value);
   @$pb.TagNumber(7)
-  $core.bool hasType() => $_has(6);
+  $core.bool hasAccountName() => $_has(6);
   @$pb.TagNumber(7)
-  void clearType() => $_clearField(7);
+  void clearAccountName() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get symbol => $_getSZ(7);
+  $core.String get masterAccountNo => $_getSZ(7);
   @$pb.TagNumber(8)
-  set symbol($core.String value) => $_setString(7, value);
+  set masterAccountNo($core.String value) => $_setString(7, value);
   @$pb.TagNumber(8)
-  $core.bool hasSymbol() => $_has(7);
+  $core.bool hasMasterAccountNo() => $_has(7);
   @$pb.TagNumber(8)
-  void clearSymbol() => $_clearField(8);
+  void clearMasterAccountNo() => $_clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get cusip => $_getSZ(8);
+  $core.String get branch => $_getSZ(8);
   @$pb.TagNumber(9)
-  set cusip($core.String value) => $_setString(8, value);
+  set branch($core.String value) => $_setString(8, value);
   @$pb.TagNumber(9)
-  $core.bool hasCusip() => $_has(8);
+  $core.bool hasBranch() => $_has(8);
   @$pb.TagNumber(9)
-  void clearCusip() => $_clearField(9);
+  void clearBranch() => $_clearField(9);
 
   @$pb.TagNumber(10)
-  $1.Date get fromDate => $_getN(9);
+  $core.String get rep => $_getSZ(9);
   @$pb.TagNumber(10)
-  set fromDate($1.Date value) => $_setField(10, value);
+  set rep($core.String value) => $_setString(9, value);
   @$pb.TagNumber(10)
-  $core.bool hasFromDate() => $_has(9);
+  $core.bool hasRep() => $_has(9);
   @$pb.TagNumber(10)
-  void clearFromDate() => $_clearField(10);
-  @$pb.TagNumber(10)
-  $1.Date ensureFromDate() => $_ensure(9);
+  void clearRep() => $_clearField(10);
 
   @$pb.TagNumber(11)
-  $1.Date get toDate => $_getN(10);
+  $core.String get assetType => $_getSZ(10);
   @$pb.TagNumber(11)
-  set toDate($1.Date value) => $_setField(11, value);
+  set assetType($core.String value) => $_setString(10, value);
   @$pb.TagNumber(11)
-  $core.bool hasToDate() => $_has(10);
+  $core.bool hasAssetType() => $_has(10);
   @$pb.TagNumber(11)
-  void clearToDate() => $_clearField(11);
-  @$pb.TagNumber(11)
-  $1.Date ensureToDate() => $_ensure(10);
+  void clearAssetType() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.String get branch => $_getSZ(11);
+  $core.String get symbol => $_getSZ(11);
   @$pb.TagNumber(12)
-  set branch($core.String value) => $_setString(11, value);
+  set symbol($core.String value) => $_setString(11, value);
   @$pb.TagNumber(12)
-  $core.bool hasBranch() => $_has(11);
+  $core.bool hasSymbol() => $_has(11);
   @$pb.TagNumber(12)
-  void clearBranch() => $_clearField(12);
+  void clearSymbol() => $_clearField(12);
 
   @$pb.TagNumber(13)
-  $core.String get rep => $_getSZ(12);
+  $core.String get rollUp => $_getSZ(12);
   @$pb.TagNumber(13)
-  set rep($core.String value) => $_setString(12, value);
+  set rollUp($core.String value) => $_setString(12, value);
   @$pb.TagNumber(13)
-  $core.bool hasRep() => $_has(12);
+  $core.bool hasRollUp() => $_has(12);
   @$pb.TagNumber(13)
-  void clearRep() => $_clearField(13);
+  void clearRollUp() => $_clearField(13);
 
   @$pb.TagNumber(14)
-  $core.int get usrId => $_getIZ(13);
+  $core.bool get includeCash => $_getBF(13);
   @$pb.TagNumber(14)
-  set usrId($core.int value) => $_setUnsignedInt32(13, value);
+  set includeCash($core.bool value) => $_setBool(13, value);
   @$pb.TagNumber(14)
-  $core.bool hasUsrId() => $_has(13);
+  $core.bool hasIncludeCash() => $_has(13);
   @$pb.TagNumber(14)
-  void clearUsrId() => $_clearField(14);
-
-  @$pb.TagNumber(15)
-  $2.Pagination get pagination => $_getN(14);
-  @$pb.TagNumber(15)
-  set pagination($2.Pagination value) => $_setField(15, value);
-  @$pb.TagNumber(15)
-  $core.bool hasPagination() => $_has(14);
-  @$pb.TagNumber(15)
-  void clearPagination() => $_clearField(15);
-  @$pb.TagNumber(15)
-  $2.Pagination ensurePagination() => $_ensure(14);
-
-  @$pb.TagNumber(16)
-  $core.String get dateType => $_getSZ(15);
-  @$pb.TagNumber(16)
-  set dateType($core.String value) => $_setString(15, value);
-  @$pb.TagNumber(16)
-  $core.bool hasDateType() => $_has(15);
-  @$pb.TagNumber(16)
-  void clearDateType() => $_clearField(16);
-
-  @$pb.TagNumber(17)
-  $core.String get assetType => $_getSZ(16);
-  @$pb.TagNumber(17)
-  set assetType($core.String value) => $_setString(16, value);
-  @$pb.TagNumber(17)
-  $core.bool hasAssetType() => $_has(16);
-  @$pb.TagNumber(17)
-  void clearAssetType() => $_clearField(17);
-
-  @$pb.TagNumber(18)
-  $core.String get rollUp => $_getSZ(17);
-  @$pb.TagNumber(18)
-  set rollUp($core.String value) => $_setString(17, value);
-  @$pb.TagNumber(18)
-  $core.bool hasRollUp() => $_has(17);
-  @$pb.TagNumber(18)
-  void clearRollUp() => $_clearField(18);
+  void clearIncludeCash() => $_clearField(14);
 }
 
 class ListPositionResponse extends $pb.GeneratedMessage {
@@ -668,27 +728,27 @@ class ListPositionResponse extends $pb.GeneratedMessage {
 class ListPositionSummary extends $pb.GeneratedMessage {
   factory ListPositionSummary({
     $core.int? totalRows,
-    $core.String? cashBalance,
-    $core.String? longMarketValue,
-    $core.String? shortMarketValue,
-    $core.String? equity,
-    $core.String? adjustedBalance,
-    $core.String? tdQty,
-    $core.String? closingPrice,
-    $core.String? tdMarketValue,
     $core.String? costBasis,
+    $core.String? sdQty,
+    $core.String? sdMarketValue,
+    $core.String? sdShortMarketValue,
+    $core.String? sdLongMarketValue,
+    $core.String? tdQty,
+    $core.String? tdMarketValue,
+    $core.String? tdShortMarketValue,
+    $core.String? tdLongMarketValue,
   }) {
     final result = create();
     if (totalRows != null) result.totalRows = totalRows;
-    if (cashBalance != null) result.cashBalance = cashBalance;
-    if (longMarketValue != null) result.longMarketValue = longMarketValue;
-    if (shortMarketValue != null) result.shortMarketValue = shortMarketValue;
-    if (equity != null) result.equity = equity;
-    if (adjustedBalance != null) result.adjustedBalance = adjustedBalance;
-    if (tdQty != null) result.tdQty = tdQty;
-    if (closingPrice != null) result.closingPrice = closingPrice;
-    if (tdMarketValue != null) result.tdMarketValue = tdMarketValue;
     if (costBasis != null) result.costBasis = costBasis;
+    if (sdQty != null) result.sdQty = sdQty;
+    if (sdMarketValue != null) result.sdMarketValue = sdMarketValue;
+    if (sdShortMarketValue != null) result.sdShortMarketValue = sdShortMarketValue;
+    if (sdLongMarketValue != null) result.sdLongMarketValue = sdLongMarketValue;
+    if (tdQty != null) result.tdQty = tdQty;
+    if (tdMarketValue != null) result.tdMarketValue = tdMarketValue;
+    if (tdShortMarketValue != null) result.tdShortMarketValue = tdShortMarketValue;
+    if (tdLongMarketValue != null) result.tdLongMarketValue = tdLongMarketValue;
     return result;
   }
 
@@ -699,15 +759,15 @@ class ListPositionSummary extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListPositionSummary', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'totalRows', $pb.PbFieldType.OU3)
-    ..aOS(2, _omitFieldNames ? '' : 'cashBalance')
-    ..aOS(3, _omitFieldNames ? '' : 'longMarketValue')
-    ..aOS(4, _omitFieldNames ? '' : 'shortMarketValue')
-    ..aOS(5, _omitFieldNames ? '' : 'equity')
-    ..aOS(6, _omitFieldNames ? '' : 'adjustedBalance')
+    ..aOS(2, _omitFieldNames ? '' : 'costBasis')
+    ..aOS(3, _omitFieldNames ? '' : 'sdQty')
+    ..aOS(4, _omitFieldNames ? '' : 'sdMarketValue')
+    ..aOS(5, _omitFieldNames ? '' : 'sdShortMarketValue')
+    ..aOS(6, _omitFieldNames ? '' : 'sdLongMarketValue')
     ..aOS(7, _omitFieldNames ? '' : 'tdQty')
-    ..aOS(8, _omitFieldNames ? '' : 'closingPrice')
-    ..aOS(9, _omitFieldNames ? '' : 'tdMarketValue')
-    ..aOS(10, _omitFieldNames ? '' : 'costBasis')
+    ..aOS(8, _omitFieldNames ? '' : 'tdMarketValue')
+    ..aOS(9, _omitFieldNames ? '' : 'tdShortMarketValue')
+    ..aOS(10, _omitFieldNames ? '' : 'tdLongMarketValue')
     ..hasRequiredFields = false
   ;
 
@@ -738,49 +798,49 @@ class ListPositionSummary extends $pb.GeneratedMessage {
   void clearTotalRows() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get cashBalance => $_getSZ(1);
+  $core.String get costBasis => $_getSZ(1);
   @$pb.TagNumber(2)
-  set cashBalance($core.String value) => $_setString(1, value);
+  set costBasis($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
-  $core.bool hasCashBalance() => $_has(1);
+  $core.bool hasCostBasis() => $_has(1);
   @$pb.TagNumber(2)
-  void clearCashBalance() => $_clearField(2);
+  void clearCostBasis() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get longMarketValue => $_getSZ(2);
+  $core.String get sdQty => $_getSZ(2);
   @$pb.TagNumber(3)
-  set longMarketValue($core.String value) => $_setString(2, value);
+  set sdQty($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasLongMarketValue() => $_has(2);
+  $core.bool hasSdQty() => $_has(2);
   @$pb.TagNumber(3)
-  void clearLongMarketValue() => $_clearField(3);
+  void clearSdQty() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get shortMarketValue => $_getSZ(3);
+  $core.String get sdMarketValue => $_getSZ(3);
   @$pb.TagNumber(4)
-  set shortMarketValue($core.String value) => $_setString(3, value);
+  set sdMarketValue($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
-  $core.bool hasShortMarketValue() => $_has(3);
+  $core.bool hasSdMarketValue() => $_has(3);
   @$pb.TagNumber(4)
-  void clearShortMarketValue() => $_clearField(4);
+  void clearSdMarketValue() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get equity => $_getSZ(4);
+  $core.String get sdShortMarketValue => $_getSZ(4);
   @$pb.TagNumber(5)
-  set equity($core.String value) => $_setString(4, value);
+  set sdShortMarketValue($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
-  $core.bool hasEquity() => $_has(4);
+  $core.bool hasSdShortMarketValue() => $_has(4);
   @$pb.TagNumber(5)
-  void clearEquity() => $_clearField(5);
+  void clearSdShortMarketValue() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get adjustedBalance => $_getSZ(5);
+  $core.String get sdLongMarketValue => $_getSZ(5);
   @$pb.TagNumber(6)
-  set adjustedBalance($core.String value) => $_setString(5, value);
+  set sdLongMarketValue($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
-  $core.bool hasAdjustedBalance() => $_has(5);
+  $core.bool hasSdLongMarketValue() => $_has(5);
   @$pb.TagNumber(6)
-  void clearAdjustedBalance() => $_clearField(6);
+  void clearSdLongMarketValue() => $_clearField(6);
 
   @$pb.TagNumber(7)
   $core.String get tdQty => $_getSZ(6);
@@ -792,31 +852,31 @@ class ListPositionSummary extends $pb.GeneratedMessage {
   void clearTdQty() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get closingPrice => $_getSZ(7);
+  $core.String get tdMarketValue => $_getSZ(7);
   @$pb.TagNumber(8)
-  set closingPrice($core.String value) => $_setString(7, value);
+  set tdMarketValue($core.String value) => $_setString(7, value);
   @$pb.TagNumber(8)
-  $core.bool hasClosingPrice() => $_has(7);
+  $core.bool hasTdMarketValue() => $_has(7);
   @$pb.TagNumber(8)
-  void clearClosingPrice() => $_clearField(8);
+  void clearTdMarketValue() => $_clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get tdMarketValue => $_getSZ(8);
+  $core.String get tdShortMarketValue => $_getSZ(8);
   @$pb.TagNumber(9)
-  set tdMarketValue($core.String value) => $_setString(8, value);
+  set tdShortMarketValue($core.String value) => $_setString(8, value);
   @$pb.TagNumber(9)
-  $core.bool hasTdMarketValue() => $_has(8);
+  $core.bool hasTdShortMarketValue() => $_has(8);
   @$pb.TagNumber(9)
-  void clearTdMarketValue() => $_clearField(9);
+  void clearTdShortMarketValue() => $_clearField(9);
 
   @$pb.TagNumber(10)
-  $core.String get costBasis => $_getSZ(9);
+  $core.String get tdLongMarketValue => $_getSZ(9);
   @$pb.TagNumber(10)
-  set costBasis($core.String value) => $_setString(9, value);
+  set tdLongMarketValue($core.String value) => $_setString(9, value);
   @$pb.TagNumber(10)
-  $core.bool hasCostBasis() => $_has(9);
+  $core.bool hasTdLongMarketValue() => $_has(9);
   @$pb.TagNumber(10)
-  void clearCostBasis() => $_clearField(10);
+  void clearTdLongMarketValue() => $_clearField(10);
 }
 
 class PositionAccountAllocation extends $pb.GeneratedMessage {

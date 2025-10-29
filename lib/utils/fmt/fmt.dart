@@ -201,4 +201,12 @@ class FormatUtils {
       return '--';
     }
   }
+
+  static String formatPercentage(String value) {
+    if (value == '') {
+      return '0%';
+    }
+
+    return '$value%';
+  }
 }
