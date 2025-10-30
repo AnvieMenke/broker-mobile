@@ -4,6 +4,7 @@ import '../../../../components/buttons/button.dart';
 import '../../../../components/messages/notification.dart';
 import '../../../../service/contact_us_service.dart';
 import '../../../../service/convert_service.dart';
+import '../../../../utils/fmt/fmt.dart';
 
 class FeedbackForm extends StatefulWidget {
   final Map<String, dynamic>? initialFormData;
@@ -103,7 +104,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
       if (!mounted) return;
       Navigator.of(context).pop(true);
     } catch (err) {
-      Notify.error("Failed to submit feedback. ${err.toString()}");
+      Notify.error("Failed to submit feedback. ${FormatUtils.cleanErrorMessage(err)}");
     } finally {
       setState(() => _isSubmitting = false);
     }

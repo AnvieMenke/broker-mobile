@@ -147,7 +147,9 @@ class _SelectStatusState extends State<SelectStatus> {
   }
 
   bool statusIsActive(SystemCode status) {
-    if (status.code == "Pending") return true;
+    if (status.code == "Pending" || status.code == currentSelected["code"]) {
+      return true;
+    }
 
     final int initialNote = int.tryParse(initialSelected["note"] ?? '0') ?? 0;
     final int currentNote = int.tryParse(currentSelected["note"] ?? '0') ?? 0;
