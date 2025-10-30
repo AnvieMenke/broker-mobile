@@ -34,15 +34,14 @@ class _SelectStatusState extends State<SelectStatus> {
   final UsrAccessService _usrAccessService = UsrAccessService();
 
   List<SystemCode> statusList = [];
-  Map<String, dynamic> currentSelected = {"note": "", "code": ""};
+  Map<String, dynamic> currentSelected = {"note": "0", "code": ""};
   Map<String, dynamic> previousSelected = {"note": "", "code": ""};
-  Map<String, dynamic> initialSelected = {"note": "", "code": ""};
+  Map<String, dynamic> initialSelected = {"note": "0", "code": ""};
 
   Future<void> getStatusList() async {
     bool hasBrokerApprovedAccess = false;
 
     final usrAccessesList = await _usrAccessService.listRoleAccess("", "");
-
     for (final usrAccess in usrAccessesList) {
       if (usrAccess.access == "Bank Request" &&
           usrAccess.subAccess == "Broker Approved") {
@@ -56,56 +55,43 @@ class _SelectStatusState extends State<SelectStatus> {
       "subType": widget.subType ?? "Bank Request",
     };
 
-    List<SystemCode> systemCodeList = await _commonService.listSystemCode(
+    List<SystemCode> data = await _commonService.listSystemCode(
       param["type"]!,
       param["subType"],
       null,
     );
 
-    if (widget.cancelOnly) {
-      systemCodeList = systemCodeList.where((systemCode) {
-        return systemCode.code == "Pending" ||
-            systemCode.code == "Canceled" ||
-            systemCode.code == widget.value;
-      }).toList();
-    }
+    List<SystemCode> filtered = data.where((item) {
+      final String current = widget.value ?? "";
+      final bool isBrokerApproved = item.code == "Broker Approved" &&
+          hasBrokerApprovedAccess &&
+          !widget.cancelOnly;
 
-    final statusZero = <SystemCode>[];
-    final tempStatusList = <SystemCode>[];
+      final bool isCancel = item.code == "Canceled" &&
+          widget.requestType != "Wire" &&
+          current == "Pending";
 
-    for (final systemCode in systemCodeList) {
-      final note = int.tryParse(systemCode.note) ?? 0;
+      final bool isCurrent = item.code == current;
 
-      if (note == 0) {
-        if (systemCode.code != "Canceled") continue;
-        statusZero.add(systemCode);
-      } else if (systemCode.code == "Broker Approved" &&
-          !hasBrokerApprovedAccess) {
-        continue;
-      } else {
-        tempStatusList.add(systemCode);
-      }
-    }
+      return isBrokerApproved || isCancel || isCurrent;
+    }).toList();
 
-    tempStatusList.sort((a, b) {
-      final an = int.tryParse(a.note) ?? 0;
-      final bn = int.tryParse(b.note) ?? 0;
-      return an.compareTo(bn);
+    filtered.sort((a, b) {
+      final noteA = int.tryParse(a.note) ?? 0;
+      final noteB = int.tryParse(b.note) ?? 0;
+
+      if (noteA == 0) return 1;
+      if (noteB == 0) return -1;
+      return noteA.compareTo(noteB);
     });
 
-    tempStatusList.addAll(statusZero);
+    setState(() => statusList = filtered);
 
-    final seen = <String>{};
-    final uniqueList = tempStatusList.where((s) => seen.add(s.code)).toList();
-
-    setState(() => statusList = uniqueList);
-
-    for (final status in uniqueList) {
+    for (final status in filtered) {
       if (status.code == widget.value) {
-        setState(() {
-          currentSelected = {"note": status.note, "code": status.code};
-          initialSelected = {"note": status.note, "code": status.code};
-        });
+        currentSelected = {"note": status.note, "code": status.code};
+        initialSelected = {"note": status.note, "code": status.code};
+        break;
       }
     }
   }
@@ -146,22 +132,6 @@ class _SelectStatusState extends State<SelectStatus> {
     widget.onChange(selectedCode);
   }
 
-  bool statusIsActive(SystemCode status) {
-    if (status.code == "Pending" || status.code == currentSelected["code"]) {
-      return true;
-    }
-
-    final int initialNote = int.tryParse(initialSelected["note"] ?? '0') ?? 0;
-    final int currentNote = int.tryParse(currentSelected["note"] ?? '0') ?? 0;
-    final int statusNote = int.tryParse(status.note) ?? 0;
-
-    return ((initialNote + 1 == statusNote &&
-            currentNote != 0 &&
-            currentNote != statusNote) ||
-        (statusNote == 0 && currentNote != 5 && initialNote != 4) ||
-        status.code == previousSelected["code"]);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -172,11 +142,8 @@ class _SelectStatusState extends State<SelectStatus> {
   Widget build(BuildContext context) {
     final disabled = widget.disabled;
 
-    final activeStatusList =
-        statusList.where((s) => statusIsActive(s)).toList();
-
     final dropdownValue =
-        activeStatusList.any((s) => s.code == currentSelected["code"])
+        statusList.any((s) => s.code == currentSelected["code"])
             ? currentSelected["code"]
             : null;
 
@@ -188,7 +155,7 @@ class _SelectStatusState extends State<SelectStatus> {
       ),
       initialValue: dropdownValue,
       onChanged: disabled ? null : handleChange,
-      items: activeStatusList.map<DropdownMenuItem<String>>((status) {
+      items: statusList.map<DropdownMenuItem<String>>((status) {
         final color = [
           "Denied",
           "Inactive",
@@ -197,7 +164,7 @@ class _SelectStatusState extends State<SelectStatus> {
           "Canceled",
         ].contains(status.code)
             ? Colors.red
-            : Theme.of(context).textTheme.bodyMedium?.copyWith().color;
+            : Theme.of(context).textTheme.bodyMedium?.color;
 
         final italic = previousSelected["code"] == status.code &&
                 (int.tryParse(status.note) ?? 0) != 0
