@@ -147,7 +147,7 @@ class _AutoCompleteBranchState extends State<AutoCompleteBranch> {
         (widget.isActive && !user.isMultipleActiveAccount));
     if (isNotVisible) return const SizedBox.shrink();
     return TypeAheadField<Map<String, dynamic>>(
-      key: ValueKey('${widget.correspondent}-${_controller.text}'),
+      key: ValueKey('${widget.correspondent}-${widget.value}'),
       controller: _controller,
       suggestionsCallback: (pattern) async => await _getOptions(pattern),
       itemBuilder: (context, suggestion) {
