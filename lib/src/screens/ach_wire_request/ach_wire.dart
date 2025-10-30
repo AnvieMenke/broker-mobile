@@ -128,7 +128,7 @@ class _AchWirePageState extends State<AchWirePage> {
         "pendingCallLog": resp.pendingCallLog,
       });
     } catch (err) {
-      Notify.error("Error: $err");
+      Notify.error(FormatUtils.cleanErrorMessage(err));
     } finally {
       setState(() => isGettingMaxWithdrawal = false);
     }
@@ -142,7 +142,7 @@ class _AchWirePageState extends State<AchWirePage> {
         formData["fee"] = double.tryParse(resp.fee.toString()) ?? 0.0;
       });
     } catch (err) {
-      Notify.error("Error: $err");
+      Notify.error(FormatUtils.cleanErrorMessage(err));
     } finally {
       setState(() => isGettingFee = false);
     }
@@ -294,7 +294,7 @@ class _AchWirePageState extends State<AchWirePage> {
         Navigator.of(context).pop(true);
       }
     } catch (err) {
-      Notify.error("Failed to create request. ${err.toString()}");
+      Notify.error("Failed to create request. ${FormatUtils.cleanErrorMessage(err)}");
     } finally {
       setState(() => isSubmitting = false);
     }
