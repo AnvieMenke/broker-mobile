@@ -223,7 +223,8 @@ class _AchWirePageState extends State<AchWirePage> {
       if (double.tryParse(maximumWithdrawable["pendingCallLog"])! > 0) {
         return Notify.error('Cannot withdraw with pending calls.');
       } else if (ConvertService.safeDouble(data["amt"]) >
-          double.tryParse(maximumWithdrawable["withdrawableAmt"])!) {
+              double.tryParse(maximumWithdrawable["withdrawableAmt"])! &&
+          data["status"] != "Canceled") {
         return Notify.error('Amount is greater than Maximum Withdrawable.');
       }
     }
@@ -260,7 +261,7 @@ class _AchWirePageState extends State<AchWirePage> {
         await _achWireService.createRequest(data);
         Notify.success('Request created successfully.');
       }
-
+      setState(() => isSubmitting = false);
       if (mounted) {
         await showDialog(
           context: context,
@@ -294,7 +295,8 @@ class _AchWirePageState extends State<AchWirePage> {
         Navigator.of(context).pop(true);
       }
     } catch (err) {
-      Notify.error("Failed to create request. ${FormatUtils.cleanErrorMessage(err)}");
+      Notify.error(
+          "Failed to create request. ${FormatUtils.cleanErrorMessage(err)}");
     } finally {
       setState(() => isSubmitting = false);
     }
@@ -430,7 +432,7 @@ class _AchWirePageState extends State<AchWirePage> {
                               prefixText: "\$",
                               helperText: formData["transferType"] ==
                                       "Withdrawal"
-                                  ? "Withdrawable amount: ${maximumWithdrawable["withdrawableAmt"]}"
+                                  ? "Withdrawable amount: ${ FormatUtils.formatCurrency(maximumWithdrawable["withdrawableAmt"])}"
                                   : null,
                             ),
                             keyboardType: const TextInputType.numberWithOptions(
