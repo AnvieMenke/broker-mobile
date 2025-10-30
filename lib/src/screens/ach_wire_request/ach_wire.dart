@@ -377,7 +377,7 @@ class _AchWirePageState extends State<AchWirePage> {
                             label: "Bank Account",
                             accountNo: formData["accountNo"],
                             correspondent: formData["correspondent"],
-                            value: formData["bankId"],
+                            value: formData["bankId"].toString(),
                             onChange: (map) {
                               setState(() {
                                 formData["bankId"] = map['data']?['bankId'];

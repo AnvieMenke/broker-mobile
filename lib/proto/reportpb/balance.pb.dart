@@ -963,6 +963,9 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
     $core.String? cashMarketValue,
     $core.String? cashQty,
     $core.String? digitalEnhancedMarketValue,
+    $core.String? plValue,
+    $core.String? plPercent,
+    $core.String? cashPercent,
   }) {
     final result = create();
     if (totalRows != null) result.totalRows = totalRows;
@@ -985,6 +988,9 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
     if (cashMarketValue != null) result.cashMarketValue = cashMarketValue;
     if (cashQty != null) result.cashQty = cashQty;
     if (digitalEnhancedMarketValue != null) result.digitalEnhancedMarketValue = digitalEnhancedMarketValue;
+    if (plValue != null) result.plValue = plValue;
+    if (plPercent != null) result.plPercent = plPercent;
+    if (cashPercent != null) result.cashPercent = cashPercent;
     return result;
   }
 
@@ -1014,6 +1020,9 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
     ..aOS(18, _omitFieldNames ? '' : 'cashMarketValue')
     ..aOS(19, _omitFieldNames ? '' : 'cashQty')
     ..aOS(20, _omitFieldNames ? '' : 'digitalEnhancedMarketValue')
+    ..aOS(21, _omitFieldNames ? '' : 'plValue')
+    ..aOS(22, _omitFieldNames ? '' : 'plPercent')
+    ..aOS(23, _omitFieldNames ? '' : 'cashPercent')
     ..hasRequiredFields = false
   ;
 
@@ -1213,6 +1222,33 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
   $core.bool hasDigitalEnhancedMarketValue() => $_has(19);
   @$pb.TagNumber(20)
   void clearDigitalEnhancedMarketValue() => $_clearField(20);
+
+  @$pb.TagNumber(21)
+  $core.String get plValue => $_getSZ(20);
+  @$pb.TagNumber(21)
+  set plValue($core.String value) => $_setString(20, value);
+  @$pb.TagNumber(21)
+  $core.bool hasPlValue() => $_has(20);
+  @$pb.TagNumber(21)
+  void clearPlValue() => $_clearField(21);
+
+  @$pb.TagNumber(22)
+  $core.String get plPercent => $_getSZ(21);
+  @$pb.TagNumber(22)
+  set plPercent($core.String value) => $_setString(21, value);
+  @$pb.TagNumber(22)
+  $core.bool hasPlPercent() => $_has(21);
+  @$pb.TagNumber(22)
+  void clearPlPercent() => $_clearField(22);
+
+  @$pb.TagNumber(23)
+  $core.String get cashPercent => $_getSZ(22);
+  @$pb.TagNumber(23)
+  set cashPercent($core.String value) => $_setString(22, value);
+  @$pb.TagNumber(23)
+  $core.bool hasCashPercent() => $_has(22);
+  @$pb.TagNumber(23)
+  void clearCashPercent() => $_clearField(23);
 }
 
 class DashboardBalance extends $pb.GeneratedMessage {
