@@ -97,7 +97,6 @@ class GridField {
         final color = amtValue < Decimal.zero
             ? Colors.red
             : (amtValue > Decimal.zero ? Colors.green : Colors.grey);
-
         return Text(
           text,
           style: TextStyle(
@@ -206,14 +205,15 @@ class GridItem {
 class GridViewCard extends StatelessWidget {
   final GridItem item;
   final List<PopupMenuEntry>? actions;
-
   final bool isSubItem;
+  final bool disableActions;
 
   const GridViewCard({
     super.key,
     required this.item,
     this.actions,
     this.isSubItem = false,
+    this.disableActions = false,
   });
 
   void _showDetails(BuildContext context) {
@@ -221,7 +221,6 @@ class GridViewCard extends StatelessWidget {
       context: context,
       builder: (ctx) {
         final textTheme = Theme.of(ctx).textTheme;
-
         return AlertDialog(
           title: const Text("Details"),
           content: ConstrainedBox(
@@ -322,7 +321,7 @@ class GridViewCard extends StatelessWidget {
                 ),
                 child: item.rightField!.displayValue,
               ),
-            if (!isSubItem)
+            if (!isSubItem && !disableActions)
               Align(
                 alignment: Alignment.centerRight,
                 child: PopupMenuButton(
@@ -336,7 +335,6 @@ class GridViewCard extends StatelessWidget {
         Column(
           children: () {
             final rows = <Widget>[];
-
             for (int i = 0; i < bodyFields.length; i++) {
               final f = bodyFields[i];
               if (f.floatRight) continue;
@@ -345,6 +343,7 @@ class GridViewCard extends StatelessWidget {
               if (i + 1 < bodyFields.length && bodyFields[i + 1].floatRight) {
                 rightField = bodyFields[i + 1];
               }
+
               if (f.value is Widget) {
                 rows.add(f.value);
               } else {
@@ -423,7 +422,6 @@ class GridViewCard extends StatelessWidget {
                 );
               }
             }
-
             return rows;
           }(),
         ),
@@ -451,6 +449,7 @@ class GridViewCard extends StatelessWidget {
                 child: GridViewCard(
                   item: sub,
                   isSubItem: true,
+                  disableActions: disableActions,
                 ),
               );
             }).toList(),
@@ -460,10 +459,7 @@ class GridViewCard extends StatelessWidget {
     );
 
     if (isSubItem) {
-      return SizedBox(
-        width: double.infinity,
-        child: content,
-      );
+      return SizedBox(width: double.infinity, child: content);
     } else {
       return Card(
         margin: const EdgeInsets.symmetric(vertical: 1.5),
@@ -476,7 +472,7 @@ class GridViewCard extends StatelessWidget {
   }
 }
 
-// ---------------------- Pagination additions ----------------------
+// ---------------------- Pagination ----------------------
 
 class GridPagination {
   int pageNo;
@@ -514,6 +510,7 @@ class GridWithPagination extends StatelessWidget {
   final Future<void> Function()? onRefresh;
   final bool hidePageInfo;
   final bool disableGridSystem;
+  final bool disableActions;
 
   const GridWithPagination({
     super.key,
@@ -524,12 +521,11 @@ class GridWithPagination extends StatelessWidget {
     this.onRefresh,
     this.hidePageInfo = false,
     this.disableGridSystem = false,
+    this.disableActions = false,
   });
 
   List<int> _pageRange(int currentPage, int totalPages, int maxButtons) {
-    if (totalPages <= maxButtons) {
-      return List.generate(totalPages, (i) => i);
-    }
+    if (totalPages <= maxButtons) return List.generate(totalPages, (i) => i);
 
     int half = maxButtons ~/ 2;
     int start = currentPage - half;
@@ -554,7 +550,6 @@ class GridWithPagination extends StatelessWidget {
     final int currentPage = pagination.pageNo;
     final int totalPages =
         (rowsPerPage > 0) ? (totalRows / rowsPerPage).ceil() : 0;
-
     final int start = (totalRows == 0) ? 0 : (currentPage * rowsPerPage) + 1;
     final int end = start + items.length - 1;
 
@@ -589,7 +584,6 @@ class GridWithPagination extends StatelessWidget {
       gridContent = LayoutBuilder(
         builder: (context, constraints) {
           final width = constraints.maxWidth;
-
           int columns = 1;
           int maxPageButtons = 3;
 
@@ -634,7 +628,11 @@ class GridWithPagination extends StatelessWidget {
 
                   return SizedBox(
                     width: cardWidth,
-                    child: GridViewCard(item: item, actions: actions),
+                    child: GridViewCard(
+                      item: item,
+                      actions: actions,
+                      disableActions: disableActions,
+                    ),
                   );
                 }).toList(),
               ),

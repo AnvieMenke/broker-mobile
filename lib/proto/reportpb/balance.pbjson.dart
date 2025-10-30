@@ -186,6 +186,9 @@ const ListBalanceSummary$json = {
     {'1': 'cash_market_value', '3': 18, '4': 1, '5': 9, '10': 'cashMarketValue'},
     {'1': 'cash_qty', '3': 19, '4': 1, '5': 9, '10': 'cashQty'},
     {'1': 'digital_enhanced_market_value', '3': 20, '4': 1, '5': 9, '10': 'digitalEnhancedMarketValue'},
+    {'1': 'pl_value', '3': 21, '4': 1, '5': 9, '10': 'plValue'},
+    {'1': 'pl_percent', '3': 22, '4': 1, '5': 9, '10': 'plPercent'},
+    {'1': 'cash_percent', '3': 23, '4': 1, '5': 9, '10': 'cashPercent'},
   ],
 };
 
@@ -207,7 +210,8 @@ final $typed_data.Uint8List listBalanceSummaryDescriptor = $convert.base64Decode
     'RfdmFsdWUYESABKAlSF2RpZ2l0YWxBc3NldE1hcmtldFZhbHVlEioKEWNhc2hfbWFya2V0X3Zh'
     'bHVlGBIgASgJUg9jYXNoTWFya2V0VmFsdWUSGQoIY2FzaF9xdHkYEyABKAlSB2Nhc2hRdHkSQQ'
     'odZGlnaXRhbF9lbmhhbmNlZF9tYXJrZXRfdmFsdWUYFCABKAlSGmRpZ2l0YWxFbmhhbmNlZE1h'
-    'cmtldFZhbHVl');
+    'cmtldFZhbHVlEhkKCHBsX3ZhbHVlGBUgASgJUgdwbFZhbHVlEh0KCnBsX3BlcmNlbnQYFiABKA'
+    'lSCXBsUGVyY2VudBIhCgxjYXNoX3BlcmNlbnQYFyABKAlSC2Nhc2hQZXJjZW50');
 
 @$core.Deprecated('Use dashboardBalanceDescriptor instead')
 const DashboardBalance$json = {
