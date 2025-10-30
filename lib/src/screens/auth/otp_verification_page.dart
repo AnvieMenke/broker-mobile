@@ -35,14 +35,19 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   String? _error;
 
   Timer? _ticker;
+  late DateTime _currentExpiryTime;
+  late String _sessionKey;
 
   @override
   void initState() {
     super.initState();
 
+    _currentExpiryTime = widget.expiryTime;
+    _sessionKey = widget.sessionKey;
+
     // use ticker just to update UI every second
     _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-      setState(() {}); // trigger rebuild, remaining time is recalculated
+      setState(() {});
     });
   }
 
@@ -53,7 +58,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   }
 
   int get _remainingSeconds {
-    final diff = widget.expiryTime.difference(DateTime.now()).inSeconds;
+    final diff = _currentExpiryTime.difference(DateTime.now()).inSeconds;
     return diff > 0 ? diff : 0;
   }
 
@@ -89,9 +94,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           password: widget.password,
           authCode: _otp,
           authenticationMode: widget.authenticationMode,
-          sessionKey: widget.sessionKey,
+          sessionKey: _sessionKey,
           correspondent: widget.correspondent,
         );
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.of(context).pushReplacementNamed('/home');
         });
@@ -102,6 +108,31 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       } finally {
         setState(() => _verifying = false);
       }
+    }
+  }
+
+  void _resendCode() async {
+    setState(() {
+      _currentExpiryTime = DateTime.now().add(const Duration(minutes: 2));
+      _error = null;
+      _otp = '';
+    });
+
+    try {
+      final resp = await loginWeb(
+        widget.email,
+        widget.password,
+        widget.correspondent,
+        widget.authenticationMode,
+      );
+
+      setState(() {
+        _sessionKey = resp.sessionKey;
+      });
+    } catch (err) {
+      setState(() {
+        _error = FormatUtils.cleanErrorMessage(err);
+      });
     }
   }
 
@@ -126,42 +157,50 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   "Enter OTP sent to ${maskEmail(widget.email)}",
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  _remainingSeconds > 0
-                      ? "Expires in ${_formatTime(_remainingSeconds)}"
-                      : "OTP expired",
-                  style: TextStyle(
-                    color: _remainingSeconds > 0 ? Colors.grey : Colors.red,
-                    fontSize: 14,
+                const SizedBox(height: 16),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      FieldOtp(onChanged: (value) => _otp = value),
+                      if (_error != null)
+                        Text(
+                          _error!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.redAccent),
+                        ),
+                      Text(
+                        _remainingSeconds > 0
+                            ? "Expires in ${_formatTime(_remainingSeconds)}"
+                            : "OTP expired. Please request a new one",
+                        style: TextStyle(
+                          color:
+                              _remainingSeconds > 0 ? Colors.grey : Colors.red,
+                          fontSize: 14,
+                        ),
+                      ),
+                      if (_remainingSeconds <= 0)
+                        TextButton(
+                          onPressed: _resendCode,
+                          child: const Text(
+                            "Resend Code",
+                            style: TextStyle(color: Colors.blueAccent),
+                          ),
+                        ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: 100,
+                        child: Button(
+                          label: "Verify",
+                          isLoading: _verifying,
+                          isDisabled: _remainingSeconds <= 0,
+                          onPressed: _verifyOtp,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        FieldOtp(onChanged: (value) => _otp = value),
-                        const SizedBox(height: 16),
-                        if (_error != null)
-                          Text(
-                            _error!,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.redAccent),
-                          ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: 100,
-                          child: Button(
-                            label: "Verify",
-                            isLoading: _verifying,
-                            isDisabled: _remainingSeconds <= 0,
-                            onPressed: _verifyOtp,
-                          ),
-                        ),
-                      ],
-                    )),
-                const SizedBox(height: 20),
                 TextButton.icon(
                   onPressed: () {
                     Navigator.pushReplacement(

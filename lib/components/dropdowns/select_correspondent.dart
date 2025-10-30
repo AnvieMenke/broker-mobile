@@ -99,7 +99,7 @@ class _AutoCompleteCorrespondentState extends State<AutoCompleteCorrespondent> {
     if (isNotVisible) return const SizedBox.shrink();
 
     return TypeAheadField<String>(
-      key: ValueKey(_controller.text),
+      key: ValueKey(widget.value),
       controller: _controller,
       suggestionsCallback: (pattern) async => _getOptions(pattern),
       itemBuilder: (context, suggestion) => ListTile(

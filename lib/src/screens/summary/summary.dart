@@ -2,11 +2,11 @@ import 'package:broker_mobile/components/containers/page_list_container.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';
 import 'package:broker_mobile/service/convert_service.dart';
 import 'package:broker_mobile/utils/fmt/fmt.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:broker_mobile/service/balance_service.dart';
 import 'package:broker_mobile/service/profile_service.dart';
+import '../../../components/dropdowns/select_account_no.dart';
 import '../../../proto/reportpb/balance.pb.dart';
 import '../../../utils/theme/custom_theme.dart';
 
@@ -19,16 +19,10 @@ class AccountSummaryPage extends StatefulWidget {
 
 class AccountSummaryState extends State<AccountSummaryPage> {
   Future<List<Balance>>? _futureBalances;
-  late Decimal totalBalance = Decimal.zero;
-  late Decimal totalTdLongMarketValue = Decimal.zero;
-  late Decimal totalSdShortMarketValue = Decimal.zero;
-  Decimal totalPlValue = Decimal.zero;
-  Decimal totalTdEquity = Decimal.zero;
-  String plPercentage = "";
-  String cashPercentage = "";
 
-  final Map<String, dynamic> queryData = {
+  late Map<String, dynamic> queryData = {
     "dateType": "Trade and Settle",
+    "accountNo": "",
   };
 
   GridPagination pagination = GridPagination(
@@ -68,26 +62,6 @@ class AccountSummaryState extends State<AccountSummaryPage> {
         reload: false,
       );
     });
-
-    try {
-      totalBalance = Decimal.parse(resp.summary.tdCashBalance.toString());
-      totalTdLongMarketValue =
-          Decimal.parse(resp.summary.tdLongMarketValue.toString());
-      totalSdShortMarketValue =
-          Decimal.parse(resp.summary.sdShortMarketValue.toString());
-      totalPlValue = Decimal.parse(resp.summary.plValue.toString());
-      totalTdEquity = Decimal.parse(resp.summary.tdEquity.toString());
-      plPercentage = resp.summary.plPercent.toString();
-      cashPercentage = resp.summary.cashPercent.toString();
-    } catch (e) {
-      totalBalance = Decimal.zero;
-      totalTdLongMarketValue = Decimal.zero;
-      totalSdShortMarketValue = Decimal.zero;
-      totalPlValue = Decimal.zero;
-      totalTdEquity = Decimal.zero;
-      plPercentage = "";
-      cashPercentage = "";
-    }
 
     return resp.balances;
   }
@@ -228,199 +202,63 @@ class AccountSummaryState extends State<AccountSummaryPage> {
     }).toList();
   }
 
-  // Widget _buildTotalCard() {
-  //   return Center(
-  //     child: ConstrainedBox(
-  //       constraints: const BoxConstraints(maxWidth: 400),
-  //       child: Card(
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(8),
-  //         ),
-  //         elevation: 2,
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(16),
-  //           child: Column(
-  //             children: [
-  //               const Text(
-  //                 "Total",
-  //                 style: TextStyle(
-  //                   fontWeight: FontWeight.bold,
-  //                   fontSize: 16,
-  //                 ),
-  //               ),
-  //               const Divider(height: 20),
-  //               Text(
-  //                 FormatUtils.formatCurrency(totalBalance),
-  //                 style: const TextStyle(
-  //                   fontWeight: FontWeight.bold,
-  //                   fontSize: 24,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 12),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Flexible(
-  //                     child: FittedBox(
-  //                       fit: BoxFit.scaleDown,
-  //                       alignment: Alignment.centerRight,
-  //                       child: Text(
-  //                         "${totalPlValue > Decimal.zero ? '+' : ''}${FormatUtils.formatCurrency(totalPlValue)}",
-  //                         style: TextStyle(
-  //                           color: totalPlValue > Decimal.zero
-  //                               ? Colors.greenAccent[400]
-  //                               : totalPlValue < Decimal.zero
-  //                                   ? Colors.redAccent
-  //                                   : Colors.grey,
-  //                           fontWeight: FontWeight.w600,
-  //                           fontSize: 13,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   const SizedBox(width: 8),
-  //                   Container(
-  //                     padding: const EdgeInsets.symmetric(
-  //                         horizontal: 8, vertical: 3),
-  //                     decoration: BoxDecoration(
-  //                       color: ConvertService.safeDouble(plPercentage) > 0
-  //                           ? Colors.greenAccent[700]
-  //                           : ConvertService.safeDouble(plPercentage) < 0
-  //                               ? Colors.redAccent[700]
-  //                               : Colors.grey[700],
-  //                       borderRadius: BorderRadius.circular(20),
-  //                     ),
-  //                     child: FittedBox(
-  //                       fit: BoxFit.scaleDown,
-  //                       child: Text(
-  //                         FormatUtils.formatPercentage(plPercentage),
-  //                         style: const TextStyle(
-  //                           color: Colors.white,
-  //                           fontSize: 12,
-  //                           fontWeight: FontWeight.w500,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //               const SizedBox(height: 12),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   Row(
-  //                     children: [
-  //                       const Icon(
-  //                         FontAwesomeIcons.arrowTrendUp,
-  //                         size: 14,
-  //                         color: Colors.green,
-  //                       ),
-  //                       const SizedBox(width: 4),
-  //                       Text(
-  //                         "Long Market Value\n${FormatUtils.formatCurrency(totalTdLongMarketValue)}",
-  //                         style: const TextStyle(fontSize: 12),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                   Row(
-  //                     children: [
-  //                       const Icon(
-  //                         FontAwesomeIcons.arrowTrendDown,
-  //                         size: 14,
-  //                         color: Colors.red,
-  //                       ),
-  //                       const SizedBox(width: 4),
-  //                       Text(
-  //                         "Short Market Value\n${FormatUtils.formatCurrency(totalSdShortMarketValue)}",
-  //                         textAlign: TextAlign.right,
-  //                         style: const TextStyle(fontSize: 12),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ],
-  //               ),
-  //               const SizedBox(height: 12),
-  //               Container(
-  //                 padding:
-  //                     const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-  //                 decoration: BoxDecoration(
-  //                   color: ConvertService.safeDouble(cashPercentage) < 0
-  //                       ? const Color(0xFF3B0000)
-  //                       : ConvertService.safeDouble(cashPercentage) > 0
-  //                           ? const Color(0xFF002B00)
-  //                           : const Color(0xFF2E2E2E),
-  //                   borderRadius: BorderRadius.circular(8),
-  //                 ),
-  //                 child: Text(
-  //                   FormatUtils.formatPercentage(cashPercentage),
-  //                   style: TextStyle(
-  //                     color: ConvertService.safeDouble(cashPercentage) < 0
-  //                         ? Colors.redAccent
-  //                         : ConvertService.safeDouble(cashPercentage) > 0
-  //                             ? Colors.greenAccent
-  //                             : Colors.white70,
-  //                     fontSize: 12,
-  //                     fontWeight: FontWeight.w500,
-  //                   ),
-  //                 ),
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return PageListContainer(
-      title: "Account Summary",
+      title: "Summary",
       onRefresh: _refreshData,
       page: _futureBalances == null
           ? AppTheme.buildLoadingIndicator()
           : FutureBuilder<List<Balance>>(
               future: _futureBalances,
               builder: (context, snapshot) {
+                Widget body;
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return AppTheme.buildLoadingIndicator();
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text("Error: ${snapshot.error}"),
-                  );
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return RefreshIndicator(
-                    color: const Color(0xFF1565C0),
+                  body = AppTheme.buildLoadingIndicator();
+                } else {
+                  body = GridWithPagination(
+                    items: _buildGridItems(snapshot.data!),
+                    pagination: pagination,
+                    onPageChange: _onPageChange,
                     onRefresh: _refreshData,
-                    child: ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: const [
-                        SizedBox(height: 200),
-                        Center(
-                          child: Text(
-                            "No data found",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                      ],
-                    ),
+                    disableActions: true,
                   );
                 }
-                final items = _buildGridItems(snapshot.data!);
                 return Scaffold(
                   body: Column(
                     children: [
-                      // _buildTotalCard(),
-                      const SizedBox(height: 12),
-                      Expanded(
-                        child: GridWithPagination(
-                          items: items,
-                          pagination: pagination,
-                          onPageChange: _onPageChange,
-                          onRefresh: _refreshData,
-                          disableActions: true,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 400),
+                          child: AutoCompleteAccountNo(
+                            name: "accountNo",
+                            value: queryData["accountNo"],
+                            isAllStatus: false,
+                            isAccessibleOnly: true,
+                            type: "Client",
+                            onChange: (map) => setState(() {
+                              if (map['data'] != null &&
+                                  map['data']['accountNo'] != null) {
+                                queryData = {
+                                  ...queryData,
+                                  "accountNo":
+                                      map['data']?['accountNo'] as String? ??
+                                          '',
+                                };
+                                _futureBalances = _listBalance();
+                              }
+                            }),
+                            onClear: (map) => setState(() {
+                              queryData["accountNo"] = "";
+                              _futureBalances = _listBalance();
+                            }),
+                          ),
                         ),
                       ),
+                      const SizedBox(height: 12),
+                      Expanded(child: body),
                     ],
                   ),
                 );

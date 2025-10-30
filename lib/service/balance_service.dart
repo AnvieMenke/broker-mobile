@@ -36,7 +36,8 @@ class BalanceService {
         param["toDate"] != null
             ? DateTime.parse(param["toDate"])
             : DateTime.now(),
-      );
+      )
+      ..accountNo = param['accountNo'] ?? "";
 
     if (paging != null && paging.isNotEmpty) {
       var paginationReq = Pagination()
