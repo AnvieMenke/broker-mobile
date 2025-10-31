@@ -680,6 +680,11 @@ class GridWithPagination extends StatelessWidget {
   ) {
     final rowsPerPage = pagination.rowsPerPage;
 
+    const double buttonWidth = 40;
+    const int maxButtons = 7;
+    final double maxScrollWidth = buttonWidth * maxButtons;
+    final double navWidth = maxScrollWidth + (40 * 4);
+
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
@@ -687,48 +692,56 @@ class GridWithPagination extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (!hidePageInfo)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  totalRows == 0
-                      ? "No results"
-                      : "Showing $start-${end.clamp(0, totalRows)} of $totalRows",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
+            Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: navWidth),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Rows per page: "),
-                    DropdownButton<int>(
-                      value: rowsPerPage,
-                      items: [5, 10, 20, 50, 100].map((rowPerPage) {
-                        return DropdownMenuItem<int>(
-                          value: rowPerPage,
-                          child: Text('$rowPerPage'),
-                        );
-                      }).toList(),
-                      onChanged: (newRowsPerPage) {
-                        if (newRowsPerPage != null) {
-                          onPageChange(
-                            pagination.copyWith(
-                              pageNo: 0,
-                              rowsPerPage: newRowsPerPage,
-                              reload: true,
-                            ),
-                          );
-                        }
-                      },
-                      underline: const SizedBox(),
+                    Flexible(
+                      child: Text(
+                        totalRows == 0
+                            ? "No results"
+                            : "Showing $start-${end.clamp(0, totalRows)} of $totalRows",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text("Rows per page: "),
+                        DropdownButton<int>(
+                          value: rowsPerPage,
+                          items: [5, 10, 20, 50, 100].map((rowPerPage) {
+                            return DropdownMenuItem<int>(
+                              value: rowPerPage,
+                              child: Text('$rowPerPage'),
+                            );
+                          }).toList(),
+                          onChanged: (newRowsPerPage) {
+                            if (newRowsPerPage != null) {
+                              onPageChange(
+                                pagination.copyWith(
+                                  pageNo: 0,
+                                  rowsPerPage: newRowsPerPage,
+                                  reload: true,
+                                ),
+                              );
+                            }
+                          },
+                          underline: const SizedBox(),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           const SizedBox(height: 8),
           Center(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: navWidth),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -753,35 +766,54 @@ class GridWithPagination extends StatelessWidget {
                             )
                         : null,
                   ),
-                  ...pagesToShow.map(
-                    (p) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: p == currentPage
-                              ? Colors.blueAccent
-                              : Theme.of(context).colorScheme.surface,
-                          foregroundColor: p == currentPage
-                              ? Colors.white
-                              : Theme.of(context).textTheme.bodyMedium?.color,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 8,
-                          ),
-                          minimumSize: const Size(30, 30),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                        onPressed: p == currentPage
-                            ? null
-                            : () => onPageChange(
-                                  pagination.copyWith(pageNo: p, reload: true),
+                  Flexible(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxScrollWidth),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(
+                            totalPages,
+                            (p) => Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: p == currentPage
+                                      ? Colors.blueAccent
+                                      : Theme.of(context).colorScheme.surface,
+                                  foregroundColor: p == currentPage
+                                      ? Colors.white
+                                      : Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                    horizontal: 8,
+                                  ),
+                                  minimumSize: const Size(30, 30),
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
                                 ),
-                        child: Text(
-                          '${p + 1}',
-                          style: const TextStyle(fontSize: 12),
+                                onPressed: p == currentPage
+                                    ? null
+                                    : () => onPageChange(
+                                          pagination.copyWith(
+                                            pageNo: p,
+                                            reload: true,
+                                          ),
+                                        ),
+                                child: Text(
+                                  '${p + 1}',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
