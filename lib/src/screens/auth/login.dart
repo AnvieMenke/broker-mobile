@@ -10,6 +10,23 @@ import 'package:broker_mobile/components/messages/notification.dart';
 import '../../../service/auth_service.dart';
 import '../../../service/common_service.dart';
 
+class SavedAccount {
+  final String email;
+  final String password;
+
+  SavedAccount({required this.email, required this.password});
+
+  Map<String, dynamic> toJson() => {
+        'email': email,
+        'password': password,
+      };
+
+  factory SavedAccount.fromJson(Map<String, dynamic> json) => SavedAccount(
+        email: json['email'],
+        password: json['password'],
+      );
+}
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -34,6 +51,10 @@ class _LoginPageState extends State<LoginPage> {
 
   String configPhoto = "";
 
+  List<SavedAccount> _savedAccounts = [];
+  OverlayEntry? _overlayEntry;
+  final LayerLink _layerLink = LayerLink();
+
   @override
   void initState() {
     super.initState();
@@ -53,15 +74,93 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _loadSavedCredentials() async {
-    final savedEmail = await _storage.read(key: 'email');
-    final savedPassword = await _storage.read(key: 'password');
+    final savedAccountsJson = await _storage.read(key: 'accounts');
+    final lastUsedEmail = await _storage.read(key: 'last_used_email');
 
-    if (savedEmail != null && savedPassword != null) {
+    if (savedAccountsJson != null) {
+      final decoded = jsonDecode(savedAccountsJson) as List<dynamic>;
+      _savedAccounts =
+          decoded.map((accJson) => SavedAccount.fromJson(accJson)).toList();
+
+      if (lastUsedEmail != null) {
+        final last = _savedAccounts.firstWhere(
+          (acc) => acc.email == lastUsedEmail,
+          orElse: () => _savedAccounts.isNotEmpty
+              ? _savedAccounts.first
+              : SavedAccount(email: '', password: ''),
+        );
+        _emailController.text = last.email;
+        _passwordController.text = last.password;
+      }
+      setState(() {});
+    }
+  }
+
+  Future<void> _saveAccount(String email, String password) async {
+    List<SavedAccount> savedAccounts = List.from(_savedAccounts);
+    if (!savedAccounts.any((acc) => acc.email == email)) {
+      savedAccounts.add(SavedAccount(email: email, password: password));
+      await _storage.write(
+        key: 'accounts',
+        value: jsonEncode(savedAccounts.map((a) => a.toJson()).toList()),
+      );
       setState(() {
-        _emailController.text = savedEmail;
-        _passwordController.text = savedPassword;
+        _savedAccounts = savedAccounts;
       });
     }
+  }
+
+  void _showSuggestions() {
+    _overlayEntry?.remove();
+    _overlayEntry = _createOverlay();
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void _hideSuggestions() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  OverlayEntry _createOverlay() {
+    final filtered = _savedAccounts
+        .where((acc) => acc.email
+            .toLowerCase()
+            .contains(_emailController.text.toLowerCase()))
+        .toList();
+
+    return OverlayEntry(
+      builder: (context) => Positioned(
+        left: 24,
+        right: 24,
+        child: CompositedTransformFollower(
+          link: _layerLink,
+          showWhenUnlinked: false,
+          offset: const Offset(0, 60),
+          child: Material(
+            elevation: 4.0,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 150),
+              child: ListView(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                children: filtered
+                    .map(
+                      (acc) => ListTile(
+                        title: Text(acc.email),
+                        onTap: () {
+                          _emailController.text = acc.email;
+                          _passwordController.text = acc.password;
+                          _hideSuggestions();
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void _handleLogin({bool auto = false}) async {
@@ -95,53 +194,57 @@ class _LoginPageState extends State<LoginPage> {
         _correspondents = response.correspondents;
       });
 
-      final savedEmail = await _storage.read(key: 'email');
-      final savedPassword = await _storage.read(key: 'password');
-      final neverSave = await _storage.read(key: 'never_save');
-
-      if ((savedEmail == null || savedPassword == null) &&
-          neverSave != 'true') {
-        if (!mounted) return;
-        final saveChoice = await showDialog<String>(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Save Password?'),
-            content:
-                const Text('Do you want to save your password for next time?'),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.pop(ctx, 'save'),
-                  child: const Text('Save')),
-              TextButton(
-                  onPressed: () => Navigator.pop(ctx, 'not_this_time'),
-                  child: const Text('Not this time')),
-              TextButton(
-                  onPressed: () => Navigator.pop(ctx, 'never'),
-                  child: const Text('Never')),
-            ],
-          ),
-        );
-
-        if (saveChoice == 'save') {
-          await _storage.write(key: 'email', value: email);
-          await _storage.write(key: 'password', value: password);
-        } else if (saveChoice == 'never') {
-          await _storage.write(key: 'never_save', value: 'true');
-        }
-      }
-
-      if (_correspondents.length > 1) {
+      if (_correspondents.length > 1 && _selectedCorrespondent == null) {
         Notify.info(
           'The email you entered has multiple accounts. Please select a correspondent.',
         );
         setState(() {
           _showCorrespondentDropdown = true;
-          _selectedCorrespondent = null;
         });
         return;
       }
 
-      _selectedCorrespondent = _correspondents.first;
+      _selectedCorrespondent ??= _correspondents.first;
+
+      final accountAlreadySaved = _savedAccounts
+          .any((acc) => acc.email == email && acc.password == password);
+
+      if (accountAlreadySaved) {
+        await _storage.write(key: 'last_used_email', value: email);
+      }
+
+      if (!accountAlreadySaved) {
+        final neverSave = await _storage.read(key: 'never_save');
+        if (neverSave != 'true') {
+          if (!mounted) return;
+          final saveChoice = await showDialog<String>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text('Save Password?'),
+              content: const Text(
+                  'Do you want to save your password for next time?'),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(ctx, 'save'),
+                    child: const Text('Save')),
+                TextButton(
+                    onPressed: () => Navigator.pop(ctx, 'not_this_time'),
+                    child: const Text('Not this time')),
+                TextButton(
+                    onPressed: () => Navigator.pop(ctx, 'never'),
+                    child: const Text('Never')),
+              ],
+            ),
+          );
+
+          if (saveChoice == 'save') {
+            await _saveAccount(email, password);
+          } else if (saveChoice == 'never') {
+            await _storage.write(key: 'never_save', value: 'true');
+          }
+        }
+      }
+
       final expiryTime = DateTime.now().add(const Duration(seconds: 120));
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(
@@ -194,6 +297,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _buildEmailField() {
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: TextField(
+        controller: _emailController,
+        decoration: const InputDecoration(
+          hintText: 'Email',
+          labelText: 'Email',
+        ),
+        onChanged: (value) {
+          _showSuggestions();
+        },
+        onTap: () {
+          if (_overlayEntry == null) _showSuggestions();
+        },
+      ),
+    );
+  }
+
   Widget _buildLoginForm() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -214,19 +336,13 @@ class _LoginPageState extends State<LoginPage> {
                 height: 100,
                 fit: BoxFit.contain,
               ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
         const Text(
           'Login Account',
           style: TextStyle(fontSize: 28),
         ),
         const SizedBox(height: 32),
-        TextField(
-          controller: _emailController,
-          decoration: InputDecoration(
-            hintText: 'Email',
-            labelText: 'Email',
-          ),
-        ),
+        _buildEmailField(),
         const SizedBox(height: 16),
         FieldPassword(
           controller: _passwordController,
@@ -246,7 +362,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         if (_showCorrespondentDropdown) ...[
-          const SizedBox(height: 16),
           DropdownButtonFormField<String>(
             initialValue: _selectedCorrespondent,
             items: _correspondents.map((c) {
@@ -264,26 +379,37 @@ class _LoginPageState extends State<LoginPage> {
               labelText: "Correspondent",
             ),
           ),
-          const SizedBox(height: 16),
-          Button(
-              label: 'Continue', onPressed: _handleLogin, isLoading: _loading),
         ],
-        if (!_showCorrespondentDropdown)
-          Button(label: 'Login', onPressed: _handleLogin, isLoading: _loading),
+        const SizedBox(height: 16),
+        Button(
+          label: _showCorrespondentDropdown ? 'Continue' : 'Login',
+          onPressed:
+              (_showCorrespondentDropdown && _selectedCorrespondent == null)
+                  ? null
+                  : _handleLogin,
+          isLoading: _loading,
+        ),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: _buildLoginForm(),
+    return GestureDetector(
+      onTap: () {
+        _overlayEntry?.remove();
+        _overlayEntry = null;
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: _buildLoginForm(),
+              ),
             ),
           ),
         ),
