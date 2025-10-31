@@ -685,6 +685,21 @@ class GridWithPagination extends StatelessWidget {
     final double maxScrollWidth = buttonWidth * maxButtons;
     final double navWidth = maxScrollWidth + (40 * 4);
 
+    final ScrollController scrollController = ScrollController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        final double targetOffset =
+            (currentPage - 2).clamp(0, totalPages) * buttonWidth;
+        scrollController.jumpTo(
+          targetOffset.clamp(
+            0,
+            scrollController.position.maxScrollExtent,
+          ),
+        );
+      }
+    });
+
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
@@ -770,6 +785,7 @@ class GridWithPagination extends StatelessWidget {
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: maxScrollWidth),
                       child: SingleChildScrollView(
+                        controller: scrollController,
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: List.generate(
