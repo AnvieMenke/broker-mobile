@@ -209,4 +209,14 @@ class FormatUtils {
 
     return '$value%';
   }
+
+  static String formatDateStringtoIcu(String dateStr) {
+    try {
+      final date = DateTime.parse(dateStr);
+      final formatter = DateFormat("MMM-dd-yyyy");
+      return formatter.format(date);
+    } catch (_) {
+      return dateStr;
+    }
+  }
 }

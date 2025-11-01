@@ -1,3 +1,5 @@
+import 'package:broker_mobile/components/charts/pie_chart.dart';
+import 'package:broker_mobile/service/position_service.dart';
 import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,8 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   Future<List<Balance>>? _futureBalances;
   Future<List<Map<String, dynamic>>>? _futureChartData;
+  Future<List<Map<String, dynamic>>>? _futureAssetChartData;
+  String? previousDate;
 
   Decimal totalBalance = Decimal.zero;
   Decimal totalTdLongMarketValue = Decimal.zero;
@@ -39,15 +43,17 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> _initializeData() async {
     final profileService = ProfileService();
-    final previousDate = await profileService.getPreviousDate();
+    final profilePreviousDate = await profileService.getPreviousDate();
 
-    queryData['fromDate'] = previousDate;
-    queryData['toDate'] = previousDate;
+    queryData['fromDate'] = profilePreviousDate;
+    queryData['toDate'] = profilePreviousDate;
 
+    previousDate = FormatUtils.formatDateStringtoIcu(profilePreviousDate);
     setState(() {
       selectedRange = "1M";
       _futureBalances = _fetchBalancesAndTotals();
       _futureChartData = _fetchChartValues();
+      _futureAssetChartData = _fetchAssetChartValues();
     });
   }
 
@@ -69,7 +75,6 @@ class _DashboardPageState extends State<DashboardPage> {
       queryData,
       {'pageNo': 0, 'rowsPerPage': 0},
     );
-    debugPrint(resp.summary.toString());
     try {
       totalBalance = Decimal.parse(resp.summary.tdCashBalance.toString());
       totalTdLongMarketValue =
@@ -89,7 +94,6 @@ class _DashboardPageState extends State<DashboardPage> {
       plPercentage = "";
       cashPercentage = "";
     }
-debugPrint(totalPlValue.toString());
     return resp.balances;
   }
 
@@ -115,10 +119,29 @@ debugPrint(totalPlValue.toString());
     }
   }
 
+  Future<List<Map<String, dynamic>>> _fetchAssetChartValues() async {
+    final positionService = PositionService();
+
+    try {
+      final resp = await positionService.getPositionAccountAllocation("Asset");
+      return resp.positionAccountAllocations.map((item) {
+        return {
+          "title": (item.description.isNotEmpty) ? item.description : item.code,
+          "value": Decimal.tryParse(item.percentage) ?? Decimal.zero,
+          "formattedValue": FormatUtils.formatPercentage(item.percentage)
+        };
+      }).toList();
+    } catch (e) {
+      debugPrint("Error fetching asset chart values: $e");
+      return [];
+    }
+  }
+
   Future<void> _refreshData() async {
     setState(() {
       _futureBalances = _fetchBalancesAndTotals();
       _futureChartData = _fetchChartValues();
+      _futureAssetChartData = _fetchAssetChartValues();
     });
   }
 
@@ -355,6 +378,52 @@ debugPrint(totalPlValue.toString());
     );
   }
 
+  Widget _buildAssetChart() {
+    return Column(
+      children: [
+        const Text(
+          "Asset Allocation",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        if (previousDate != null)
+          Text(
+            "As of ${previousDate!}",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey[600],
+            ),
+          ),
+        const SizedBox(height: 24),
+        FutureBuilder<List<Map<String, dynamic>>>(
+          future: _futureAssetChartData,
+          builder: (context, snapshot) {
+            if (_futureAssetChartData == null ||
+                snapshot.connectionState == ConnectionState.waiting) {
+              return AppTheme.buildLoadingIndicator();
+            }
+
+            if (snapshot.hasError) {
+              return const Center(child: Text("Error loading chart"));
+            }
+
+            final data = snapshot.data ?? [];
+
+            if (data.isEmpty) {
+              return const Center(child: Text("No chart data found"));
+            }
+
+            return FlPieChart(data: data);
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -383,6 +452,8 @@ debugPrint(totalPlValue.toString());
                         _buildPeriodRangeSelector(),
                         const SizedBox(height: 12),
                         _buildLineChart(),
+                        const SizedBox(height: 24),
+                        _buildAssetChart()
                       ],
                     ),
                   );
