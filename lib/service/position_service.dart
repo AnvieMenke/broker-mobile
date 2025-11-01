@@ -62,4 +62,17 @@ class PositionService {
       rethrow;
     }
   }
+
+  Future<GetPositionAccountAllocationResponse> getPositionAccountAllocation(
+      String type) async {
+    final client = _positionService();
+    final req = GetPositionAccountAllocationRequest()..type = type;
+
+    try {
+      final response = await client.getPositionAccountAllocation(req);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
