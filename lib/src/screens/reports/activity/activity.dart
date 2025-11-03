@@ -335,7 +335,6 @@ class ActivityPageState extends State<ActivityPage> {
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(6),
-                                          // ↑ tap area
                                           child: const Icon(
                                             Icons.info_outline,
                                             color: Colors.grey,
