@@ -28,6 +28,7 @@ class _AchWirePageState extends State<AchWirePage> {
   final user = sessionManager.user!;
 
   late Map<String, dynamic> formData;
+  List<String> disabledRequestTypes = [];
 
   final Map<String, dynamic> initialMaximumWithdrawable = {
     "totalAmt": 0.0,
@@ -191,6 +192,16 @@ class _AchWirePageState extends State<AchWirePage> {
       bool isInternational = bic.isNotEmpty;
       setState(() {
         formData["isInternational"] = isInternational;
+        disabledRequestTypes.clear();
+        if (!resp.bankAccount.ach) {
+          disabledRequestTypes.add("ach");
+        }
+        if (!resp.bankAccount.wire) {
+          disabledRequestTypes.add("wire");
+        }
+        if (!resp.bankAccount.check_22) {
+          disabledRequestTypes.add("check");
+        }
       });
     } catch (err) {
       debugPrint(err.toString());
@@ -220,10 +231,12 @@ class _AchWirePageState extends State<AchWirePage> {
     }
 
     if (data["transferType"] == 'Withdrawal') {
-      if (double.tryParse(maximumWithdrawable["pendingCallLog"])! > 0) {
+      if (ConvertService.safeDouble(maximumWithdrawable["pendingCallLog"]) >
+          0) {
         return Notify.error('Cannot withdraw with pending calls.');
       } else if (ConvertService.safeDouble(data["amt"]) >
-              double.tryParse(maximumWithdrawable["withdrawableAmt"])! &&
+              ConvertService.safeDouble(
+                  maximumWithdrawable["withdrawableAmt"]) &&
           data["status"] != "Canceled") {
         return Notify.error('Amount is greater than Maximum Withdrawable.');
       }
@@ -393,15 +406,24 @@ class _AchWirePageState extends State<AchWirePage> {
                         SizedBox(
                           width: itemWidth,
                           child: SelectSystemCode(
-                            disabled: isEdit,
+                            disabled:
+                                isEdit || formData["bankId"].toString().isEmpty,
                             label: "Request Type",
                             placeholder: "Select Request Type",
                             value: formData["requestType"],
                             type: "Type",
                             subType: "Request Type",
+                            disabledCodes: disabledRequestTypes,
                             onChange: (map) => setState(() {
-                              formData["requestType"] =
+                              String selectedRequestType =
                                   map?["data"]["code"] ?? '';
+                              formData = {
+                                ...formData,
+                                "requestType": selectedRequestType,
+                                "transferType": selectedRequestType == "Wire"
+                                    ? "Withdrawal"
+                                    : formData["transferType"] ?? '',
+                              };
                               _calculateFee();
                             }),
                           ),
@@ -409,7 +431,8 @@ class _AchWirePageState extends State<AchWirePage> {
                         SizedBox(
                           width: itemWidth,
                           child: SelectSystemCode(
-                            disabled: isEdit,
+                            disabled:
+                                isEdit || formData["requestType"] == "Wire",
                             label: "Transfer Type",
                             placeholder: "Select Transfer Type",
                             value: formData["transferType"],
@@ -447,7 +470,8 @@ class _AchWirePageState extends State<AchWirePage> {
                             },
                             onChanged: (value) {
                               setState(() {
-                                formData["amt"] = double.tryParse(value) ?? 0.0;
+                                formData["amt"] =
+                                    ConvertService.safeDouble(value);
                                 _calculateFee();
                               });
                             },
