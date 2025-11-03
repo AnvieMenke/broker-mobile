@@ -12,22 +12,23 @@ class SelectSystemCode extends StatefulWidget {
   final String? error;
   final String? msg;
   final InputBorder? border;
+  final List<String>? disabledCodes;
   final void Function(Map<String, dynamic>?) onChange;
 
-  const SelectSystemCode({
-    super.key,
-    required this.type,
-    required this.label,
-    required this.placeholder,
-    required this.onChange,
-    this.value,
-    this.subType,
-    this.orderBy,
-    this.disabled = false,
-    this.error,
-    this.msg,
-    this.border,
-  });
+  const SelectSystemCode(
+      {super.key,
+      required this.type,
+      required this.label,
+      required this.placeholder,
+      required this.onChange,
+      this.value,
+      this.subType,
+      this.orderBy,
+      this.disabled = false,
+      this.error,
+      this.msg,
+      this.border,
+      this.disabledCodes});
 
   @override
   State<SelectSystemCode> createState() => _SelectSystemCodeState();
@@ -119,9 +120,18 @@ class _SelectSystemCodeState extends State<SelectSystemCode> {
                 ),
               ),
               ...systemCodes.map((systemCode) {
+                final isDisabled = widget.disabledCodes
+                        ?.map((e) => e.toLowerCase())
+                        .contains(systemCode.code?.toLowerCase()) ??
+                    false;
+
                 return DropdownMenuItem<String>(
                   value: systemCode.code ?? "",
-                  child: Text(systemCode.description ?? ""),
+                  enabled: !isDisabled,
+                  child: Opacity(
+                    opacity: isDisabled ? 0.4 : 1.0,
+                    child: Text(systemCode.description ?? ""),
+                  ),
                 );
               }),
             ],
