@@ -176,22 +176,22 @@ class ActivityPageState extends State<ActivityPage> {
                                                     style: const TextStyle(
                                                         fontSize: 14),
                                                   ),
-                                                  Text(
-                                                    "Symbol: $symbol",
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
-                                                  ),
-                                                  Text(
-                                                    "Symbol Description: $symbolDescription",
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
-                                                  ),
+                                                  if (symbol.isNotEmpty) ...[
+                                                    Text(
+                                                      "Symbol: $symbol",
+                                                      style: const TextStyle(
+                                                          fontSize: 14),
+                                                    ),
+                                                    Text(
+                                                      "Symbol Description: $symbolDescription",
+                                                      style: const TextStyle(
+                                                          fontSize: 14),
+                                                    ),
+                                                  ],
                                                   RichText(
                                                     text: TextSpan(
                                                       style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 13,
+                                                        fontSize: 14,
                                                       ),
                                                       children: [
                                                         const TextSpan(
@@ -224,28 +224,28 @@ class ActivityPageState extends State<ActivityPage> {
                                                   RichText(
                                                     text: TextSpan(
                                                       style: const TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.w600,
-                                                        fontSize: 13,
+                                                        fontSize: 14,
                                                       ),
                                                       children: [
                                                         const TextSpan(
-                                                            text: 'Gross Amount: '),
+                                                            text:
+                                                                'Gross Amount: '),
                                                         TextSpan(
                                                           text: FormatUtils
-                                                              .formatCurrency(grossAmt),
+                                                              .formatCurrency(
+                                                                  grossAmt),
                                                           style: TextStyle(
                                                             color: ConvertService
-                                                                .safeDouble(
-                                                                grossAmt) >
-                                                                0
+                                                                        .safeDouble(
+                                                                            grossAmt) >
+                                                                    0
                                                                 ? null
                                                                 : ConvertService.safeDouble(
-                                                                grossAmt) <
-                                                                0
-                                                                ? Colors
-                                                                .redAccent
-                                                                : null,
+                                                                            grossAmt) <
+                                                                        0
+                                                                    ? Colors
+                                                                        .redAccent
+                                                                    : null,
                                                           ),
                                                         ),
                                                       ],
@@ -254,28 +254,27 @@ class ActivityPageState extends State<ActivityPage> {
                                                   RichText(
                                                     text: TextSpan(
                                                       style: const TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.w600,
-                                                        fontSize: 13,
+                                                        fontSize: 14,
                                                       ),
                                                       children: [
                                                         const TextSpan(
                                                             text: 'Fees: '),
                                                         TextSpan(
                                                           text: FormatUtils
-                                                              .formatCurrencySymbol(fees),
+                                                              .formatCurrencySymbol(
+                                                                  fees),
                                                           style: TextStyle(
                                                             color: ConvertService
-                                                                .safeDouble(
-                                                                fees) >
-                                                                0
+                                                                        .safeDouble(
+                                                                            fees) >
+                                                                    0
                                                                 ? null
                                                                 : ConvertService.safeDouble(
-                                                                fees) <
-                                                                0
-                                                                ? Colors
-                                                                .redAccent
-                                                                : null,
+                                                                            fees) <
+                                                                        0
+                                                                    ? Colors
+                                                                        .redAccent
+                                                                    : null,
                                                           ),
                                                         ),
                                                       ],
@@ -284,38 +283,41 @@ class ActivityPageState extends State<ActivityPage> {
                                                   RichText(
                                                     text: TextSpan(
                                                       style: const TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.w600,
-                                                        fontSize: 13,
+                                                        fontSize: 14,
                                                       ),
                                                       children: [
                                                         const TextSpan(
-                                                            text: 'Net Amount: '),
+                                                            text:
+                                                                'Net Amount: '),
                                                         TextSpan(
                                                           text: FormatUtils
-                                                              .formatCurrency(netAmt),
+                                                              .formatCurrency(
+                                                                  netAmt),
                                                           style: TextStyle(
                                                             color: ConvertService
-                                                                .safeDouble(
-                                                                netAmt) >
-                                                                0
+                                                                        .safeDouble(
+                                                                            netAmt) >
+                                                                    0
                                                                 ? null
                                                                 : ConvertService.safeDouble(
-                                                                netAmt) <
-                                                                0
-                                                                ? Colors
-                                                                .redAccent
-                                                                : null,
+                                                                            netAmt) <
+                                                                        0
+                                                                    ? Colors
+                                                                        .redAccent
+                                                                    : null,
                                                           ),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                  Text(
-                                                    "Description: $description",
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
-                                                  ),
+                                                  if (description
+                                                      .isNotEmpty) ...[
+                                                    Text(
+                                                      "Description: $description",
+                                                      style: const TextStyle(
+                                                          fontSize: 14),
+                                                    ),
+                                                  ],
                                                   const SizedBox(height: 12),
                                                   Align(
                                                     alignment:
