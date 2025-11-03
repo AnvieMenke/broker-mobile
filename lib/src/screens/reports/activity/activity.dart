@@ -12,6 +12,7 @@ import '../../../../components/dropdowns/select_rep.dart';
 import '../../../../components/dropdowns/select_branch.dart';
 import '../../../../components/dropdowns/select_symbol.dart';
 import '../../../../components/dropdowns/select_entry_type.dart';
+import '../../../../utils/fmt/fmt.dart';
 import '../../../../utils/theme/custom_theme.dart';
 import '../../../../components/datepicker/datepicker.dart';
 
@@ -43,7 +44,7 @@ class ActivityPageState extends State<ActivityPage> {
 
   GridPagination pagination = GridPagination(
     pageNo: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 100,
     totalRows: 0,
     reload: true,
   );
@@ -81,102 +82,336 @@ class ActivityPageState extends State<ActivityPage> {
       'pageNo': pagination.pageNo,
       'rowsPerPage': pagination.rowsPerPage,
     });
+
     setState(() {
       pagination = pagination.copyWith(
         totalRows: resp.summary.totalRows,
         reload: false,
       );
     });
-    return resp.activities.map((e) {
-      return GridItem.fromMap({
-        "entryType": {
-          "label": "Entry Type",
-          "value": "${e.entryType} ${e.entryTypeDescription}",
+
+    // Group activities by accountNo
+    final Map<String, List> grouped = {};
+    for (var e in resp.activities) {
+      grouped.putIfAbsent(e.accountNo, () => []).add(e);
+    }
+
+    List<GridItem> items = [];
+
+    grouped.forEach((accountNo, activities) {
+      // Create subItems list for each account
+      final subItems = activities.where((e) => e != null).map((e) {
+        final entryType = e.entryType ?? '';
+        final entryTypeDesc = e.entryTypeDescription ?? '';
+        final date = e.systemDate ?? '';
+        final netAmt = e.netAmt ?? 0;
+        final symbol = e.symbol ?? '';
+        final qty = e.qty ?? 0;
+        final price = e.price ?? 0;
+        final grossAmt = e.grossAmt ?? 0;
+        final fees = e.fees ?? 0;
+        final symbolDescription = e.symbolDescription ?? '';
+        final description = e.description ?? '';
+
+        return {
+          "activityDetails": {
+            "value": LayoutBuilder(
+              builder: (context, constraints) {
+                return Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          "$entryType $entryTypeDesc",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      InkWell(
+                                        borderRadius: BorderRadius.circular(20),
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                top: Radius.circular(16),
+                                              ),
+                                            ),
+                                            builder: (context) => Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "$entryType $entryTypeDesc",
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 12),
+                                                  Text(
+                                                    "Date: ${FormatUtils.formatPbDate(date)}",
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
+                                                  ),
+                                                  Text(
+                                                    "Symbol: $symbol",
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
+                                                  ),
+                                                  Text(
+                                                    "Symbol Description: $symbolDescription",
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 13,
+                                                      ),
+                                                      children: [
+                                                        const TextSpan(
+                                                            text: 'Qty: '),
+                                                        TextSpan(
+                                                          text: FormatUtils
+                                                              .formatQty(qty),
+                                                          style: TextStyle(
+                                                            color: ConvertService
+                                                                        .safeDouble(
+                                                                            qty) >
+                                                                    0
+                                                                ? null
+                                                                : ConvertService.safeDouble(
+                                                                            qty) <
+                                                                        0
+                                                                    ? Colors
+                                                                        .redAccent
+                                                                    : null,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "Price: ${FormatUtils.formatCurrency(price)}",
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                        fontSize: 13,
+                                                      ),
+                                                      children: [
+                                                        const TextSpan(
+                                                            text: 'Gross Amount: '),
+                                                        TextSpan(
+                                                          text: FormatUtils
+                                                              .formatCurrency(grossAmt),
+                                                          style: TextStyle(
+                                                            color: ConvertService
+                                                                .safeDouble(
+                                                                grossAmt) >
+                                                                0
+                                                                ? null
+                                                                : ConvertService.safeDouble(
+                                                                grossAmt) <
+                                                                0
+                                                                ? Colors
+                                                                .redAccent
+                                                                : null,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                        fontSize: 13,
+                                                      ),
+                                                      children: [
+                                                        const TextSpan(
+                                                            text: 'Fees: '),
+                                                        TextSpan(
+                                                          text: FormatUtils
+                                                              .formatCurrencySymbol(fees),
+                                                          style: TextStyle(
+                                                            color: ConvertService
+                                                                .safeDouble(
+                                                                fees) >
+                                                                0
+                                                                ? null
+                                                                : ConvertService.safeDouble(
+                                                                fees) <
+                                                                0
+                                                                ? Colors
+                                                                .redAccent
+                                                                : null,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                        fontSize: 13,
+                                                      ),
+                                                      children: [
+                                                        const TextSpan(
+                                                            text: 'Net Amount: '),
+                                                        TextSpan(
+                                                          text: FormatUtils
+                                                              .formatCurrency(netAmt),
+                                                          style: TextStyle(
+                                                            color: ConvertService
+                                                                .safeDouble(
+                                                                netAmt) >
+                                                                0
+                                                                ? null
+                                                                : ConvertService.safeDouble(
+                                                                netAmt) <
+                                                                0
+                                                                ? Colors
+                                                                .redAccent
+                                                                : null,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "Description: $description",
+                                                    style: const TextStyle(
+                                                        fontSize: 14),
+                                                  ),
+                                                  const SizedBox(height: 12),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      child:
+                                                          const Text("Close"),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(6),
+                                          child: const Icon(
+                                            Icons.info_outline,
+                                            color: Colors.grey,
+                                            size: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              FormatUtils.formatCurrency(netAmt),
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          },
+        };
+      }).toList();
+
+      // Add GridItem per account
+      items.add(GridItem.fromMap({
+        "accountNo": {
+          "label": "Account No",
+          "value": accountNo,
           "visible": true,
           "gridPosition": "title",
         },
+        "correspondent": {
+          "label": "Correspondent",
+          "value": activities.first.correspondent,
+          "visible": false,
+        },
+        "rep": {
+          "label": "Rep",
+          "value": activities.first.rep,
+          "visible": false,
+        },
+        "branch": {
+          "label": "Branch",
+          "value": activities.first.branch,
+          "visible": false,
+        },
         "date": {
           "label": "Date",
-          "value": e.systemDate,
+          "value": activities.first.systemDate,
           "type": "date",
           "visible": true,
           "gridPosition": "subTitle",
         },
         "marginType": {
           "label": "Margin Type",
-          "value": e.marginType,
-          "visible": true,
-          "hideLabel": true,
-        },
-        "correspondent": {
-          "label": "Correspondent",
-          "value": e.correspondent,
+          "value": activities.first.marginType,
           "visible": false,
         },
-        "accountNo": {
-          "label": "Account No",
-          "value": e.accountNo,
-          "visible": false,
-        },
-        "masterAccountNo": {
-          "label": "Master Account No",
-          "value": e.masterAccountNo,
-          "visible": false,
-        },
-        "rep": {
-          "label": "Rep",
-          "value": e.rep,
-          "visible": false,
-        },
-        "branch": {
-          "label": "Branch",
-          "value": e.branch,
-          "visible": false,
-        },
-        "description": {
-          "label": "Description",
-          "value": e.description,
-          "visible": false,
-        },
-        "symbol": {
-          "label": "Symbol",
-          "value": e.symbol,
-          "visible": false,
-        },
-        "qty": {
-          "label": "QTY",
-          "value": e.qty,
-          "type": "qty",
-          "visible": false,
-        },
-        "price": {
-          "label": "Price",
-          "value": e.price,
-          "type": "price",
-          "visible": false,
-        },
-        "grossAmt": {
-          "label": "Gross Amount",
-          "value": e.grossAmt,
-          "type": "amount",
-          "visible": false,
-        },
-        "fees": {
-          "label": "Fees",
-          "value": e.fees,
-          "type": "amount",
-          "visible": false,
-        },
-        "netAmt": {
-          "hideLabel": true,
-          "label": "Net Amount",
-          "value": e.netAmt,
-          "type": "amount",
-          "floatRight": true,
-          "visible": true,
-        },
-      });
-    }).toList();
+        "subItems": subItems,
+      }));
+    });
+
+    return items;
   }
 
   void _onPageChange(GridPagination newPagination) {
@@ -347,6 +582,8 @@ class ActivityPageState extends State<ActivityPage> {
                         pagination: pagination,
                         onPageChange: _onPageChange,
                         onRefresh: _refresh,
+                        hidePageInfo: true,
+                        disableGridSystem: true,
                       );
                     }
 

@@ -65,7 +65,7 @@ class ActivityService {
       var paginationReq = Pagination()
         ..pageNo = paging["pageNo"] ?? 0
         ..pageSize = paging["rowsPerPage"] ?? 100
-        ..sortName = paging["sortName"] ?? ""
+        ..sortName = paging["sortName"] ?? "tradeDate,accountNo"
         ..sortDirection = paging["sortDirection"] ?? "ASC";
 
       req.pagination = paginationReq;
