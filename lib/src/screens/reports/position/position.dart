@@ -145,14 +145,14 @@ class PositionPageState extends State<PositionPage> {
                                       ),
                                       const SizedBox(width: 4),
                                       InkWell(
+                                        borderRadius: BorderRadius.circular(20),
                                         onTap: () {
                                           showModalBottomSheet(
                                             context: context,
                                             shape: const RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.vertical(
-                                                top: Radius.circular(16),
-                                              ),
+                                                      top: Radius.circular(16)),
                                             ),
                                             builder: (context) => Padding(
                                               padding: const EdgeInsets.all(16),
@@ -170,25 +170,130 @@ class PositionPageState extends State<PositionPage> {
                                                     ),
                                                   ),
                                                   const SizedBox(height: 12),
-                                                  Text(
-                                                    "TD Qty: ${FormatUtils.formatQty(tdQty)}",
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 13,
+                                                      ),
+                                                      children: [
+                                                        const TextSpan(
+                                                            text: 'TD Qty: '),
+                                                        TextSpan(
+                                                          text: FormatUtils
+                                                              .formatQty(tdQty),
+                                                          style: TextStyle(
+                                                            color: ConvertService
+                                                                        .safeDouble(
+                                                                            tdQty) >
+                                                                    0
+                                                                ? null
+                                                                : ConvertService.safeDouble(
+                                                                            tdQty) <
+                                                                        0
+                                                                    ? Colors
+                                                                        .redAccent
+                                                                    : null,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                  Text(
-                                                    "Market Value: ${FormatUtils.formatCurrency(tdMarketValue)}",
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 13,
+                                                      ),
+                                                      children: [
+                                                        const TextSpan(
+                                                            text:
+                                                                'Market Value: '),
+                                                        TextSpan(
+                                                          text: FormatUtils
+                                                              .formatCurrency(
+                                                                  tdMarketValue),
+                                                          style: TextStyle(
+                                                            color: ConvertService
+                                                                        .safeDouble(
+                                                                            tdMarketValue) >
+                                                                    0
+                                                                ? null
+                                                                : ConvertService.safeDouble(
+                                                                            tdMarketValue) <
+                                                                        0
+                                                                    ? Colors
+                                                                        .redAccent
+                                                                    : null,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                  Text(
-                                                    "Unrealized P/L: ${FormatUtils.formatCurrency(plValue)}",
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 13,
+                                                      ),
+                                                      children: [
+                                                        const TextSpan(
+                                                            text:
+                                                                'Unrealized P/L: '),
+                                                        TextSpan(
+                                                          text: FormatUtils
+                                                              .formatCurrency(
+                                                                  plValue),
+                                                          style: TextStyle(
+                                                            color: ConvertService
+                                                                        .safeDouble(
+                                                                            plValue) >
+                                                                    0
+                                                                ? null
+                                                                : ConvertService.safeDouble(
+                                                                            plValue) <
+                                                                        0
+                                                                    ? Colors
+                                                                        .redAccent
+                                                                    : null,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                  Text(
-                                                    "P/L: ${FormatUtils.formatPercentage(plPercent)}",
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 13,
+                                                      ),
+                                                      children: [
+                                                        const TextSpan(
+                                                            text: 'P/L: '),
+                                                        TextSpan(
+                                                          text: FormatUtils
+                                                              .formatPercentage(
+                                                                  plPercent),
+                                                          style: TextStyle(
+                                                            color: ConvertService
+                                                                        .safeDouble(
+                                                                            plPercent) >
+                                                                    0
+                                                                ? null
+                                                                : ConvertService.safeDouble(
+                                                                            plPercent) <
+                                                                        0
+                                                                    ? Colors
+                                                                        .redAccent
+                                                                    : null,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                   const SizedBox(height: 12),
                                                   Align(
@@ -207,10 +312,17 @@ class PositionPageState extends State<PositionPage> {
                                             ),
                                           );
                                         },
-                                        child: const Icon(
-                                          Icons.info_outline,
-                                          color: Colors.grey,
-                                          size: 14,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.transparent,
+                                          ),
+                                          child: const Icon(
+                                            Icons.info_outline,
+                                            color: Colors.grey,
+                                            size: 16,
+                                          ),
                                         ),
                                       ),
                                     ],
