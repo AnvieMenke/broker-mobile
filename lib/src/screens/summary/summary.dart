@@ -40,11 +40,11 @@ class AccountSummaryState extends State<AccountSummaryPage> {
 
   void _init() async {
     final profileService = ProfileService();
-    final previousDate = await profileService.getPreviousDate();
+    final systemDate = await profileService.getSystemDate();
 
     setState(() {
-      queryData['fromDate'] = previousDate;
-      queryData['toDate'] = previousDate;
+      queryData['fromDate'] = systemDate;
+      queryData['toDate'] = systemDate;
       _futureBalances = _listBalance();
     });
   }

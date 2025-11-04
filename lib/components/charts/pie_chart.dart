@@ -21,7 +21,7 @@ class _FlPieChartState extends State<FlPieChart> {
     generatedColors = _generateColors(widget.data.length);
     total = widget.data.fold<double>(
       0,
-      (sum, item) => sum + (item['value'] ?? 0).toDouble(),
+      (sum, item) => sum + (item['percentValue'] ?? 0).toDouble(),
     );
   }
 
@@ -79,12 +79,16 @@ class _FlPieChartState extends State<FlPieChart> {
           child: Row(
             children: const [
               Expanded(
-                  flex: 8,
+                  flex: 6,
                   child: Text("Asset",
                       style: TextStyle(fontWeight: FontWeight.bold))),
               Expanded(
                   flex: 3,
                   child: Text("Percent",
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+              Expanded(
+                  flex: 3,
+                  child: Text("Value",
                       style: TextStyle(fontWeight: FontWeight.bold))),
             ],
           ),
@@ -98,17 +102,26 @@ class _FlPieChartState extends State<FlPieChart> {
             final i = entry.key;
             final item = entry.value;
             final color = generatedColors[i];
-            final value = (item['value'] ?? 0).toDouble();
-            final percent = total > 0 ? (value / total) * 100 : 0.0;
-            final formattedValue = item['formattedValue']?.toString() ??
-                "${percent.toStringAsFixed(1)}%";
+            final percentValue = (item['percentValue'] ?? 0).toDouble();
+            final percent = total > 0 ? (percentValue / total) * 100 : 0.0;
+
+            String formattedPercent;
+            if (percent % 1 == 0) {
+              formattedPercent = '${percent.toStringAsFixed(0)}%';
+            } else {
+              final rounded = double.parse(percent.toStringAsFixed(2));
+              formattedPercent =
+                  '${rounded.toStringAsFixed(rounded % 1 == 0 ? 0 : 2)}%';
+            }
+
+            final formattedValue = item['formattedValue']?.toString() ?? '';
 
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
               child: Row(
                 children: [
                   Expanded(
-                    flex: 8,
+                    flex: 6,
                     child: Row(
                       children: [
                         Container(
@@ -123,11 +136,14 @@ class _FlPieChartState extends State<FlPieChart> {
                         Flexible(
                           child: Text(
                             item['title'] ?? '',
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
                     ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(formattedPercent),
                   ),
                   Expanded(
                     flex: 3,
@@ -146,7 +162,7 @@ class _FlPieChartState extends State<FlPieChart> {
     return widget.data.asMap().entries.map((entry) {
       final i = entry.key;
       final item = entry.value;
-      final value = (item['value'] ?? 0).toDouble();
+      final value = (item['percentValue'] ?? 0).toDouble();
 
       return PieChartSectionData(
         color: generatedColors[i],
