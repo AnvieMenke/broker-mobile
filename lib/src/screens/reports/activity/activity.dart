@@ -188,48 +188,90 @@ class ActivityPageState extends State<ActivityPage> {
                                                           fontSize: 14),
                                                     ),
                                                   ],
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                      ),
-                                                      children: [
-                                                        const TextSpan(
-                                                            text: 'Qty: '),
-                                                        TextSpan(
-                                                          text: FormatUtils
-                                                              .formatQty(qty),
-                                                          style: TextStyle(
-                                                            color: ConvertService
-                                                                        .safeDouble(
-                                                                            qty) >
-                                                                    0
-                                                                ? null
-                                                                : ConvertService.safeDouble(
-                                                                            qty) <
-                                                                        0
-                                                                    ? Colors
-                                                                        .redAccent
-                                                                    : null,
+                                                  if (ConvertService.safeDouble(
+                                                          qty) !=
+                                                      0) ...[
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                              fontSize: 14,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyMedium
+                                                                  ?.color,
+                                                            ),
+                                                        children: [
+                                                          const TextSpan(
+                                                              text: 'Qty: '),
+                                                          TextSpan(
+                                                            text: FormatUtils
+                                                                .formatQty(qty),
+                                                            style: TextStyle(
+                                                              color: ConvertService
+                                                                          .safeDouble(
+                                                                              qty) >
+                                                                      0
+                                                                  ? Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyMedium
+                                                                      ?.color
+                                                                  : ConvertService.safeDouble(
+                                                                              qty) <
+                                                                          0
+                                                                      ? Colors
+                                                                          .redAccent
+                                                                      : Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .bodyMedium
+                                                                          ?.color,
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    "Price: ${FormatUtils.formatCurrency(price)}",
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
-                                                  ),
+                                                  ],
+                                                  if (ConvertService.safeDouble(
+                                                          price) !=
+                                                      0) ...[
+                                                    Text(
+                                                      "Price: ${FormatUtils.formatCurrencySymbol(price)}",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.copyWith(
+                                                            fontSize: 14,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.color,
+                                                          ),
+                                                    )
+                                                  ],
                                                   RichText(
                                                     text: TextSpan(
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                      ),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.copyWith(
+                                                            fontSize: 14,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.color,
+                                                          ),
                                                       children: [
                                                         const TextSpan(
-                                                            text:
-                                                                'Gross Amount: '),
+                                                          text:
+                                                              'Gross Amount: ',
+                                                        ),
                                                         TextSpan(
                                                           text: FormatUtils
                                                               .formatCurrency(
@@ -239,13 +281,21 @@ class ActivityPageState extends State<ActivityPage> {
                                                                         .safeDouble(
                                                                             grossAmt) >
                                                                     0
-                                                                ? null
+                                                                ? Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyMedium
+                                                                    ?.color
                                                                 : ConvertService.safeDouble(
                                                                             grossAmt) <
                                                                         0
                                                                     ? Colors
                                                                         .redAccent
-                                                                    : null,
+                                                                    : Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyMedium
+                                                                        ?.color,
                                                           ),
                                                         ),
                                                       ],
@@ -253,28 +303,44 @@ class ActivityPageState extends State<ActivityPage> {
                                                   ),
                                                   RichText(
                                                     text: TextSpan(
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                      ),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.copyWith(
+                                                            fontSize: 14,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.color,
+                                                          ),
                                                       children: [
                                                         const TextSpan(
                                                             text: 'Fees: '),
                                                         TextSpan(
                                                           text: FormatUtils
-                                                              .formatCurrencySymbol(
+                                                              .formatCurrency(
                                                                   fees),
                                                           style: TextStyle(
                                                             color: ConvertService
                                                                         .safeDouble(
                                                                             fees) >
                                                                     0
-                                                                ? null
+                                                                ? Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyMedium
+                                                                    ?.color
                                                                 : ConvertService.safeDouble(
                                                                             fees) <
                                                                         0
                                                                     ? Colors
                                                                         .redAccent
-                                                                    : null,
+                                                                    : Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyMedium
+                                                                        ?.color,
                                                           ),
                                                         ),
                                                       ],
@@ -282,9 +348,17 @@ class ActivityPageState extends State<ActivityPage> {
                                                   ),
                                                   RichText(
                                                     text: TextSpan(
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                      ),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.copyWith(
+                                                            fontSize: 14,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.color,
+                                                          ),
                                                       children: [
                                                         const TextSpan(
                                                             text:
@@ -298,13 +372,21 @@ class ActivityPageState extends State<ActivityPage> {
                                                                         .safeDouble(
                                                                             netAmt) >
                                                                     0
-                                                                ? null
+                                                                ? Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyMedium
+                                                                    ?.color
                                                                 : ConvertService.safeDouble(
                                                                             netAmt) <
                                                                         0
                                                                     ? Colors
                                                                         .redAccent
-                                                                    : null,
+                                                                    : Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyMedium
+                                                                        ?.color,
                                                           ),
                                                         ),
                                                       ],
@@ -360,7 +442,19 @@ class ActivityPageState extends State<ActivityPage> {
                             fit: BoxFit.scaleDown,
                             child: Text(
                               FormatUtils.formatCurrency(netAmt),
-                              style: const TextStyle(fontSize: 14),
+                              style: TextStyle(
+                                color: ConvertService.safeDouble(netAmt) > 0
+                                    ? Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color
+                                    : ConvertService.safeDouble(netAmt) < 0
+                                        ? Colors.redAccent
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color,
+                              ),
                             ),
                           ),
                         ),

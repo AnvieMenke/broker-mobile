@@ -166,6 +166,7 @@ const PositionAccountAllocation$json = {
     {'1': 'percentage', '3': 1, '4': 1, '5': 9, '10': 'percentage'},
     {'1': 'code', '3': 2, '4': 1, '5': 9, '10': 'code'},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'value', '3': 4, '4': 1, '5': 9, '10': 'value'},
   ],
 };
 
@@ -173,20 +174,16 @@ const PositionAccountAllocation$json = {
 final $typed_data.Uint8List positionAccountAllocationDescriptor = $convert.base64Decode(
     'ChlQb3NpdGlvbkFjY291bnRBbGxvY2F0aW9uEh4KCnBlcmNlbnRhZ2UYASABKAlSCnBlcmNlbn'
     'RhZ2USEgoEY29kZRgCIAEoCVIEY29kZRIgCgtkZXNjcmlwdGlvbhgDIAEoCVILZGVzY3JpcHRp'
-    'b24=');
+    'b24SFAoFdmFsdWUYBCABKAlSBXZhbHVl');
 
 @$core.Deprecated('Use getPositionAccountAllocationRequestDescriptor instead')
 const GetPositionAccountAllocationRequest$json = {
   '1': 'GetPositionAccountAllocationRequest',
-  '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 9, '10': 'type'},
-  ],
 };
 
 /// Descriptor for `GetPositionAccountAllocationRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getPositionAccountAllocationRequestDescriptor = $convert.base64Decode(
-    'CiNHZXRQb3NpdGlvbkFjY291bnRBbGxvY2F0aW9uUmVxdWVzdBISCgR0eXBlGAEgASgJUgR0eX'
-    'Bl');
+    'CiNHZXRQb3NpdGlvbkFjY291bnRBbGxvY2F0aW9uUmVxdWVzdA==');
 
 @$core.Deprecated('Use getPositionAccountAllocationResponseDescriptor instead')
 const GetPositionAccountAllocationResponse$json = {

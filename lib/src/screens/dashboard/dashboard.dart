@@ -22,7 +22,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Future<List<Balance>>? _futureBalances;
   Future<List<Map<String, dynamic>>>? _futureChartData;
   Future<List<Map<String, dynamic>>>? _futureAssetChartData;
-  String? previousDate;
+  String? systemDate;
 
   Decimal totalBalance = Decimal.zero;
   Decimal totalTdLongMarketValue = Decimal.zero;
@@ -43,12 +43,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> _initializeData() async {
     final profileService = ProfileService();
-    final profilePreviousDate = await profileService.getPreviousDate();
+    final profileSystemDate = await profileService.getSystemDate();
 
-    queryData['fromDate'] = profilePreviousDate;
-    queryData['toDate'] = profilePreviousDate;
+    queryData['fromDate'] = profileSystemDate;
+    queryData['toDate'] = profileSystemDate;
 
-    previousDate = FormatUtils.formatDateStringtoIcu(profilePreviousDate);
+    systemDate = FormatUtils.formatDateStringtoIcu(profileSystemDate);
     setState(() {
       selectedRange = "1M";
       _futureBalances = _fetchBalancesAndTotals();
@@ -127,8 +127,8 @@ class _DashboardPageState extends State<DashboardPage> {
       return resp.positionAccountAllocations.map((item) {
         return {
           "title": (item.description.isNotEmpty) ? item.description : item.code,
-          "value": Decimal.tryParse(item.percentage) ?? Decimal.zero,
-          "formattedValue": FormatUtils.formatPercentage(item.percentage)
+          "percentValue": Decimal.tryParse(item.percentage) ?? Decimal.zero,
+          "formattedValue": FormatUtils.formatMoneySuffix(ConvertService.safeDouble(item.value))
         };
       }).toList();
     } catch (e) {
@@ -389,9 +389,9 @@ class _DashboardPageState extends State<DashboardPage> {
             fontSize: 16,
           ),
         ),
-        if (previousDate != null)
+        if (systemDate != null)
           Text(
-            "As of ${previousDate!}",
+            "As of ${systemDate!}",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 13,

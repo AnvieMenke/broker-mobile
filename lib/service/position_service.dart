@@ -66,7 +66,7 @@ class PositionService {
   Future<GetPositionAccountAllocationResponse> getPositionAccountAllocation(
       String type) async {
     final client = _positionService();
-    final req = GetPositionAccountAllocationRequest()..type = type;
+    final req = GetPositionAccountAllocationRequest();
 
     try {
       final response = await client.getPositionAccountAllocation(req);

@@ -884,11 +884,13 @@ class PositionAccountAllocation extends $pb.GeneratedMessage {
     $core.String? percentage,
     $core.String? code,
     $core.String? description,
+    $core.String? value,
   }) {
     final result = create();
     if (percentage != null) result.percentage = percentage;
     if (code != null) result.code = code;
     if (description != null) result.description = description;
+    if (value != null) result.value = value;
     return result;
   }
 
@@ -901,6 +903,7 @@ class PositionAccountAllocation extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'percentage')
     ..aOS(2, _omitFieldNames ? '' : 'code')
     ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..aOS(4, _omitFieldNames ? '' : 'value')
     ..hasRequiredFields = false
   ;
 
@@ -947,16 +950,19 @@ class PositionAccountAllocation extends $pb.GeneratedMessage {
   $core.bool hasDescription() => $_has(2);
   @$pb.TagNumber(3)
   void clearDescription() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get value => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set value($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasValue() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearValue() => $_clearField(4);
 }
 
 class GetPositionAccountAllocationRequest extends $pb.GeneratedMessage {
-  factory GetPositionAccountAllocationRequest({
-    $core.String? type,
-  }) {
-    final result = create();
-    if (type != null) result.type = type;
-    return result;
-  }
+  factory GetPositionAccountAllocationRequest() => create();
 
   GetPositionAccountAllocationRequest._();
 
@@ -964,7 +970,6 @@ class GetPositionAccountAllocationRequest extends $pb.GeneratedMessage {
   factory GetPositionAccountAllocationRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPositionAccountAllocationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'type')
     ..hasRequiredFields = false
   ;
 
@@ -984,15 +989,6 @@ class GetPositionAccountAllocationRequest extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static GetPositionAccountAllocationRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPositionAccountAllocationRequest>(create);
   static GetPositionAccountAllocationRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get type => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set type($core.String value) => $_setString(0, value);
-  @$pb.TagNumber(1)
-  $core.bool hasType() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearType() => $_clearField(1);
 }
 
 class GetPositionAccountAllocationResponse extends $pb.GeneratedMessage {

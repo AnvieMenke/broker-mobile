@@ -59,10 +59,10 @@ class PositionPageState extends State<PositionPage> {
 
   void _init() async {
     final profileService = ProfileService();
-    final previousDate = await profileService.getPreviousDate();
+    final systemDate = await profileService.getSystemDate();
     setState(() {
-      queryData['fromDate'] = previousDate;
-      queryData['toDate'] = previousDate;
+      queryData['fromDate'] = systemDate;
+      queryData['toDate'] = systemDate;
       _futureRequests = _listPosition();
     });
   }
@@ -172,11 +172,17 @@ class PositionPageState extends State<PositionPage> {
                                                   const SizedBox(height: 12),
                                                   RichText(
                                                     text: TextSpan(
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 13,
-                                                      ),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.copyWith(
+                                                            fontSize: 14,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.color,
+                                                          ),
                                                       children: [
                                                         const TextSpan(
                                                             text: 'TD Qty: '),
@@ -188,13 +194,21 @@ class PositionPageState extends State<PositionPage> {
                                                                         .safeDouble(
                                                                             tdQty) >
                                                                     0
-                                                                ? null
+                                                                ? Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyMedium
+                                                                    ?.color
                                                                 : ConvertService.safeDouble(
                                                                             tdQty) <
                                                                         0
                                                                     ? Colors
                                                                         .redAccent
-                                                                    : null,
+                                                                    : Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyMedium
+                                                                        ?.color,
                                                           ),
                                                         ),
                                                       ],
@@ -202,11 +216,17 @@ class PositionPageState extends State<PositionPage> {
                                                   ),
                                                   RichText(
                                                     text: TextSpan(
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 13,
-                                                      ),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.copyWith(
+                                                            fontSize: 14,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.color,
+                                                          ),
                                                       children: [
                                                         const TextSpan(
                                                             text:
@@ -220,13 +240,21 @@ class PositionPageState extends State<PositionPage> {
                                                                         .safeDouble(
                                                                             tdMarketValue) >
                                                                     0
-                                                                ? null
+                                                                ? Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyMedium
+                                                                    ?.color
                                                                 : ConvertService.safeDouble(
                                                                             tdMarketValue) <
                                                                         0
                                                                     ? Colors
                                                                         .redAccent
-                                                                    : null,
+                                                                    : Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyMedium
+                                                                        ?.color,
                                                           ),
                                                         ),
                                                       ],
@@ -234,11 +262,17 @@ class PositionPageState extends State<PositionPage> {
                                                   ),
                                                   RichText(
                                                     text: TextSpan(
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 13,
-                                                      ),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.copyWith(
+                                                            fontSize: 14,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.color,
+                                                          ),
                                                       children: [
                                                         const TextSpan(
                                                             text:
@@ -252,13 +286,21 @@ class PositionPageState extends State<PositionPage> {
                                                                         .safeDouble(
                                                                             plValue) >
                                                                     0
-                                                                ? null
+                                                                ? Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyMedium
+                                                                    ?.color
                                                                 : ConvertService.safeDouble(
                                                                             plValue) <
                                                                         0
                                                                     ? Colors
                                                                         .redAccent
-                                                                    : null,
+                                                                    : Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyMedium
+                                                                        ?.color,
                                                           ),
                                                         ),
                                                       ],
@@ -266,11 +308,17 @@ class PositionPageState extends State<PositionPage> {
                                                   ),
                                                   RichText(
                                                     text: TextSpan(
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 13,
-                                                      ),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.copyWith(
+                                                            fontSize: 14,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.color,
+                                                          ),
                                                       children: [
                                                         const TextSpan(
                                                             text: 'P/L: '),
@@ -283,13 +331,21 @@ class PositionPageState extends State<PositionPage> {
                                                                         .safeDouble(
                                                                             plPercent) >
                                                                     0
-                                                                ? null
+                                                                ? Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyMedium
+                                                                    ?.color
                                                                 : ConvertService.safeDouble(
                                                                             plPercent) <
                                                                         0
                                                                     ? Colors
                                                                         .redAccent
-                                                                    : null,
+                                                                    : Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyMedium
+                                                                        ?.color,
                                                           ),
                                                         ),
                                                       ],
