@@ -9,6 +9,7 @@ import 'package:broker_mobile/components/dropdowns/select_account_no.dart';
 import 'package:broker_mobile/components/dropdowns/select_bank_account.dart';
 import 'package:broker_mobile/components/dropdowns/select_system_code.dart';
 import 'package:broker_mobile/components/messages/notification.dart';
+import '../../../components/fields/field_amound.dart';
 import '../../../session/session.dart';
 import '../../../utils/theme/custom_theme.dart';
 
@@ -448,30 +449,19 @@ class _AchWirePageState extends State<AchWirePage> {
                         ),
                         SizedBox(
                           width: itemWidth,
-                          child: TextFormField(
-                            controller: _amountController,
+                          child: FieldAmount(
+                            initial: ConvertService.safeDouble(formData["amt"]).toString(),
+                            prefixText: '\$',
+                            maxDecimalDigits: 2,
                             decoration: InputDecoration(
                               labelText: "Amount",
-                              prefixText: "\$",
-                              helperText: formData["transferType"] ==
-                                      "Withdrawal"
-                                  ? "Withdrawable amount: ${ FormatUtils.formatCurrency(maximumWithdrawable["withdrawableAmt"])}"
+                              helperText: formData["transferType"] == "Withdrawal"
+                                  ? "Withdrawable amount: ${FormatUtils.formatCurrency(maximumWithdrawable["withdrawableAmt"])}"
                                   : null,
                             ),
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            onTap: () {
-                              final text = _amountController.text.trim();
-                              if (text == '0' ||
-                                  text == '0.0' ||
-                                  text == '0.00') {
-                                _amountController.clear();
-                              }
-                            },
-                            onChanged: (value) {
+                            onChangedRaw: (raw) {
                               setState(() {
-                                formData["amt"] =
-                                    ConvertService.safeDouble(value);
+                                formData["amt"] = ConvertService.safeDouble(raw);
                                 _calculateFee();
                               });
                             },
