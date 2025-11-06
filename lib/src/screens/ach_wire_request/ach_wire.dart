@@ -425,6 +425,7 @@ class _AchWirePageState extends State<AchWirePage> {
                                     ? "Withdrawal"
                                     : formData["transferType"] ?? '',
                               };
+                              _checkAndFetchMaxWithdrawable();
                               _calculateFee();
                             }),
                           ),
