@@ -80,16 +80,25 @@ class _FlPieChartState extends State<FlPieChart> {
             children: const [
               Expanded(
                   flex: 6,
-                  child: Text("Asset",
-                      style: TextStyle(fontWeight: FontWeight.bold))),
+                  child: Text(
+                    "Asset",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  )),
               Expanded(
                   flex: 3,
-                  child: Text("Percent",
-                      style: TextStyle(fontWeight: FontWeight.bold))),
+                  child: Text(
+                    "Percent",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.right,
+                  )),
               Expanded(
                   flex: 3,
-                  child: Text("Value",
-                      style: TextStyle(fontWeight: FontWeight.bold))),
+                  child: Text(
+                    "Value",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.right,
+                  )),
             ],
           ),
         ),
@@ -143,11 +152,21 @@ class _FlPieChartState extends State<FlPieChart> {
                   ),
                   Expanded(
                     flex: 3,
-                    child: Text(formattedPercent),
+                    child: Text(
+                      formattedPercent,
+                      textAlign: TextAlign.right,
+                    ),
                   ),
                   Expanded(
                     flex: 3,
-                    child: Text(formattedValue),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        formattedValue,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -128,7 +128,9 @@ class _DashboardPageState extends State<DashboardPage> {
         return {
           "title": (item.description.isNotEmpty) ? item.description : item.code,
           "percentValue": Decimal.tryParse(item.percentage) ?? Decimal.zero,
-          "formattedValue": FormatUtils.formatMoneySuffix(ConvertService.safeDouble(item.value))
+          "formattedValue": FormatUtils.formatMoneySuffix(
+              ConvertService.safeDouble(item.value),
+              showDecimal: true)
         };
       }).toList();
     } catch (e) {
