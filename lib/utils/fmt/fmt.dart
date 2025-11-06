@@ -115,14 +115,17 @@ class FormatUtils {
     return '${value.substring(0, 30)} ...';
   }
 
-  static String formatMoneySuffix(num value) {
+  static String formatMoneySuffix(num value, {bool showDecimal = false}) {
     final isNegative = value < 0;
     final absValue = value.abs().toDouble();
 
     String suffix = '';
     double displayValue = absValue;
 
-    if (absValue >= 1_000_000_000) {
+    if (absValue >= 1_000_000_000_000) {
+      displayValue = absValue / 1_000_000_000_000;
+      suffix = 'T';
+    } else if (absValue >= 1_000_000_000) {
       displayValue = absValue / 1_000_000_000;
       suffix = 'B';
     } else if (absValue >= 1_000_000) {
@@ -133,8 +136,19 @@ class FormatUtils {
       suffix = 'K';
     }
 
-    return '${isNegative ? '-' : ''}\$${displayValue.floor()}$suffix';
+    String formattedValue;
+
+    if (showDecimal) {
+      formattedValue = displayValue.toStringAsFixed(2);
+      formattedValue =
+          formattedValue.replaceAll(RegExp(r'([.]*0+)(?!.*\d)'), '');
+    } else {
+      formattedValue = displayValue.toStringAsFixed(0);
+    }
+
+    return '${isNegative ? '-' : ''}\$$formattedValue$suffix';
   }
+
 
   static String formatMonthAbbreviation(int month) {
     const months = [
