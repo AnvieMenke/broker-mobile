@@ -89,6 +89,7 @@ class Activity extends $pb.GeneratedMessage {
     $core.String? contraSubAccountNo,
     $core.int? reportActivityId,
     $core.String? currency,
+    $core.bool? isSolicited,
   }) {
     final result = create();
     if (correspondent != null) result.correspondent = correspondent;
@@ -158,6 +159,7 @@ class Activity extends $pb.GeneratedMessage {
     if (contraSubAccountNo != null) result.contraSubAccountNo = contraSubAccountNo;
     if (reportActivityId != null) result.reportActivityId = reportActivityId;
     if (currency != null) result.currency = currency;
+    if (isSolicited != null) result.isSolicited = isSolicited;
     return result;
   }
 
@@ -234,6 +236,7 @@ class Activity extends $pb.GeneratedMessage {
     ..aOS(69, _omitFieldNames ? '' : 'contraSubAccountNo')
     ..a<$core.int>(70, _omitFieldNames ? '' : 'reportActivityId', $pb.PbFieldType.OU3)
     ..aOS(71, _omitFieldNames ? '' : 'currency')
+    ..aOB(72, _omitFieldNames ? '' : 'isSolicited')
     ..hasRequiredFields = false
   ;
 
@@ -867,6 +870,15 @@ class Activity extends $pb.GeneratedMessage {
   $core.bool hasCurrency() => $_has(66);
   @$pb.TagNumber(71)
   void clearCurrency() => $_clearField(71);
+
+  @$pb.TagNumber(72)
+  $core.bool get isSolicited => $_getBF(67);
+  @$pb.TagNumber(72)
+  set isSolicited($core.bool value) => $_setBool(67, value);
+  @$pb.TagNumber(72)
+  $core.bool hasIsSolicited() => $_has(67);
+  @$pb.TagNumber(72)
+  void clearIsSolicited() => $_clearField(72);
 }
 
 class ActivityReportDetails extends $pb.GeneratedMessage {

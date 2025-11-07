@@ -117,14 +117,16 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                                 fit: BoxFit.scaleDown,
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  "${ConvertService.safeDouble(acct.plValue) > 0 ? '+' : ''}${FormatUtils.formatCurrency(acct.plValue)} (${FormatUtils.formatPercentage(acct.plPercent)})",
+                                  "${ConvertService.safeDouble(acct.positionPl) > 0 ? '+' : ''}"
+                                  "${FormatUtils.formatCurrency(acct.positionPl)} "
+                                  "(${FormatUtils.formatPercentage(acct.positionPlPercent)})",
                                   style: TextStyle(
                                     color: ConvertService.safeDouble(
-                                                acct.plValue) >
+                                                acct.positionPl) >
                                             0
                                         ? Colors.greenAccent[400]
                                         : ConvertService.safeDouble(
-                                                    acct.plValue) <
+                                                    acct.positionPl) <
                                                 0
                                             ? Colors.redAccent
                                             : Colors.grey,
@@ -191,6 +193,43 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Position Cost ${FormatUtils.formatCurrency(acct.positionCost)}",
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerRight,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "YTD Profit ${FormatUtils.formatCurrency(acct.ytdPlValue)} "
+                                  "(${FormatUtils.formatPercentage(acct.ytdPlPercent)})",
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

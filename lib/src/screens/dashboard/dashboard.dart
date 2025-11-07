@@ -31,6 +31,9 @@ class _DashboardPageState extends State<DashboardPage> {
   Decimal totalTdEquity = Decimal.zero;
   String plPercentage = "";
   String cashPercentage = "";
+  Decimal totalYtdPl = Decimal.zero;
+  String ytdPlPercentage = "";
+  Decimal totalPositionCost = Decimal.zero;
 
   final Map<String, dynamic> queryData = {"dateType": "Trade and Settle"};
   String? selectedRange;
@@ -81,18 +84,24 @@ class _DashboardPageState extends State<DashboardPage> {
           Decimal.parse(resp.summary.tdLongMarketValue.toString());
       totalSdShortMarketValue =
           Decimal.parse(resp.summary.sdShortMarketValue.toString());
-      totalPlValue = Decimal.parse(resp.summary.plValue.toString());
+      totalPlValue = Decimal.parse(resp.summary.positionPl.toString());
       totalTdEquity = Decimal.parse(resp.summary.tdEquity.toString());
-      plPercentage = resp.summary.plPercent.toString();
+      plPercentage = resp.summary.positionPlPercent.toString();
       cashPercentage = resp.summary.cashPercent.toString();
+      totalYtdPl = Decimal.parse(resp.summary.ytdPlValue.toString());
+      ytdPlPercentage = resp.summary.ytdPlPercent.toString();
+      totalPositionCost = Decimal.parse(resp.summary.positionCost.toString());
     } catch (_) {
       totalBalance = Decimal.zero;
       totalTdLongMarketValue = Decimal.zero;
       totalSdShortMarketValue = Decimal.zero;
+      totalYtdPl = Decimal.zero;
       totalPlValue = Decimal.zero;
       totalTdEquity = Decimal.zero;
       plPercentage = "";
       cashPercentage = "";
+      ytdPlPercentage = "";
+      totalPositionCost = Decimal.zero;
     }
     return resp.balances;
   }
@@ -255,7 +264,44 @@ class _DashboardPageState extends State<DashboardPage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-            )
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Position Cost ${FormatUtils.formatCurrency(totalPositionCost)}",
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "YTD Profit ${FormatUtils.formatCurrency(totalYtdPl)} (${FormatUtils.formatPercentage(ytdPlPercentage)})",
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
