@@ -21,114 +21,76 @@ export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 class Balance extends $pb.GeneratedMessage {
   factory Balance({
+    $core.int? reportBalanceId,
+    $core.String? dateType,
+    $1.Date? date,
     $core.int? accountId,
     $core.String? correspondent,
+    $core.String? branch,
     $core.String? accountNo,
     $core.String? subAccountNo,
     $core.String? accountName,
     $core.String? masterAccountNo,
-    $core.String? broker,
-    $core.String? type,
-    $core.String? dateType,
-    $1.Date? date,
     $core.String? rep,
-    $core.String? branch,
     $core.String? marginType,
     $core.String? accountStatus,
+    $core.String? accountType,
     $core.String? tdCashBalance,
+    $core.String? tdMarketValue,
     $core.String? tdShortMarketValue,
     $core.String? tdLongMarketValue,
     $core.String? tdEquity,
     $core.String? tdAdjustedBalance,
+    $core.String? tdEquityChangeValue,
+    $core.String? tdEquityChangePercent,
     $core.String? sdCashBalance,
+    $core.String? sdMarketValue,
     $core.String? sdShortMarketValue,
     $core.String? sdLongMarketValue,
     $core.String? sdEquity,
     $core.String? sdAdjustedBalance,
-    $core.int? reportBalanceId,
-    $core.String? digitalEnhancedMarketValue,
-    $core.String? sdRegFee,
-    $core.String? sdTafFee,
-    $core.String? sdCommission,
-    $core.String? sdFees,
-    $core.String? sdHaircut,
-    $core.String? sdMoneyMarket,
-    $core.String? participantNo,
-    $core.String? tdMoneyMarket,
-    $core.String? tdDebitBalanceAge,
-    $core.String? sdDebitBalanceAge,
-    $core.String? withdrawableAmt,
-    $core.String? marginReq,
-    $core.String? tradableAmt,
-    $core.String? buyingPower,
-    $core.String? digitalAssetMarketValue,
-    $core.String? equityMarketValue,
-    $core.String? fixedIncomeMarketValue,
-    $core.String? mutualFundMarketValue,
-    $core.String? optionMarketValue,
-    $core.String? accountType,
     $core.String? cashPercent,
-    $core.String? tdEquityChangeValue,
-    $core.String? tdEquityChangePercent,
-    $core.String? plValue,
-    $core.String? plPercent,
-    $core.String? sdMarketValue,
-    $core.String? tdMarketValue,
+    $core.String? positionCost,
+    $core.String? positionPl,
+    $core.String? positionPlPercent,
+    $core.String? ytdPlValue,
+    $core.String? ytdPlPercent,
   }) {
     final result = create();
+    if (reportBalanceId != null) result.reportBalanceId = reportBalanceId;
+    if (dateType != null) result.dateType = dateType;
+    if (date != null) result.date = date;
     if (accountId != null) result.accountId = accountId;
     if (correspondent != null) result.correspondent = correspondent;
+    if (branch != null) result.branch = branch;
     if (accountNo != null) result.accountNo = accountNo;
     if (subAccountNo != null) result.subAccountNo = subAccountNo;
     if (accountName != null) result.accountName = accountName;
     if (masterAccountNo != null) result.masterAccountNo = masterAccountNo;
-    if (broker != null) result.broker = broker;
-    if (type != null) result.type = type;
-    if (dateType != null) result.dateType = dateType;
-    if (date != null) result.date = date;
     if (rep != null) result.rep = rep;
-    if (branch != null) result.branch = branch;
     if (marginType != null) result.marginType = marginType;
     if (accountStatus != null) result.accountStatus = accountStatus;
+    if (accountType != null) result.accountType = accountType;
     if (tdCashBalance != null) result.tdCashBalance = tdCashBalance;
+    if (tdMarketValue != null) result.tdMarketValue = tdMarketValue;
     if (tdShortMarketValue != null) result.tdShortMarketValue = tdShortMarketValue;
     if (tdLongMarketValue != null) result.tdLongMarketValue = tdLongMarketValue;
     if (tdEquity != null) result.tdEquity = tdEquity;
     if (tdAdjustedBalance != null) result.tdAdjustedBalance = tdAdjustedBalance;
+    if (tdEquityChangeValue != null) result.tdEquityChangeValue = tdEquityChangeValue;
+    if (tdEquityChangePercent != null) result.tdEquityChangePercent = tdEquityChangePercent;
     if (sdCashBalance != null) result.sdCashBalance = sdCashBalance;
+    if (sdMarketValue != null) result.sdMarketValue = sdMarketValue;
     if (sdShortMarketValue != null) result.sdShortMarketValue = sdShortMarketValue;
     if (sdLongMarketValue != null) result.sdLongMarketValue = sdLongMarketValue;
     if (sdEquity != null) result.sdEquity = sdEquity;
     if (sdAdjustedBalance != null) result.sdAdjustedBalance = sdAdjustedBalance;
-    if (reportBalanceId != null) result.reportBalanceId = reportBalanceId;
-    if (digitalEnhancedMarketValue != null) result.digitalEnhancedMarketValue = digitalEnhancedMarketValue;
-    if (sdRegFee != null) result.sdRegFee = sdRegFee;
-    if (sdTafFee != null) result.sdTafFee = sdTafFee;
-    if (sdCommission != null) result.sdCommission = sdCommission;
-    if (sdFees != null) result.sdFees = sdFees;
-    if (sdHaircut != null) result.sdHaircut = sdHaircut;
-    if (sdMoneyMarket != null) result.sdMoneyMarket = sdMoneyMarket;
-    if (participantNo != null) result.participantNo = participantNo;
-    if (tdMoneyMarket != null) result.tdMoneyMarket = tdMoneyMarket;
-    if (tdDebitBalanceAge != null) result.tdDebitBalanceAge = tdDebitBalanceAge;
-    if (sdDebitBalanceAge != null) result.sdDebitBalanceAge = sdDebitBalanceAge;
-    if (withdrawableAmt != null) result.withdrawableAmt = withdrawableAmt;
-    if (marginReq != null) result.marginReq = marginReq;
-    if (tradableAmt != null) result.tradableAmt = tradableAmt;
-    if (buyingPower != null) result.buyingPower = buyingPower;
-    if (digitalAssetMarketValue != null) result.digitalAssetMarketValue = digitalAssetMarketValue;
-    if (equityMarketValue != null) result.equityMarketValue = equityMarketValue;
-    if (fixedIncomeMarketValue != null) result.fixedIncomeMarketValue = fixedIncomeMarketValue;
-    if (mutualFundMarketValue != null) result.mutualFundMarketValue = mutualFundMarketValue;
-    if (optionMarketValue != null) result.optionMarketValue = optionMarketValue;
-    if (accountType != null) result.accountType = accountType;
     if (cashPercent != null) result.cashPercent = cashPercent;
-    if (tdEquityChangeValue != null) result.tdEquityChangeValue = tdEquityChangeValue;
-    if (tdEquityChangePercent != null) result.tdEquityChangePercent = tdEquityChangePercent;
-    if (plValue != null) result.plValue = plValue;
-    if (plPercent != null) result.plPercent = plPercent;
-    if (sdMarketValue != null) result.sdMarketValue = sdMarketValue;
-    if (tdMarketValue != null) result.tdMarketValue = tdMarketValue;
+    if (positionCost != null) result.positionCost = positionCost;
+    if (positionPl != null) result.positionPl = positionPl;
+    if (positionPlPercent != null) result.positionPlPercent = positionPlPercent;
+    if (ytdPlValue != null) result.ytdPlValue = ytdPlValue;
+    if (ytdPlPercent != null) result.ytdPlPercent = ytdPlPercent;
     return result;
   }
 
@@ -138,59 +100,40 @@ class Balance extends $pb.GeneratedMessage {
   factory Balance.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Balance', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
-    ..a<$core.int>(1, _omitFieldNames ? '' : 'accountId', $pb.PbFieldType.OU3)
-    ..aOS(2, _omitFieldNames ? '' : 'correspondent')
-    ..aOS(3, _omitFieldNames ? '' : 'accountNo')
-    ..aOS(4, _omitFieldNames ? '' : 'subAccountNo')
-    ..aOS(5, _omitFieldNames ? '' : 'accountName')
-    ..aOS(6, _omitFieldNames ? '' : 'masterAccountNo')
-    ..aOS(7, _omitFieldNames ? '' : 'broker')
-    ..aOS(8, _omitFieldNames ? '' : 'type')
-    ..aOS(9, _omitFieldNames ? '' : 'dateType')
-    ..aOM<$1.Date>(11, _omitFieldNames ? '' : 'date', subBuilder: $1.Date.create)
-    ..aOS(12, _omitFieldNames ? '' : 'rep')
-    ..aOS(13, _omitFieldNames ? '' : 'branch')
-    ..aOS(14, _omitFieldNames ? '' : 'marginType')
-    ..aOS(20, _omitFieldNames ? '' : 'accountStatus')
-    ..aOS(21, _omitFieldNames ? '' : 'tdCashBalance')
-    ..aOS(22, _omitFieldNames ? '' : 'tdShortMarketValue')
-    ..aOS(23, _omitFieldNames ? '' : 'tdLongMarketValue')
-    ..aOS(24, _omitFieldNames ? '' : 'tdEquity')
-    ..aOS(25, _omitFieldNames ? '' : 'tdAdjustedBalance')
-    ..aOS(26, _omitFieldNames ? '' : 'sdCashBalance')
-    ..aOS(27, _omitFieldNames ? '' : 'sdShortMarketValue')
-    ..aOS(28, _omitFieldNames ? '' : 'sdLongMarketValue')
-    ..aOS(29, _omitFieldNames ? '' : 'sdEquity')
-    ..aOS(30, _omitFieldNames ? '' : 'sdAdjustedBalance')
-    ..a<$core.int>(31, _omitFieldNames ? '' : 'reportBalanceId', $pb.PbFieldType.OU3)
-    ..aOS(32, _omitFieldNames ? '' : 'digitalEnhancedMarketValue')
-    ..aOS(33, _omitFieldNames ? '' : 'sdRegFee')
-    ..aOS(34, _omitFieldNames ? '' : 'sdTafFee')
-    ..aOS(35, _omitFieldNames ? '' : 'sdCommission')
-    ..aOS(36, _omitFieldNames ? '' : 'sdFees')
-    ..aOS(37, _omitFieldNames ? '' : 'sdHaircut')
-    ..aOS(38, _omitFieldNames ? '' : 'sdMoneyMarket')
-    ..aOS(39, _omitFieldNames ? '' : 'participantNo')
-    ..aOS(40, _omitFieldNames ? '' : 'tdMoneyMarket')
-    ..aOS(41, _omitFieldNames ? '' : 'tdDebitBalanceAge')
-    ..aOS(42, _omitFieldNames ? '' : 'sdDebitBalanceAge')
-    ..aOS(43, _omitFieldNames ? '' : 'withdrawableAmt')
-    ..aOS(44, _omitFieldNames ? '' : 'marginReq')
-    ..aOS(45, _omitFieldNames ? '' : 'tradableAmt')
-    ..aOS(46, _omitFieldNames ? '' : 'buyingPower')
-    ..aOS(47, _omitFieldNames ? '' : 'digitalAssetMarketValue')
-    ..aOS(48, _omitFieldNames ? '' : 'equityMarketValue')
-    ..aOS(49, _omitFieldNames ? '' : 'fixedIncomeMarketValue')
-    ..aOS(50, _omitFieldNames ? '' : 'mutualFundMarketValue')
-    ..aOS(51, _omitFieldNames ? '' : 'optionMarketValue')
-    ..aOS(52, _omitFieldNames ? '' : 'accountType')
-    ..aOS(53, _omitFieldNames ? '' : 'cashPercent')
-    ..aOS(54, _omitFieldNames ? '' : 'tdEquityChangeValue')
-    ..aOS(55, _omitFieldNames ? '' : 'tdEquityChangePercent')
-    ..aOS(56, _omitFieldNames ? '' : 'plValue')
-    ..aOS(57, _omitFieldNames ? '' : 'plPercent')
-    ..aOS(58, _omitFieldNames ? '' : 'sdMarketValue')
-    ..aOS(59, _omitFieldNames ? '' : 'tdMarketValue')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'reportBalanceId', $pb.PbFieldType.OU3)
+    ..aOS(2, _omitFieldNames ? '' : 'dateType')
+    ..aOM<$1.Date>(3, _omitFieldNames ? '' : 'date', subBuilder: $1.Date.create)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'accountId', $pb.PbFieldType.OU3)
+    ..aOS(5, _omitFieldNames ? '' : 'correspondent')
+    ..aOS(6, _omitFieldNames ? '' : 'branch')
+    ..aOS(7, _omitFieldNames ? '' : 'accountNo')
+    ..aOS(8, _omitFieldNames ? '' : 'subAccountNo')
+    ..aOS(9, _omitFieldNames ? '' : 'accountName')
+    ..aOS(10, _omitFieldNames ? '' : 'masterAccountNo')
+    ..aOS(11, _omitFieldNames ? '' : 'rep')
+    ..aOS(12, _omitFieldNames ? '' : 'marginType')
+    ..aOS(13, _omitFieldNames ? '' : 'accountStatus')
+    ..aOS(14, _omitFieldNames ? '' : 'accountType')
+    ..aOS(15, _omitFieldNames ? '' : 'tdCashBalance')
+    ..aOS(16, _omitFieldNames ? '' : 'tdMarketValue')
+    ..aOS(17, _omitFieldNames ? '' : 'tdShortMarketValue')
+    ..aOS(18, _omitFieldNames ? '' : 'tdLongMarketValue')
+    ..aOS(19, _omitFieldNames ? '' : 'tdEquity')
+    ..aOS(20, _omitFieldNames ? '' : 'tdAdjustedBalance')
+    ..aOS(21, _omitFieldNames ? '' : 'tdEquityChangeValue')
+    ..aOS(22, _omitFieldNames ? '' : 'tdEquityChangePercent')
+    ..aOS(23, _omitFieldNames ? '' : 'sdCashBalance')
+    ..aOS(24, _omitFieldNames ? '' : 'sdMarketValue')
+    ..aOS(25, _omitFieldNames ? '' : 'sdShortMarketValue')
+    ..aOS(26, _omitFieldNames ? '' : 'sdLongMarketValue')
+    ..aOS(27, _omitFieldNames ? '' : 'sdEquity')
+    ..aOS(28, _omitFieldNames ? '' : 'sdAdjustedBalance')
+    ..aOS(29, _omitFieldNames ? '' : 'cashPercent')
+    ..aOS(30, _omitFieldNames ? '' : 'positionCost')
+    ..aOS(31, _omitFieldNames ? '' : 'positionPl')
+    ..aOS(32, _omitFieldNames ? '' : 'positionPlPercent')
+    ..aOS(33, _omitFieldNames ? '' : 'ytdPlValue')
+    ..aOS(34, _omitFieldNames ? '' : 'ytdPlPercent')
     ..hasRequiredFields = false
   ;
 
@@ -212,513 +155,340 @@ class Balance extends $pb.GeneratedMessage {
   static Balance? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.int get accountId => $_getIZ(0);
+  $core.int get reportBalanceId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set accountId($core.int value) => $_setUnsignedInt32(0, value);
+  set reportBalanceId($core.int value) => $_setUnsignedInt32(0, value);
   @$pb.TagNumber(1)
-  $core.bool hasAccountId() => $_has(0);
+  $core.bool hasReportBalanceId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearAccountId() => $_clearField(1);
+  void clearReportBalanceId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get correspondent => $_getSZ(1);
+  $core.String get dateType => $_getSZ(1);
   @$pb.TagNumber(2)
-  set correspondent($core.String value) => $_setString(1, value);
+  set dateType($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
-  $core.bool hasCorrespondent() => $_has(1);
+  $core.bool hasDateType() => $_has(1);
   @$pb.TagNumber(2)
-  void clearCorrespondent() => $_clearField(2);
+  void clearDateType() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get accountNo => $_getSZ(2);
+  $1.Date get date => $_getN(2);
   @$pb.TagNumber(3)
-  set accountNo($core.String value) => $_setString(2, value);
+  set date($1.Date value) => $_setField(3, value);
   @$pb.TagNumber(3)
-  $core.bool hasAccountNo() => $_has(2);
+  $core.bool hasDate() => $_has(2);
   @$pb.TagNumber(3)
-  void clearAccountNo() => $_clearField(3);
+  void clearDate() => $_clearField(3);
+  @$pb.TagNumber(3)
+  $1.Date ensureDate() => $_ensure(2);
 
   @$pb.TagNumber(4)
-  $core.String get subAccountNo => $_getSZ(3);
+  $core.int get accountId => $_getIZ(3);
   @$pb.TagNumber(4)
-  set subAccountNo($core.String value) => $_setString(3, value);
+  set accountId($core.int value) => $_setUnsignedInt32(3, value);
   @$pb.TagNumber(4)
-  $core.bool hasSubAccountNo() => $_has(3);
+  $core.bool hasAccountId() => $_has(3);
   @$pb.TagNumber(4)
-  void clearSubAccountNo() => $_clearField(4);
+  void clearAccountId() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get accountName => $_getSZ(4);
+  $core.String get correspondent => $_getSZ(4);
   @$pb.TagNumber(5)
-  set accountName($core.String value) => $_setString(4, value);
+  set correspondent($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
-  $core.bool hasAccountName() => $_has(4);
+  $core.bool hasCorrespondent() => $_has(4);
   @$pb.TagNumber(5)
-  void clearAccountName() => $_clearField(5);
+  void clearCorrespondent() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get masterAccountNo => $_getSZ(5);
+  $core.String get branch => $_getSZ(5);
   @$pb.TagNumber(6)
-  set masterAccountNo($core.String value) => $_setString(5, value);
+  set branch($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
-  $core.bool hasMasterAccountNo() => $_has(5);
+  $core.bool hasBranch() => $_has(5);
   @$pb.TagNumber(6)
-  void clearMasterAccountNo() => $_clearField(6);
+  void clearBranch() => $_clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get broker => $_getSZ(6);
+  $core.String get accountNo => $_getSZ(6);
   @$pb.TagNumber(7)
-  set broker($core.String value) => $_setString(6, value);
+  set accountNo($core.String value) => $_setString(6, value);
   @$pb.TagNumber(7)
-  $core.bool hasBroker() => $_has(6);
+  $core.bool hasAccountNo() => $_has(6);
   @$pb.TagNumber(7)
-  void clearBroker() => $_clearField(7);
+  void clearAccountNo() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get type => $_getSZ(7);
+  $core.String get subAccountNo => $_getSZ(7);
   @$pb.TagNumber(8)
-  set type($core.String value) => $_setString(7, value);
+  set subAccountNo($core.String value) => $_setString(7, value);
   @$pb.TagNumber(8)
-  $core.bool hasType() => $_has(7);
+  $core.bool hasSubAccountNo() => $_has(7);
   @$pb.TagNumber(8)
-  void clearType() => $_clearField(8);
+  void clearSubAccountNo() => $_clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get dateType => $_getSZ(8);
+  $core.String get accountName => $_getSZ(8);
   @$pb.TagNumber(9)
-  set dateType($core.String value) => $_setString(8, value);
+  set accountName($core.String value) => $_setString(8, value);
   @$pb.TagNumber(9)
-  $core.bool hasDateType() => $_has(8);
+  $core.bool hasAccountName() => $_has(8);
   @$pb.TagNumber(9)
-  void clearDateType() => $_clearField(9);
+  void clearAccountName() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get masterAccountNo => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set masterAccountNo($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasMasterAccountNo() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearMasterAccountNo() => $_clearField(10);
 
   @$pb.TagNumber(11)
-  $1.Date get date => $_getN(9);
-  @$pb.TagNumber(11)
-  set date($1.Date value) => $_setField(11, value);
-  @$pb.TagNumber(11)
-  $core.bool hasDate() => $_has(9);
-  @$pb.TagNumber(11)
-  void clearDate() => $_clearField(11);
-  @$pb.TagNumber(11)
-  $1.Date ensureDate() => $_ensure(9);
-
-  @$pb.TagNumber(12)
   $core.String get rep => $_getSZ(10);
-  @$pb.TagNumber(12)
+  @$pb.TagNumber(11)
   set rep($core.String value) => $_setString(10, value);
-  @$pb.TagNumber(12)
+  @$pb.TagNumber(11)
   $core.bool hasRep() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearRep() => $_clearField(11);
+
   @$pb.TagNumber(12)
-  void clearRep() => $_clearField(12);
+  $core.String get marginType => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set marginType($core.String value) => $_setString(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasMarginType() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearMarginType() => $_clearField(12);
 
   @$pb.TagNumber(13)
-  $core.String get branch => $_getSZ(11);
+  $core.String get accountStatus => $_getSZ(12);
   @$pb.TagNumber(13)
-  set branch($core.String value) => $_setString(11, value);
+  set accountStatus($core.String value) => $_setString(12, value);
   @$pb.TagNumber(13)
-  $core.bool hasBranch() => $_has(11);
+  $core.bool hasAccountStatus() => $_has(12);
   @$pb.TagNumber(13)
-  void clearBranch() => $_clearField(13);
+  void clearAccountStatus() => $_clearField(13);
 
   @$pb.TagNumber(14)
-  $core.String get marginType => $_getSZ(12);
+  $core.String get accountType => $_getSZ(13);
   @$pb.TagNumber(14)
-  set marginType($core.String value) => $_setString(12, value);
+  set accountType($core.String value) => $_setString(13, value);
   @$pb.TagNumber(14)
-  $core.bool hasMarginType() => $_has(12);
+  $core.bool hasAccountType() => $_has(13);
   @$pb.TagNumber(14)
-  void clearMarginType() => $_clearField(14);
+  void clearAccountType() => $_clearField(14);
 
-  @$pb.TagNumber(20)
-  $core.String get accountStatus => $_getSZ(13);
-  @$pb.TagNumber(20)
-  set accountStatus($core.String value) => $_setString(13, value);
-  @$pb.TagNumber(20)
-  $core.bool hasAccountStatus() => $_has(13);
-  @$pb.TagNumber(20)
-  void clearAccountStatus() => $_clearField(20);
-
-  @$pb.TagNumber(21)
+  @$pb.TagNumber(15)
   $core.String get tdCashBalance => $_getSZ(14);
-  @$pb.TagNumber(21)
+  @$pb.TagNumber(15)
   set tdCashBalance($core.String value) => $_setString(14, value);
-  @$pb.TagNumber(21)
+  @$pb.TagNumber(15)
   $core.bool hasTdCashBalance() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearTdCashBalance() => $_clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.String get tdMarketValue => $_getSZ(15);
+  @$pb.TagNumber(16)
+  set tdMarketValue($core.String value) => $_setString(15, value);
+  @$pb.TagNumber(16)
+  $core.bool hasTdMarketValue() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearTdMarketValue() => $_clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.String get tdShortMarketValue => $_getSZ(16);
+  @$pb.TagNumber(17)
+  set tdShortMarketValue($core.String value) => $_setString(16, value);
+  @$pb.TagNumber(17)
+  $core.bool hasTdShortMarketValue() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearTdShortMarketValue() => $_clearField(17);
+
+  @$pb.TagNumber(18)
+  $core.String get tdLongMarketValue => $_getSZ(17);
+  @$pb.TagNumber(18)
+  set tdLongMarketValue($core.String value) => $_setString(17, value);
+  @$pb.TagNumber(18)
+  $core.bool hasTdLongMarketValue() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearTdLongMarketValue() => $_clearField(18);
+
+  @$pb.TagNumber(19)
+  $core.String get tdEquity => $_getSZ(18);
+  @$pb.TagNumber(19)
+  set tdEquity($core.String value) => $_setString(18, value);
+  @$pb.TagNumber(19)
+  $core.bool hasTdEquity() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearTdEquity() => $_clearField(19);
+
+  @$pb.TagNumber(20)
+  $core.String get tdAdjustedBalance => $_getSZ(19);
+  @$pb.TagNumber(20)
+  set tdAdjustedBalance($core.String value) => $_setString(19, value);
+  @$pb.TagNumber(20)
+  $core.bool hasTdAdjustedBalance() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearTdAdjustedBalance() => $_clearField(20);
+
   @$pb.TagNumber(21)
-  void clearTdCashBalance() => $_clearField(21);
+  $core.String get tdEquityChangeValue => $_getSZ(20);
+  @$pb.TagNumber(21)
+  set tdEquityChangeValue($core.String value) => $_setString(20, value);
+  @$pb.TagNumber(21)
+  $core.bool hasTdEquityChangeValue() => $_has(20);
+  @$pb.TagNumber(21)
+  void clearTdEquityChangeValue() => $_clearField(21);
 
   @$pb.TagNumber(22)
-  $core.String get tdShortMarketValue => $_getSZ(15);
+  $core.String get tdEquityChangePercent => $_getSZ(21);
   @$pb.TagNumber(22)
-  set tdShortMarketValue($core.String value) => $_setString(15, value);
+  set tdEquityChangePercent($core.String value) => $_setString(21, value);
   @$pb.TagNumber(22)
-  $core.bool hasTdShortMarketValue() => $_has(15);
+  $core.bool hasTdEquityChangePercent() => $_has(21);
   @$pb.TagNumber(22)
-  void clearTdShortMarketValue() => $_clearField(22);
+  void clearTdEquityChangePercent() => $_clearField(22);
 
   @$pb.TagNumber(23)
-  $core.String get tdLongMarketValue => $_getSZ(16);
+  $core.String get sdCashBalance => $_getSZ(22);
   @$pb.TagNumber(23)
-  set tdLongMarketValue($core.String value) => $_setString(16, value);
+  set sdCashBalance($core.String value) => $_setString(22, value);
   @$pb.TagNumber(23)
-  $core.bool hasTdLongMarketValue() => $_has(16);
+  $core.bool hasSdCashBalance() => $_has(22);
   @$pb.TagNumber(23)
-  void clearTdLongMarketValue() => $_clearField(23);
+  void clearSdCashBalance() => $_clearField(23);
 
   @$pb.TagNumber(24)
-  $core.String get tdEquity => $_getSZ(17);
+  $core.String get sdMarketValue => $_getSZ(23);
   @$pb.TagNumber(24)
-  set tdEquity($core.String value) => $_setString(17, value);
+  set sdMarketValue($core.String value) => $_setString(23, value);
   @$pb.TagNumber(24)
-  $core.bool hasTdEquity() => $_has(17);
+  $core.bool hasSdMarketValue() => $_has(23);
   @$pb.TagNumber(24)
-  void clearTdEquity() => $_clearField(24);
+  void clearSdMarketValue() => $_clearField(24);
 
   @$pb.TagNumber(25)
-  $core.String get tdAdjustedBalance => $_getSZ(18);
+  $core.String get sdShortMarketValue => $_getSZ(24);
   @$pb.TagNumber(25)
-  set tdAdjustedBalance($core.String value) => $_setString(18, value);
+  set sdShortMarketValue($core.String value) => $_setString(24, value);
   @$pb.TagNumber(25)
-  $core.bool hasTdAdjustedBalance() => $_has(18);
+  $core.bool hasSdShortMarketValue() => $_has(24);
   @$pb.TagNumber(25)
-  void clearTdAdjustedBalance() => $_clearField(25);
+  void clearSdShortMarketValue() => $_clearField(25);
 
   @$pb.TagNumber(26)
-  $core.String get sdCashBalance => $_getSZ(19);
+  $core.String get sdLongMarketValue => $_getSZ(25);
   @$pb.TagNumber(26)
-  set sdCashBalance($core.String value) => $_setString(19, value);
+  set sdLongMarketValue($core.String value) => $_setString(25, value);
   @$pb.TagNumber(26)
-  $core.bool hasSdCashBalance() => $_has(19);
+  $core.bool hasSdLongMarketValue() => $_has(25);
   @$pb.TagNumber(26)
-  void clearSdCashBalance() => $_clearField(26);
+  void clearSdLongMarketValue() => $_clearField(26);
 
   @$pb.TagNumber(27)
-  $core.String get sdShortMarketValue => $_getSZ(20);
+  $core.String get sdEquity => $_getSZ(26);
   @$pb.TagNumber(27)
-  set sdShortMarketValue($core.String value) => $_setString(20, value);
+  set sdEquity($core.String value) => $_setString(26, value);
   @$pb.TagNumber(27)
-  $core.bool hasSdShortMarketValue() => $_has(20);
+  $core.bool hasSdEquity() => $_has(26);
   @$pb.TagNumber(27)
-  void clearSdShortMarketValue() => $_clearField(27);
+  void clearSdEquity() => $_clearField(27);
 
   @$pb.TagNumber(28)
-  $core.String get sdLongMarketValue => $_getSZ(21);
+  $core.String get sdAdjustedBalance => $_getSZ(27);
   @$pb.TagNumber(28)
-  set sdLongMarketValue($core.String value) => $_setString(21, value);
+  set sdAdjustedBalance($core.String value) => $_setString(27, value);
   @$pb.TagNumber(28)
-  $core.bool hasSdLongMarketValue() => $_has(21);
+  $core.bool hasSdAdjustedBalance() => $_has(27);
   @$pb.TagNumber(28)
-  void clearSdLongMarketValue() => $_clearField(28);
+  void clearSdAdjustedBalance() => $_clearField(28);
 
   @$pb.TagNumber(29)
-  $core.String get sdEquity => $_getSZ(22);
+  $core.String get cashPercent => $_getSZ(28);
   @$pb.TagNumber(29)
-  set sdEquity($core.String value) => $_setString(22, value);
+  set cashPercent($core.String value) => $_setString(28, value);
   @$pb.TagNumber(29)
-  $core.bool hasSdEquity() => $_has(22);
+  $core.bool hasCashPercent() => $_has(28);
   @$pb.TagNumber(29)
-  void clearSdEquity() => $_clearField(29);
+  void clearCashPercent() => $_clearField(29);
 
   @$pb.TagNumber(30)
-  $core.String get sdAdjustedBalance => $_getSZ(23);
+  $core.String get positionCost => $_getSZ(29);
   @$pb.TagNumber(30)
-  set sdAdjustedBalance($core.String value) => $_setString(23, value);
+  set positionCost($core.String value) => $_setString(29, value);
   @$pb.TagNumber(30)
-  $core.bool hasSdAdjustedBalance() => $_has(23);
+  $core.bool hasPositionCost() => $_has(29);
   @$pb.TagNumber(30)
-  void clearSdAdjustedBalance() => $_clearField(30);
+  void clearPositionCost() => $_clearField(30);
 
   @$pb.TagNumber(31)
-  $core.int get reportBalanceId => $_getIZ(24);
+  $core.String get positionPl => $_getSZ(30);
   @$pb.TagNumber(31)
-  set reportBalanceId($core.int value) => $_setUnsignedInt32(24, value);
+  set positionPl($core.String value) => $_setString(30, value);
   @$pb.TagNumber(31)
-  $core.bool hasReportBalanceId() => $_has(24);
+  $core.bool hasPositionPl() => $_has(30);
   @$pb.TagNumber(31)
-  void clearReportBalanceId() => $_clearField(31);
+  void clearPositionPl() => $_clearField(31);
 
   @$pb.TagNumber(32)
-  $core.String get digitalEnhancedMarketValue => $_getSZ(25);
+  $core.String get positionPlPercent => $_getSZ(31);
   @$pb.TagNumber(32)
-  set digitalEnhancedMarketValue($core.String value) => $_setString(25, value);
+  set positionPlPercent($core.String value) => $_setString(31, value);
   @$pb.TagNumber(32)
-  $core.bool hasDigitalEnhancedMarketValue() => $_has(25);
+  $core.bool hasPositionPlPercent() => $_has(31);
   @$pb.TagNumber(32)
-  void clearDigitalEnhancedMarketValue() => $_clearField(32);
+  void clearPositionPlPercent() => $_clearField(32);
 
   @$pb.TagNumber(33)
-  $core.String get sdRegFee => $_getSZ(26);
+  $core.String get ytdPlValue => $_getSZ(32);
   @$pb.TagNumber(33)
-  set sdRegFee($core.String value) => $_setString(26, value);
+  set ytdPlValue($core.String value) => $_setString(32, value);
   @$pb.TagNumber(33)
-  $core.bool hasSdRegFee() => $_has(26);
+  $core.bool hasYtdPlValue() => $_has(32);
   @$pb.TagNumber(33)
-  void clearSdRegFee() => $_clearField(33);
+  void clearYtdPlValue() => $_clearField(33);
 
   @$pb.TagNumber(34)
-  $core.String get sdTafFee => $_getSZ(27);
+  $core.String get ytdPlPercent => $_getSZ(33);
   @$pb.TagNumber(34)
-  set sdTafFee($core.String value) => $_setString(27, value);
+  set ytdPlPercent($core.String value) => $_setString(33, value);
   @$pb.TagNumber(34)
-  $core.bool hasSdTafFee() => $_has(27);
+  $core.bool hasYtdPlPercent() => $_has(33);
   @$pb.TagNumber(34)
-  void clearSdTafFee() => $_clearField(34);
-
-  @$pb.TagNumber(35)
-  $core.String get sdCommission => $_getSZ(28);
-  @$pb.TagNumber(35)
-  set sdCommission($core.String value) => $_setString(28, value);
-  @$pb.TagNumber(35)
-  $core.bool hasSdCommission() => $_has(28);
-  @$pb.TagNumber(35)
-  void clearSdCommission() => $_clearField(35);
-
-  @$pb.TagNumber(36)
-  $core.String get sdFees => $_getSZ(29);
-  @$pb.TagNumber(36)
-  set sdFees($core.String value) => $_setString(29, value);
-  @$pb.TagNumber(36)
-  $core.bool hasSdFees() => $_has(29);
-  @$pb.TagNumber(36)
-  void clearSdFees() => $_clearField(36);
-
-  @$pb.TagNumber(37)
-  $core.String get sdHaircut => $_getSZ(30);
-  @$pb.TagNumber(37)
-  set sdHaircut($core.String value) => $_setString(30, value);
-  @$pb.TagNumber(37)
-  $core.bool hasSdHaircut() => $_has(30);
-  @$pb.TagNumber(37)
-  void clearSdHaircut() => $_clearField(37);
-
-  @$pb.TagNumber(38)
-  $core.String get sdMoneyMarket => $_getSZ(31);
-  @$pb.TagNumber(38)
-  set sdMoneyMarket($core.String value) => $_setString(31, value);
-  @$pb.TagNumber(38)
-  $core.bool hasSdMoneyMarket() => $_has(31);
-  @$pb.TagNumber(38)
-  void clearSdMoneyMarket() => $_clearField(38);
-
-  @$pb.TagNumber(39)
-  $core.String get participantNo => $_getSZ(32);
-  @$pb.TagNumber(39)
-  set participantNo($core.String value) => $_setString(32, value);
-  @$pb.TagNumber(39)
-  $core.bool hasParticipantNo() => $_has(32);
-  @$pb.TagNumber(39)
-  void clearParticipantNo() => $_clearField(39);
-
-  @$pb.TagNumber(40)
-  $core.String get tdMoneyMarket => $_getSZ(33);
-  @$pb.TagNumber(40)
-  set tdMoneyMarket($core.String value) => $_setString(33, value);
-  @$pb.TagNumber(40)
-  $core.bool hasTdMoneyMarket() => $_has(33);
-  @$pb.TagNumber(40)
-  void clearTdMoneyMarket() => $_clearField(40);
-
-  @$pb.TagNumber(41)
-  $core.String get tdDebitBalanceAge => $_getSZ(34);
-  @$pb.TagNumber(41)
-  set tdDebitBalanceAge($core.String value) => $_setString(34, value);
-  @$pb.TagNumber(41)
-  $core.bool hasTdDebitBalanceAge() => $_has(34);
-  @$pb.TagNumber(41)
-  void clearTdDebitBalanceAge() => $_clearField(41);
-
-  @$pb.TagNumber(42)
-  $core.String get sdDebitBalanceAge => $_getSZ(35);
-  @$pb.TagNumber(42)
-  set sdDebitBalanceAge($core.String value) => $_setString(35, value);
-  @$pb.TagNumber(42)
-  $core.bool hasSdDebitBalanceAge() => $_has(35);
-  @$pb.TagNumber(42)
-  void clearSdDebitBalanceAge() => $_clearField(42);
-
-  @$pb.TagNumber(43)
-  $core.String get withdrawableAmt => $_getSZ(36);
-  @$pb.TagNumber(43)
-  set withdrawableAmt($core.String value) => $_setString(36, value);
-  @$pb.TagNumber(43)
-  $core.bool hasWithdrawableAmt() => $_has(36);
-  @$pb.TagNumber(43)
-  void clearWithdrawableAmt() => $_clearField(43);
-
-  @$pb.TagNumber(44)
-  $core.String get marginReq => $_getSZ(37);
-  @$pb.TagNumber(44)
-  set marginReq($core.String value) => $_setString(37, value);
-  @$pb.TagNumber(44)
-  $core.bool hasMarginReq() => $_has(37);
-  @$pb.TagNumber(44)
-  void clearMarginReq() => $_clearField(44);
-
-  @$pb.TagNumber(45)
-  $core.String get tradableAmt => $_getSZ(38);
-  @$pb.TagNumber(45)
-  set tradableAmt($core.String value) => $_setString(38, value);
-  @$pb.TagNumber(45)
-  $core.bool hasTradableAmt() => $_has(38);
-  @$pb.TagNumber(45)
-  void clearTradableAmt() => $_clearField(45);
-
-  @$pb.TagNumber(46)
-  $core.String get buyingPower => $_getSZ(39);
-  @$pb.TagNumber(46)
-  set buyingPower($core.String value) => $_setString(39, value);
-  @$pb.TagNumber(46)
-  $core.bool hasBuyingPower() => $_has(39);
-  @$pb.TagNumber(46)
-  void clearBuyingPower() => $_clearField(46);
-
-  @$pb.TagNumber(47)
-  $core.String get digitalAssetMarketValue => $_getSZ(40);
-  @$pb.TagNumber(47)
-  set digitalAssetMarketValue($core.String value) => $_setString(40, value);
-  @$pb.TagNumber(47)
-  $core.bool hasDigitalAssetMarketValue() => $_has(40);
-  @$pb.TagNumber(47)
-  void clearDigitalAssetMarketValue() => $_clearField(47);
-
-  @$pb.TagNumber(48)
-  $core.String get equityMarketValue => $_getSZ(41);
-  @$pb.TagNumber(48)
-  set equityMarketValue($core.String value) => $_setString(41, value);
-  @$pb.TagNumber(48)
-  $core.bool hasEquityMarketValue() => $_has(41);
-  @$pb.TagNumber(48)
-  void clearEquityMarketValue() => $_clearField(48);
-
-  @$pb.TagNumber(49)
-  $core.String get fixedIncomeMarketValue => $_getSZ(42);
-  @$pb.TagNumber(49)
-  set fixedIncomeMarketValue($core.String value) => $_setString(42, value);
-  @$pb.TagNumber(49)
-  $core.bool hasFixedIncomeMarketValue() => $_has(42);
-  @$pb.TagNumber(49)
-  void clearFixedIncomeMarketValue() => $_clearField(49);
-
-  @$pb.TagNumber(50)
-  $core.String get mutualFundMarketValue => $_getSZ(43);
-  @$pb.TagNumber(50)
-  set mutualFundMarketValue($core.String value) => $_setString(43, value);
-  @$pb.TagNumber(50)
-  $core.bool hasMutualFundMarketValue() => $_has(43);
-  @$pb.TagNumber(50)
-  void clearMutualFundMarketValue() => $_clearField(50);
-
-  @$pb.TagNumber(51)
-  $core.String get optionMarketValue => $_getSZ(44);
-  @$pb.TagNumber(51)
-  set optionMarketValue($core.String value) => $_setString(44, value);
-  @$pb.TagNumber(51)
-  $core.bool hasOptionMarketValue() => $_has(44);
-  @$pb.TagNumber(51)
-  void clearOptionMarketValue() => $_clearField(51);
-
-  @$pb.TagNumber(52)
-  $core.String get accountType => $_getSZ(45);
-  @$pb.TagNumber(52)
-  set accountType($core.String value) => $_setString(45, value);
-  @$pb.TagNumber(52)
-  $core.bool hasAccountType() => $_has(45);
-  @$pb.TagNumber(52)
-  void clearAccountType() => $_clearField(52);
-
-  @$pb.TagNumber(53)
-  $core.String get cashPercent => $_getSZ(46);
-  @$pb.TagNumber(53)
-  set cashPercent($core.String value) => $_setString(46, value);
-  @$pb.TagNumber(53)
-  $core.bool hasCashPercent() => $_has(46);
-  @$pb.TagNumber(53)
-  void clearCashPercent() => $_clearField(53);
-
-  @$pb.TagNumber(54)
-  $core.String get tdEquityChangeValue => $_getSZ(47);
-  @$pb.TagNumber(54)
-  set tdEquityChangeValue($core.String value) => $_setString(47, value);
-  @$pb.TagNumber(54)
-  $core.bool hasTdEquityChangeValue() => $_has(47);
-  @$pb.TagNumber(54)
-  void clearTdEquityChangeValue() => $_clearField(54);
-
-  @$pb.TagNumber(55)
-  $core.String get tdEquityChangePercent => $_getSZ(48);
-  @$pb.TagNumber(55)
-  set tdEquityChangePercent($core.String value) => $_setString(48, value);
-  @$pb.TagNumber(55)
-  $core.bool hasTdEquityChangePercent() => $_has(48);
-  @$pb.TagNumber(55)
-  void clearTdEquityChangePercent() => $_clearField(55);
-
-  @$pb.TagNumber(56)
-  $core.String get plValue => $_getSZ(49);
-  @$pb.TagNumber(56)
-  set plValue($core.String value) => $_setString(49, value);
-  @$pb.TagNumber(56)
-  $core.bool hasPlValue() => $_has(49);
-  @$pb.TagNumber(56)
-  void clearPlValue() => $_clearField(56);
-
-  @$pb.TagNumber(57)
-  $core.String get plPercent => $_getSZ(50);
-  @$pb.TagNumber(57)
-  set plPercent($core.String value) => $_setString(50, value);
-  @$pb.TagNumber(57)
-  $core.bool hasPlPercent() => $_has(50);
-  @$pb.TagNumber(57)
-  void clearPlPercent() => $_clearField(57);
-
-  @$pb.TagNumber(58)
-  $core.String get sdMarketValue => $_getSZ(51);
-  @$pb.TagNumber(58)
-  set sdMarketValue($core.String value) => $_setString(51, value);
-  @$pb.TagNumber(58)
-  $core.bool hasSdMarketValue() => $_has(51);
-  @$pb.TagNumber(58)
-  void clearSdMarketValue() => $_clearField(58);
-
-  @$pb.TagNumber(59)
-  $core.String get tdMarketValue => $_getSZ(52);
-  @$pb.TagNumber(59)
-  set tdMarketValue($core.String value) => $_setString(52, value);
-  @$pb.TagNumber(59)
-  $core.bool hasTdMarketValue() => $_has(52);
-  @$pb.TagNumber(59)
-  void clearTdMarketValue() => $_clearField(59);
+  void clearYtdPlPercent() => $_clearField(34);
 }
 
 class ListBalanceRequest extends $pb.GeneratedMessage {
   factory ListBalanceRequest({
+    $2.Pagination? pagination,
+    $core.String? dateType,
+    $1.Date? fromDate,
+    $1.Date? toDate,
     $core.String? correspondent,
     $core.String? accountNo,
     $core.String? accountName,
     $core.String? masterAccountNo,
     $core.String? branch,
     $core.String? rep,
-    $1.Date? fromDate,
-    $1.Date? toDate,
-    $core.int? usrId,
-    $2.Pagination? pagination,
-    $core.String? dateType,
     $core.String? rollUp,
     $core.bool? hideZero,
   }) {
     final result = create();
+    if (pagination != null) result.pagination = pagination;
+    if (dateType != null) result.dateType = dateType;
+    if (fromDate != null) result.fromDate = fromDate;
+    if (toDate != null) result.toDate = toDate;
     if (correspondent != null) result.correspondent = correspondent;
     if (accountNo != null) result.accountNo = accountNo;
     if (accountName != null) result.accountName = accountName;
     if (masterAccountNo != null) result.masterAccountNo = masterAccountNo;
     if (branch != null) result.branch = branch;
     if (rep != null) result.rep = rep;
-    if (fromDate != null) result.fromDate = fromDate;
-    if (toDate != null) result.toDate = toDate;
-    if (usrId != null) result.usrId = usrId;
-    if (pagination != null) result.pagination = pagination;
-    if (dateType != null) result.dateType = dateType;
     if (rollUp != null) result.rollUp = rollUp;
     if (hideZero != null) result.hideZero = hideZero;
     return result;
@@ -730,19 +500,18 @@ class ListBalanceRequest extends $pb.GeneratedMessage {
   factory ListBalanceRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListBalanceRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'correspondent')
-    ..aOS(2, _omitFieldNames ? '' : 'accountNo')
-    ..aOS(3, _omitFieldNames ? '' : 'accountName')
-    ..aOS(4, _omitFieldNames ? '' : 'masterAccountNo')
-    ..aOS(5, _omitFieldNames ? '' : 'branch')
-    ..aOS(6, _omitFieldNames ? '' : 'rep')
-    ..aOM<$1.Date>(7, _omitFieldNames ? '' : 'fromDate', subBuilder: $1.Date.create)
-    ..aOM<$1.Date>(8, _omitFieldNames ? '' : 'toDate', subBuilder: $1.Date.create)
-    ..a<$core.int>(9, _omitFieldNames ? '' : 'usrId', $pb.PbFieldType.OU3)
-    ..aOM<$2.Pagination>(10, _omitFieldNames ? '' : 'pagination', subBuilder: $2.Pagination.create)
-    ..aOS(11, _omitFieldNames ? '' : 'dateType')
-    ..aOS(12, _omitFieldNames ? '' : 'rollUp')
-    ..aOB(13, _omitFieldNames ? '' : 'hideZero')
+    ..aOM<$2.Pagination>(1, _omitFieldNames ? '' : 'pagination', subBuilder: $2.Pagination.create)
+    ..aOS(2, _omitFieldNames ? '' : 'dateType')
+    ..aOM<$1.Date>(3, _omitFieldNames ? '' : 'fromDate', subBuilder: $1.Date.create)
+    ..aOM<$1.Date>(4, _omitFieldNames ? '' : 'toDate', subBuilder: $1.Date.create)
+    ..aOS(5, _omitFieldNames ? '' : 'correspondent')
+    ..aOS(6, _omitFieldNames ? '' : 'accountNo')
+    ..aOS(7, _omitFieldNames ? '' : 'accountName')
+    ..aOS(8, _omitFieldNames ? '' : 'masterAccountNo')
+    ..aOS(9, _omitFieldNames ? '' : 'branch')
+    ..aOS(10, _omitFieldNames ? '' : 'rep')
+    ..aOS(11, _omitFieldNames ? '' : 'rollUp')
+    ..aOB(12, _omitFieldNames ? '' : 'hideZero')
     ..hasRequiredFields = false
   ;
 
@@ -764,127 +533,118 @@ class ListBalanceRequest extends $pb.GeneratedMessage {
   static ListBalanceRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get correspondent => $_getSZ(0);
+  $2.Pagination get pagination => $_getN(0);
   @$pb.TagNumber(1)
-  set correspondent($core.String value) => $_setString(0, value);
+  set pagination($2.Pagination value) => $_setField(1, value);
   @$pb.TagNumber(1)
-  $core.bool hasCorrespondent() => $_has(0);
+  $core.bool hasPagination() => $_has(0);
   @$pb.TagNumber(1)
-  void clearCorrespondent() => $_clearField(1);
+  void clearPagination() => $_clearField(1);
+  @$pb.TagNumber(1)
+  $2.Pagination ensurePagination() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $core.String get accountNo => $_getSZ(1);
+  $core.String get dateType => $_getSZ(1);
   @$pb.TagNumber(2)
-  set accountNo($core.String value) => $_setString(1, value);
+  set dateType($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
-  $core.bool hasAccountNo() => $_has(1);
+  $core.bool hasDateType() => $_has(1);
   @$pb.TagNumber(2)
-  void clearAccountNo() => $_clearField(2);
+  void clearDateType() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get accountName => $_getSZ(2);
+  $1.Date get fromDate => $_getN(2);
   @$pb.TagNumber(3)
-  set accountName($core.String value) => $_setString(2, value);
+  set fromDate($1.Date value) => $_setField(3, value);
   @$pb.TagNumber(3)
-  $core.bool hasAccountName() => $_has(2);
+  $core.bool hasFromDate() => $_has(2);
   @$pb.TagNumber(3)
-  void clearAccountName() => $_clearField(3);
+  void clearFromDate() => $_clearField(3);
+  @$pb.TagNumber(3)
+  $1.Date ensureFromDate() => $_ensure(2);
 
   @$pb.TagNumber(4)
-  $core.String get masterAccountNo => $_getSZ(3);
+  $1.Date get toDate => $_getN(3);
   @$pb.TagNumber(4)
-  set masterAccountNo($core.String value) => $_setString(3, value);
+  set toDate($1.Date value) => $_setField(4, value);
   @$pb.TagNumber(4)
-  $core.bool hasMasterAccountNo() => $_has(3);
+  $core.bool hasToDate() => $_has(3);
   @$pb.TagNumber(4)
-  void clearMasterAccountNo() => $_clearField(4);
+  void clearToDate() => $_clearField(4);
+  @$pb.TagNumber(4)
+  $1.Date ensureToDate() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $core.String get branch => $_getSZ(4);
+  $core.String get correspondent => $_getSZ(4);
   @$pb.TagNumber(5)
-  set branch($core.String value) => $_setString(4, value);
+  set correspondent($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
-  $core.bool hasBranch() => $_has(4);
+  $core.bool hasCorrespondent() => $_has(4);
   @$pb.TagNumber(5)
-  void clearBranch() => $_clearField(5);
+  void clearCorrespondent() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get rep => $_getSZ(5);
+  $core.String get accountNo => $_getSZ(5);
   @$pb.TagNumber(6)
-  set rep($core.String value) => $_setString(5, value);
+  set accountNo($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
-  $core.bool hasRep() => $_has(5);
+  $core.bool hasAccountNo() => $_has(5);
   @$pb.TagNumber(6)
-  void clearRep() => $_clearField(6);
+  void clearAccountNo() => $_clearField(6);
 
   @$pb.TagNumber(7)
-  $1.Date get fromDate => $_getN(6);
+  $core.String get accountName => $_getSZ(6);
   @$pb.TagNumber(7)
-  set fromDate($1.Date value) => $_setField(7, value);
+  set accountName($core.String value) => $_setString(6, value);
   @$pb.TagNumber(7)
-  $core.bool hasFromDate() => $_has(6);
+  $core.bool hasAccountName() => $_has(6);
   @$pb.TagNumber(7)
-  void clearFromDate() => $_clearField(7);
-  @$pb.TagNumber(7)
-  $1.Date ensureFromDate() => $_ensure(6);
+  void clearAccountName() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $1.Date get toDate => $_getN(7);
+  $core.String get masterAccountNo => $_getSZ(7);
   @$pb.TagNumber(8)
-  set toDate($1.Date value) => $_setField(8, value);
+  set masterAccountNo($core.String value) => $_setString(7, value);
   @$pb.TagNumber(8)
-  $core.bool hasToDate() => $_has(7);
+  $core.bool hasMasterAccountNo() => $_has(7);
   @$pb.TagNumber(8)
-  void clearToDate() => $_clearField(8);
-  @$pb.TagNumber(8)
-  $1.Date ensureToDate() => $_ensure(7);
+  void clearMasterAccountNo() => $_clearField(8);
 
   @$pb.TagNumber(9)
-  $core.int get usrId => $_getIZ(8);
+  $core.String get branch => $_getSZ(8);
   @$pb.TagNumber(9)
-  set usrId($core.int value) => $_setUnsignedInt32(8, value);
+  set branch($core.String value) => $_setString(8, value);
   @$pb.TagNumber(9)
-  $core.bool hasUsrId() => $_has(8);
+  $core.bool hasBranch() => $_has(8);
   @$pb.TagNumber(9)
-  void clearUsrId() => $_clearField(9);
+  void clearBranch() => $_clearField(9);
 
   @$pb.TagNumber(10)
-  $2.Pagination get pagination => $_getN(9);
+  $core.String get rep => $_getSZ(9);
   @$pb.TagNumber(10)
-  set pagination($2.Pagination value) => $_setField(10, value);
+  set rep($core.String value) => $_setString(9, value);
   @$pb.TagNumber(10)
-  $core.bool hasPagination() => $_has(9);
+  $core.bool hasRep() => $_has(9);
   @$pb.TagNumber(10)
-  void clearPagination() => $_clearField(10);
-  @$pb.TagNumber(10)
-  $2.Pagination ensurePagination() => $_ensure(9);
+  void clearRep() => $_clearField(10);
 
   @$pb.TagNumber(11)
-  $core.String get dateType => $_getSZ(10);
+  $core.String get rollUp => $_getSZ(10);
   @$pb.TagNumber(11)
-  set dateType($core.String value) => $_setString(10, value);
+  set rollUp($core.String value) => $_setString(10, value);
   @$pb.TagNumber(11)
-  $core.bool hasDateType() => $_has(10);
+  $core.bool hasRollUp() => $_has(10);
   @$pb.TagNumber(11)
-  void clearDateType() => $_clearField(11);
+  void clearRollUp() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.String get rollUp => $_getSZ(11);
+  $core.bool get hideZero => $_getBF(11);
   @$pb.TagNumber(12)
-  set rollUp($core.String value) => $_setString(11, value);
+  set hideZero($core.bool value) => $_setBool(11, value);
   @$pb.TagNumber(12)
-  $core.bool hasRollUp() => $_has(11);
+  $core.bool hasHideZero() => $_has(11);
   @$pb.TagNumber(12)
-  void clearRollUp() => $_clearField(12);
-
-  @$pb.TagNumber(13)
-  $core.bool get hideZero => $_getBF(12);
-  @$pb.TagNumber(13)
-  set hideZero($core.bool value) => $_setBool(12, value);
-  @$pb.TagNumber(13)
-  $core.bool hasHideZero() => $_has(12);
-  @$pb.TagNumber(13)
-  void clearHideZero() => $_clearField(13);
+  void clearHideZero() => $_clearField(12);
 }
 
 class ListBalanceResponse extends $pb.GeneratedMessage {
@@ -945,51 +705,43 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
   factory ListBalanceSummary({
     $core.int? totalRows,
     $core.String? sdCashBalance,
+    $core.String? sdMarketValue,
     $core.String? sdShortMarketValue,
     $core.String? sdLongMarketValue,
     $core.String? sdEquity,
     $core.String? sdAdjustedBalance,
-    $core.String? sdMoneyMarket,
-    $core.String? moneyMarket,
     $core.String? tdCashBalance,
-    $core.String? tdMoneyMarket,
+    $core.String? tdMarketValue,
     $core.String? tdShortMarketValue,
     $core.String? tdLongMarketValue,
     $core.String? tdEquity,
     $core.String? tdAdjustedBalance,
-    $core.String? tdDebitBalanceAge,
-    $core.String? sdDebitBalanceAge,
-    $core.String? digitalAssetMarketValue,
-    $core.String? cashMarketValue,
-    $core.String? cashQty,
-    $core.String? digitalEnhancedMarketValue,
-    $core.String? plValue,
-    $core.String? plPercent,
+    $core.String? positionCost,
+    $core.String? positionPl,
+    $core.String? positionPlPercent,
+    $core.String? ytdPlValue,
+    $core.String? ytdPlPercent,
     $core.String? cashPercent,
   }) {
     final result = create();
     if (totalRows != null) result.totalRows = totalRows;
     if (sdCashBalance != null) result.sdCashBalance = sdCashBalance;
+    if (sdMarketValue != null) result.sdMarketValue = sdMarketValue;
     if (sdShortMarketValue != null) result.sdShortMarketValue = sdShortMarketValue;
     if (sdLongMarketValue != null) result.sdLongMarketValue = sdLongMarketValue;
     if (sdEquity != null) result.sdEquity = sdEquity;
     if (sdAdjustedBalance != null) result.sdAdjustedBalance = sdAdjustedBalance;
-    if (sdMoneyMarket != null) result.sdMoneyMarket = sdMoneyMarket;
-    if (moneyMarket != null) result.moneyMarket = moneyMarket;
     if (tdCashBalance != null) result.tdCashBalance = tdCashBalance;
-    if (tdMoneyMarket != null) result.tdMoneyMarket = tdMoneyMarket;
+    if (tdMarketValue != null) result.tdMarketValue = tdMarketValue;
     if (tdShortMarketValue != null) result.tdShortMarketValue = tdShortMarketValue;
     if (tdLongMarketValue != null) result.tdLongMarketValue = tdLongMarketValue;
     if (tdEquity != null) result.tdEquity = tdEquity;
     if (tdAdjustedBalance != null) result.tdAdjustedBalance = tdAdjustedBalance;
-    if (tdDebitBalanceAge != null) result.tdDebitBalanceAge = tdDebitBalanceAge;
-    if (sdDebitBalanceAge != null) result.sdDebitBalanceAge = sdDebitBalanceAge;
-    if (digitalAssetMarketValue != null) result.digitalAssetMarketValue = digitalAssetMarketValue;
-    if (cashMarketValue != null) result.cashMarketValue = cashMarketValue;
-    if (cashQty != null) result.cashQty = cashQty;
-    if (digitalEnhancedMarketValue != null) result.digitalEnhancedMarketValue = digitalEnhancedMarketValue;
-    if (plValue != null) result.plValue = plValue;
-    if (plPercent != null) result.plPercent = plPercent;
+    if (positionCost != null) result.positionCost = positionCost;
+    if (positionPl != null) result.positionPl = positionPl;
+    if (positionPlPercent != null) result.positionPlPercent = positionPlPercent;
+    if (ytdPlValue != null) result.ytdPlValue = ytdPlValue;
+    if (ytdPlPercent != null) result.ytdPlPercent = ytdPlPercent;
     if (cashPercent != null) result.cashPercent = cashPercent;
     return result;
   }
@@ -1002,27 +754,23 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListBalanceSummary', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'totalRows', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'sdCashBalance')
-    ..aOS(3, _omitFieldNames ? '' : 'sdShortMarketValue')
-    ..aOS(4, _omitFieldNames ? '' : 'sdLongMarketValue')
-    ..aOS(5, _omitFieldNames ? '' : 'sdEquity')
-    ..aOS(6, _omitFieldNames ? '' : 'sdAdjustedBalance')
-    ..aOS(7, _omitFieldNames ? '' : 'sdMoneyMarket')
-    ..aOS(8, _omitFieldNames ? '' : 'moneyMarket')
-    ..aOS(9, _omitFieldNames ? '' : 'tdCashBalance')
-    ..aOS(10, _omitFieldNames ? '' : 'tdMoneyMarket')
-    ..aOS(11, _omitFieldNames ? '' : 'tdShortMarketValue')
-    ..aOS(12, _omitFieldNames ? '' : 'tdLongMarketValue')
-    ..aOS(13, _omitFieldNames ? '' : 'tdEquity')
-    ..aOS(14, _omitFieldNames ? '' : 'tdAdjustedBalance')
-    ..aOS(15, _omitFieldNames ? '' : 'tdDebitBalanceAge')
-    ..aOS(16, _omitFieldNames ? '' : 'sdDebitBalanceAge')
-    ..aOS(17, _omitFieldNames ? '' : 'digitalAssetMarketValue')
-    ..aOS(18, _omitFieldNames ? '' : 'cashMarketValue')
-    ..aOS(19, _omitFieldNames ? '' : 'cashQty')
-    ..aOS(20, _omitFieldNames ? '' : 'digitalEnhancedMarketValue')
-    ..aOS(21, _omitFieldNames ? '' : 'plValue')
-    ..aOS(22, _omitFieldNames ? '' : 'plPercent')
-    ..aOS(23, _omitFieldNames ? '' : 'cashPercent')
+    ..aOS(3, _omitFieldNames ? '' : 'sdMarketValue')
+    ..aOS(4, _omitFieldNames ? '' : 'sdShortMarketValue')
+    ..aOS(5, _omitFieldNames ? '' : 'sdLongMarketValue')
+    ..aOS(6, _omitFieldNames ? '' : 'sdEquity')
+    ..aOS(7, _omitFieldNames ? '' : 'sdAdjustedBalance')
+    ..aOS(8, _omitFieldNames ? '' : 'tdCashBalance')
+    ..aOS(9, _omitFieldNames ? '' : 'tdMarketValue')
+    ..aOS(10, _omitFieldNames ? '' : 'tdShortMarketValue')
+    ..aOS(11, _omitFieldNames ? '' : 'tdLongMarketValue')
+    ..aOS(12, _omitFieldNames ? '' : 'tdEquity')
+    ..aOS(13, _omitFieldNames ? '' : 'tdAdjustedBalance')
+    ..aOS(14, _omitFieldNames ? '' : 'positionCost')
+    ..aOS(15, _omitFieldNames ? '' : 'positionPl')
+    ..aOS(16, _omitFieldNames ? '' : 'positionPlPercent')
+    ..aOS(17, _omitFieldNames ? '' : 'ytdPlValue')
+    ..aOS(18, _omitFieldNames ? '' : 'ytdPlPercent')
+    ..aOS(19, _omitFieldNames ? '' : 'cashPercent')
     ..hasRequiredFields = false
   ;
 
@@ -1062,193 +810,157 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
   void clearSdCashBalance() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get sdShortMarketValue => $_getSZ(2);
+  $core.String get sdMarketValue => $_getSZ(2);
   @$pb.TagNumber(3)
-  set sdShortMarketValue($core.String value) => $_setString(2, value);
+  set sdMarketValue($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasSdShortMarketValue() => $_has(2);
+  $core.bool hasSdMarketValue() => $_has(2);
   @$pb.TagNumber(3)
-  void clearSdShortMarketValue() => $_clearField(3);
+  void clearSdMarketValue() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get sdLongMarketValue => $_getSZ(3);
+  $core.String get sdShortMarketValue => $_getSZ(3);
   @$pb.TagNumber(4)
-  set sdLongMarketValue($core.String value) => $_setString(3, value);
+  set sdShortMarketValue($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
-  $core.bool hasSdLongMarketValue() => $_has(3);
+  $core.bool hasSdShortMarketValue() => $_has(3);
   @$pb.TagNumber(4)
-  void clearSdLongMarketValue() => $_clearField(4);
+  void clearSdShortMarketValue() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get sdEquity => $_getSZ(4);
+  $core.String get sdLongMarketValue => $_getSZ(4);
   @$pb.TagNumber(5)
-  set sdEquity($core.String value) => $_setString(4, value);
+  set sdLongMarketValue($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
-  $core.bool hasSdEquity() => $_has(4);
+  $core.bool hasSdLongMarketValue() => $_has(4);
   @$pb.TagNumber(5)
-  void clearSdEquity() => $_clearField(5);
+  void clearSdLongMarketValue() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get sdAdjustedBalance => $_getSZ(5);
+  $core.String get sdEquity => $_getSZ(5);
   @$pb.TagNumber(6)
-  set sdAdjustedBalance($core.String value) => $_setString(5, value);
+  set sdEquity($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
-  $core.bool hasSdAdjustedBalance() => $_has(5);
+  $core.bool hasSdEquity() => $_has(5);
   @$pb.TagNumber(6)
-  void clearSdAdjustedBalance() => $_clearField(6);
+  void clearSdEquity() => $_clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get sdMoneyMarket => $_getSZ(6);
+  $core.String get sdAdjustedBalance => $_getSZ(6);
   @$pb.TagNumber(7)
-  set sdMoneyMarket($core.String value) => $_setString(6, value);
+  set sdAdjustedBalance($core.String value) => $_setString(6, value);
   @$pb.TagNumber(7)
-  $core.bool hasSdMoneyMarket() => $_has(6);
+  $core.bool hasSdAdjustedBalance() => $_has(6);
   @$pb.TagNumber(7)
-  void clearSdMoneyMarket() => $_clearField(7);
+  void clearSdAdjustedBalance() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get moneyMarket => $_getSZ(7);
+  $core.String get tdCashBalance => $_getSZ(7);
   @$pb.TagNumber(8)
-  set moneyMarket($core.String value) => $_setString(7, value);
+  set tdCashBalance($core.String value) => $_setString(7, value);
   @$pb.TagNumber(8)
-  $core.bool hasMoneyMarket() => $_has(7);
+  $core.bool hasTdCashBalance() => $_has(7);
   @$pb.TagNumber(8)
-  void clearMoneyMarket() => $_clearField(8);
+  void clearTdCashBalance() => $_clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get tdCashBalance => $_getSZ(8);
+  $core.String get tdMarketValue => $_getSZ(8);
   @$pb.TagNumber(9)
-  set tdCashBalance($core.String value) => $_setString(8, value);
+  set tdMarketValue($core.String value) => $_setString(8, value);
   @$pb.TagNumber(9)
-  $core.bool hasTdCashBalance() => $_has(8);
+  $core.bool hasTdMarketValue() => $_has(8);
   @$pb.TagNumber(9)
-  void clearTdCashBalance() => $_clearField(9);
+  void clearTdMarketValue() => $_clearField(9);
 
   @$pb.TagNumber(10)
-  $core.String get tdMoneyMarket => $_getSZ(9);
+  $core.String get tdShortMarketValue => $_getSZ(9);
   @$pb.TagNumber(10)
-  set tdMoneyMarket($core.String value) => $_setString(9, value);
+  set tdShortMarketValue($core.String value) => $_setString(9, value);
   @$pb.TagNumber(10)
-  $core.bool hasTdMoneyMarket() => $_has(9);
+  $core.bool hasTdShortMarketValue() => $_has(9);
   @$pb.TagNumber(10)
-  void clearTdMoneyMarket() => $_clearField(10);
+  void clearTdShortMarketValue() => $_clearField(10);
 
   @$pb.TagNumber(11)
-  $core.String get tdShortMarketValue => $_getSZ(10);
+  $core.String get tdLongMarketValue => $_getSZ(10);
   @$pb.TagNumber(11)
-  set tdShortMarketValue($core.String value) => $_setString(10, value);
+  set tdLongMarketValue($core.String value) => $_setString(10, value);
   @$pb.TagNumber(11)
-  $core.bool hasTdShortMarketValue() => $_has(10);
+  $core.bool hasTdLongMarketValue() => $_has(10);
   @$pb.TagNumber(11)
-  void clearTdShortMarketValue() => $_clearField(11);
+  void clearTdLongMarketValue() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.String get tdLongMarketValue => $_getSZ(11);
+  $core.String get tdEquity => $_getSZ(11);
   @$pb.TagNumber(12)
-  set tdLongMarketValue($core.String value) => $_setString(11, value);
+  set tdEquity($core.String value) => $_setString(11, value);
   @$pb.TagNumber(12)
-  $core.bool hasTdLongMarketValue() => $_has(11);
+  $core.bool hasTdEquity() => $_has(11);
   @$pb.TagNumber(12)
-  void clearTdLongMarketValue() => $_clearField(12);
+  void clearTdEquity() => $_clearField(12);
 
   @$pb.TagNumber(13)
-  $core.String get tdEquity => $_getSZ(12);
+  $core.String get tdAdjustedBalance => $_getSZ(12);
   @$pb.TagNumber(13)
-  set tdEquity($core.String value) => $_setString(12, value);
+  set tdAdjustedBalance($core.String value) => $_setString(12, value);
   @$pb.TagNumber(13)
-  $core.bool hasTdEquity() => $_has(12);
+  $core.bool hasTdAdjustedBalance() => $_has(12);
   @$pb.TagNumber(13)
-  void clearTdEquity() => $_clearField(13);
+  void clearTdAdjustedBalance() => $_clearField(13);
 
   @$pb.TagNumber(14)
-  $core.String get tdAdjustedBalance => $_getSZ(13);
+  $core.String get positionCost => $_getSZ(13);
   @$pb.TagNumber(14)
-  set tdAdjustedBalance($core.String value) => $_setString(13, value);
+  set positionCost($core.String value) => $_setString(13, value);
   @$pb.TagNumber(14)
-  $core.bool hasTdAdjustedBalance() => $_has(13);
+  $core.bool hasPositionCost() => $_has(13);
   @$pb.TagNumber(14)
-  void clearTdAdjustedBalance() => $_clearField(14);
+  void clearPositionCost() => $_clearField(14);
 
   @$pb.TagNumber(15)
-  $core.String get tdDebitBalanceAge => $_getSZ(14);
+  $core.String get positionPl => $_getSZ(14);
   @$pb.TagNumber(15)
-  set tdDebitBalanceAge($core.String value) => $_setString(14, value);
+  set positionPl($core.String value) => $_setString(14, value);
   @$pb.TagNumber(15)
-  $core.bool hasTdDebitBalanceAge() => $_has(14);
+  $core.bool hasPositionPl() => $_has(14);
   @$pb.TagNumber(15)
-  void clearTdDebitBalanceAge() => $_clearField(15);
+  void clearPositionPl() => $_clearField(15);
 
   @$pb.TagNumber(16)
-  $core.String get sdDebitBalanceAge => $_getSZ(15);
+  $core.String get positionPlPercent => $_getSZ(15);
   @$pb.TagNumber(16)
-  set sdDebitBalanceAge($core.String value) => $_setString(15, value);
+  set positionPlPercent($core.String value) => $_setString(15, value);
   @$pb.TagNumber(16)
-  $core.bool hasSdDebitBalanceAge() => $_has(15);
+  $core.bool hasPositionPlPercent() => $_has(15);
   @$pb.TagNumber(16)
-  void clearSdDebitBalanceAge() => $_clearField(16);
+  void clearPositionPlPercent() => $_clearField(16);
 
   @$pb.TagNumber(17)
-  $core.String get digitalAssetMarketValue => $_getSZ(16);
+  $core.String get ytdPlValue => $_getSZ(16);
   @$pb.TagNumber(17)
-  set digitalAssetMarketValue($core.String value) => $_setString(16, value);
+  set ytdPlValue($core.String value) => $_setString(16, value);
   @$pb.TagNumber(17)
-  $core.bool hasDigitalAssetMarketValue() => $_has(16);
+  $core.bool hasYtdPlValue() => $_has(16);
   @$pb.TagNumber(17)
-  void clearDigitalAssetMarketValue() => $_clearField(17);
+  void clearYtdPlValue() => $_clearField(17);
 
   @$pb.TagNumber(18)
-  $core.String get cashMarketValue => $_getSZ(17);
+  $core.String get ytdPlPercent => $_getSZ(17);
   @$pb.TagNumber(18)
-  set cashMarketValue($core.String value) => $_setString(17, value);
+  set ytdPlPercent($core.String value) => $_setString(17, value);
   @$pb.TagNumber(18)
-  $core.bool hasCashMarketValue() => $_has(17);
+  $core.bool hasYtdPlPercent() => $_has(17);
   @$pb.TagNumber(18)
-  void clearCashMarketValue() => $_clearField(18);
+  void clearYtdPlPercent() => $_clearField(18);
 
   @$pb.TagNumber(19)
-  $core.String get cashQty => $_getSZ(18);
+  $core.String get cashPercent => $_getSZ(18);
   @$pb.TagNumber(19)
-  set cashQty($core.String value) => $_setString(18, value);
+  set cashPercent($core.String value) => $_setString(18, value);
   @$pb.TagNumber(19)
-  $core.bool hasCashQty() => $_has(18);
+  $core.bool hasCashPercent() => $_has(18);
   @$pb.TagNumber(19)
-  void clearCashQty() => $_clearField(19);
-
-  @$pb.TagNumber(20)
-  $core.String get digitalEnhancedMarketValue => $_getSZ(19);
-  @$pb.TagNumber(20)
-  set digitalEnhancedMarketValue($core.String value) => $_setString(19, value);
-  @$pb.TagNumber(20)
-  $core.bool hasDigitalEnhancedMarketValue() => $_has(19);
-  @$pb.TagNumber(20)
-  void clearDigitalEnhancedMarketValue() => $_clearField(20);
-
-  @$pb.TagNumber(21)
-  $core.String get plValue => $_getSZ(20);
-  @$pb.TagNumber(21)
-  set plValue($core.String value) => $_setString(20, value);
-  @$pb.TagNumber(21)
-  $core.bool hasPlValue() => $_has(20);
-  @$pb.TagNumber(21)
-  void clearPlValue() => $_clearField(21);
-
-  @$pb.TagNumber(22)
-  $core.String get plPercent => $_getSZ(21);
-  @$pb.TagNumber(22)
-  set plPercent($core.String value) => $_setString(21, value);
-  @$pb.TagNumber(22)
-  $core.bool hasPlPercent() => $_has(21);
-  @$pb.TagNumber(22)
-  void clearPlPercent() => $_clearField(22);
-
-  @$pb.TagNumber(23)
-  $core.String get cashPercent => $_getSZ(22);
-  @$pb.TagNumber(23)
-  set cashPercent($core.String value) => $_setString(22, value);
-  @$pb.TagNumber(23)
-  $core.bool hasCashPercent() => $_has(22);
-  @$pb.TagNumber(23)
-  void clearCashPercent() => $_clearField(23);
+  void clearCashPercent() => $_clearField(19);
 }
 
 class DashboardBalance extends $pb.GeneratedMessage {

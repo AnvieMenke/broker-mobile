@@ -85,6 +85,7 @@ const Activity$json = {
     {'1': 'contra_sub_account_no', '3': 69, '4': 1, '5': 9, '10': 'contraSubAccountNo'},
     {'1': 'report_activity_id', '3': 70, '4': 1, '5': 13, '10': 'reportActivityId'},
     {'1': 'currency', '3': 71, '4': 1, '5': 9, '10': 'currency'},
+    {'1': 'is_solicited', '3': 72, '4': 1, '5': 8, '10': 'isSolicited'},
   ],
 };
 
@@ -133,7 +134,7 @@ final $typed_data.Uint8List activityDescriptor = $convert.base64Decode(
     'GEMgASgJUg1vdGhlckZlZXNMaXN0EiQKDmR2cF9jb25maXJtX25vGEQgASgNUgxkdnBDb25maX'
     'JtTm8SMQoVY29udHJhX3N1Yl9hY2NvdW50X25vGEUgASgJUhJjb250cmFTdWJBY2NvdW50Tm8S'
     'LAoScmVwb3J0X2FjdGl2aXR5X2lkGEYgASgNUhByZXBvcnRBY3Rpdml0eUlkEhoKCGN1cnJlbm'
-    'N5GEcgASgJUghjdXJyZW5jeQ==');
+    'N5GEcgASgJUghjdXJyZW5jeRIhCgxpc19zb2xpY2l0ZWQYSCABKAhSC2lzU29saWNpdGVk');
 
 @$core.Deprecated('Use activityReportDetailsDescriptor instead')
 const ActivityReportDetails$json = {
