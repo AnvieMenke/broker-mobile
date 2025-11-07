@@ -5,8 +5,6 @@ import 'utils/theme/custom_theme.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:broker_mobile/session/activity_listener.dart';
 
-final navigatorKey = GlobalKey<NavigatorState>();
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppEnv.load();

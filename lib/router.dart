@@ -13,6 +13,8 @@ import 'package:broker_mobile/src/screens/misc/change_password/change_password_p
 import 'package:broker_mobile/src/screens/misc/authenticator/authenticator_page.dart';
 import 'package:broker_mobile/src/screens/summary/summary.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 Route<dynamic> generateRoute(RouteSettings settings) {
   final routes = <String, WidgetBuilder>{
     '/home': (_) => const MainScreen(),

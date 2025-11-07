@@ -1,11 +1,10 @@
 import 'dart:async';
+import 'package:broker_mobile/router.dart';
 import 'package:broker_mobile/service/auth_service.dart';
 import 'package:broker_mobile/session/session_user.dart';
 import 'package:flutter/material.dart';
 import 'idle_timer_manager.dart';
 import 'package:broker_mobile/env.dart';
-
-final navigatorKey = GlobalKey<NavigatorState>();
 
 class SessionManager with WidgetsBindingObserver {
   String? _accessToken;
