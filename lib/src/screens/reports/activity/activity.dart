@@ -556,7 +556,7 @@ class ActivityPageState extends State<ActivityPage> {
                         name: "correspondent",
                         value: selectedCorrespondent,
                         label: "Correspondent",
-                        isAllStatus: false,
+                        isAllStatus: true,
                         type: "",
                         onChange: (value) => setState(() {
                           selectedCorrespondent = value;
@@ -565,8 +565,7 @@ class ActivityPageState extends State<ActivityPage> {
                       AutoCompleteMasterAccountNo(
                         name: "masterAccountNo",
                         value: selectedMasterAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
                           selectedMasterAccountNo =
@@ -576,8 +575,7 @@ class ActivityPageState extends State<ActivityPage> {
                       AutoCompleteRepAdvisor(
                         name: "rep",
                         value: selectedRep,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
                           selectedRep = map['data']?['rep'] as String? ?? '';
@@ -586,8 +584,7 @@ class ActivityPageState extends State<ActivityPage> {
                       AutoCompleteBranch(
                         name: "branch",
                         value: selectedBranch,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
                           selectedBranch =
@@ -754,8 +751,7 @@ class ActivityPageState extends State<ActivityPage> {
                               child: AutoCompleteAccountNo(
                                 name: "accountNo",
                                 value: queryData["accountNo"],
-                                isAllStatus: false,
-                                isAccessibleOnly: true,
+                                isAllStatus: true,
                                 correspondent: queryData["correspondent"],
                                 type: "Client",
                                 onChange: (map) => setState(() {
@@ -787,7 +783,6 @@ class ActivityPageState extends State<ActivityPage> {
                                     child: AutoCompleteSymbol(
                                       name: "symbol",
                                       value: queryData['symbol'],
-                                      isActive: true,
                                       onClear: (map) => setState(() {
                                         queryData["symbol"] = "";
                                         _updateQueryData();

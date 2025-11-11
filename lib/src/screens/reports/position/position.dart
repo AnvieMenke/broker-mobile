@@ -565,7 +565,7 @@ class PositionPageState extends State<PositionPage> {
                         name: "correspondent",
                         value: selectedCorrespondent,
                         label: "Correspondent",
-                        isAllStatus: false,
+                        isAllStatus: true,
                         type: "",
                         onChange: (value) =>
                             setState(() => selectedCorrespondent = value),
@@ -573,8 +573,7 @@ class PositionPageState extends State<PositionPage> {
                       AutoCompleteRepAdvisor(
                         name: "rep",
                         value: selectedRep,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
                           selectedRep = map['data']['rep'] ?? '';
@@ -583,8 +582,7 @@ class PositionPageState extends State<PositionPage> {
                       AutoCompleteBranch(
                         name: "branch",
                         value: selectedBranch,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
                           selectedBranch = map['data']['branch'] ?? '';
@@ -748,8 +746,7 @@ class PositionPageState extends State<PositionPage> {
                               child: AutoCompleteAccountNo(
                                 name: "accountNo",
                                 value: queryData["accountNo"],
-                                isAllStatus: false,
-                                isAccessibleOnly: true,
+                                isAllStatus: true,
                                 correspondent: queryData["correspondent"],
                                 type: "Client",
                                 onChange: (map) => setState(() {
@@ -782,7 +779,6 @@ class PositionPageState extends State<PositionPage> {
                                     child: AutoCompleteSymbol(
                                       name: "symbol",
                                       value: queryData['symbol'],
-                                      isActive: true,
                                       onClear: (map) => setState(() {
                                         queryData["symbol"] = "";
                                         _updateQueryData();

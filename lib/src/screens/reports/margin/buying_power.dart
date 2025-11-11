@@ -165,8 +165,7 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
                       AutoCompleteMasterAccountNo(
                         name: "masterAccountNo",
                         value: selectedMasterAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
                           selectedMasterAccountNo =
@@ -177,8 +176,7 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
                       AutoCompleteAccountName(
                         name: "accountName",
                         value: selectedAccountName,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
                           selectedAccountName =

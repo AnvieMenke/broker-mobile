@@ -258,7 +258,7 @@ class _AchWireListState extends State<AchWireList> {
                         name: "correspondent",
                         value: selectedCorrespondent,
                         label: "Correspondent",
-                        isAllStatus: false,
+                        isAllStatus: true,
                         type: "",
                         onChange: (value) =>
                             setState(() => selectedCorrespondent = value),
@@ -266,8 +266,7 @@ class _AchWireListState extends State<AchWireList> {
                       AutoCompleteAccountNo(
                         name: "accountNo",
                         value: selectedAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
                           selectedAccountNo =
@@ -277,8 +276,7 @@ class _AchWireListState extends State<AchWireList> {
                       AutoCompleteMasterAccountNo(
                         name: "masterAccountNo",
                         value: selectedMasterAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
                           selectedMasterAccountNo =

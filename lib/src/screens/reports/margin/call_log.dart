@@ -156,7 +156,7 @@ class CallLogPageState extends State<CallLogPage> {
                         name: "correspondent",
                         value: selectedCorrespondent,
                         label: "Correspondent",
-                        isAllStatus: false,
+                        isAllStatus: true,
                         type: "",
                         onChange: (value) => setState(() {
                           selectedCorrespondent = value;
@@ -166,8 +166,7 @@ class CallLogPageState extends State<CallLogPage> {
                       AutoCompleteMasterAccountNo(
                         name: "masterAccountNo",
                         value: selectedMasterAccountNo,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
                           selectedMasterAccountNo =
@@ -178,8 +177,7 @@ class CallLogPageState extends State<CallLogPage> {
                       AutoCompleteAccountName(
                         name: "accountName",
                         value: selectedAccountName,
-                        isAllStatus: false,
-                        isAccessibleOnly: true,
+                        isAllStatus: true,
                         correspondent: queryData["correspondent"],
                         onChange: (map) => setState(() {
                           selectedAccountName =
