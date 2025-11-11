@@ -77,3 +77,19 @@ Future<void> validateAuthCode({
     rethrow;
   }
 }
+
+Future<EmailAuthCodeResponse> emailAuthCode(
+  String email,
+  correspondent,
+) async {
+  final req = EmailAuthCodeRequest()
+    ..email = email
+    ..correspondent = correspondent;
+
+  try {
+    final response = await _service.emailAuthCode(req);
+    return response;
+  } catch (error) {
+    rethrow;
+  }
+}

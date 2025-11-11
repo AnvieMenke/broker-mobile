@@ -1,6 +1,7 @@
 import 'package:broker_mobile/google/protobuf/empty.pb.dart';
 import 'package:broker_mobile/proto/usrpb/administrator.pbgrpc.dart';
 import 'package:broker_mobile/server/grpc_client_factory.dart';
+import 'package:broker_mobile/service/convert_service.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:broker_mobile/session/session_user.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +85,45 @@ class UserService {
       sessionManager.updateUserAuthenticator(false);
     } catch (err, stack) {
       debugPrint("Remove user OTP error: $err\n$stack");
+      rethrow;
+    }
+  }
+
+  Future<ForgotPasswordCheckEmailResponse> forgotPasswordCheckEmail(
+    String email,
+    String correspondent,
+  ) async {
+    try {
+      final payload = ForgotPasswordCheckEmailRequest()
+        ..email = email
+        ..correspondent = correspondent;
+
+      final response = await _service.forgotPasswordCheckEmail(payload);
+
+      return response;
+    } catch (err, stack) {
+      debugPrint("Forgot password check email error: $err\n$stack");
+      rethrow;
+    }
+  }
+
+  Future<void> forgotPassword(
+    String email,
+    correspondent,
+    externalAuthId,
+    otp,
+    newPassword,
+  ) async {
+    final req = ForgotPasswordRequest()
+      ..email = email
+      ..correspondent = correspondent
+      ..externalAuthId = externalAuthId
+      ..code = ConvertService.safeInt(otp)
+      ..newPassword = newPassword;
+
+    try {
+      await _service.forgotPassword(req);
+    } catch (error) {
       rethrow;
     }
   }
