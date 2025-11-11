@@ -274,7 +274,7 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                           child: AutoCompleteAccountNo(
                             name: "accountNo",
                             value: queryData["accountNo"],
-                            isActive: true,
+                            isAllStatus: true,
                             type: "Client",
                             onChange: (map) => setState(() {
                               if (map['data'] != null &&
