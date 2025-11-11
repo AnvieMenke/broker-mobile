@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:broker_mobile/components/buttons/button.dart';
 import 'package:broker_mobile/components/fields/field_password.dart';
+import 'package:broker_mobile/src/screens/auth/forgot_password.dart';
 import 'package:broker_mobile/src/screens/auth/otp_verification_page.dart';
 import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:broker_mobile/components/messages/notification.dart';
 import '../../../service/auth_service.dart';
-import '../../../service/common_service.dart';
 
 class SavedAccount {
   final String email;
@@ -37,7 +37,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _commonService = CommonService();
   final _storage = const FlutterSecureStorage();
 
   String _selectedAuthMethod = "Email";
@@ -58,19 +57,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _loadAppConfig();
     _loadSavedCredentials();
-  }
-
-  Future<void> _loadAppConfig() async {
-    try {
-      final config = await _commonService.getAppConfig();
-      setState(() {
-        configPhoto = config.photo;
-      });
-    } catch (e) {
-      debugPrint("❌ Failed to load AppConfig: $e");
-    }
   }
 
   Future<void> _loadSavedCredentials() async {
@@ -320,22 +307,12 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        configPhoto.isNotEmpty
-            ? Image.memory(
-                base64Decode(
-                  configPhoto
-                      .replaceAll(RegExp(r'data:image/[^;]+;base64,'), '')
-                      .trim(),
-                ),
-                width: 100,
-                height: 100,
-              )
-            : Image.asset(
-                'assets/images/sas_logo.png',
-                width: 100,
-                height: 100,
-                fit: BoxFit.contain,
-              ),
+        Image.asset(
+          'assets/images/sas_logo.png',
+          width: 100,
+          height: 100,
+          fit: BoxFit.contain,
+        ),
         const SizedBox(height: 16),
         const Text(
           'Login Account',
@@ -388,6 +365,24 @@ class _LoginPageState extends State<LoginPage> {
                   ? null
                   : _handleLogin,
           isLoading: _loading,
+        ),
+        const SizedBox(height: 8),
+        TextButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ForgotPasswordPage(),
+              ),
+            );
+          },
+          child: const Text(
+            'Forgot Password?',
+            style: TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
       ],
     );
