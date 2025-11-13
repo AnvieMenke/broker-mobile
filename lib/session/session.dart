@@ -1,8 +1,9 @@
-import 'package:broker_mobile/router.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/src/screens/auth/login.dart';
 import 'package:broker_mobile/session/session_manager.dart';
 import 'package:broker_mobile/session/theme_manager.dart';
+
+import '../navigator.dart';
 
 final sessionManager = SessionManager(
   onLogout: (logoutReason) async {

@@ -2,7 +2,6 @@ import 'package:broker_mobile/proto/commonpb/lazylist.pbgrpc.dart';
 import 'package:broker_mobile/proto/commonpb/list.pbgrpc.dart';
 import 'package:broker_mobile/proto/commonpb/systemcode.pbgrpc.dart';
 import 'package:broker_mobile/proto/commonpb/appconfig.pbgrpc.dart';
-import 'package:broker_mobile/google/protobuf/empty.pb.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import 'package:protobuf/protobuf.dart';
 import '../server/grpc_client.dart';
@@ -236,11 +235,13 @@ class CommonService {
     }
   }
 
-  Future<AppConfig> getAppConfig() async {
+  Future<MobileAppConfig> getMobileAppConfig(String correspondent) async {
     final client = _appConfigClient();
 
+    final req = MobileAppConfigRequest()..correspondent = correspondent ;
+
     try {
-      final response = await client.getAppConfig(Empty());
+      final response = await client.getMobileAppConfig(req);
       return response;
     } catch (e) {
       rethrow;

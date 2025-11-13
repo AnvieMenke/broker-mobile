@@ -38,20 +38,18 @@ const Balance$json = {
     {'1': 'td_long_market_value', '3': 18, '4': 1, '5': 9, '10': 'tdLongMarketValue'},
     {'1': 'td_equity', '3': 19, '4': 1, '5': 9, '10': 'tdEquity'},
     {'1': 'td_adjusted_balance', '3': 20, '4': 1, '5': 9, '10': 'tdAdjustedBalance'},
-    {'1': 'td_equity_change_value', '3': 21, '4': 1, '5': 9, '10': 'tdEquityChangeValue'},
-    {'1': 'td_equity_change_percent', '3': 22, '4': 1, '5': 9, '10': 'tdEquityChangePercent'},
-    {'1': 'sd_cash_balance', '3': 23, '4': 1, '5': 9, '10': 'sdCashBalance'},
-    {'1': 'sd_market_value', '3': 24, '4': 1, '5': 9, '10': 'sdMarketValue'},
-    {'1': 'sd_short_market_value', '3': 25, '4': 1, '5': 9, '10': 'sdShortMarketValue'},
-    {'1': 'sd_long_market_value', '3': 26, '4': 1, '5': 9, '10': 'sdLongMarketValue'},
-    {'1': 'sd_equity', '3': 27, '4': 1, '5': 9, '10': 'sdEquity'},
-    {'1': 'sd_adjusted_balance', '3': 28, '4': 1, '5': 9, '10': 'sdAdjustedBalance'},
-    {'1': 'cash_percent', '3': 29, '4': 1, '5': 9, '10': 'cashPercent'},
-    {'1': 'position_cost', '3': 30, '4': 1, '5': 9, '10': 'positionCost'},
-    {'1': 'position_pl', '3': 31, '4': 1, '5': 9, '10': 'positionPl'},
-    {'1': 'position_pl_percent', '3': 32, '4': 1, '5': 9, '10': 'positionPlPercent'},
-    {'1': 'ytd_pl_value', '3': 33, '4': 1, '5': 9, '10': 'ytdPlValue'},
-    {'1': 'ytd_pl_percent', '3': 34, '4': 1, '5': 9, '10': 'ytdPlPercent'},
+    {'1': 'sd_cash_balance', '3': 21, '4': 1, '5': 9, '10': 'sdCashBalance'},
+    {'1': 'sd_market_value', '3': 22, '4': 1, '5': 9, '10': 'sdMarketValue'},
+    {'1': 'sd_short_market_value', '3': 23, '4': 1, '5': 9, '10': 'sdShortMarketValue'},
+    {'1': 'sd_long_market_value', '3': 24, '4': 1, '5': 9, '10': 'sdLongMarketValue'},
+    {'1': 'sd_equity', '3': 25, '4': 1, '5': 9, '10': 'sdEquity'},
+    {'1': 'sd_adjusted_balance', '3': 26, '4': 1, '5': 9, '10': 'sdAdjustedBalance'},
+    {'1': 'account_value_percent', '3': 27, '4': 1, '5': 9, '10': 'accountValuePercent'},
+    {'1': 'position_cost', '3': 28, '4': 1, '5': 9, '10': 'positionCost'},
+    {'1': 'unrealized_pl_value', '3': 29, '4': 1, '5': 9, '10': 'unrealizedPlValue'},
+    {'1': 'unrealized_pl_percent', '3': 30, '4': 1, '5': 9, '10': 'unrealizedPlPercent'},
+    {'1': 'ytd_pl_value', '3': 31, '4': 1, '5': 9, '10': 'ytdPlValue'},
+    {'1': 'ytd_pl_percent', '3': 32, '4': 1, '5': 9, '10': 'ytdPlPercent'},
   ],
 };
 
@@ -70,18 +68,16 @@ final $typed_data.Uint8List balanceDescriptor = $convert.base64Decode(
     'ZE1hcmtldFZhbHVlEjEKFXRkX3Nob3J0X21hcmtldF92YWx1ZRgRIAEoCVISdGRTaG9ydE1hcm'
     'tldFZhbHVlEi8KFHRkX2xvbmdfbWFya2V0X3ZhbHVlGBIgASgJUhF0ZExvbmdNYXJrZXRWYWx1'
     'ZRIbCgl0ZF9lcXVpdHkYEyABKAlSCHRkRXF1aXR5Ei4KE3RkX2FkanVzdGVkX2JhbGFuY2UYFC'
-    'ABKAlSEXRkQWRqdXN0ZWRCYWxhbmNlEjMKFnRkX2VxdWl0eV9jaGFuZ2VfdmFsdWUYFSABKAlS'
-    'E3RkRXF1aXR5Q2hhbmdlVmFsdWUSNwoYdGRfZXF1aXR5X2NoYW5nZV9wZXJjZW50GBYgASgJUh'
-    'V0ZEVxdWl0eUNoYW5nZVBlcmNlbnQSJgoPc2RfY2FzaF9iYWxhbmNlGBcgASgJUg1zZENhc2hC'
-    'YWxhbmNlEiYKD3NkX21hcmtldF92YWx1ZRgYIAEoCVINc2RNYXJrZXRWYWx1ZRIxChVzZF9zaG'
-    '9ydF9tYXJrZXRfdmFsdWUYGSABKAlSEnNkU2hvcnRNYXJrZXRWYWx1ZRIvChRzZF9sb25nX21h'
-    'cmtldF92YWx1ZRgaIAEoCVIRc2RMb25nTWFya2V0VmFsdWUSGwoJc2RfZXF1aXR5GBsgASgJUg'
-    'hzZEVxdWl0eRIuChNzZF9hZGp1c3RlZF9iYWxhbmNlGBwgASgJUhFzZEFkanVzdGVkQmFsYW5j'
-    'ZRIhCgxjYXNoX3BlcmNlbnQYHSABKAlSC2Nhc2hQZXJjZW50EiMKDXBvc2l0aW9uX2Nvc3QYHi'
-    'ABKAlSDHBvc2l0aW9uQ29zdBIfCgtwb3NpdGlvbl9wbBgfIAEoCVIKcG9zaXRpb25QbBIuChNw'
-    'b3NpdGlvbl9wbF9wZXJjZW50GCAgASgJUhFwb3NpdGlvblBsUGVyY2VudBIgCgx5dGRfcGxfdm'
-    'FsdWUYISABKAlSCnl0ZFBsVmFsdWUSJAoOeXRkX3BsX3BlcmNlbnQYIiABKAlSDHl0ZFBsUGVy'
-    'Y2VudA==');
+    'ABKAlSEXRkQWRqdXN0ZWRCYWxhbmNlEiYKD3NkX2Nhc2hfYmFsYW5jZRgVIAEoCVINc2RDYXNo'
+    'QmFsYW5jZRImCg9zZF9tYXJrZXRfdmFsdWUYFiABKAlSDXNkTWFya2V0VmFsdWUSMQoVc2Rfc2'
+    'hvcnRfbWFya2V0X3ZhbHVlGBcgASgJUhJzZFNob3J0TWFya2V0VmFsdWUSLwoUc2RfbG9uZ19t'
+    'YXJrZXRfdmFsdWUYGCABKAlSEXNkTG9uZ01hcmtldFZhbHVlEhsKCXNkX2VxdWl0eRgZIAEoCV'
+    'IIc2RFcXVpdHkSLgoTc2RfYWRqdXN0ZWRfYmFsYW5jZRgaIAEoCVIRc2RBZGp1c3RlZEJhbGFu'
+    'Y2USMgoVYWNjb3VudF92YWx1ZV9wZXJjZW50GBsgASgJUhNhY2NvdW50VmFsdWVQZXJjZW50Ei'
+    'MKDXBvc2l0aW9uX2Nvc3QYHCABKAlSDHBvc2l0aW9uQ29zdBIuChN1bnJlYWxpemVkX3BsX3Zh'
+    'bHVlGB0gASgJUhF1bnJlYWxpemVkUGxWYWx1ZRIyChV1bnJlYWxpemVkX3BsX3BlcmNlbnQYHi'
+    'ABKAlSE3VucmVhbGl6ZWRQbFBlcmNlbnQSIAoMeXRkX3BsX3ZhbHVlGB8gASgJUgp5dGRQbFZh'
+    'bHVlEiQKDnl0ZF9wbF9wZXJjZW50GCAgASgJUgx5dGRQbFBlcmNlbnQ=');
 
 @$core.Deprecated('Use listBalanceRequestDescriptor instead')
 const ListBalanceRequest$json = {
@@ -146,11 +142,11 @@ const ListBalanceSummary$json = {
     {'1': 'td_equity', '3': 12, '4': 1, '5': 9, '10': 'tdEquity'},
     {'1': 'td_adjusted_balance', '3': 13, '4': 1, '5': 9, '10': 'tdAdjustedBalance'},
     {'1': 'position_cost', '3': 14, '4': 1, '5': 9, '10': 'positionCost'},
-    {'1': 'position_pl', '3': 15, '4': 1, '5': 9, '10': 'positionPl'},
-    {'1': 'position_pl_percent', '3': 16, '4': 1, '5': 9, '10': 'positionPlPercent'},
+    {'1': 'unrealized_pl_value', '3': 15, '4': 1, '5': 9, '10': 'unrealizedPlValue'},
+    {'1': 'unrealized_pl_percent', '3': 16, '4': 1, '5': 9, '10': 'unrealizedPlPercent'},
     {'1': 'ytd_pl_value', '3': 17, '4': 1, '5': 9, '10': 'ytdPlValue'},
     {'1': 'ytd_pl_percent', '3': 18, '4': 1, '5': 9, '10': 'ytdPlPercent'},
-    {'1': 'cash_percent', '3': 19, '4': 1, '5': 9, '10': 'cashPercent'},
+    {'1': 'account_value_percent', '3': 19, '4': 1, '5': 9, '10': 'accountValuePercent'},
   ],
 };
 
@@ -166,11 +162,11 @@ final $typed_data.Uint8List listBalanceSummaryDescriptor = $convert.base64Decode
     'IxChV0ZF9zaG9ydF9tYXJrZXRfdmFsdWUYCiABKAlSEnRkU2hvcnRNYXJrZXRWYWx1ZRIvChR0'
     'ZF9sb25nX21hcmtldF92YWx1ZRgLIAEoCVIRdGRMb25nTWFya2V0VmFsdWUSGwoJdGRfZXF1aX'
     'R5GAwgASgJUgh0ZEVxdWl0eRIuChN0ZF9hZGp1c3RlZF9iYWxhbmNlGA0gASgJUhF0ZEFkanVz'
-    'dGVkQmFsYW5jZRIjCg1wb3NpdGlvbl9jb3N0GA4gASgJUgxwb3NpdGlvbkNvc3QSHwoLcG9zaX'
-    'Rpb25fcGwYDyABKAlSCnBvc2l0aW9uUGwSLgoTcG9zaXRpb25fcGxfcGVyY2VudBgQIAEoCVIR'
-    'cG9zaXRpb25QbFBlcmNlbnQSIAoMeXRkX3BsX3ZhbHVlGBEgASgJUgp5dGRQbFZhbHVlEiQKDn'
-    'l0ZF9wbF9wZXJjZW50GBIgASgJUgx5dGRQbFBlcmNlbnQSIQoMY2FzaF9wZXJjZW50GBMgASgJ'
-    'UgtjYXNoUGVyY2VudA==');
+    'dGVkQmFsYW5jZRIjCg1wb3NpdGlvbl9jb3N0GA4gASgJUgxwb3NpdGlvbkNvc3QSLgoTdW5yZW'
+    'FsaXplZF9wbF92YWx1ZRgPIAEoCVIRdW5yZWFsaXplZFBsVmFsdWUSMgoVdW5yZWFsaXplZF9w'
+    'bF9wZXJjZW50GBAgASgJUhN1bnJlYWxpemVkUGxQZXJjZW50EiAKDHl0ZF9wbF92YWx1ZRgRIA'
+    'EoCVIKeXRkUGxWYWx1ZRIkCg55dGRfcGxfcGVyY2VudBgSIAEoCVIMeXRkUGxQZXJjZW50EjIK'
+    'FWFjY291bnRfdmFsdWVfcGVyY2VudBgTIAEoCVITYWNjb3VudFZhbHVlUGVyY2VudA==');
 
 @$core.Deprecated('Use dashboardBalanceDescriptor instead')
 const DashboardBalance$json = {

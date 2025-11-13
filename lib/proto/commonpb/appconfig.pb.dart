@@ -134,6 +134,110 @@ class AppConfig extends $pb.GeneratedMessage {
   void clearBrokerName() => $_clearField(7);
 }
 
+class MobileAppConfig extends $pb.GeneratedMessage {
+  factory MobileAppConfig({
+    $core.String? brokerName,
+    $core.String? mobileLogo,
+  }) {
+    final result = create();
+    if (brokerName != null) result.brokerName = brokerName;
+    if (mobileLogo != null) result.mobileLogo = mobileLogo;
+    return result;
+  }
+
+  MobileAppConfig._();
+
+  factory MobileAppConfig.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory MobileAppConfig.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MobileAppConfig', package: const $pb.PackageName(_omitMessageNames ? '' : 'commonpb'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'brokerName')
+    ..aOS(2, _omitFieldNames ? '' : 'mobileLogo')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  MobileAppConfig clone() => MobileAppConfig()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  MobileAppConfig copyWith(void Function(MobileAppConfig) updates) => super.copyWith((message) => updates(message as MobileAppConfig)) as MobileAppConfig;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static MobileAppConfig create() => MobileAppConfig._();
+  @$core.override
+  MobileAppConfig createEmptyInstance() => create();
+  static $pb.PbList<MobileAppConfig> createRepeated() => $pb.PbList<MobileAppConfig>();
+  @$core.pragma('dart2js:noInline')
+  static MobileAppConfig getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MobileAppConfig>(create);
+  static MobileAppConfig? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get brokerName => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set brokerName($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasBrokerName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBrokerName() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get mobileLogo => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set mobileLogo($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasMobileLogo() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMobileLogo() => $_clearField(2);
+}
+
+class MobileAppConfigRequest extends $pb.GeneratedMessage {
+  factory MobileAppConfigRequest({
+    $core.String? correspondent,
+  }) {
+    final result = create();
+    if (correspondent != null) result.correspondent = correspondent;
+    return result;
+  }
+
+  MobileAppConfigRequest._();
+
+  factory MobileAppConfigRequest.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory MobileAppConfigRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MobileAppConfigRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'commonpb'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'correspondent')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  MobileAppConfigRequest clone() => MobileAppConfigRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  MobileAppConfigRequest copyWith(void Function(MobileAppConfigRequest) updates) => super.copyWith((message) => updates(message as MobileAppConfigRequest)) as MobileAppConfigRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static MobileAppConfigRequest create() => MobileAppConfigRequest._();
+  @$core.override
+  MobileAppConfigRequest createEmptyInstance() => create();
+  static $pb.PbList<MobileAppConfigRequest> createRepeated() => $pb.PbList<MobileAppConfigRequest>();
+  @$core.pragma('dart2js:noInline')
+  static MobileAppConfigRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MobileAppConfigRequest>(create);
+  static MobileAppConfigRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get correspondent => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set correspondent($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasCorrespondent() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearCorrespondent() => $_clearField(1);
+}
+
 
 const $core.bool _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const $core.bool _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

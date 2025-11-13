@@ -30,38 +30,86 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       body: IndexedStack(
         index: _selectedIndex,
-        children: _pages,
+        children: _pages.map((page) {
+          return SafeArea(
+            top: false,
+            bottom: true,
+            child: page,
+          );
+        }).toList(),
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onItemTapped,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: BottomAppBar(
+        color: Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xFF2D2D2D) // dark theme
+            : const Color(0xFFF5F5F5),
+        // light theme soft gray
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 6,
+        elevation: 0,
+        child: SizedBox(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(
+                  Icons.summarize_outlined, Icons.summarize, 'Summary', 1),
+              _buildNavItem(Icons.insert_chart_outlined, Icons.insert_chart,
+                  'Reports', 2),
+              Container(
+                width: 48,
+              ),
+              _buildNavItem(
+                  Icons.payments_outlined, Icons.payments, 'Transfers', 3),
+              _buildNavItem(Icons.category_outlined, Icons.category, 'Misc', 4),
+            ],
           ),
-          NavigationDestination(
-            icon: Icon(Icons.summarize_outlined),
-            selectedIcon: Icon(Icons.summarize),
-            label: 'Summary',
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: SizedBox(
+        width: 62,
+        height: 62,
+        child: FloatingActionButton(
+          shape: const CircleBorder(),
+          onPressed: () => _onItemTapped(0),
+          backgroundColor: Colors.blue,
+          elevation: 8,
+          child: Icon(
+            _selectedIndex == 0 ? Icons.home : Icons.home_outlined,
+            size: 30,
+            color: Colors.white,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.insert_chart_outlined),
-            selectedIcon: Icon(Icons.insert_chart),
-            label: 'Reports',
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(
+      IconData icon, IconData selectedIcon, String label, int index) {
+    final bool isSelected = _selectedIndex == index;
+    return InkWell(
+      onTap: () => _onItemTapped(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            isSelected ? selectedIcon : icon,
+            color: isSelected
+                ? Colors.blue
+                : Theme.of(context).textTheme.bodyMedium?.color,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.payments_outlined),
-            selectedIcon: Icon(Icons.payments),
-            label: 'Transfers',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.category_outlined),
-            selectedIcon: Icon(Icons.category),
-            label: 'Misc',
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: isSelected
+                  ? Colors.blue
+                  : Theme.of(context).textTheme.bodyMedium?.color,
+            ),
           ),
         ],
       ),

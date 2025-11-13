@@ -1,4 +1,5 @@
 import 'package:broker_mobile/src/screens/misc/feedback/feedback.dart';
+import 'package:broker_mobile/src/screens/misc/misc_page.dart';
 import 'package:broker_mobile/src/screens/reports/activity/activity.dart';
 import 'package:broker_mobile/src/screens/reports/margin/buying_power.dart';
 import 'package:broker_mobile/src/screens/reports/margin/call_log.dart';
@@ -13,11 +14,10 @@ import 'package:broker_mobile/src/screens/misc/change_password/change_password_p
 import 'package:broker_mobile/src/screens/misc/authenticator/authenticator_page.dart';
 import 'package:broker_mobile/src/screens/summary/summary.dart';
 
-final navigatorKey = GlobalKey<NavigatorState>();
-
 Route<dynamic> generateRoute(RouteSettings settings) {
   final routes = <String, WidgetBuilder>{
     '/home': (_) => const MainScreen(),
+    '/misc': (_) => const MiscPage(),
     '/summary': (_) => const AccountSummaryPage(),
     '/reports/activity': (_) => const ActivityPage(),
     '/reports/position': (_) => const PositionPage(),

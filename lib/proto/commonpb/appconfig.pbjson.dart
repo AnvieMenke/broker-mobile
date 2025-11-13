@@ -36,3 +36,30 @@ final $typed_data.Uint8List appConfigDescriptor = $convert.base64Decode(
     'luX21pbl9hbXQYBiABKAlSDG1hcmdpbk1pbkFtdBIfCgticm9rZXJfbmFtZRgHIAEoCVIKYnJv'
     'a2VyTmFtZQ==');
 
+@$core.Deprecated('Use mobileAppConfigDescriptor instead')
+const MobileAppConfig$json = {
+  '1': 'MobileAppConfig',
+  '2': [
+    {'1': 'broker_name', '3': 1, '4': 1, '5': 9, '10': 'brokerName'},
+    {'1': 'mobile_logo', '3': 2, '4': 1, '5': 9, '10': 'mobileLogo'},
+  ],
+};
+
+/// Descriptor for `MobileAppConfig`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List mobileAppConfigDescriptor = $convert.base64Decode(
+    'Cg9Nb2JpbGVBcHBDb25maWcSHwoLYnJva2VyX25hbWUYASABKAlSCmJyb2tlck5hbWUSHwoLbW'
+    '9iaWxlX2xvZ28YAiABKAlSCm1vYmlsZUxvZ28=');
+
+@$core.Deprecated('Use mobileAppConfigRequestDescriptor instead')
+const MobileAppConfigRequest$json = {
+  '1': 'MobileAppConfigRequest',
+  '2': [
+    {'1': 'correspondent', '3': 1, '4': 1, '5': 9, '10': 'correspondent'},
+  ],
+};
+
+/// Descriptor for `MobileAppConfigRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List mobileAppConfigRequestDescriptor = $convert.base64Decode(
+    'ChZNb2JpbGVBcHBDb25maWdSZXF1ZXN0EiQKDWNvcnJlc3BvbmRlbnQYASABKAlSDWNvcnJlc3'
+    'BvbmRlbnQ=');
+
