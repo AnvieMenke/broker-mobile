@@ -10,8 +10,17 @@ class AchWireMenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("ACH/Wire Requests"),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.pushNamed(context, '/profile');
+            },
+          )
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(

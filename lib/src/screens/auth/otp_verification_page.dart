@@ -99,7 +99,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         );
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).pushReplacementNamed('/home');
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/home',
+            (route) => false,
+          );
         });
       } catch (err) {
         setState(() {
