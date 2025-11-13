@@ -1,6 +1,6 @@
 import 'package:broker_mobile/components/containers/page_container.dart';
 import 'package:flutter/material.dart';
-import 'package:broker_mobile/src/screens/misc/change_password/change_password_form.dart';
+import 'package:broker_mobile/src/screens/profile/change_password/change_password_form.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:broker_mobile/service/user_service.dart';
 

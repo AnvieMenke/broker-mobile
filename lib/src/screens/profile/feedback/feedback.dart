@@ -1,6 +1,6 @@
 import 'package:broker_mobile/components/containers/page_list_container.dart';
 import 'package:broker_mobile/service/contact_us_service.dart';
-import 'package:broker_mobile/src/screens/misc/feedback/feedback_form.dart';
+import 'package:broker_mobile/src/screens/profile/feedback/feedback_form.dart';
 import 'package:broker_mobile/utils/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/components/grid/grid_view_card.dart';

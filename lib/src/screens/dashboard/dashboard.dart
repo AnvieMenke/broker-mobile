@@ -519,7 +519,7 @@ class _DashboardPageState extends State<DashboardPage> {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              Navigator.pushNamed(context, '/misc');
+              Navigator.pushNamed(context, '/profile');
             },
           )
         ],

@@ -30,7 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.person),
           onPressed: () {
-            Navigator.pushNamed(context, '/misc');
+            Navigator.pushNamed(context, '/profile');
           },
         ),
       ],
