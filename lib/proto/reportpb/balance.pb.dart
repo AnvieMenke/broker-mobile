@@ -41,18 +41,16 @@ class Balance extends $pb.GeneratedMessage {
     $core.String? tdLongMarketValue,
     $core.String? tdEquity,
     $core.String? tdAdjustedBalance,
-    $core.String? tdEquityChangeValue,
-    $core.String? tdEquityChangePercent,
     $core.String? sdCashBalance,
     $core.String? sdMarketValue,
     $core.String? sdShortMarketValue,
     $core.String? sdLongMarketValue,
     $core.String? sdEquity,
     $core.String? sdAdjustedBalance,
-    $core.String? cashPercent,
+    $core.String? accountValuePercent,
     $core.String? positionCost,
-    $core.String? positionPl,
-    $core.String? positionPlPercent,
+    $core.String? unrealizedPlValue,
+    $core.String? unrealizedPlPercent,
     $core.String? ytdPlValue,
     $core.String? ytdPlPercent,
   }) {
@@ -77,18 +75,16 @@ class Balance extends $pb.GeneratedMessage {
     if (tdLongMarketValue != null) result.tdLongMarketValue = tdLongMarketValue;
     if (tdEquity != null) result.tdEquity = tdEquity;
     if (tdAdjustedBalance != null) result.tdAdjustedBalance = tdAdjustedBalance;
-    if (tdEquityChangeValue != null) result.tdEquityChangeValue = tdEquityChangeValue;
-    if (tdEquityChangePercent != null) result.tdEquityChangePercent = tdEquityChangePercent;
     if (sdCashBalance != null) result.sdCashBalance = sdCashBalance;
     if (sdMarketValue != null) result.sdMarketValue = sdMarketValue;
     if (sdShortMarketValue != null) result.sdShortMarketValue = sdShortMarketValue;
     if (sdLongMarketValue != null) result.sdLongMarketValue = sdLongMarketValue;
     if (sdEquity != null) result.sdEquity = sdEquity;
     if (sdAdjustedBalance != null) result.sdAdjustedBalance = sdAdjustedBalance;
-    if (cashPercent != null) result.cashPercent = cashPercent;
+    if (accountValuePercent != null) result.accountValuePercent = accountValuePercent;
     if (positionCost != null) result.positionCost = positionCost;
-    if (positionPl != null) result.positionPl = positionPl;
-    if (positionPlPercent != null) result.positionPlPercent = positionPlPercent;
+    if (unrealizedPlValue != null) result.unrealizedPlValue = unrealizedPlValue;
+    if (unrealizedPlPercent != null) result.unrealizedPlPercent = unrealizedPlPercent;
     if (ytdPlValue != null) result.ytdPlValue = ytdPlValue;
     if (ytdPlPercent != null) result.ytdPlPercent = ytdPlPercent;
     return result;
@@ -120,20 +116,18 @@ class Balance extends $pb.GeneratedMessage {
     ..aOS(18, _omitFieldNames ? '' : 'tdLongMarketValue')
     ..aOS(19, _omitFieldNames ? '' : 'tdEquity')
     ..aOS(20, _omitFieldNames ? '' : 'tdAdjustedBalance')
-    ..aOS(21, _omitFieldNames ? '' : 'tdEquityChangeValue')
-    ..aOS(22, _omitFieldNames ? '' : 'tdEquityChangePercent')
-    ..aOS(23, _omitFieldNames ? '' : 'sdCashBalance')
-    ..aOS(24, _omitFieldNames ? '' : 'sdMarketValue')
-    ..aOS(25, _omitFieldNames ? '' : 'sdShortMarketValue')
-    ..aOS(26, _omitFieldNames ? '' : 'sdLongMarketValue')
-    ..aOS(27, _omitFieldNames ? '' : 'sdEquity')
-    ..aOS(28, _omitFieldNames ? '' : 'sdAdjustedBalance')
-    ..aOS(29, _omitFieldNames ? '' : 'cashPercent')
-    ..aOS(30, _omitFieldNames ? '' : 'positionCost')
-    ..aOS(31, _omitFieldNames ? '' : 'positionPl')
-    ..aOS(32, _omitFieldNames ? '' : 'positionPlPercent')
-    ..aOS(33, _omitFieldNames ? '' : 'ytdPlValue')
-    ..aOS(34, _omitFieldNames ? '' : 'ytdPlPercent')
+    ..aOS(21, _omitFieldNames ? '' : 'sdCashBalance')
+    ..aOS(22, _omitFieldNames ? '' : 'sdMarketValue')
+    ..aOS(23, _omitFieldNames ? '' : 'sdShortMarketValue')
+    ..aOS(24, _omitFieldNames ? '' : 'sdLongMarketValue')
+    ..aOS(25, _omitFieldNames ? '' : 'sdEquity')
+    ..aOS(26, _omitFieldNames ? '' : 'sdAdjustedBalance')
+    ..aOS(27, _omitFieldNames ? '' : 'accountValuePercent')
+    ..aOS(28, _omitFieldNames ? '' : 'positionCost')
+    ..aOS(29, _omitFieldNames ? '' : 'unrealizedPlValue')
+    ..aOS(30, _omitFieldNames ? '' : 'unrealizedPlPercent')
+    ..aOS(31, _omitFieldNames ? '' : 'ytdPlValue')
+    ..aOS(32, _omitFieldNames ? '' : 'ytdPlPercent')
     ..hasRequiredFields = false
   ;
 
@@ -337,130 +331,112 @@ class Balance extends $pb.GeneratedMessage {
   void clearTdAdjustedBalance() => $_clearField(20);
 
   @$pb.TagNumber(21)
-  $core.String get tdEquityChangeValue => $_getSZ(20);
+  $core.String get sdCashBalance => $_getSZ(20);
   @$pb.TagNumber(21)
-  set tdEquityChangeValue($core.String value) => $_setString(20, value);
+  set sdCashBalance($core.String value) => $_setString(20, value);
   @$pb.TagNumber(21)
-  $core.bool hasTdEquityChangeValue() => $_has(20);
+  $core.bool hasSdCashBalance() => $_has(20);
   @$pb.TagNumber(21)
-  void clearTdEquityChangeValue() => $_clearField(21);
+  void clearSdCashBalance() => $_clearField(21);
 
   @$pb.TagNumber(22)
-  $core.String get tdEquityChangePercent => $_getSZ(21);
+  $core.String get sdMarketValue => $_getSZ(21);
   @$pb.TagNumber(22)
-  set tdEquityChangePercent($core.String value) => $_setString(21, value);
+  set sdMarketValue($core.String value) => $_setString(21, value);
   @$pb.TagNumber(22)
-  $core.bool hasTdEquityChangePercent() => $_has(21);
+  $core.bool hasSdMarketValue() => $_has(21);
   @$pb.TagNumber(22)
-  void clearTdEquityChangePercent() => $_clearField(22);
+  void clearSdMarketValue() => $_clearField(22);
 
   @$pb.TagNumber(23)
-  $core.String get sdCashBalance => $_getSZ(22);
+  $core.String get sdShortMarketValue => $_getSZ(22);
   @$pb.TagNumber(23)
-  set sdCashBalance($core.String value) => $_setString(22, value);
+  set sdShortMarketValue($core.String value) => $_setString(22, value);
   @$pb.TagNumber(23)
-  $core.bool hasSdCashBalance() => $_has(22);
+  $core.bool hasSdShortMarketValue() => $_has(22);
   @$pb.TagNumber(23)
-  void clearSdCashBalance() => $_clearField(23);
+  void clearSdShortMarketValue() => $_clearField(23);
 
   @$pb.TagNumber(24)
-  $core.String get sdMarketValue => $_getSZ(23);
+  $core.String get sdLongMarketValue => $_getSZ(23);
   @$pb.TagNumber(24)
-  set sdMarketValue($core.String value) => $_setString(23, value);
+  set sdLongMarketValue($core.String value) => $_setString(23, value);
   @$pb.TagNumber(24)
-  $core.bool hasSdMarketValue() => $_has(23);
+  $core.bool hasSdLongMarketValue() => $_has(23);
   @$pb.TagNumber(24)
-  void clearSdMarketValue() => $_clearField(24);
+  void clearSdLongMarketValue() => $_clearField(24);
 
   @$pb.TagNumber(25)
-  $core.String get sdShortMarketValue => $_getSZ(24);
+  $core.String get sdEquity => $_getSZ(24);
   @$pb.TagNumber(25)
-  set sdShortMarketValue($core.String value) => $_setString(24, value);
+  set sdEquity($core.String value) => $_setString(24, value);
   @$pb.TagNumber(25)
-  $core.bool hasSdShortMarketValue() => $_has(24);
+  $core.bool hasSdEquity() => $_has(24);
   @$pb.TagNumber(25)
-  void clearSdShortMarketValue() => $_clearField(25);
+  void clearSdEquity() => $_clearField(25);
 
   @$pb.TagNumber(26)
-  $core.String get sdLongMarketValue => $_getSZ(25);
+  $core.String get sdAdjustedBalance => $_getSZ(25);
   @$pb.TagNumber(26)
-  set sdLongMarketValue($core.String value) => $_setString(25, value);
+  set sdAdjustedBalance($core.String value) => $_setString(25, value);
   @$pb.TagNumber(26)
-  $core.bool hasSdLongMarketValue() => $_has(25);
+  $core.bool hasSdAdjustedBalance() => $_has(25);
   @$pb.TagNumber(26)
-  void clearSdLongMarketValue() => $_clearField(26);
+  void clearSdAdjustedBalance() => $_clearField(26);
 
   @$pb.TagNumber(27)
-  $core.String get sdEquity => $_getSZ(26);
+  $core.String get accountValuePercent => $_getSZ(26);
   @$pb.TagNumber(27)
-  set sdEquity($core.String value) => $_setString(26, value);
+  set accountValuePercent($core.String value) => $_setString(26, value);
   @$pb.TagNumber(27)
-  $core.bool hasSdEquity() => $_has(26);
+  $core.bool hasAccountValuePercent() => $_has(26);
   @$pb.TagNumber(27)
-  void clearSdEquity() => $_clearField(27);
+  void clearAccountValuePercent() => $_clearField(27);
 
   @$pb.TagNumber(28)
-  $core.String get sdAdjustedBalance => $_getSZ(27);
+  $core.String get positionCost => $_getSZ(27);
   @$pb.TagNumber(28)
-  set sdAdjustedBalance($core.String value) => $_setString(27, value);
+  set positionCost($core.String value) => $_setString(27, value);
   @$pb.TagNumber(28)
-  $core.bool hasSdAdjustedBalance() => $_has(27);
+  $core.bool hasPositionCost() => $_has(27);
   @$pb.TagNumber(28)
-  void clearSdAdjustedBalance() => $_clearField(28);
+  void clearPositionCost() => $_clearField(28);
 
   @$pb.TagNumber(29)
-  $core.String get cashPercent => $_getSZ(28);
+  $core.String get unrealizedPlValue => $_getSZ(28);
   @$pb.TagNumber(29)
-  set cashPercent($core.String value) => $_setString(28, value);
+  set unrealizedPlValue($core.String value) => $_setString(28, value);
   @$pb.TagNumber(29)
-  $core.bool hasCashPercent() => $_has(28);
+  $core.bool hasUnrealizedPlValue() => $_has(28);
   @$pb.TagNumber(29)
-  void clearCashPercent() => $_clearField(29);
+  void clearUnrealizedPlValue() => $_clearField(29);
 
   @$pb.TagNumber(30)
-  $core.String get positionCost => $_getSZ(29);
+  $core.String get unrealizedPlPercent => $_getSZ(29);
   @$pb.TagNumber(30)
-  set positionCost($core.String value) => $_setString(29, value);
+  set unrealizedPlPercent($core.String value) => $_setString(29, value);
   @$pb.TagNumber(30)
-  $core.bool hasPositionCost() => $_has(29);
+  $core.bool hasUnrealizedPlPercent() => $_has(29);
   @$pb.TagNumber(30)
-  void clearPositionCost() => $_clearField(30);
+  void clearUnrealizedPlPercent() => $_clearField(30);
 
   @$pb.TagNumber(31)
-  $core.String get positionPl => $_getSZ(30);
+  $core.String get ytdPlValue => $_getSZ(30);
   @$pb.TagNumber(31)
-  set positionPl($core.String value) => $_setString(30, value);
+  set ytdPlValue($core.String value) => $_setString(30, value);
   @$pb.TagNumber(31)
-  $core.bool hasPositionPl() => $_has(30);
+  $core.bool hasYtdPlValue() => $_has(30);
   @$pb.TagNumber(31)
-  void clearPositionPl() => $_clearField(31);
+  void clearYtdPlValue() => $_clearField(31);
 
   @$pb.TagNumber(32)
-  $core.String get positionPlPercent => $_getSZ(31);
+  $core.String get ytdPlPercent => $_getSZ(31);
   @$pb.TagNumber(32)
-  set positionPlPercent($core.String value) => $_setString(31, value);
+  set ytdPlPercent($core.String value) => $_setString(31, value);
   @$pb.TagNumber(32)
-  $core.bool hasPositionPlPercent() => $_has(31);
+  $core.bool hasYtdPlPercent() => $_has(31);
   @$pb.TagNumber(32)
-  void clearPositionPlPercent() => $_clearField(32);
-
-  @$pb.TagNumber(33)
-  $core.String get ytdPlValue => $_getSZ(32);
-  @$pb.TagNumber(33)
-  set ytdPlValue($core.String value) => $_setString(32, value);
-  @$pb.TagNumber(33)
-  $core.bool hasYtdPlValue() => $_has(32);
-  @$pb.TagNumber(33)
-  void clearYtdPlValue() => $_clearField(33);
-
-  @$pb.TagNumber(34)
-  $core.String get ytdPlPercent => $_getSZ(33);
-  @$pb.TagNumber(34)
-  set ytdPlPercent($core.String value) => $_setString(33, value);
-  @$pb.TagNumber(34)
-  $core.bool hasYtdPlPercent() => $_has(33);
-  @$pb.TagNumber(34)
-  void clearYtdPlPercent() => $_clearField(34);
+  void clearYtdPlPercent() => $_clearField(32);
 }
 
 class ListBalanceRequest extends $pb.GeneratedMessage {
@@ -717,11 +693,11 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
     $core.String? tdEquity,
     $core.String? tdAdjustedBalance,
     $core.String? positionCost,
-    $core.String? positionPl,
-    $core.String? positionPlPercent,
+    $core.String? unrealizedPlValue,
+    $core.String? unrealizedPlPercent,
     $core.String? ytdPlValue,
     $core.String? ytdPlPercent,
-    $core.String? cashPercent,
+    $core.String? accountValuePercent,
   }) {
     final result = create();
     if (totalRows != null) result.totalRows = totalRows;
@@ -738,11 +714,11 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
     if (tdEquity != null) result.tdEquity = tdEquity;
     if (tdAdjustedBalance != null) result.tdAdjustedBalance = tdAdjustedBalance;
     if (positionCost != null) result.positionCost = positionCost;
-    if (positionPl != null) result.positionPl = positionPl;
-    if (positionPlPercent != null) result.positionPlPercent = positionPlPercent;
+    if (unrealizedPlValue != null) result.unrealizedPlValue = unrealizedPlValue;
+    if (unrealizedPlPercent != null) result.unrealizedPlPercent = unrealizedPlPercent;
     if (ytdPlValue != null) result.ytdPlValue = ytdPlValue;
     if (ytdPlPercent != null) result.ytdPlPercent = ytdPlPercent;
-    if (cashPercent != null) result.cashPercent = cashPercent;
+    if (accountValuePercent != null) result.accountValuePercent = accountValuePercent;
     return result;
   }
 
@@ -766,11 +742,11 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
     ..aOS(12, _omitFieldNames ? '' : 'tdEquity')
     ..aOS(13, _omitFieldNames ? '' : 'tdAdjustedBalance')
     ..aOS(14, _omitFieldNames ? '' : 'positionCost')
-    ..aOS(15, _omitFieldNames ? '' : 'positionPl')
-    ..aOS(16, _omitFieldNames ? '' : 'positionPlPercent')
+    ..aOS(15, _omitFieldNames ? '' : 'unrealizedPlValue')
+    ..aOS(16, _omitFieldNames ? '' : 'unrealizedPlPercent')
     ..aOS(17, _omitFieldNames ? '' : 'ytdPlValue')
     ..aOS(18, _omitFieldNames ? '' : 'ytdPlPercent')
-    ..aOS(19, _omitFieldNames ? '' : 'cashPercent')
+    ..aOS(19, _omitFieldNames ? '' : 'accountValuePercent')
     ..hasRequiredFields = false
   ;
 
@@ -918,22 +894,22 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
   void clearPositionCost() => $_clearField(14);
 
   @$pb.TagNumber(15)
-  $core.String get positionPl => $_getSZ(14);
+  $core.String get unrealizedPlValue => $_getSZ(14);
   @$pb.TagNumber(15)
-  set positionPl($core.String value) => $_setString(14, value);
+  set unrealizedPlValue($core.String value) => $_setString(14, value);
   @$pb.TagNumber(15)
-  $core.bool hasPositionPl() => $_has(14);
+  $core.bool hasUnrealizedPlValue() => $_has(14);
   @$pb.TagNumber(15)
-  void clearPositionPl() => $_clearField(15);
+  void clearUnrealizedPlValue() => $_clearField(15);
 
   @$pb.TagNumber(16)
-  $core.String get positionPlPercent => $_getSZ(15);
+  $core.String get unrealizedPlPercent => $_getSZ(15);
   @$pb.TagNumber(16)
-  set positionPlPercent($core.String value) => $_setString(15, value);
+  set unrealizedPlPercent($core.String value) => $_setString(15, value);
   @$pb.TagNumber(16)
-  $core.bool hasPositionPlPercent() => $_has(15);
+  $core.bool hasUnrealizedPlPercent() => $_has(15);
   @$pb.TagNumber(16)
-  void clearPositionPlPercent() => $_clearField(16);
+  void clearUnrealizedPlPercent() => $_clearField(16);
 
   @$pb.TagNumber(17)
   $core.String get ytdPlValue => $_getSZ(16);
@@ -954,13 +930,13 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
   void clearYtdPlPercent() => $_clearField(18);
 
   @$pb.TagNumber(19)
-  $core.String get cashPercent => $_getSZ(18);
+  $core.String get accountValuePercent => $_getSZ(18);
   @$pb.TagNumber(19)
-  set cashPercent($core.String value) => $_setString(18, value);
+  set accountValuePercent($core.String value) => $_setString(18, value);
   @$pb.TagNumber(19)
-  $core.bool hasCashPercent() => $_has(18);
+  $core.bool hasAccountValuePercent() => $_has(18);
   @$pb.TagNumber(19)
-  void clearCashPercent() => $_clearField(19);
+  void clearAccountValuePercent() => $_clearField(19);
 }
 
 class DashboardBalance extends $pb.GeneratedMessage {

@@ -1,15 +1,18 @@
 import 'dart:async';
-import 'package:broker_mobile/router.dart';
 import 'package:broker_mobile/service/auth_service.dart';
 import 'package:broker_mobile/session/session_user.dart';
 import 'package:flutter/material.dart';
+import '../navigator.dart';
 import 'idle_timer_manager.dart';
 import 'package:broker_mobile/env.dart';
 
 class SessionManager with WidgetsBindingObserver {
   String? _accessToken;
   String? _refreshToken;
+  String? _logo;
+  String? _brokerName;
   SessionUser? _user;
+
   SessionUser? get user => _user;
   Timer? _refreshTimer;
 
@@ -44,10 +47,12 @@ class SessionManager with WidgetsBindingObserver {
     _idleTimerManager.stop();
   }
 
-  void startSession(String token, String refreshToken) {
+  void startSession(String token, refreshToken, logo, brokerName) {
     _accessToken = token;
     _refreshToken = refreshToken;
     _user = SessionUser.fromToken(token);
+    _logo = logo;
+    _brokerName = brokerName;
 
     _scheduleRefresh();
 
@@ -58,15 +63,22 @@ class SessionManager with WidgetsBindingObserver {
   void clearSession() {
     _accessToken = null;
     _refreshToken = null;
+    _logo = null;
+    _brokerName = null;
     _user = null;
     _refreshTimer?.cancel();
     _idleTimerManager.stop();
   }
 
   String get token => _accessToken ?? "";
+
   bool get isAuthenticated =>
       _accessToken != null &&
       _user?.tokenExpiry?.isAfter(DateTime.now()) == true;
+
+  String? get logo => _logo ?? "";
+
+  String? get brokerName => _brokerName ?? "";
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

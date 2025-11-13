@@ -25,7 +25,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           : null,
       title: Text(title),
       centerTitle: true,
-      actions: actions,
+      actions: [
+        ...?actions,
+        IconButton(
+          icon: const Icon(Icons.person),
+          onPressed: () {
+            Navigator.pushNamed(context, '/profile');
+          },
+        ),
+      ],
     );
   }
 

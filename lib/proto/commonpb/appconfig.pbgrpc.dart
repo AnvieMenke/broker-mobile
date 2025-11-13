@@ -35,11 +35,19 @@ class AppConfigServiceClient extends $grpc.Client {
       '/commonpb.AppConfigService/GetAppConfig',
       ($0.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $1.AppConfig.fromBuffer(value));
+  static final _$getMobileAppConfig = $grpc.ClientMethod<$1.MobileAppConfigRequest, $1.MobileAppConfig>(
+      '/commonpb.AppConfigService/GetMobileAppConfig',
+      ($1.MobileAppConfigRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $1.MobileAppConfig.fromBuffer(value));
 
   AppConfigServiceClient(super.channel, {super.options, super.interceptors});
 
   $grpc.ResponseFuture<$1.AppConfig> getAppConfig($0.Empty request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getAppConfig, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$1.MobileAppConfig> getMobileAppConfig($1.MobileAppConfigRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getMobileAppConfig, request, options: options);
   }
 }
 
@@ -55,11 +63,23 @@ abstract class AppConfigServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($1.AppConfig value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.MobileAppConfigRequest, $1.MobileAppConfig>(
+        'GetMobileAppConfig',
+        getMobileAppConfig_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $1.MobileAppConfigRequest.fromBuffer(value),
+        ($1.MobileAppConfig value) => value.writeToBuffer()));
   }
 
   $async.Future<$1.AppConfig> getAppConfig_Pre($grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
     return getAppConfig($call, await $request);
   }
 
+  $async.Future<$1.MobileAppConfig> getMobileAppConfig_Pre($grpc.ServiceCall $call, $async.Future<$1.MobileAppConfigRequest> $request) async {
+    return getMobileAppConfig($call, await $request);
+  }
+
   $async.Future<$1.AppConfig> getAppConfig($grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$1.MobileAppConfig> getMobileAppConfig($grpc.ServiceCall call, $1.MobileAppConfigRequest request);
 }

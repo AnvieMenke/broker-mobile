@@ -3,10 +3,13 @@ import 'package:broker_mobile/session/session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:broker_mobile/env.dart';
 import 'package:broker_mobile/proto/authpb/auth.pbgrpc.dart';
+import 'common_service.dart';
 
 import '../google/protobuf/empty.pb.dart';
 
 final _service = GrpcClientFactory.create(AuthServiceClient.new);
+
+final _commonService = CommonService();
 
 Future<LoginResponse?> refreshToken(
   String refreshToken,
@@ -72,7 +75,9 @@ Future<void> validateAuthCode({
 
   try {
     final response = await _service.validateCode(req);
-    sessionManager.startSession(response.accessToken, response.refreshToken);
+    final mobileAppConfigResponse =
+        await _commonService.getMobileAppConfig(correspondent);
+    sessionManager.startSession(response.accessToken, response.refreshToken,mobileAppConfigResponse.mobileLogo, mobileAppConfigResponse.brokerName);
   } catch (error) {
     rethrow;
   }

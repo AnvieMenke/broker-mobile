@@ -117,16 +117,16 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                                 fit: BoxFit.scaleDown,
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  "${ConvertService.safeDouble(acct.positionPl) > 0 ? '+' : ''}"
-                                  "${FormatUtils.formatCurrency(acct.positionPl)} "
-                                  "(${FormatUtils.formatPercentage(acct.positionPlPercent)})",
+                                  "${ConvertService.safeDouble(acct.unrealizedPlValue) > 0 ? '+' : ''}"
+                                  "${FormatUtils.formatCurrency(acct.unrealizedPlValue)} "
+                                  "(${FormatUtils.formatPercentage(acct.unrealizedPlPercent)})",
                                   style: TextStyle(
                                     color: ConvertService.safeDouble(
-                                                acct.positionPl) >
+                                                acct.unrealizedPlValue) >
                                             0
                                         ? Colors.greenAccent[400]
                                         : ConvertService.safeDouble(
-                                                    acct.positionPl) <
+                                                    acct.unrealizedPlValue) <
                                                 0
                                             ? Colors.redAccent
                                             : Colors.grey,
@@ -175,19 +175,19 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: ConvertService.safeDouble(acct.cashPercent) < 0
+                      color: ConvertService.safeDouble(acct.accountValuePercent) < 0
                           ? const Color(0xFF3B0000)
-                          : ConvertService.safeDouble(acct.cashPercent) > 0
+                          : ConvertService.safeDouble(acct.accountValuePercent) > 0
                               ? const Color(0xFF002B00)
                               : const Color(0xFF2E2E2E),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      FormatUtils.formatPercentage(acct.cashPercent),
+                      FormatUtils.formatPercentage(acct.accountValuePercent),
                       style: TextStyle(
-                        color: ConvertService.safeDouble(acct.cashPercent) < 0
+                        color: ConvertService.safeDouble(acct.accountValuePercent) < 0
                             ? Colors.redAccent
-                            : ConvertService.safeDouble(acct.cashPercent) > 0
+                            : ConvertService.safeDouble(acct.accountValuePercent) > 0
                                 ? Colors.greenAccent
                                 : Colors.white70,
                         fontSize: 12,

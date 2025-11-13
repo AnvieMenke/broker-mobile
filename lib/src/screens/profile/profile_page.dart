@@ -8,32 +8,32 @@ const List<Map<String, dynamic>> _options = [
   {
     "title": "User Settings",
     "icon": Icons.manage_accounts,
-    "route": "/misc/user"
+    "route": "/profile/user"
   },
   {
     "title": "Change Password",
     "icon": Icons.password,
-    "route": "/misc/change-password"
+    "route": "/profile/change-password"
   },
   {
     "title": "App Settings",
     "icon": Icons.app_settings_alt,
-    "route": "/misc/app"
+    "route": "/profile/app"
   },
   {
     "title": "Authenticator",
     "icon": Icons.key,
-    "route": "/misc/authenticator"
+    "route": "/profile/authenticator"
   },
   {
     "title": "Feedback",
     "icon": Icons.feedback,
-    "route": "/misc/feedback"
+    "route": "/profile/feedback"
   },
 ];
 
-class MiscPage extends StatelessWidget {
-  const MiscPage({super.key});
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
 
   void handleOptionTap(BuildContext context, int index) {
     final route = _options[index]["route"] as String?;
@@ -50,7 +50,7 @@ class MiscPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageContainer(
-      title: "Misc",
+      title: "Profile",
       showBack: false,
       page: OptionGrid(
         options: _options,
