@@ -157,6 +157,10 @@ class SessionManager with WidgetsBindingObserver {
       onLogout(logoutReason);
     }
     clearSession();
+    navigatorKey.currentState?.pushNamedAndRemoveUntil(
+      '/',
+      (route) => false,
+    );
   }
 
   void updateUserSettings(

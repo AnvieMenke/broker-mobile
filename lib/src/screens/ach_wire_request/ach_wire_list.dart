@@ -425,7 +425,7 @@ class _AchWireListState extends State<AchWireList> {
   @override
   Widget build(BuildContext context) {
     return PageListContainer(
-      title: "ACH/Wire Requests",
+      title: "ACH/Wire",
       openFilterDialog: _openFilterDialog,
       onRefresh: _refresh,
       page: _futureRequests == null

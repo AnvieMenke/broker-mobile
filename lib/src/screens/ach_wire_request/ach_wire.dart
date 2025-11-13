@@ -319,7 +319,18 @@ class _AchWirePageState extends State<AchWirePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("ACH/Wire Request")),
+      appBar: AppBar(
+        title: const Text("ACH/Wire Request"),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.pushNamed(context, '/profile');
+            },
+          )
+        ],
+      ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
@@ -373,8 +384,7 @@ class _AchWirePageState extends State<AchWirePage> {
                                 final data = map['data'] ?? {};
                                 formData["accountNo"] =
                                     data?['accountNo'] ?? '';
-                                formData["broker"] =
-                                    data?['broker'] ?? '';
+                                formData["broker"] = data?['broker'] ?? '';
                                 formData["accountId"] = data?['accountId'] ?? 0;
                                 if ((formData["correspondent"] ?? '').isEmpty) {
                                   formData["correspondent"] =
@@ -452,18 +462,21 @@ class _AchWirePageState extends State<AchWirePage> {
                         SizedBox(
                           width: itemWidth,
                           child: FieldAmount(
-                            initial: ConvertService.safeDouble(formData["amt"]).toString(),
+                            initial: ConvertService.safeDouble(formData["amt"])
+                                .toString(),
                             prefixText: '\$',
                             maxDecimalDigits: 2,
                             decoration: InputDecoration(
                               labelText: "Amount",
-                              helperText: formData["transferType"] == "Withdrawal"
+                              helperText: formData["transferType"] ==
+                                      "Withdrawal"
                                   ? "Withdrawable amount: ${FormatUtils.formatCurrency(maximumWithdrawable["withdrawableAmt"])}"
                                   : null,
                             ),
                             onChangedRaw: (raw) {
                               setState(() {
-                                formData["amt"] = ConvertService.safeDouble(raw);
+                                formData["amt"] =
+                                    ConvertService.safeDouble(raw);
                                 _calculateFee();
                               });
                             },
