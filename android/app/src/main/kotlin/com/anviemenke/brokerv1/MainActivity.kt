@@ -1,4 +1,4 @@
-package com.anviemenke.broker.v1
+package com.anviemenke.brokerv1
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
