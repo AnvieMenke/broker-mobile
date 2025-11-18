@@ -1,28 +1,11 @@
 import 'package:broker_mobile/proto/bankpb/request.pbgrpc.dart';
-import '../server/auth_interceptor.dart';
-import 'package:grpc/grpc_connection_interface.dart';
-import '../server/grpc_client.dart';
+import '../server/grpc_client_factory.dart';
 import 'convert_service.dart';
 import 'package:broker_mobile/proto/utilspb/pagination.pb.dart';
 
 class AchWireService {
-  ClientChannelBase _createChannel() {
-    return getGrpcChannel();
-  }
 
-  RequestServiceClient _achWireSvc() {
-    final channel = _createChannel();
-
-    final client = RequestServiceClient(
-      channel,
-      options: CallOptions(timeout: Duration(seconds: 30)),
-      interceptors: [AuthInterceptor()],
-    );
-
-    return client;
-  }
-
-  late final achService = _achWireSvc();
+  final _service = GrpcClientFactory.create(RequestServiceClient.new);
 
   Future<ReadMaximumWithdrawableResponse> readMaximumWithdrawable(
       String correspondent, accountNo) async {
@@ -31,7 +14,7 @@ class AchWireService {
       ..accountNo = accountNo ?? "";
 
     try {
-      final response = await achService.readMaximumWithdrawable(req);
+      final response = await _service.readMaximumWithdrawable(req);
       return response;
     } catch (e) {
       rethrow;
@@ -49,7 +32,7 @@ class AchWireService {
       ..broker = param["broker"] ?? "";
 
     try {
-      final response = await achService.getFee(req);
+      final response = await _service.getFee(req);
       return response;
     } catch (e) {
       rethrow;
@@ -70,7 +53,7 @@ class AchWireService {
       ..status = param["status"] ?? ""
       ..requestType = param["requestType"] ?? "";
     try {
-      final response = await achService.create(req);
+      final response = await _service.create(req);
       return response;
     } catch (e) {
       rethrow;
@@ -116,7 +99,7 @@ class AchWireService {
       req.pagination = paginationReq;
     }
     try {
-      final response = await achService.list(req);
+      final response = await _service.list(req);
       return response;
     } catch (e) {
       rethrow;
@@ -131,7 +114,7 @@ class AchWireService {
       ..status = param["status"] ?? "";
 
     try {
-      final response = await achService.update(req);
+      final response = await _service.update(req);
       return response;
     } catch (e) {
       rethrow;

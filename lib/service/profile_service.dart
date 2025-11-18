@@ -1,31 +1,14 @@
 import 'package:broker_mobile/google/type/date.pb.dart';
 import 'package:broker_mobile/proto/admpb/profile.pbgrpc.dart';
-import '../server/auth_interceptor.dart';
-import 'package:grpc/grpc_connection_interface.dart';
-import '../server/grpc_client.dart';
+import '../server/grpc_client_factory.dart';
 
 class ProfileService {
-  ClientChannelBase _createChannel() {
-    return getGrpcChannel();
-  }
+  final _service = GrpcClientFactory.create(ProfileServiceClient.new);
 
-  ProfileServiceClient profileService() {
-    final channel = _createChannel();
-
-    final client = ProfileServiceClient(
-      channel,
-      options: CallOptions(timeout: Duration(seconds: 30)),
-      interceptors: [AuthInterceptor()],
-    );
-
-    return client;
-  }
-
-  late final svc = profileService();
 
   Future<String> getDate(String type) async {
     final req = ReadProfileRequest();
-    final response = await svc.readProfile(req);
+    final response = await _service.readProfile(req);
 
     Date? dateValue;
 

@@ -1,3 +1,5 @@
+import 'maintenance_screen.dart';
+import 'package:broker_mobile/src/screens/core/splash_screen.dart';
 import 'package:broker_mobile/src/screens/profile/feedback/feedback.dart';
 import 'package:broker_mobile/src/screens/profile/profile_page.dart';
 import 'package:broker_mobile/src/screens/reports/activity/activity.dart';
@@ -7,7 +9,7 @@ import 'package:broker_mobile/src/screens/reports/position/position.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:broker_mobile/src/screens/auth/login.dart';
-import 'package:broker_mobile/src/screens/dashboard/main_screen.dart';
+import 'package:broker_mobile/src/screens/core/main_screen.dart';
 import 'package:broker_mobile/src/screens/profile/app_settings/app_settings_page.dart';
 import 'package:broker_mobile/src/screens/profile/user-settings/user_settings_page.dart';
 import 'package:broker_mobile/src/screens/profile/change_password/change_password_page.dart';
@@ -30,6 +32,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     '/profile/feedback': (_) => const FeedbackPage(),
   };
 
+  if (settings.name == '/splash') {
+    return MaterialPageRoute(builder: (_) => const SplashScreen());
+  }
+  if (settings.name == '/maintenance') {
+    return MaterialPageRoute(builder: (_) => const MaintenanceScreen());
+  }
   // Redirect to login if not authenticated or accessing root
   if (settings.name == '/' || !sessionManager.isAuthenticated) {
     return MaterialPageRoute(builder: (_) => const LoginPage());

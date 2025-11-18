@@ -47,9 +47,11 @@ flutter:
     - .env
     - assets/images/no_data.png
     - assets/images/sas_logo.png
+    - assets/images/icon.png
+    - assets/images/splash_screen.png
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/sas_logo.png"
+  image_path: "assets/images/icon.png"
   remove_alpha_ios: true

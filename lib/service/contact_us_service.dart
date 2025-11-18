@@ -1,28 +1,10 @@
 import 'package:broker_mobile/proto/admpb/contactus.pbgrpc.dart';
 import 'package:broker_mobile/service/convert_service.dart';
-import '../server/auth_interceptor.dart';
-import 'package:grpc/grpc_connection_interface.dart';
-import '../server/grpc_client.dart';
 import 'package:broker_mobile/proto/utilspb/pagination.pb.dart';
+import '../server/grpc_client_factory.dart';
 
 class ContactUsService {
-  ClientChannelBase _createChannel() {
-    return getGrpcChannel();
-  }
-
-  ContactUsServiceClient _contactUsService() {
-    final channel = _createChannel();
-
-    final client = ContactUsServiceClient(
-      channel,
-      options: CallOptions(timeout: Duration(seconds: 30)),
-      interceptors: [AuthInterceptor()],
-    );
-
-    return client;
-  }
-
-  late final contactUsService = _contactUsService();
+  final _service = GrpcClientFactory.create(ContactUsServiceClient.new);
 
   Future<CreateContactUsResponse> create(Map<String, dynamic> param) async {
     final req = ContactUs()
@@ -31,7 +13,7 @@ class ContactUsService {
       ..description = param['description'] ?? ""
       ..status = param['status'] ?? "";
     try {
-      final response = await contactUsService.createContactUs(req);
+      final response = await _service.createContactUs(req);
       return response;
     } catch (e) {
       rethrow;
@@ -54,7 +36,7 @@ class ContactUsService {
       req.pagination = paginationReq;
     }
     try {
-      final response = await contactUsService.listContactUs(req);
+      final response = await _service.listContactUs(req);
       return response;
     } catch (e) {
       rethrow;
@@ -69,7 +51,7 @@ class ContactUsService {
       ..description = param['description'] ?? ""
       ..status = param['status'] ?? "";
     try {
-      final response = await contactUsService.updateContactUs(req);
+      final response = await _service.updateContactUs(req);
       return response;
     } catch (e) {
       rethrow;
