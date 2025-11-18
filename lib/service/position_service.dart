@@ -1,30 +1,13 @@
 import 'package:broker_mobile/proto/reportpb/position.pbgrpc.dart';
-import '../server/auth_interceptor.dart';
-import 'package:grpc/grpc_connection_interface.dart';
-import '../server/grpc_client.dart';
+import '../server/grpc_client_factory.dart';
 import 'convert_service.dart';
 import 'package:broker_mobile/proto/utilspb/pagination.pb.dart';
 
 class PositionService {
-  ClientChannelBase _createChannel() {
-    return getGrpcChannel();
-  }
-
-  PositionServiceClient _positionService() {
-    final channel = _createChannel();
-
-    final client = PositionServiceClient(
-      channel,
-      options: CallOptions(timeout: Duration(seconds: 30)),
-      interceptors: [AuthInterceptor()],
-    );
-
-    return client;
-  }
+  final _service = GrpcClientFactory.create(PositionServiceClient.new);
 
   Future<ListPositionResponse> listPosition(
       Map<String, dynamic> param, Map<String, dynamic>? paging) async {
-    final client = _positionService();
     final req = ListPositionRequest()
       ..dateType = param['dateType'] ?? ""
       ..fromDate = ConvertService.stringToPBObjectDate(
@@ -56,7 +39,7 @@ class PositionService {
       req.pagination = paginationReq;
     }
     try {
-      final response = await client.listPosition(req);
+      final response = await _service.listPosition(req);
       return response;
     } catch (e) {
       rethrow;
@@ -65,11 +48,10 @@ class PositionService {
 
   Future<GetPositionAccountAllocationResponse> getPositionAccountAllocation(
       String type) async {
-    final client = _positionService();
     final req = GetPositionAccountAllocationRequest();
 
     try {
-      final response = await client.getPositionAccountAllocation(req);
+      final response = await _service.getPositionAccountAllocation(req);
       return response;
     } catch (e) {
       rethrow;

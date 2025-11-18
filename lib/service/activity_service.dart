@@ -1,30 +1,13 @@
 import 'package:broker_mobile/proto/reportpb/activity.pbgrpc.dart';
-import '../server/auth_interceptor.dart';
-import 'package:grpc/grpc_connection_interface.dart';
-import '../server/grpc_client.dart';
+import '../server/grpc_client_factory.dart';
 import 'convert_service.dart';
 import 'package:broker_mobile/proto/utilspb/pagination.pb.dart';
 
 class ActivityService {
-  ClientChannelBase _createChannel() {
-    return getGrpcChannel();
-  }
-
-  ActivityServiceClient _activityService() {
-    final channel = _createChannel();
-
-    final client = ActivityServiceClient(
-      channel,
-      options: CallOptions(timeout: Duration(seconds: 30)),
-      interceptors: [AuthInterceptor()],
-    );
-
-    return client;
-  }
+  final _service = GrpcClientFactory.create(ActivityServiceClient.new);
 
   Future<ListActivityResponse> listActivity(
       Map<String, dynamic> param, Map<String, dynamic>? paging) async {
-    final client = _activityService();
     final req = ListActivityRequest()
       ..dateType = "Trade Date"
       ..fromDate = ConvertService.stringToPBObjectDate(
@@ -72,7 +55,7 @@ class ActivityService {
     }
 
     try {
-      final response = await client.listActivity(req);
+      final response = await _service.listActivity(req);
       return response;
     } catch (e) {
       rethrow;

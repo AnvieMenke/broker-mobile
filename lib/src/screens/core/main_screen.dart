@@ -44,9 +44,8 @@ class _MainScreenState extends State<MainScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: Theme.of(context).brightness == Brightness.dark
-            ? const Color(0xFF2D2D2D) // dark theme
+            ? const Color(0xFF2D2D2D)
             : const Color(0xFFF5F5F5),
-        // light theme soft gray
         shape: const CircularNotchedRectangle(),
         notchMargin: 6,
         elevation: 0,

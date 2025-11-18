@@ -1,29 +1,13 @@
 import '../proto/marginpb/calllog.pbgrpc.dart';
-import '../server/auth_interceptor.dart';
-import 'package:grpc/grpc_connection_interface.dart';
-import '../server/grpc_client.dart';
 import 'package:broker_mobile/proto/utilspb/pagination.pb.dart';
 
+import '../server/grpc_client_factory.dart';
+
 class CallLogService {
-  ClientChannelBase _createChannel() {
-    return getGrpcChannel();
-  }
-
-  CallLogServiceClient _callLogService() {
-    final channel = _createChannel();
-
-    final client = CallLogServiceClient(
-      channel,
-      options: CallOptions(timeout: Duration(seconds: 30)),
-      interceptors: [AuthInterceptor()],
-    );
-
-    return client;
-  }
+  final _service = GrpcClientFactory.create(CallLogServiceClient.new);
 
   Future<ListCallLogResponse> listCallLog(
       Map<String, dynamic> param, Map<String, dynamic>? paging) async {
-    final client = _callLogService();
     final req = ListCallLogRequest()
       ..correspondent = param['correspondent'] ?? ""
       ..masterAccountNo = param['masterAccountNo'] ?? ""
@@ -41,7 +25,7 @@ class CallLogService {
       req.pagination = paginationReq;
     }
     try {
-      final response = await client.listCallLog(req);
+      final response = await _service.listCallLog(req);
       return response;
     } catch (e) {
       rethrow;

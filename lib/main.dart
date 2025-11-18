@@ -1,6 +1,8 @@
 import 'package:broker_mobile/router.dart';
+import 'package:broker_mobile/service/health_check_service.dart';
 import 'package:flutter/material.dart';
 import 'package:broker_mobile/env.dart';
+import 'maintenance_screen.dart';
 import 'navigator.dart';
 import 'utils/theme/custom_theme.dart';
 import 'package:broker_mobile/session/session.dart';
@@ -11,9 +13,17 @@ void main() async {
   await AppEnv.load();
   AppTheme.setSystemUIOverlayStyle();
   sessionManager.init();
-
   // Load saved theme before runApp
   await themeManager.loadTheme();
+  final isHealthy = await HealthCheckService().checkService();
+
+  if (!isHealthy) {
+    runApp(const MaterialApp(
+      home: MaintenanceScreen(),
+      debugShowCheckedModeBanner: false,
+    ));
+    return;
+  }
 
   runApp(const MyApp());
 }
@@ -52,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         darkTheme: AppTheme.darkTheme,
         themeMode: themeManager.themeMode,
         navigatorKey: navigatorKey,
-        initialRoute: '/',
+        initialRoute: '/splash',
         onGenerateRoute: generateRoute,
       ),
     );
