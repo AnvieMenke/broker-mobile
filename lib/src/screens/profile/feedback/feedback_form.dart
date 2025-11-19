@@ -121,10 +121,15 @@ class _FeedbackFormState extends State<FeedbackForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Text(
+                  'Subject',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 6),
                 TextField(
                   enabled: !isEdit,
                   controller: _subjectController,
-                  decoration: const InputDecoration(labelText: "Subject"),
+                  decoration: const InputDecoration(hintText: "Subject"),
                 ),
                 const SizedBox(height: 16),
                 SelectPage(
@@ -139,12 +144,17 @@ class _FeedbackFormState extends State<FeedbackForm> {
                   }),
                 ),
                 const SizedBox(height: 16),
+                const Text(
+                  'Feedback',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 6),
                 TextField(
                   maxLines: 15,
                   controller: _feedbackController,
                   keyboardType: TextInputType.multiline,
                   decoration: const InputDecoration(
-                    labelText: 'Feedback',
+                    hintText: 'Write your feedback...',
                     alignLabelWithHint: true,
                   ),
                 ),

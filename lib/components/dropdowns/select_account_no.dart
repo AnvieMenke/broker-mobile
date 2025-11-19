@@ -19,6 +19,7 @@ class AutoCompleteAccountNo extends StatefulWidget {
   final Function(Map<String, dynamic>) onChange;
   final Function(Map<String, dynamic>)? onClear;
   final bool reset;
+  final bool? isMainFilter;
 
   const AutoCompleteAccountNo({
     super.key,
@@ -36,6 +37,7 @@ class AutoCompleteAccountNo extends StatefulWidget {
     required this.onChange,
     this.onClear,
     this.reset = false,
+    this.isMainFilter = false,
   });
 
   @override
@@ -207,34 +209,87 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
           onFocusChange: (hasFocus) {
             if (!hasFocus) _handleOnBlur(_controller.text);
           },
-          child: TextField(
-            controller: controller,
-            focusNode: focusNode,
-            enabled: !widget.disabled,
-            decoration: InputDecoration(
-              labelText: 'Account No',
-              hintText: 'Account No',
-              errorText: widget.error ? 'Invalid input' : null,
-              suffixIcon: controller.text.isNotEmpty && !widget.disabled
-                  ? IconButton(
-                      icon: const Icon(Icons.clear, size: 20),
-                      onPressed: _clearField,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            if (widget.isMainFilter == false) ...[
+              const Text(
+                'Account No',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 6),
+            ],
+            TextField(
+              controller: controller,
+              focusNode: focusNode,
+              enabled: !widget.disabled,
+              decoration: widget.isMainFilter == true
+                  ? InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _controller.text.isNotEmpty
+                              ? Icons.close_rounded
+                              : Icons.search,
+                          size: 18,
+                        ),
+                        onPressed: widget.disabled
+                            ? null
+                            : _controller.text.isNotEmpty
+                                ? _clearField
+                                : null,
+                      ),
+                      hintText: 'Account No',
+                      hintStyle: const TextStyle(fontSize: 14),
+                      filled: true,
+                      fillColor: Colors.grey[900]?.withValues(alpha: 0.05),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide:
+                            BorderSide(color: Colors.grey.shade400, width: 0.8),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1.2,
+                        ),
+                      ),
                     )
-                  : null,
+                  : InputDecoration(
+                      hintText: 'Account No',
+                      errorText: widget.error ? 'Invalid input' : null,
+                      fillColor: widget.disabled
+                          ? Theme.of(context)
+                              .disabledColor
+                              .withValues(alpha: 0.12)
+                          : null,
+                      filled: true,
+                      suffixIcon: controller.text.isNotEmpty && !widget.disabled
+                          ? IconButton(
+                              icon: const Icon(Icons.clear, size: 20),
+                              onPressed: _clearField,
+                            )
+                          : null,
+                    ),
+              onChanged: (value) {
+                setState(() {});
+                if (widget.freeSolo) {
+                  _setPropsValue(controller.text, {});
+                  return;
+                }
+                if (value.isEmpty) {
+                  _setPropsValue('', {});
+                  widget.onChange({});
+                }
+              },
+              onEditingComplete: () => _handleOnBlur(_controller.text),
             ),
-            onChanged: (value) {
-              setState(() {});
-              if (widget.freeSolo) {
-                _setPropsValue(controller.text, {});
-                return;
-              }
-              if (value.isEmpty) {
-                _setPropsValue('', {});
-                widget.onChange({});
-              }
-            },
-            onEditingComplete: () => _handleOnBlur(_controller.text),
-          ),
+          ]),
         );
       },
     );

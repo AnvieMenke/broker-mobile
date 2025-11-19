@@ -79,62 +79,74 @@ class _SelectSystemCodeState extends State<SelectSystemCode> {
 
     return isLoading
         ? const LinearProgressIndicator()
-        : DropdownButtonFormField<String>(
-            initialValue: dropdownValue,
-            isExpanded: true,
-            decoration: InputDecoration(
-              labelText: widget.label,
-              errorText: widget.error != null ? widget.msg : null,
-              border: widget.border,
+        : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              widget.label,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
-            onChanged: widget.disabled
-                ? null
-                : (selectedCode) {
-                    if (selectedCode == null || selectedCode.isEmpty) {
-                      widget.onChange(null);
-                      return;
-                    }
-
-                    final matches = systemCodes
-                        .where((o) => o.code == selectedCode)
-                        .toList();
-                    final data = matches.isNotEmpty ? matches.first : null;
-
-                    if (data != null) {
-                      widget.onChange({
-                        "data": {
-                          "code": data.code ?? "",
-                          "description": data.description ?? "",
-                          "subType": data.subType ?? "",
-                          "note": data.note ?? "",
-                        }
-                      });
-                    }
-                  },
-            items: [
-              DropdownMenuItem<String>(
-                value: "",
-                child: Text(
-                  widget.placeholder,
-                  style: const TextStyle(color: Colors.grey),
-                ),
+            const SizedBox(height: 6),
+            DropdownButtonFormField<String>(
+              initialValue: dropdownValue,
+              isExpanded: true,
+              decoration: InputDecoration(
+                errorText: widget.error != null ? widget.msg : null,
+                border: widget.border,
+                fillColor: widget.disabled
+                    ? Theme.of(context)
+                    .disabledColor
+                    .withValues(alpha: 0.12)
+                    : null,
+                filled: true,
               ),
-              ...systemCodes.map((systemCode) {
-                final isDisabled = widget.disabledCodes
-                        ?.map((e) => e.toLowerCase())
-                        .contains(systemCode.code?.toLowerCase()) ??
-                    false;
+              onChanged: widget.disabled
+                  ? null
+                  : (selectedCode) {
+                      if (selectedCode == null || selectedCode.isEmpty) {
+                        widget.onChange(null);
+                        return;
+                      }
 
-                return DropdownMenuItem<String>(
-                  value: systemCode.code ?? "",
-                  enabled: !isDisabled,
-                  child: Opacity(
-                    opacity: isDisabled ? 0.4 : 1.0,
-                    child: Text(systemCode.description ?? ""),
+                      final matches = systemCodes
+                          .where((o) => o.code == selectedCode)
+                          .toList();
+                      final data = matches.isNotEmpty ? matches.first : null;
+
+                      if (data != null) {
+                        widget.onChange({
+                          "data": {
+                            "code": data.code ?? "",
+                            "description": data.description ?? "",
+                            "subType": data.subType ?? "",
+                            "note": data.note ?? "",
+                          }
+                        });
+                      }
+                    },
+              items: [
+                DropdownMenuItem<String>(
+                  value: "",
+                  child: Text(
+                    widget.placeholder,
+                    style: const TextStyle(color: Colors.grey),
                   ),
-                );
-              }),
-            ],
-          );
+                ),
+                ...systemCodes.map((systemCode) {
+                  final isDisabled = widget.disabledCodes
+                          ?.map((e) => e.toLowerCase())
+                          .contains(systemCode.code?.toLowerCase()) ??
+                      false;
+
+                  return DropdownMenuItem<String>(
+                    value: systemCode.code ?? "",
+                    enabled: !isDisabled,
+                    child: Opacity(
+                      opacity: isDisabled ? 0.4 : 1.0,
+                      child: Text(systemCode.description ?? ""),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ]);
   }
 }

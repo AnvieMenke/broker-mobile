@@ -283,9 +283,15 @@ class _AchWireListState extends State<AchWireList> {
                               map['data']?['masterAccountNo'] as String? ?? '';
                         }),
                       ),
+                      const Text(
+                        'External ID',
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 6),
                       TextField(
                         decoration:
-                            const InputDecoration(labelText: 'External ID'),
+                            const InputDecoration(hintText: 'External ID'),
                         onChanged: (value) => externalId = value,
                       ),
                       SelectSystemCode(
@@ -334,21 +340,32 @@ class _AchWireListState extends State<AchWireList> {
                           ),
                           Expanded(
                             flex: 3,
-                            child: TextField(
-                              decoration: const InputDecoration(
-                                labelText: "Amount",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: AppTheme.defaultRadius,
-                                    bottomRight: AppTheme.defaultRadius,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Amount',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
                                   ),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                              enabled: (selectedSign ?? "").isNotEmpty,
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) => amount = value,
-                            ),
+                                  const SizedBox(height: 6),
+                                  TextField(
+                                    decoration: const InputDecoration(
+                                      labelText: "Amount",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: AppTheme.defaultRadius,
+                                          bottomRight: AppTheme.defaultRadius,
+                                        ),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                    ),
+                                    enabled: (selectedSign ?? "").isNotEmpty,
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (value) => amount = value,
+                                  ),
+                                ]),
                           ),
                         ],
                       ),

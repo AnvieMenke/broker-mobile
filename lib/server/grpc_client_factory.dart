@@ -4,6 +4,7 @@ import 'package:broker_mobile/server/grpc_client.dart';
 import 'package:grpc/grpc.dart';
 import 'package:grpc/grpc_connection_interface.dart';
 import '../navigator.dart';
+import '../session/session.dart';
 import 'global_grpc_error_interceptor.dart';
 
 class GrpcClientFactory {
@@ -32,5 +33,6 @@ void globalGrpcErrorHandler(Object error) {
       '/maintenance',
       (route) => false,
     );
+    sessionManager.logout(null, false);
   }
 }

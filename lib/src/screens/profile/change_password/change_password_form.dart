@@ -97,13 +97,24 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
         Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const Text(
+                'Email',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 6),
               TextFormField(
                 initialValue: widget.email,
                 readOnly: true,
-                decoration: const InputDecoration(labelText: "Email"),
+                decoration: const InputDecoration(hintText: "Email"),
               ),
               const SizedBox(height: 12),
+              const Text(
+                'Old Password',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 6),
               FieldPassword(
                 controller: _oldPasswordController,
                 label: "Old Password",
@@ -111,12 +122,22 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                     v == null || v.isEmpty ? "Old password is required" : null,
               ),
               const SizedBox(height: 12),
+              const Text(
+                'New Password',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 6),
               FieldPassword(
                 controller: _newPasswordController,
                 label: "New Password",
                 validator: _validatePassword,
               ),
               const SizedBox(height: 12),
+              const Text(
+                'Confirm Password',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 6),
               FieldPassword(
                 controller: _confirmPasswordController,
                 label: "Confirm New Password",

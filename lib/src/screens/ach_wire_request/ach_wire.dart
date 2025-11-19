@@ -421,7 +421,7 @@ class _AchWirePageState extends State<AchWirePage> {
                             disabled:
                                 isEdit || formData["bankId"].toString().isEmpty,
                             label: "Request Type",
-                            placeholder: "Select Request Type",
+                            placeholder: "Request Type",
                             value: formData["requestType"],
                             type: "Type",
                             subType: "Request Type",
@@ -447,7 +447,7 @@ class _AchWirePageState extends State<AchWirePage> {
                             disabled:
                                 isEdit || formData["requestType"] == "Wire",
                             label: "Transfer Type",
-                            placeholder: "Select Transfer Type",
+                            placeholder: "Transfer Type",
                             value: formData["transferType"],
                             type: "Type",
                             subType: "Transfer Type",
@@ -461,41 +461,66 @@ class _AchWirePageState extends State<AchWirePage> {
                         ),
                         SizedBox(
                           width: itemWidth,
-                          child: FieldAmount(
-                            initial: ConvertService.safeDouble(formData["amt"])
-                                .toString(),
-                            prefixText: '\$',
-                            maxDecimalDigits: 2,
-                            decoration: InputDecoration(
-                              labelText: "Amount",
-                              helperText: formData["transferType"] ==
-                                      "Withdrawal"
-                                  ? "Withdrawable amount: ${FormatUtils.formatCurrency(maximumWithdrawable["withdrawableAmt"])}"
-                                  : null,
-                            ),
-                            onChangedRaw: (raw) {
-                              setState(() {
-                                formData["amt"] =
-                                    ConvertService.safeDouble(raw);
-                                _calculateFee();
-                              });
-                            },
-                          ),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Amount',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(height: 6),
+                                FieldAmount(
+                                  initial:
+                                      ConvertService.safeDouble(formData["amt"])
+                                          .toString(),
+                                  prefixText: '\$',
+                                  maxDecimalDigits: 2,
+                                  decoration: InputDecoration(
+                                    helperText: formData["transferType"] ==
+                                            "Withdrawal"
+                                        ? "Withdrawable amount: ${FormatUtils.formatCurrency(maximumWithdrawable["withdrawableAmt"])}"
+                                        : null,
+                                  ),
+                                  onChangedRaw: (raw) {
+                                    setState(() {
+                                      formData["amt"] =
+                                          ConvertService.safeDouble(raw);
+                                      _calculateFee();
+                                    });
+                                  },
+                                ),
+                              ]),
                         ),
                         SizedBox(
                           width: itemWidth,
                           child: isGettingFee
                               ? AppTheme.buildLoadingIndicator()
-                              : TextFormField(
-                                  decoration: const InputDecoration(
-                                    labelText: "Fee",
-                                    prefixText: "\$",
-                                  ),
-                                  readOnly: true,
-                                  controller: TextEditingController(
-                                    text: formData["fee"].toString(),
-                                  ),
-                                ),
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                      Text(
+                                        'Fee',
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      TextField(
+                                        readOnly: true,
+                                        decoration: InputDecoration(
+                                          fillColor: Theme.of(context)
+                                              .disabledColor
+                                              .withValues(alpha: 0.12),
+                                          filled: true,
+                                        ),
+                                        controller: TextEditingController(
+                                          text: FormatUtils.formatCurrency(
+                                              formData["fee"]),
+                                        ),
+                                      ),
+                                    ]),
                         ),
                         SizedBox(
                           width: itemWidth,

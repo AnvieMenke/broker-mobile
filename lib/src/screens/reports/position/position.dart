@@ -749,6 +749,7 @@ class PositionPageState extends State<PositionPage> {
                                 isAllStatus: true,
                                 correspondent: queryData["correspondent"],
                                 type: "Client",
+                                isMainFilter: true,
                                 onChange: (map) => setState(() {
                                   if (map['data'] != null &&
                                       map['data']['accountNo'] != null) {

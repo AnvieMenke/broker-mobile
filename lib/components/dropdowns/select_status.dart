@@ -147,41 +147,53 @@ class _SelectStatusState extends State<SelectStatus> {
             ? currentSelected["code"]
             : null;
 
-    return DropdownButtonFormField<String>(
-      isExpanded: true,
-      decoration: InputDecoration(
-        labelText: "Status",
-        errorText: widget.error ? "Invalid status" : null,
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(
+        'Status',
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
       ),
-      initialValue: dropdownValue,
-      onChanged: disabled ? null : handleChange,
-      items: statusList.map<DropdownMenuItem<String>>((status) {
-        final color = [
-          "Denied",
-          "Inactive",
-          "Rejected",
-          "Bank Rejected",
-          "Canceled",
-        ].contains(status.code)
-            ? Colors.red
-            : Theme.of(context).textTheme.bodyMedium?.color;
+      const SizedBox(height: 6),
+      DropdownButtonFormField<String>(
+        isExpanded: true,
+        decoration: InputDecoration(
+          fillColor: widget.disabled
+              ? Theme.of(context)
+              .disabledColor
+              .withValues(alpha: 0.12)
+              : null,
+          filled: true,
+          errorText: widget.error ? "Invalid status" : null,
+        ),
+        initialValue: dropdownValue,
+        onChanged: disabled ? null : handleChange,
+        items: statusList.map<DropdownMenuItem<String>>((status) {
+          final color = [
+            "Denied",
+            "Inactive",
+            "Rejected",
+            "Bank Rejected",
+            "Canceled",
+          ].contains(status.code)
+              ? Colors.red
+              : Theme.of(context).textTheme.bodyMedium?.color;
 
-        final italic = previousSelected["code"] == status.code &&
-                (int.tryParse(status.note) ?? 0) != 0
-            ? FontStyle.italic
-            : FontStyle.normal;
+          final italic = previousSelected["code"] == status.code &&
+                  (int.tryParse(status.note) ?? 0) != 0
+              ? FontStyle.italic
+              : FontStyle.normal;
 
-        return DropdownMenuItem<String>(
-          value: status.code,
-          child: Text(
-            status.description,
-            style: TextStyle(
-              color: color,
-              fontStyle: italic,
+          return DropdownMenuItem<String>(
+            value: status.code,
+            child: Text(
+              status.description,
+              style: TextStyle(
+                color: color,
+                fontStyle: italic,
+              ),
             ),
-          ),
-        );
-      }).toList(),
-    );
+          );
+        }).toList(),
+      ),
+    ]);
   }
 }

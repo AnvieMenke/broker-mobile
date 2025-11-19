@@ -66,50 +66,57 @@ class _SelectPageState extends State<SelectPage> {
 
     return isLoading
         ? const LinearProgressIndicator()
-        : DropdownButtonFormField<String>(
-            initialValue: dropdownValue,
-            isExpanded: true,
-            decoration: InputDecoration(
-              labelText: widget.label,
-              errorText: widget.error != null ? widget.msg : null,
-              border: widget.border,
+        : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              widget.label,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
-            onChanged: widget.disabled
-                ? null
-                : (selectedPage) {
-                    if (selectedPage == null || selectedPage.isEmpty) {
-                      widget.onChange(null);
-                      return;
-                    }
-
-                    final matches =
-                        pages.where((o) => o.pageName == selectedPage).toList();
-                    final data = matches.isNotEmpty ? matches.first : null;
-
-                    if (data != null) {
-                      widget.onChange({
-                        "data": {
-                          "pageName": data.pageName ?? "",
-                          "pageComponent": data.component ?? "",
-                        }
-                      });
-                    }
-                  },
-            items: [
-              DropdownMenuItem<String>(
-                value: "",
-                child: Text(
-                  widget.placeholder,
-                  style: const TextStyle(color: Colors.grey),
-                ),
+            const SizedBox(height: 6),
+            DropdownButtonFormField<String>(
+              initialValue: dropdownValue,
+              isExpanded: true,
+              decoration: InputDecoration(
+                errorText: widget.error != null ? widget.msg : null,
+                border: widget.border,
               ),
-              ...pages.map((page) {
-                return DropdownMenuItem<String>(
-                  value: page.pageName ?? "",
-                  child: Text(page.pageName ?? ""),
-                );
-              }),
-            ],
-          );
+              onChanged: widget.disabled
+                  ? null
+                  : (selectedPage) {
+                      if (selectedPage == null || selectedPage.isEmpty) {
+                        widget.onChange(null);
+                        return;
+                      }
+
+                      final matches = pages
+                          .where((o) => o.pageName == selectedPage)
+                          .toList();
+                      final data = matches.isNotEmpty ? matches.first : null;
+
+                      if (data != null) {
+                        widget.onChange({
+                          "data": {
+                            "pageName": data.pageName ?? "",
+                            "pageComponent": data.component ?? "",
+                          }
+                        });
+                      }
+                    },
+              items: [
+                DropdownMenuItem<String>(
+                  value: "",
+                  child: Text(
+                    widget.placeholder,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
+                ...pages.map((page) {
+                  return DropdownMenuItem<String>(
+                    value: page.pageName ?? "",
+                    child: Text(page.pageName ?? ""),
+                  );
+                }),
+              ],
+            ),
+          ]);
   }
 }
