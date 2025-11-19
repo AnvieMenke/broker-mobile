@@ -5,6 +5,7 @@ class FieldPassword extends StatefulWidget {
   final String label;
   final String? Function(String?)? validator;
   final bool? autoFocus;
+  final bool? showLabelText;
 
   const FieldPassword({
     super.key,
@@ -12,6 +13,7 @@ class FieldPassword extends StatefulWidget {
     required this.label,
     this.validator,
     this.autoFocus,
+    this.showLabelText = true,
   });
 
   @override
@@ -28,7 +30,7 @@ class _FieldPasswordState extends State<FieldPassword> {
       obscureText: _obscure,
       autofocus: widget.autoFocus ?? false,
       decoration: InputDecoration(
-        labelText: widget.label,
+        labelText: (widget.showLabelText == true) ? widget.label : null,
         suffixIcon: IconButton(
           icon: Icon(
             _obscure ? Icons.visibility_off : Icons.visibility,

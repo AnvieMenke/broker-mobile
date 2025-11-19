@@ -9,6 +9,7 @@ class ChangePasswordForm extends StatefulWidget {
     required String oldPassword,
     required String newPassword,
   }) onSubmit;
+
   // returns `null` if success, otherwise an error string
 
   const ChangePasswordForm({
@@ -118,6 +119,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               FieldPassword(
                 controller: _oldPasswordController,
                 label: "Old Password",
+                showLabelText: false,
                 validator: (v) =>
                     v == null || v.isEmpty ? "Old password is required" : null,
               ),
@@ -130,6 +132,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               FieldPassword(
                 controller: _newPasswordController,
                 label: "New Password",
+                showLabelText: false,
                 validator: _validatePassword,
               ),
               const SizedBox(height: 12),
@@ -141,6 +144,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               FieldPassword(
                 controller: _confirmPasswordController,
                 label: "Confirm New Password",
+                showLabelText: false,
                 validator: (v) {
                   if (v == null || v.isEmpty) {
                     return "Confirm password is required";
