@@ -600,10 +600,16 @@ class ActivityPageState extends State<ActivityPage> {
                           selectedAssetType = map?['data']['code'] ?? '';
                         }),
                       ),
+                      const Text(
+                        'Description',
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 6),
                       TextField(
                         controller: descriptionController,
                         decoration:
-                            const InputDecoration(labelText: "Description"),
+                            const InputDecoration(hintText: "Description"),
                         onChanged: (value) => description = value,
                       ),
                     ],
@@ -754,6 +760,7 @@ class ActivityPageState extends State<ActivityPage> {
                                 isAllStatus: true,
                                 correspondent: queryData["correspondent"],
                                 type: "Client",
+                                isMainFilter: true,
                                 onChange: (map) => setState(() {
                                   if (map['data'] != null &&
                                       map['data']['accountNo'] != null) {

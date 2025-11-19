@@ -19,6 +19,7 @@ class AccountSummaryPage extends StatefulWidget {
 
 class AccountSummaryState extends State<AccountSummaryPage> {
   Future<List<Balance>>? _futureBalances;
+  final FocusScopeNode _focusScopeNode = FocusScopeNode();
 
   late Map<String, dynamic> queryData = {
     "dateType": "Trade and Settle",
@@ -175,19 +176,27 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: ConvertService.safeDouble(acct.accountValuePercent) < 0
-                          ? const Color(0xFF3B0000)
-                          : ConvertService.safeDouble(acct.accountValuePercent) > 0
-                              ? const Color(0xFF002B00)
-                              : const Color(0xFF2E2E2E),
+                      color:
+                          ConvertService.safeDouble(acct.accountValuePercent) <
+                                  0
+                              ? const Color(0xFF3B0000)
+                              : ConvertService.safeDouble(
+                                          acct.accountValuePercent) >
+                                      0
+                                  ? const Color(0xFF002B00)
+                                  : const Color(0xFF2E2E2E),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
                       FormatUtils.formatPercentage(acct.accountValuePercent),
                       style: TextStyle(
-                        color: ConvertService.safeDouble(acct.accountValuePercent) < 0
+                        color: ConvertService.safeDouble(
+                                    acct.accountValuePercent) <
+                                0
                             ? Colors.redAccent
-                            : ConvertService.safeDouble(acct.accountValuePercent) > 0
+                            : ConvertService.safeDouble(
+                                        acct.accountValuePercent) >
+                                    0
                                 ? Colors.greenAccent
                                 : Colors.white70,
                         fontSize: 12,
@@ -243,65 +252,73 @@ class AccountSummaryState extends State<AccountSummaryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PageListContainer(
-      title: "Summary",
-      onRefresh: _refreshData,
-      page: _futureBalances == null
-          ? AppTheme.buildLoadingIndicator()
-          : FutureBuilder<List<Balance>>(
-              future: _futureBalances,
-              builder: (context, snapshot) {
-                Widget body;
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  body = AppTheme.buildLoadingIndicator();
-                } else {
-                  body = GridWithPagination(
-                    items: _buildGridItems(snapshot.data!),
-                    pagination: pagination,
-                    onPageChange: _onPageChange,
-                    onRefresh: _refreshData,
-                    disableActions: true,
-                  );
-                }
-                return Scaffold(
-                  body: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 400),
-                          child: AutoCompleteAccountNo(
-                            name: "accountNo",
-                            value: queryData["accountNo"],
-                            isAllStatus: true,
-                            type: "Client",
-                            onChange: (map) => setState(() {
-                              if (map['data'] != null &&
-                                  map['data']['accountNo'] != null) {
-                                queryData = {
-                                  ...queryData,
-                                  "accountNo":
-                                      map['data']?['accountNo'] as String? ??
+    return FocusScope(
+      node: _focusScopeNode,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => _focusScopeNode.unfocus(),
+        child: PageListContainer(
+          title: "Summary",
+          onRefresh: _refreshData,
+          page: _futureBalances == null
+              ? AppTheme.buildLoadingIndicator()
+              : FutureBuilder<List<Balance>>(
+                  future: _futureBalances,
+                  builder: (context, snapshot) {
+                    Widget body;
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      body = AppTheme.buildLoadingIndicator();
+                    } else {
+                      body = GridWithPagination(
+                        items: _buildGridItems(snapshot.data!),
+                        pagination: pagination,
+                        onPageChange: _onPageChange,
+                        onRefresh: _refreshData,
+                        disableActions: true,
+                      );
+                    }
+                    return Scaffold(
+                      body: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 400),
+                              child: AutoCompleteAccountNo(
+                                name: "accountNo",
+                                value: queryData["accountNo"],
+                                isAllStatus: true,
+                                type: "Client",
+                                isMainFilter: true,
+                                onChange: (map) => setState(() {
+                                  if (map['data'] != null &&
+                                      map['data']['accountNo'] != null) {
+                                    queryData = {
+                                      ...queryData,
+                                      "accountNo": map['data']?['accountNo']
+                                              as String? ??
                                           '',
-                                };
-                                _futureBalances = _listBalance();
-                              }
-                            }),
-                            onClear: (map) => setState(() {
-                              queryData["accountNo"] = "";
-                              _futureBalances = _listBalance();
-                            }),
+                                    };
+                                    _futureBalances = _listBalance();
+                                  }
+                                }),
+                                onClear: (map) => setState(() {
+                                  queryData["accountNo"] = "";
+                                  _futureBalances = _listBalance();
+                                }),
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 12),
+                          Expanded(child: body),
+                        ],
                       ),
-                      const SizedBox(height: 12),
-                      Expanded(child: body),
-                    ],
-                  ),
-                );
-              },
-            ),
+                    );
+                  },
+                ),
+        ),
+      ),
     );
   }
 }

@@ -163,35 +163,42 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
           onFocusChange: (hasFocus) {
             if (!hasFocus) _handleOnBlur(_controller.text);
           },
-          child: TextField(
-            controller: controller,
-            focusNode: focusNode,
-            enabled: !widget.disabled,
-            decoration: InputDecoration(
-              labelText: 'Account Name',
-              hintText: 'Account Name',
-              errorText: widget.error ? 'Invalid input' : null,
-              suffixIcon: controller.text.isNotEmpty && !widget.disabled
-                  ? IconButton(
-                      icon: const Icon(Icons.clear, size: 20),
-                      onPressed: _clearField,
-                    )
-                  : null,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text(
+              'Account Name',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
-            onChanged: (value) {
-              setState(() {});
-              if (widget.freeSolo) {
-                _setPropsValue(_controller.text, {});
-                return;
-              }
-              if (value.isEmpty) {
-                _setPropsValue('', {});
-                widget.onChange({});
-                return;
-              }
-            },
-            onEditingComplete: () => _handleOnBlur(_controller.text),
-          ),
+            const SizedBox(height: 6),
+            TextField(
+              controller: controller,
+              focusNode: focusNode,
+              enabled: !widget.disabled,
+              decoration: InputDecoration(
+                hintText: 'Account Name',
+                errorText: widget.error ? 'Invalid input' : null,
+                suffixIcon: controller.text.isNotEmpty && !widget.disabled
+                    ? IconButton(
+                        icon: const Icon(Icons.clear, size: 20),
+                        onPressed: _clearField,
+                      )
+                    : null,
+              ),
+              onChanged: (value) {
+                setState(() {});
+                if (widget.freeSolo) {
+                  _setPropsValue(_controller.text, {});
+                  return;
+                }
+                if (value.isEmpty) {
+                  _setPropsValue('', {});
+                  widget.onChange({});
+                  return;
+                }
+              },
+              onEditingComplete: () => _handleOnBlur(_controller.text),
+            ),
+          ]),
         );
       },
     );

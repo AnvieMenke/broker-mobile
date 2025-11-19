@@ -75,7 +75,7 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
         }
 
         final matches =
-        options.where((account) => account.bankId == widget.value).toList();
+            options.where((account) => account.bankId == widget.value).toList();
 
         selectedValue = matches.isNotEmpty ? matches.first : null;
       });
@@ -90,64 +90,76 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<BankAccount>(
-      initialValue: selectedValue,
-      hint: const Text("Select Bank Account"),
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
-      decoration: InputDecoration(
-        labelText: widget.label,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(
+        widget.label,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
       ),
-      items: options.isNotEmpty
-          ? options.map((account) {
-              return DropdownMenuItem<BankAccount>(
-                value: account,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: Text(
-                    "${account.bankName}: ${account.bankAccountNo}",
-                    softWrap: true,
-                    overflow: TextOverflow.visible,
-                    maxLines: null,
-                    style: const TextStyle(fontSize: 14),
+      const SizedBox(height: 6),
+      DropdownButtonFormField<BankAccount>(
+        initialValue: selectedValue,
+        hint: const Text("Select Bank Account"),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
+        decoration: InputDecoration(
+          fillColor: widget.disabled
+              ? Theme.of(context)
+              .disabledColor
+              .withValues(alpha: 0.12)
+              : null,
+          filled: true,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        ),
+        items: options.isNotEmpty
+            ? options.map((account) {
+                return DropdownMenuItem<BankAccount>(
+                  value: account,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: Text(
+                      "${account.bankName}: ${account.bankAccountNo}",
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                      maxLines: null,
+                      style: const TextStyle(fontSize: 14),
+                    ),
                   ),
-                ),
-              );
-            }).toList()
-          : [
-              const DropdownMenuItem<BankAccount>(
-                value: null,
-                child: Text("No Bank Available"),
-              ),
-            ],
-      onChanged: widget.disabled
-          ? null
-          : (account) {
-              setState(() {
-                selectedValue = account;
-              });
-
-              if (account != null && widget.onChange != null) {
-                widget.onChange!(
-                  {
-                    'data': {
-                      'bankId': account.bankId,
-                      'bankName': account.bankName,
-                      'bankAccountNo': account.bankAccountNo,
-                    }
-                  },
                 );
-              }
-            },
-      validator: widget.requiredField
-          ? (value) => value == null ? 'Required' : null
-          : null,
-    );
+              }).toList()
+            : [
+                const DropdownMenuItem<BankAccount>(
+                  value: null,
+                  child: Text("Bank Account"),
+                ),
+              ],
+        onChanged: widget.disabled
+            ? null
+            : (account) {
+                setState(() {
+                  selectedValue = account;
+                });
+
+                if (account != null && widget.onChange != null) {
+                  widget.onChange!(
+                    {
+                      'data': {
+                        'bankId': account.bankId,
+                        'bankName': account.bankName,
+                        'bankAccountNo': account.bankAccountNo,
+                      }
+                    },
+                  );
+                }
+              },
+        validator: widget.requiredField
+            ? (value) => value == null ? 'Required' : null
+            : null,
+      ),
+    ]);
   }
 }

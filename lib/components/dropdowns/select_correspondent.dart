@@ -121,36 +121,49 @@ class _AutoCompleteCorrespondentState extends State<AutoCompleteCorrespondent> {
               _handleOnBlur(_controller.text);
             }
           },
-          child: TextField(
-            controller: controller,
-            focusNode: focusNode,
-            enabled: !widget.disabled,
-            decoration: InputDecoration(
-              labelText: widget.label ?? 'Correspondent',
-              hintText: widget.label ?? 'Correspondent',
-              errorText: widget.error ? 'Invalid input' : null,
-              suffixIcon: controller.text.isNotEmpty && !widget.disabled
-                  ? IconButton(
-                      icon: const Icon(Icons.clear, size: 20),
-                      onPressed: _clearField,
-                    )
-                  : null,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              widget.label ?? 'Correspondent',
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
-            onChanged: (value) {
-              setState(() {});
-              if (widget.freeSolo) {
-                widget.onChange(value);
-                return;
-              }
-              if (value.isEmpty) {
-                widget.onChange('');
-                return;
-              }
-            },
-            onEditingComplete: () {
-              _handleOnBlur(_controller.text);
-            },
-          ),
+            const SizedBox(height: 6),
+            TextField(
+              controller: controller,
+              focusNode: focusNode,
+              enabled: !widget.disabled,
+              decoration: InputDecoration(
+                fillColor: widget.disabled
+                    ? Theme.of(context)
+                    .disabledColor
+                    .withValues(alpha: 0.12)
+                    : null,
+                filled: true,
+                hintText: widget.label ?? 'Correspondent',
+                errorText: widget.error ? 'Invalid input' : null,
+                suffixIcon: controller.text.isNotEmpty && !widget.disabled
+                    ? IconButton(
+                        icon: const Icon(Icons.clear, size: 20),
+                        onPressed: _clearField,
+                      )
+                    : null,
+              ),
+              onChanged: (value) {
+                setState(() {});
+                if (widget.freeSolo) {
+                  widget.onChange(value);
+                  return;
+                }
+                if (value.isEmpty) {
+                  widget.onChange('');
+                  return;
+                }
+              },
+              onEditingComplete: () {
+                _handleOnBlur(_controller.text);
+              },
+            ),
+          ]),
         );
       },
     );

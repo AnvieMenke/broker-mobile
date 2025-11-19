@@ -117,34 +117,61 @@ class _UserSettingsFormState extends State<UserSettingsForm> {
     return Form(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Read-only fields
+          const Text(
+            'Name',
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 6),
           TextFormField(
             initialValue: widget.name,
             readOnly: true,
             decoration: InputDecoration(
-              labelText: "Name",
-              hintText: 'Email',
+              hintText: 'Name',
             ),
           ),
           const SizedBox(height: 12),
+          const Text(
+            'Email',
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 6),
           TextFormField(
             initialValue: widget.email,
             readOnly: true,
-            decoration: const InputDecoration(labelText: "Email"),
+            decoration: const InputDecoration(hintText: "Email"),
           ),
           const SizedBox(height: 12),
+          const Text(
+            'Role',
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 6),
           TextFormField(
             initialValue: widget.role,
             readOnly: true,
-            decoration: const InputDecoration(labelText: "Role"),
+            decoration: const InputDecoration(hintText: "Role"),
           ),
           const SizedBox(height: 12),
-
+          const Text(
+            'Mobile Number',
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 6),
           // Mobile number
           IntlPhoneField(
             initialValue: widget.mobileNo,
-            decoration: const InputDecoration(labelText: 'Mobile Number'),
+            decoration: const InputDecoration(hintText: 'Mobile Number'),
             onChanged: (phone) {
               _mobileNo = phone.completeNumber;
             },
