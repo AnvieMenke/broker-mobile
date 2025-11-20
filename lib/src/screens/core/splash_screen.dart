@@ -54,7 +54,7 @@ class SplashScreenState extends State<SplashScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 24.0),
               child: Text(
-                'Copyright © 2025 SAS . All Rights Reserved.',
+                'Copyright © 2025 SAS. All rights reserved.',
                 style: TextStyle(
                   fontSize: 9,
                   color: Colors.white38,

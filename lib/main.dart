@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:broker_mobile/router.dart';
 import 'package:broker_mobile/service/health_check_service.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,12 @@ import 'navigator.dart';
 import 'utils/theme/custom_theme.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:broker_mobile/session/activity_listener.dart';
+import 'package:flutter/foundation.dart';
+
+bool isApplePlatform() {
+  if (kIsWeb) return false;
+  return Platform.isIOS || Platform.isMacOS;
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +23,7 @@ void main() async {
   // Load saved theme before runApp
   await themeManager.loadTheme();
   final isHealthy = await HealthCheckService().checkService();
-
+  final initialRoute = isApplePlatform() ? '/' : '/splash';
   if (!isHealthy) {
     runApp(const MaterialApp(
       home: MaintenanceScreen(),
@@ -25,11 +32,13 @@ void main() async {
     return;
   }
 
-  runApp(const MyApp());
+  runApp(MyApp(initialRoute: initialRoute));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+
+  const MyApp({super.key, required this.initialRoute});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -62,7 +71,7 @@ class _MyAppState extends State<MyApp> {
         darkTheme: AppTheme.darkTheme,
         themeMode: themeManager.themeMode,
         navigatorKey: navigatorKey,
-        initialRoute: '/splash',
+        initialRoute: widget.initialRoute,
         onGenerateRoute: generateRoute,
       ),
     );
