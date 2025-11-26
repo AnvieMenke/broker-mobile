@@ -11,7 +11,6 @@ class AutoCompleteBranch extends StatefulWidget {
   final bool freeSolo;
   final bool required;
   final bool error;
-  final bool isAccessibleOnly;
   final bool isAllStatus;
   final bool isActive;
   final String correspondent;
@@ -26,7 +25,6 @@ class AutoCompleteBranch extends StatefulWidget {
     this.freeSolo = false,
     this.required = false,
     this.error = false,
-    this.isAccessibleOnly = false,
     this.isAllStatus = false,
     this.isActive = true,
     this.correspondent = '',
@@ -74,31 +72,18 @@ class _AutoCompleteBranchState extends State<AutoCompleteBranch> {
 
   Future<List<Map<String, dynamic>>> _getOptions(String input) async {
     try {
-      if (widget.isAccessibleOnly) {
-        final data = await _service.accessibleBranch(
-          input,
-          widget.correspondent,
-          widget.isAllStatus,
-        );
-        _options = data
-            .map((acc) => {
-                  'branch': acc.branch,
-                })
-            .toList();
-      } else {
-        final data = await _service.lazyLoadAccount(
-          input,
-          'branch',
-          'branch',
-          widget.isActive,
-          widget.correspondent,
-        );
-        _options = data.accounts
-            .map((acc) => {
-                  'branch': acc.branch,
-                })
-            .toList();
-      }
+      final data = await _service.lazyLoadAccount(
+        input,
+        'branch',
+        'branch',
+        widget.isActive,
+        widget.correspondent,
+      );
+      _options = data.accounts
+          .map((acc) => {
+                'branch': acc.branch,
+              })
+          .toList();
       return _options;
     } catch (e) {
       debugPrint('Error fetching branch options: $e');

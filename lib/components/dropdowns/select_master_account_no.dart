@@ -10,7 +10,6 @@ class AutoCompleteMasterAccountNo extends StatefulWidget {
   final bool freeSolo;
   final bool required;
   final bool error;
-  final bool isAccessibleOnly;
   final bool isAllStatus;
   final bool isActive;
   final String correspondent;
@@ -25,7 +24,6 @@ class AutoCompleteMasterAccountNo extends StatefulWidget {
     this.freeSolo = false,
     this.required = false,
     this.error = false,
-    this.isAccessibleOnly = false,
     this.isAllStatus = false,
     this.isActive = true,
     this.correspondent = '',
@@ -74,35 +72,21 @@ class _AutoCompleteMasterAccountNoState
 
   Future<List<Map<String, dynamic>>> _getOptions(String input) async {
     try {
-      if (widget.isAccessibleOnly) {
-        final data = await _service.accessibleMasterAccountNo(
-          input,
-          widget.correspondent,
-          widget.isAllStatus,
-        );
-        _options = data
-            .map((acc) => {
-                  'masterAccountNo': acc.masterAccountNo,
-                  'accountName': acc.accountName,
-                })
-            .toList();
-      } else {
-        final data = await _service.lazyLoadAccount(
-          input,
-          'master_account_no',
-          'master_account_no',
-          widget.isActive,
-          widget.correspondent,
-        );
-        _options = data.accounts
-            .map((acc) => {
-                  'masterAccountNo': acc.accountNo,
-                  'accountName': acc.accountName,
-                  'correspondent': acc.correspondent,
-                  'accountId': acc.accountId,
-                })
-            .toList();
-      }
+      final data = await _service.lazyLoadAccount(
+        input,
+        'master_account_no',
+        'master_account_no',
+        widget.isActive,
+        widget.correspondent,
+      );
+      _options = data.accounts
+          .map((acc) => {
+                'masterAccountNo': acc.accountNo,
+                'accountName': acc.accountName,
+                'correspondent': acc.correspondent,
+                'accountId': acc.accountId,
+              })
+          .toList();
       return _options;
     } catch (e) {
       debugPrint('Error fetching master accounts: $e');

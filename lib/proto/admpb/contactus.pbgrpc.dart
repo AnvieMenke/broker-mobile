@@ -42,10 +42,6 @@ class ContactUsServiceClient extends $grpc.Client {
       '/admpb.ContactUsService/CreateContactUs',
       ($0.ContactUs value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.CreateContactUsResponse.fromBuffer(value));
-  static final _$getNewId = $grpc.ClientMethod<$0.NewIdEmptyRequest, $0.ContactUs>(
-      '/admpb.ContactUsService/GetNewId',
-      ($0.NewIdEmptyRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ContactUs.fromBuffer(value));
 
   ContactUsServiceClient(super.channel, {super.options, super.interceptors});
 
@@ -59,10 +55,6 @@ class ContactUsServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.CreateContactUsResponse> createContactUs($0.ContactUs request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createContactUs, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.ContactUs> getNewId($0.NewIdEmptyRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getNewId, request, options: options);
   }
 }
 
@@ -92,13 +84,6 @@ abstract class ContactUsServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.ContactUs.fromBuffer(value),
         ($0.CreateContactUsResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.NewIdEmptyRequest, $0.ContactUs>(
-        'GetNewId',
-        getNewId_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.NewIdEmptyRequest.fromBuffer(value),
-        ($0.ContactUs value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.UpdateContactUsResponse> updateContactUs_Pre($grpc.ServiceCall $call, $async.Future<$0.ContactUs> $request) async {
@@ -113,12 +98,7 @@ abstract class ContactUsServiceBase extends $grpc.Service {
     return createContactUs($call, await $request);
   }
 
-  $async.Future<$0.ContactUs> getNewId_Pre($grpc.ServiceCall $call, $async.Future<$0.NewIdEmptyRequest> $request) async {
-    return getNewId($call, await $request);
-  }
-
   $async.Future<$0.UpdateContactUsResponse> updateContactUs($grpc.ServiceCall call, $0.ContactUs request);
   $async.Future<$0.ListContactUsResponse> listContactUs($grpc.ServiceCall call, $0.ListContactUsRequest request);
   $async.Future<$0.CreateContactUsResponse> createContactUs($grpc.ServiceCall call, $0.ContactUs request);
-  $async.Future<$0.ContactUs> getNewId($grpc.ServiceCall call, $0.NewIdEmptyRequest request);
 }

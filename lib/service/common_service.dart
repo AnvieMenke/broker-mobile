@@ -30,22 +30,6 @@ class CommonService {
     }
   }
 
-  Future<PbList<AccountNo>> accessibleAccountNo(
-      String key, correspondent, bool isAllStatus, String type) async {
-    final req = AccessibleRequest()
-      ..key = key
-      ..correspondent = correspondent
-      ..isAllStatus = isAllStatus
-      ..type = type;
-
-    try {
-      final response = await _lazyService.accessibleAccountNo(req);
-      return response.accountNos;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   Future<LazyAccountResponse> lazyLoadAccount(
     String key,
     String orderBy,
@@ -63,6 +47,29 @@ class CommonService {
 
     try {
       final response = await _lazyService.lazyAccount(req);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<LazyRepAdvisorResponse> lazyRepAdvisor(
+      String key,
+      String orderBy,
+      String type,
+      bool isActive,
+      String correspondent,
+      ) async {
+    final req = LazyAccountRequest()
+      ..key = key
+      ..limit = 50
+      ..orderBy = orderBy
+      ..colType = type
+      ..isActive = isActive
+      ..correspondent = correspondent;
+
+    try {
+      final response = await _lazyService.lazyRepAdvisor(req);
       return response;
     } catch (e) {
       rethrow;
@@ -99,51 +106,6 @@ class CommonService {
     }
   }
 
-  Future<PbList<MasterAccountNo>> accessibleMasterAccountNo(
-      String key, correspondent, bool isAllStatus) async {
-    final req = AccessibleRequest()
-      ..key = key
-      ..correspondent = correspondent
-      ..isAllStatus = isAllStatus;
-
-    try {
-      final response = await _lazyService.accessibleMasterAccountNo(req);
-      return response.masterAccountNos;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<PbList<Rep>> accessibleRep(
-      String key, correspondent, bool isAllStatus) async {
-    final req = AccessibleRequest()
-      ..key = key
-      ..correspondent = correspondent
-      ..isAllStatus = isAllStatus;
-
-    try {
-      final response = await _lazyService.accessibleRep(req);
-      return response.reps;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<PbList<Branch>> accessibleBranch(
-      String key, correspondent, bool isAllStatus) async {
-    final req = AccessibleRequest()
-      ..key = key
-      ..correspondent = correspondent
-      ..isAllStatus = isAllStatus;
-
-    try {
-      final response = await _lazyService.accessibleBranch(req);
-      return response.branches;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   Future<ListAdmEntryTypeResponse> listEntryType(String entryType, screenType,
       correspondent, accountNo, status, note) async {
     final req = ListAdmEntryTypeRequest()
@@ -158,21 +120,6 @@ class CommonService {
     try {
       final response = await _listService.listAdmEntryType(req);
       return response;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<PbList<String>> accessibleAccountName(
-      String key, correspondent, bool isAllStatus) async {
-    final req = AccessibleRequest()
-      ..key = key
-      ..correspondent = correspondent
-      ..isAllStatus = isAllStatus;
-
-    try {
-      final response = await _lazyService.accessibleAccountName(req);
-      return response.accountNames;
     } catch (e) {
       rethrow;
     }

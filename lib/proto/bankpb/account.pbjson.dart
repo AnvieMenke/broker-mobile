@@ -271,48 +271,6 @@ final $typed_data.Uint8List listAccountResponseDescriptor = $convert.base64Decod
     'Njb3VudFIMYmFua0FjY291bnRzEjQKB3N1bW1hcnkYAiABKAsyGi5iYW5rcGIuTGlzdEFjY291'
     'bnRTdW1tYXJ5UgdzdW1tYXJ5');
 
-@$core.Deprecated('Use listAccountAuditRequestDescriptor instead')
-const ListAccountAuditRequest$json = {
-  '1': 'ListAccountAuditRequest',
-  '2': [
-    {'1': 'bank_id', '3': 1, '4': 1, '5': 13, '10': 'bankId'},
-  ],
-};
-
-/// Descriptor for `ListAccountAuditRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listAccountAuditRequestDescriptor = $convert.base64Decode(
-    'ChdMaXN0QWNjb3VudEF1ZGl0UmVxdWVzdBIXCgdiYW5rX2lkGAEgASgNUgZiYW5rSWQ=');
-
-@$core.Deprecated('Use listAccountAuditResponseDescriptor instead')
-const ListAccountAuditResponse$json = {
-  '1': 'ListAccountAuditResponse',
-  '2': [
-    {'1': 'account', '3': 1, '4': 3, '5': 11, '6': '.bankpb.Account', '10': 'account'},
-  ],
-};
-
-/// Descriptor for `ListAccountAuditResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listAccountAuditResponseDescriptor = $convert.base64Decode(
-    'ChhMaXN0QWNjb3VudEF1ZGl0UmVzcG9uc2USKQoHYWNjb3VudBgBIAMoCzIPLmJhbmtwYi5BY2'
-    'NvdW50UgdhY2NvdW50');
-
-@$core.Deprecated('Use listBankAccountRequestDescriptor instead')
-const ListBankAccountRequest$json = {
-  '1': 'ListBankAccountRequest',
-  '2': [
-    {'1': 'account_no', '3': 1, '4': 1, '5': 9, '10': 'accountNo'},
-    {'1': 'correspondent', '3': 2, '4': 1, '5': 9, '10': 'correspondent'},
-    {'1': 'status', '3': 3, '4': 1, '5': 9, '10': 'status'},
-    {'1': 'user_id', '3': 4, '4': 1, '5': 5, '10': 'userId'},
-  ],
-};
-
-/// Descriptor for `ListBankAccountRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listBankAccountRequestDescriptor = $convert.base64Decode(
-    'ChZMaXN0QmFua0FjY291bnRSZXF1ZXN0Eh0KCmFjY291bnRfbm8YASABKAlSCWFjY291bnRObx'
-    'IkCg1jb3JyZXNwb25kZW50GAIgASgJUg1jb3JyZXNwb25kZW50EhYKBnN0YXR1cxgDIAEoCVIG'
-    'c3RhdHVzEhcKB3VzZXJfaWQYBCABKAVSBnVzZXJJZA==');
-
 @$core.Deprecated('Use deleteAccountRequestDescriptor instead')
 const DeleteAccountRequest$json = {
   '1': 'DeleteAccountRequest',

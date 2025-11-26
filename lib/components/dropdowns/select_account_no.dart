@@ -11,7 +11,6 @@ class AutoCompleteAccountNo extends StatefulWidget {
   final bool freeSolo;
   final bool required;
   final bool error;
-  final bool isAccessibleOnly;
   final bool isAllStatus;
   final bool isActive;
   final String type;
@@ -29,7 +28,6 @@ class AutoCompleteAccountNo extends StatefulWidget {
     this.freeSolo = false,
     this.required = false,
     this.error = false,
-    this.isAccessibleOnly = false,
     this.isAllStatus = false,
     this.isActive = true,
     this.type = '',
@@ -79,39 +77,22 @@ class _AutoCompleteAccountNoState extends State<AutoCompleteAccountNo> {
 
   Future<List<Map<String, dynamic>>> _getOptions(String input) async {
     try {
-      if (widget.isAccessibleOnly) {
-        final data = await _service.accessibleAccountNo(
-          input,
-          widget.correspondent,
-          widget.isAllStatus,
-          widget.type,
-        );
-        _options = data
-            .map((acc) => {
-                  'accountNo': acc.accountNo,
-                  'correspondent': acc.correspondent,
-                  'accountName': acc.accountName,
-                  'accountId': acc.accountId,
-                })
-            .toList();
-      } else {
-        final data = await _service.lazyLoadAccount(
-          input,
-          'account_no',
-          'account_no',
-          widget.isActive,
-          widget.correspondent,
-        );
-        _options = data.accounts
-            .map((acc) => {
-                  'accountId': acc.accountId,
-                  'accountNo': acc.accountNo,
-                  'correspondent': acc.correspondent,
-                  'broker': acc.broker,
-                  'accountName': acc.accountName,
-                })
-            .toList();
-      }
+      final data = await _service.lazyLoadAccount(
+        input,
+        'account_no',
+        'account_no',
+        widget.isActive,
+        widget.correspondent,
+      );
+      _options = data.accounts
+          .map((acc) => {
+                'accountId': acc.accountId,
+                'accountNo': acc.accountNo,
+                'correspondent': acc.correspondent,
+                'broker': acc.broker,
+                'accountName': acc.accountName,
+              })
+          .toList();
       return _options;
     } catch (e) {
       debugPrint('Error fetching accounts: $e');

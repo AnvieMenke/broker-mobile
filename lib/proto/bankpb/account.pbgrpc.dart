@@ -50,14 +50,6 @@ class AccountServiceClient extends $grpc.Client {
       '/bankpb.AccountService/DeleteAccount',
       ($0.DeleteAccountRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.DeleteAccountResponse.fromBuffer(value));
-  static final _$listBankAccount = $grpc.ClientMethod<$0.ListBankAccountRequest, $0.ListAccountResponse>(
-      '/bankpb.AccountService/ListBankAccount',
-      ($0.ListBankAccountRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ListAccountResponse.fromBuffer(value));
-  static final _$listAccountAudit = $grpc.ClientMethod<$0.ListAccountAuditRequest, $0.ListAccountAuditResponse>(
-      '/bankpb.AccountService/ListAccountAudit',
-      ($0.ListAccountAuditRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ListAccountAuditResponse.fromBuffer(value));
 
   AccountServiceClient(super.channel, {super.options, super.interceptors});
 
@@ -79,14 +71,6 @@ class AccountServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.DeleteAccountResponse> deleteAccount($0.DeleteAccountRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteAccount, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.ListAccountResponse> listBankAccount($0.ListBankAccountRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$listBankAccount, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.ListAccountAuditResponse> listAccountAudit($0.ListAccountAuditRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$listAccountAudit, request, options: options);
   }
 }
 
@@ -130,20 +114,6 @@ abstract class AccountServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.DeleteAccountRequest.fromBuffer(value),
         ($0.DeleteAccountResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ListBankAccountRequest, $0.ListAccountResponse>(
-        'ListBankAccount',
-        listBankAccount_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.ListBankAccountRequest.fromBuffer(value),
-        ($0.ListAccountResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ListAccountAuditRequest, $0.ListAccountAuditResponse>(
-        'ListAccountAudit',
-        listAccountAudit_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.ListAccountAuditRequest.fromBuffer(value),
-        ($0.ListAccountAuditResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.CreateAccountResponse> createAccount_Pre($grpc.ServiceCall $call, $async.Future<$0.Account> $request) async {
@@ -166,19 +136,9 @@ abstract class AccountServiceBase extends $grpc.Service {
     return deleteAccount($call, await $request);
   }
 
-  $async.Future<$0.ListAccountResponse> listBankAccount_Pre($grpc.ServiceCall $call, $async.Future<$0.ListBankAccountRequest> $request) async {
-    return listBankAccount($call, await $request);
-  }
-
-  $async.Future<$0.ListAccountAuditResponse> listAccountAudit_Pre($grpc.ServiceCall $call, $async.Future<$0.ListAccountAuditRequest> $request) async {
-    return listAccountAudit($call, await $request);
-  }
-
   $async.Future<$0.CreateAccountResponse> createAccount($grpc.ServiceCall call, $0.Account request);
   $async.Future<$0.UpdateAccountResponse> updateAccount($grpc.ServiceCall call, $0.Account request);
   $async.Future<$0.ReadAccountResponse> readAccount($grpc.ServiceCall call, $0.ReadAccountRequest request);
   $async.Future<$0.ListAccountResponse> listAccount($grpc.ServiceCall call, $0.ListAccountRequest request);
   $async.Future<$0.DeleteAccountResponse> deleteAccount($grpc.ServiceCall call, $0.DeleteAccountRequest request);
-  $async.Future<$0.ListAccountResponse> listBankAccount($grpc.ServiceCall call, $0.ListBankAccountRequest request);
-  $async.Future<$0.ListAccountAuditResponse> listAccountAudit($grpc.ServiceCall call, $0.ListAccountAuditRequest request);
 }

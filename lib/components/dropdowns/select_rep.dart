@@ -72,23 +72,14 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
 
   Future<List<Map<String, dynamic>>> _getOptions(String input) async {
     try {
-      if (widget.isAccessibleOnly) {
-        final data = await _service.accessibleRep(
-          input,
-          widget.correspondent,
-          widget.isAllStatus,
-        );
-        _options = data.map((acc) => {'rep': acc.rep}).toList();
-      } else {
-        final data = await _service.lazyLoadAccount(
-          input,
-          'rep',
-          'rep',
-          widget.isActive,
-          widget.correspondent,
-        );
-        _options = data.accounts.map((acc) => {'rep': acc.rep}).toList();
-      }
+      final data = await _service.lazyRepAdvisor(
+        input,
+        'rep',
+        'rep',
+        widget.isActive,
+        widget.correspondent,
+      );
+      _options = data.repAdvisors.map((rep) => {'rep': rep.repCode, 'firstName': rep.firstName, 'lastName': rep.lastName}).toList();
       return _options;
     } catch (e) {
       debugPrint('Error fetching rep advisor options: $e');
@@ -147,6 +138,10 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
             suggestion['rep'] ?? '',
             style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
           ),
+          subtitle: Text(
+            '${suggestion['firstName'] ?? ''} ${suggestion['lastName'] ?? ''}'.trim(),
+          ),
+
         );
       },
       onSelected: (suggestion) {

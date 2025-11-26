@@ -30,20 +30,12 @@ class SystemCodeServiceClient extends $grpc.Client {
     '',
   ];
 
-  static final _$lazySystemCode = $grpc.ClientMethod<$0.LazySystemCodeRequest, $0.SystemCodeResponse>(
-      '/commonpb.SystemCodeService/LazySystemCode',
-      ($0.LazySystemCodeRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.SystemCodeResponse.fromBuffer(value));
   static final _$listSystemCode = $grpc.ClientMethod<$0.ListSystemCodeRequest, $0.SystemCodeResponse>(
       '/commonpb.SystemCodeService/ListSystemCode',
       ($0.ListSystemCodeRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.SystemCodeResponse.fromBuffer(value));
 
   SystemCodeServiceClient(super.channel, {super.options, super.interceptors});
-
-  $grpc.ResponseFuture<$0.SystemCodeResponse> lazySystemCode($0.LazySystemCodeRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$lazySystemCode, request, options: options);
-  }
 
   $grpc.ResponseFuture<$0.SystemCodeResponse> listSystemCode($0.ListSystemCodeRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$listSystemCode, request, options: options);
@@ -55,13 +47,6 @@ abstract class SystemCodeServiceBase extends $grpc.Service {
   $core.String get $name => 'commonpb.SystemCodeService';
 
   SystemCodeServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.LazySystemCodeRequest, $0.SystemCodeResponse>(
-        'LazySystemCode',
-        lazySystemCode_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.LazySystemCodeRequest.fromBuffer(value),
-        ($0.SystemCodeResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.ListSystemCodeRequest, $0.SystemCodeResponse>(
         'ListSystemCode',
         listSystemCode_Pre,
@@ -71,14 +56,9 @@ abstract class SystemCodeServiceBase extends $grpc.Service {
         ($0.SystemCodeResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.SystemCodeResponse> lazySystemCode_Pre($grpc.ServiceCall $call, $async.Future<$0.LazySystemCodeRequest> $request) async {
-    return lazySystemCode($call, await $request);
-  }
-
   $async.Future<$0.SystemCodeResponse> listSystemCode_Pre($grpc.ServiceCall $call, $async.Future<$0.ListSystemCodeRequest> $request) async {
     return listSystemCode($call, await $request);
   }
 
-  $async.Future<$0.SystemCodeResponse> lazySystemCode($grpc.ServiceCall call, $0.LazySystemCodeRequest request);
   $async.Future<$0.SystemCodeResponse> listSystemCode($grpc.ServiceCall call, $0.ListSystemCodeRequest request);
 }

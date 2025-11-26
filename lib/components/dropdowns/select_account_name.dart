@@ -10,7 +10,6 @@ class AutoCompleteAccountName extends StatefulWidget {
   final bool freeSolo;
   final bool required;
   final bool error;
-  final bool isAccessibleOnly;
   final bool isAllStatus;
   final bool isActive;
   final String correspondent;
@@ -25,7 +24,6 @@ class AutoCompleteAccountName extends StatefulWidget {
     this.freeSolo = false,
     this.required = false,
     this.error = false,
-    this.isAccessibleOnly = false,
     this.isAllStatus = false,
     this.isActive = true,
     this.correspondent = '',
@@ -73,25 +71,16 @@ class _AutoCompleteAccountNameState extends State<AutoCompleteAccountName> {
 
   Future<List<Map<String, dynamic>>> _getOptions(String input) async {
     try {
-      if (widget.isAccessibleOnly) {
-        final data = await _service.accessibleAccountName(
-          input,
-          widget.correspondent,
-          widget.isAllStatus,
-        );
-        _options = data.map((acc) => {'accountName': acc}).toList();
-      } else {
-        final data = await _service.lazyLoadAccount(
-          input,
-          'account_name',
-          'account_name',
-          widget.isActive,
-          widget.correspondent,
-        );
-        _options = data.accounts
-            .map((acc) => {'accountName': acc.accountName})
-            .toList();
-      }
+      final data = await _service.lazyLoadAccount(
+        input,
+        'account_name',
+        'account_name',
+        widget.isActive,
+        widget.correspondent,
+      );
+      _options =
+          data.accounts.map((acc) => {'accountName': acc.accountName}).toList();
+
       return _options;
     } catch (e) {
       debugPrint('Error fetching account name options: $e');
