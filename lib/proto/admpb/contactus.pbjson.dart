@@ -126,12 +126,3 @@ final $typed_data.Uint8List createContactUsResponseDescriptor = $convert.base64D
     'ChdDcmVhdGVDb250YWN0VXNSZXNwb25zZRIvCgpjb250YWN0X3VzGAEgASgLMhAuYWRtcGIuQ2'
     '9udGFjdFVzUgljb250YWN0VXM=');
 
-@$core.Deprecated('Use newIdEmptyRequestDescriptor instead')
-const NewIdEmptyRequest$json = {
-  '1': 'NewIdEmptyRequest',
-};
-
-/// Descriptor for `NewIdEmptyRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List newIdEmptyRequestDescriptor = $convert.base64Decode(
-    'ChFOZXdJZEVtcHR5UmVxdWVzdA==');
-

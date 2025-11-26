@@ -574,36 +574,6 @@ class CreateContactUsResponse extends $pb.GeneratedMessage {
   ContactUs ensureContactUs() => $_ensure(0);
 }
 
-class NewIdEmptyRequest extends $pb.GeneratedMessage {
-  factory NewIdEmptyRequest() => create();
-
-  NewIdEmptyRequest._();
-
-  factory NewIdEmptyRequest.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory NewIdEmptyRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'NewIdEmptyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'admpb'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  NewIdEmptyRequest clone() => NewIdEmptyRequest()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  NewIdEmptyRequest copyWith(void Function(NewIdEmptyRequest) updates) => super.copyWith((message) => updates(message as NewIdEmptyRequest)) as NewIdEmptyRequest;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static NewIdEmptyRequest create() => NewIdEmptyRequest._();
-  @$core.override
-  NewIdEmptyRequest createEmptyInstance() => create();
-  static $pb.PbList<NewIdEmptyRequest> createRepeated() => $pb.PbList<NewIdEmptyRequest>();
-  @$core.pragma('dart2js:noInline')
-  static NewIdEmptyRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<NewIdEmptyRequest>(create);
-  static NewIdEmptyRequest? _defaultInstance;
-}
-
 
 const $core.bool _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const $core.bool _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

@@ -32,25 +32,6 @@ final $typed_data.Uint8List systemCodeDescriptor = $convert.base64Decode(
     'ZRgDIAEoCUITkkEQSgwiVXNlciBTZXR1cCJ4ZFIHc3ViVHlwZRIdCgRub3RlGAQgASgJQgmSQQ'
     'ZKAiIieGRSBG5vdGU=');
 
-@$core.Deprecated('Use lazySystemCodeRequestDescriptor instead')
-const LazySystemCodeRequest$json = {
-  '1': 'LazySystemCodeRequest',
-  '2': [
-    {'1': 'type', '3': 1, '4': 1, '5': 9, '8': {}, '10': 'type'},
-    {'1': 'code', '3': 2, '4': 1, '5': 9, '10': 'code'},
-    {'1': 'limit', '3': 3, '4': 1, '5': 5, '10': 'limit'},
-    {'1': 'sub_type', '3': 4, '4': 1, '5': 9, '10': 'subType'},
-    {'1': 'note', '3': 5, '4': 1, '5': 9, '10': 'note'},
-  ],
-};
-
-/// Descriptor for `LazySystemCodeRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List lazySystemCodeRequestDescriptor = $convert.base64Decode(
-    'ChVMYXp5U3lzdGVtQ29kZVJlcXVlc3QSNwoEdHlwZRgBIAEoCUIjkkEgShciSW52ZXN0bWVudC'
-    'BPYmplY3RpdmVzItIBBHR5cGVSBHR5cGUSEgoEY29kZRgCIAEoCVIEY29kZRIUCgVsaW1pdBgD'
-    'IAEoBVIFbGltaXQSGQoIc3ViX3R5cGUYBCABKAlSB3N1YlR5cGUSEgoEbm90ZRgFIAEoCVIEbm'
-    '90ZQ==');
-
 @$core.Deprecated('Use listSystemCodeRequestDescriptor instead')
 const ListSystemCodeRequest$json = {
   '1': 'ListSystemCodeRequest',

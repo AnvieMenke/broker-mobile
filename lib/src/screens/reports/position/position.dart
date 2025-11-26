@@ -5,6 +5,7 @@ import 'package:broker_mobile/components/grid/grid_view_card.dart';
 import '../../../../components/datepicker/datepicker.dart';
 import '../../../../components/dropdowns/select_account_no.dart';
 import '../../../../components/dropdowns/select_correspondent.dart';
+import '../../../../components/dropdowns/select_master_account_no.dart';
 import '../../../../service/position_service.dart';
 import '../../../../service/convert_service.dart';
 import '../../../../service/profile_service.dart';
@@ -29,6 +30,7 @@ class PositionPageState extends State<PositionPage> {
   late Map<String, dynamic> queryData = {
     "correspondent": "",
     "accountNo": "",
+    "masterAccountNo": "",
     "rep": "",
     "branch": "",
     "assetType": "",
@@ -544,6 +546,7 @@ class PositionPageState extends State<PositionPage> {
     String selectedRep = queryData["rep"];
     String selectedBranch = queryData["branch"];
     String selectedAssetType = queryData["assetType"];
+    String selectedMasterAccountNo = queryData["masterAccountNo"];
 
     final value = await showDialog<bool>(
       context: context,
@@ -569,6 +572,16 @@ class PositionPageState extends State<PositionPage> {
                         type: "",
                         onChange: (value) =>
                             setState(() => selectedCorrespondent = value),
+                      ),
+                      AutoCompleteMasterAccountNo(
+                        name: "masterAccountNo",
+                        value: selectedMasterAccountNo,
+                        isAllStatus: true,
+                        correspondent: queryData["correspondent"],
+                        onChange: (map) => setState(() {
+                          selectedMasterAccountNo =
+                              map['data']?['masterAccountNo'] as String? ?? '';
+                        }),
                       ),
                       AutoCompleteRepAdvisor(
                         name: "rep",
@@ -613,6 +626,7 @@ class PositionPageState extends State<PositionPage> {
                     queryData = {
                       ...queryData,
                       "correspondent": selectedCorrespondent,
+                      "masterAccountNo": selectedMasterAccountNo,
                       "rep": selectedRep,
                       "branch": selectedBranch,
                       "assetType": selectedAssetType,
