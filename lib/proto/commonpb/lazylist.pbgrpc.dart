@@ -50,26 +50,6 @@ class LazyListServiceClient extends $grpc.Client {
       '/commonpb.LazyListService/LazyRepAdvisor',
       ($0.LazyAccountRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.LazyRepAdvisorResponse.fromBuffer(value));
-  static final _$accessibleAccountNo = $grpc.ClientMethod<$0.AccessibleRequest, $0.AccessibleAccountNoResponse>(
-      '/commonpb.LazyListService/AccessibleAccountNo',
-      ($0.AccessibleRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.AccessibleAccountNoResponse.fromBuffer(value));
-  static final _$accessibleMasterAccountNo = $grpc.ClientMethod<$0.AccessibleRequest, $0.AccessibleMasterAccountNoResponse>(
-      '/commonpb.LazyListService/AccessibleMasterAccountNo',
-      ($0.AccessibleRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.AccessibleMasterAccountNoResponse.fromBuffer(value));
-  static final _$accessibleAccountName = $grpc.ClientMethod<$0.AccessibleRequest, $0.AccessibleAccountNameResponse>(
-      '/commonpb.LazyListService/AccessibleAccountName',
-      ($0.AccessibleRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.AccessibleAccountNameResponse.fromBuffer(value));
-  static final _$accessibleRep = $grpc.ClientMethod<$0.AccessibleRequest, $0.AccessibleRepResponse>(
-      '/commonpb.LazyListService/AccessibleRep',
-      ($0.AccessibleRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.AccessibleRepResponse.fromBuffer(value));
-  static final _$accessibleBranch = $grpc.ClientMethod<$0.AccessibleRequest, $0.AccessibleBranchResponse>(
-      '/commonpb.LazyListService/AccessibleBranch',
-      ($0.AccessibleRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.AccessibleBranchResponse.fromBuffer(value));
 
   LazyListServiceClient(super.channel, {super.options, super.interceptors});
 
@@ -91,26 +71,6 @@ class LazyListServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.LazyRepAdvisorResponse> lazyRepAdvisor($0.LazyAccountRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$lazyRepAdvisor, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.AccessibleAccountNoResponse> accessibleAccountNo($0.AccessibleRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$accessibleAccountNo, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.AccessibleMasterAccountNoResponse> accessibleMasterAccountNo($0.AccessibleRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$accessibleMasterAccountNo, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.AccessibleAccountNameResponse> accessibleAccountName($0.AccessibleRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$accessibleAccountName, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.AccessibleRepResponse> accessibleRep($0.AccessibleRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$accessibleRep, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.AccessibleBranchResponse> accessibleBranch($0.AccessibleRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$accessibleBranch, request, options: options);
   }
 }
 
@@ -154,41 +114,6 @@ abstract class LazyListServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.LazyAccountRequest.fromBuffer(value),
         ($0.LazyRepAdvisorResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.AccessibleRequest, $0.AccessibleAccountNoResponse>(
-        'AccessibleAccountNo',
-        accessibleAccountNo_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.AccessibleRequest.fromBuffer(value),
-        ($0.AccessibleAccountNoResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.AccessibleRequest, $0.AccessibleMasterAccountNoResponse>(
-        'AccessibleMasterAccountNo',
-        accessibleMasterAccountNo_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.AccessibleRequest.fromBuffer(value),
-        ($0.AccessibleMasterAccountNoResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.AccessibleRequest, $0.AccessibleAccountNameResponse>(
-        'AccessibleAccountName',
-        accessibleAccountName_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.AccessibleRequest.fromBuffer(value),
-        ($0.AccessibleAccountNameResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.AccessibleRequest, $0.AccessibleRepResponse>(
-        'AccessibleRep',
-        accessibleRep_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.AccessibleRequest.fromBuffer(value),
-        ($0.AccessibleRepResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.AccessibleRequest, $0.AccessibleBranchResponse>(
-        'AccessibleBranch',
-        accessibleBranch_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.AccessibleRequest.fromBuffer(value),
-        ($0.AccessibleBranchResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.LazyAccountResponse> lazyAccount_Pre($grpc.ServiceCall $call, $async.Future<$0.LazyAccountRequest> $request) async {
@@ -211,34 +136,9 @@ abstract class LazyListServiceBase extends $grpc.Service {
     return lazyRepAdvisor($call, await $request);
   }
 
-  $async.Future<$0.AccessibleAccountNoResponse> accessibleAccountNo_Pre($grpc.ServiceCall $call, $async.Future<$0.AccessibleRequest> $request) async {
-    return accessibleAccountNo($call, await $request);
-  }
-
-  $async.Future<$0.AccessibleMasterAccountNoResponse> accessibleMasterAccountNo_Pre($grpc.ServiceCall $call, $async.Future<$0.AccessibleRequest> $request) async {
-    return accessibleMasterAccountNo($call, await $request);
-  }
-
-  $async.Future<$0.AccessibleAccountNameResponse> accessibleAccountName_Pre($grpc.ServiceCall $call, $async.Future<$0.AccessibleRequest> $request) async {
-    return accessibleAccountName($call, await $request);
-  }
-
-  $async.Future<$0.AccessibleRepResponse> accessibleRep_Pre($grpc.ServiceCall $call, $async.Future<$0.AccessibleRequest> $request) async {
-    return accessibleRep($call, await $request);
-  }
-
-  $async.Future<$0.AccessibleBranchResponse> accessibleBranch_Pre($grpc.ServiceCall $call, $async.Future<$0.AccessibleRequest> $request) async {
-    return accessibleBranch($call, await $request);
-  }
-
   $async.Future<$0.LazyAccountResponse> lazyAccount($grpc.ServiceCall call, $0.LazyAccountRequest request);
   $async.Future<$0.LazyLoadSecurityResponse> lazySecurity($grpc.ServiceCall call, $0.LazyLoadSecurityRequest request);
   $async.Future<$0.LazyAdministratorEmailResponse> lazyAdministratorEmail($grpc.ServiceCall call, $0.LazyAccountRequest request);
   $async.Future<$0.AccessibleCorrespondentResponse> accessibleCorrespondent($grpc.ServiceCall call, $0.AccessibleRequest request);
   $async.Future<$0.LazyRepAdvisorResponse> lazyRepAdvisor($grpc.ServiceCall call, $0.LazyAccountRequest request);
-  $async.Future<$0.AccessibleAccountNoResponse> accessibleAccountNo($grpc.ServiceCall call, $0.AccessibleRequest request);
-  $async.Future<$0.AccessibleMasterAccountNoResponse> accessibleMasterAccountNo($grpc.ServiceCall call, $0.AccessibleRequest request);
-  $async.Future<$0.AccessibleAccountNameResponse> accessibleAccountName($grpc.ServiceCall call, $0.AccessibleRequest request);
-  $async.Future<$0.AccessibleRepResponse> accessibleRep($grpc.ServiceCall call, $0.AccessibleRequest request);
-  $async.Future<$0.AccessibleBranchResponse> accessibleBranch($grpc.ServiceCall call, $0.AccessibleRequest request);
 }

@@ -502,60 +502,6 @@ class ListCallLogRequest extends $pb.GeneratedMessage {
   $3.Pagination ensurePagination() => $_ensure(10);
 }
 
-class ListCallLogResponse extends $pb.GeneratedMessage {
-  factory ListCallLogResponse({
-    $core.Iterable<CallLog>? callLogs,
-    ListCallLogSummary? summary,
-  }) {
-    final result = create();
-    if (callLogs != null) result.callLogs.addAll(callLogs);
-    if (summary != null) result.summary = summary;
-    return result;
-  }
-
-  ListCallLogResponse._();
-
-  factory ListCallLogResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory ListCallLogResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListCallLogResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'marginpb'), createEmptyInstance: create)
-    ..pc<CallLog>(1, _omitFieldNames ? '' : 'callLogs', $pb.PbFieldType.PM, subBuilder: CallLog.create)
-    ..aOM<ListCallLogSummary>(2, _omitFieldNames ? '' : 'summary', subBuilder: ListCallLogSummary.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListCallLogResponse clone() => ListCallLogResponse()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListCallLogResponse copyWith(void Function(ListCallLogResponse) updates) => super.copyWith((message) => updates(message as ListCallLogResponse)) as ListCallLogResponse;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static ListCallLogResponse create() => ListCallLogResponse._();
-  @$core.override
-  ListCallLogResponse createEmptyInstance() => create();
-  static $pb.PbList<ListCallLogResponse> createRepeated() => $pb.PbList<ListCallLogResponse>();
-  @$core.pragma('dart2js:noInline')
-  static ListCallLogResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListCallLogResponse>(create);
-  static ListCallLogResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $pb.PbList<CallLog> get callLogs => $_getList(0);
-
-  @$pb.TagNumber(2)
-  ListCallLogSummary get summary => $_getN(1);
-  @$pb.TagNumber(2)
-  set summary(ListCallLogSummary value) => $_setField(2, value);
-  @$pb.TagNumber(2)
-  $core.bool hasSummary() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearSummary() => $_clearField(2);
-  @$pb.TagNumber(2)
-  ListCallLogSummary ensureSummary() => $_ensure(1);
-}
-
 class ListCallLogSummary extends $pb.GeneratedMessage {
   factory ListCallLogSummary({
     $core.String? callReq,
@@ -626,122 +572,58 @@ class ListCallLogSummary extends $pb.GeneratedMessage {
   void clearTotalRows() => $_clearField(3);
 }
 
-class UpdateCallLogResponse extends $pb.GeneratedMessage {
-  factory UpdateCallLogResponse({
-    CallLog? callLog,
+class ListCallLogResponse extends $pb.GeneratedMessage {
+  factory ListCallLogResponse({
+    $core.Iterable<CallLog>? callLogs,
+    ListCallLogSummary? summary,
   }) {
     final result = create();
-    if (callLog != null) result.callLog = callLog;
+    if (callLogs != null) result.callLogs.addAll(callLogs);
+    if (summary != null) result.summary = summary;
     return result;
   }
 
-  UpdateCallLogResponse._();
+  ListCallLogResponse._();
 
-  factory UpdateCallLogResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory UpdateCallLogResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+  factory ListCallLogResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory ListCallLogResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateCallLogResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'marginpb'), createEmptyInstance: create)
-    ..aOM<CallLog>(1, _omitFieldNames ? '' : 'callLog', subBuilder: CallLog.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListCallLogResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'marginpb'), createEmptyInstance: create)
+    ..pc<CallLog>(1, _omitFieldNames ? '' : 'callLogs', $pb.PbFieldType.PM, subBuilder: CallLog.create)
+    ..aOM<ListCallLogSummary>(2, _omitFieldNames ? '' : 'summary', subBuilder: ListCallLogSummary.create)
     ..hasRequiredFields = false
   ;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateCallLogResponse clone() => UpdateCallLogResponse()..mergeFromMessage(this);
+  ListCallLogResponse clone() => ListCallLogResponse()..mergeFromMessage(this);
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  UpdateCallLogResponse copyWith(void Function(UpdateCallLogResponse) updates) => super.copyWith((message) => updates(message as UpdateCallLogResponse)) as UpdateCallLogResponse;
+  ListCallLogResponse copyWith(void Function(ListCallLogResponse) updates) => super.copyWith((message) => updates(message as ListCallLogResponse)) as ListCallLogResponse;
 
   @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static UpdateCallLogResponse create() => UpdateCallLogResponse._();
+  static ListCallLogResponse create() => ListCallLogResponse._();
   @$core.override
-  UpdateCallLogResponse createEmptyInstance() => create();
-  static $pb.PbList<UpdateCallLogResponse> createRepeated() => $pb.PbList<UpdateCallLogResponse>();
+  ListCallLogResponse createEmptyInstance() => create();
+  static $pb.PbList<ListCallLogResponse> createRepeated() => $pb.PbList<ListCallLogResponse>();
   @$core.pragma('dart2js:noInline')
-  static UpdateCallLogResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateCallLogResponse>(create);
-  static UpdateCallLogResponse? _defaultInstance;
+  static ListCallLogResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListCallLogResponse>(create);
+  static ListCallLogResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  CallLog get callLog => $_getN(0);
-  @$pb.TagNumber(1)
-  set callLog(CallLog value) => $_setField(1, value);
-  @$pb.TagNumber(1)
-  $core.bool hasCallLog() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearCallLog() => $_clearField(1);
-  @$pb.TagNumber(1)
-  CallLog ensureCallLog() => $_ensure(0);
-}
+  $pb.PbList<CallLog> get callLogs => $_getList(0);
 
-class CallNoticeRequest extends $pb.GeneratedMessage {
-  factory CallNoticeRequest({
-    $core.Iterable<$core.int>? accountIds,
-  }) {
-    final result = create();
-    if (accountIds != null) result.accountIds.addAll(accountIds);
-    return result;
-  }
-
-  CallNoticeRequest._();
-
-  factory CallNoticeRequest.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory CallNoticeRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CallNoticeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'marginpb'), createEmptyInstance: create)
-    ..p<$core.int>(1, _omitFieldNames ? '' : 'accountIds', $pb.PbFieldType.KU3)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  CallNoticeRequest clone() => CallNoticeRequest()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  CallNoticeRequest copyWith(void Function(CallNoticeRequest) updates) => super.copyWith((message) => updates(message as CallNoticeRequest)) as CallNoticeRequest;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static CallNoticeRequest create() => CallNoticeRequest._();
-  @$core.override
-  CallNoticeRequest createEmptyInstance() => create();
-  static $pb.PbList<CallNoticeRequest> createRepeated() => $pb.PbList<CallNoticeRequest>();
-  @$core.pragma('dart2js:noInline')
-  static CallNoticeRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CallNoticeRequest>(create);
-  static CallNoticeRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $pb.PbList<$core.int> get accountIds => $_getList(0);
-}
-
-class EmptyResponse extends $pb.GeneratedMessage {
-  factory EmptyResponse() => create();
-
-  EmptyResponse._();
-
-  factory EmptyResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory EmptyResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'EmptyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'marginpb'), createEmptyInstance: create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  EmptyResponse clone() => EmptyResponse()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  EmptyResponse copyWith(void Function(EmptyResponse) updates) => super.copyWith((message) => updates(message as EmptyResponse)) as EmptyResponse;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static EmptyResponse create() => EmptyResponse._();
-  @$core.override
-  EmptyResponse createEmptyInstance() => create();
-  static $pb.PbList<EmptyResponse> createRepeated() => $pb.PbList<EmptyResponse>();
-  @$core.pragma('dart2js:noInline')
-  static EmptyResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<EmptyResponse>(create);
-  static EmptyResponse? _defaultInstance;
+  @$pb.TagNumber(2)
+  ListCallLogSummary get summary => $_getN(1);
+  @$pb.TagNumber(2)
+  set summary(ListCallLogSummary value) => $_setField(2, value);
+  @$pb.TagNumber(2)
+  $core.bool hasSummary() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSummary() => $_clearField(2);
+  @$pb.TagNumber(2)
+  ListCallLogSummary ensureSummary() => $_ensure(1);
 }
 
 

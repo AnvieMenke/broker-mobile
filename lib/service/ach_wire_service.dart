@@ -47,7 +47,6 @@ class AchWireService {
       ..bankId = ConvertService.safeInt(param["bankId"])
       ..transferType = param["transferType"] ?? ""
       ..amt = param["amt"]?.toString() ?? ""
-      ..fee = param["fee"]?.toString() ?? ""
       ..fedNo = param["fedNo"] ?? ""
       ..externalId = param["externalId"] ?? ""
       ..status = param["status"] ?? ""
@@ -110,7 +109,6 @@ class AchWireService {
     final req = UpdateRequest()
       ..requestId = ConvertService.safeInt(param["requestId"])
       ..amt = param["amt"]?.toString() ?? ""
-      ..fee = param["fee"]?.toString() ?? ""
       ..status = param["status"] ?? "";
 
     try {

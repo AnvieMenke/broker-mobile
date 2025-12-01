@@ -431,7 +431,6 @@ class CreateRequest extends $pb.GeneratedMessage {
     $core.String? requestType,
     $core.String? transferType,
     $core.String? amt,
-    $core.String? fee,
     $core.String? status,
     $core.String? fedNo,
     $core.String? externalId,
@@ -444,7 +443,6 @@ class CreateRequest extends $pb.GeneratedMessage {
     if (requestType != null) result.requestType = requestType;
     if (transferType != null) result.transferType = transferType;
     if (amt != null) result.amt = amt;
-    if (fee != null) result.fee = fee;
     if (status != null) result.status = status;
     if (fedNo != null) result.fedNo = fedNo;
     if (externalId != null) result.externalId = externalId;
@@ -464,10 +462,9 @@ class CreateRequest extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'requestType')
     ..aOS(6, _omitFieldNames ? '' : 'transferType')
     ..aOS(7, _omitFieldNames ? '' : 'amt')
-    ..aOS(8, _omitFieldNames ? '' : 'fee')
-    ..aOS(9, _omitFieldNames ? '' : 'status')
-    ..aOS(10, _omitFieldNames ? '' : 'fedNo')
-    ..aOS(11, _omitFieldNames ? '' : 'externalId')
+    ..aOS(10, _omitFieldNames ? '' : 'status')
+    ..aOS(11, _omitFieldNames ? '' : 'fedNo')
+    ..aOS(12, _omitFieldNames ? '' : 'externalId')
     ..hasRequiredFields = false
   ;
 
@@ -551,41 +548,32 @@ class CreateRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   void clearAmt() => $_clearField(7);
 
-  @$pb.TagNumber(8)
-  $core.String get fee => $_getSZ(7);
-  @$pb.TagNumber(8)
-  set fee($core.String value) => $_setString(7, value);
-  @$pb.TagNumber(8)
-  $core.bool hasFee() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearFee() => $_clearField(8);
-
-  @$pb.TagNumber(9)
-  $core.String get status => $_getSZ(8);
-  @$pb.TagNumber(9)
-  set status($core.String value) => $_setString(8, value);
-  @$pb.TagNumber(9)
-  $core.bool hasStatus() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearStatus() => $_clearField(9);
-
   @$pb.TagNumber(10)
-  $core.String get fedNo => $_getSZ(9);
+  $core.String get status => $_getSZ(7);
   @$pb.TagNumber(10)
-  set fedNo($core.String value) => $_setString(9, value);
+  set status($core.String value) => $_setString(7, value);
   @$pb.TagNumber(10)
-  $core.bool hasFedNo() => $_has(9);
+  $core.bool hasStatus() => $_has(7);
   @$pb.TagNumber(10)
-  void clearFedNo() => $_clearField(10);
+  void clearStatus() => $_clearField(10);
 
   @$pb.TagNumber(11)
-  $core.String get externalId => $_getSZ(10);
+  $core.String get fedNo => $_getSZ(8);
   @$pb.TagNumber(11)
-  set externalId($core.String value) => $_setString(10, value);
+  set fedNo($core.String value) => $_setString(8, value);
   @$pb.TagNumber(11)
-  $core.bool hasExternalId() => $_has(10);
+  $core.bool hasFedNo() => $_has(8);
   @$pb.TagNumber(11)
-  void clearExternalId() => $_clearField(11);
+  void clearFedNo() => $_clearField(11);
+
+  @$pb.TagNumber(12)
+  $core.String get externalId => $_getSZ(9);
+  @$pb.TagNumber(12)
+  set externalId($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(12)
+  $core.bool hasExternalId() => $_has(9);
+  @$pb.TagNumber(12)
+  void clearExternalId() => $_clearField(12);
 }
 
 class CreateResponse extends $pb.GeneratedMessage {
@@ -640,7 +628,6 @@ class UpdateRequest extends $pb.GeneratedMessage {
   factory UpdateRequest({
     $core.int? requestId,
     $core.String? amt,
-    $core.String? fee,
     $core.String? status,
     $core.String? fedNo,
     $core.String? externalId,
@@ -648,7 +635,6 @@ class UpdateRequest extends $pb.GeneratedMessage {
     final result = create();
     if (requestId != null) result.requestId = requestId;
     if (amt != null) result.amt = amt;
-    if (fee != null) result.fee = fee;
     if (status != null) result.status = status;
     if (fedNo != null) result.fedNo = fedNo;
     if (externalId != null) result.externalId = externalId;
@@ -663,10 +649,9 @@ class UpdateRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'bankpb'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'amt')
-    ..aOS(3, _omitFieldNames ? '' : 'fee')
-    ..aOS(4, _omitFieldNames ? '' : 'status')
-    ..aOS(5, _omitFieldNames ? '' : 'fedNo')
-    ..aOS(6, _omitFieldNames ? '' : 'externalId')
+    ..aOS(3, _omitFieldNames ? '' : 'status')
+    ..aOS(4, _omitFieldNames ? '' : 'fedNo')
+    ..aOS(5, _omitFieldNames ? '' : 'externalId')
     ..hasRequiredFields = false
   ;
 
@@ -706,40 +691,31 @@ class UpdateRequest extends $pb.GeneratedMessage {
   void clearAmt() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get fee => $_getSZ(2);
+  $core.String get status => $_getSZ(2);
   @$pb.TagNumber(3)
-  set fee($core.String value) => $_setString(2, value);
+  set status($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
-  $core.bool hasFee() => $_has(2);
+  $core.bool hasStatus() => $_has(2);
   @$pb.TagNumber(3)
-  void clearFee() => $_clearField(3);
+  void clearStatus() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get status => $_getSZ(3);
+  $core.String get fedNo => $_getSZ(3);
   @$pb.TagNumber(4)
-  set status($core.String value) => $_setString(3, value);
+  set fedNo($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
-  $core.bool hasStatus() => $_has(3);
+  $core.bool hasFedNo() => $_has(3);
   @$pb.TagNumber(4)
-  void clearStatus() => $_clearField(4);
+  void clearFedNo() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get fedNo => $_getSZ(4);
+  $core.String get externalId => $_getSZ(4);
   @$pb.TagNumber(5)
-  set fedNo($core.String value) => $_setString(4, value);
+  set externalId($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
-  $core.bool hasFedNo() => $_has(4);
+  $core.bool hasExternalId() => $_has(4);
   @$pb.TagNumber(5)
-  void clearFedNo() => $_clearField(5);
-
-  @$pb.TagNumber(6)
-  $core.String get externalId => $_getSZ(5);
-  @$pb.TagNumber(6)
-  set externalId($core.String value) => $_setString(5, value);
-  @$pb.TagNumber(6)
-  $core.bool hasExternalId() => $_has(5);
-  @$pb.TagNumber(6)
-  void clearExternalId() => $_clearField(6);
+  void clearExternalId() => $_clearField(5);
 }
 
 class UpdateResponse extends $pb.GeneratedMessage {

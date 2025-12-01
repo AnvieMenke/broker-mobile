@@ -92,21 +92,6 @@ final $typed_data.Uint8List listCallLogRequestDescriptor = $convert.base64Decode
     'dpblR5cGUSMwoKcGFnaW5hdGlvbhgLIAEoCzITLnV0aWxzcGIuUGFnaW5hdGlvblIKcGFnaW5h'
     'dGlvbg==');
 
-@$core.Deprecated('Use listCallLogResponseDescriptor instead')
-const ListCallLogResponse$json = {
-  '1': 'ListCallLogResponse',
-  '2': [
-    {'1': 'call_logs', '3': 1, '4': 3, '5': 11, '6': '.marginpb.CallLog', '10': 'callLogs'},
-    {'1': 'summary', '3': 2, '4': 1, '5': 11, '6': '.marginpb.ListCallLogSummary', '10': 'summary'},
-  ],
-};
-
-/// Descriptor for `ListCallLogResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listCallLogResponseDescriptor = $convert.base64Decode(
-    'ChNMaXN0Q2FsbExvZ1Jlc3BvbnNlEi4KCWNhbGxfbG9ncxgBIAMoCzIRLm1hcmdpbnBiLkNhbG'
-    'xMb2dSCGNhbGxMb2dzEjYKB3N1bW1hcnkYAiABKAsyHC5tYXJnaW5wYi5MaXN0Q2FsbExvZ1N1'
-    'bW1hcnlSB3N1bW1hcnk=');
-
 @$core.Deprecated('Use listCallLogSummaryDescriptor instead')
 const ListCallLogSummary$json = {
   '1': 'ListCallLogSummary',
@@ -122,37 +107,18 @@ final $typed_data.Uint8List listCallLogSummaryDescriptor = $convert.base64Decode
     'ChJMaXN0Q2FsbExvZ1N1bW1hcnkSGQoIY2FsbF9yZXEYASABKAlSB2NhbGxSZXESGQoIY2FsbF'
     '9hbXQYAiABKAlSB2NhbGxBbXQSHQoKdG90YWxfcm93cxgDIAEoDVIJdG90YWxSb3dz');
 
-@$core.Deprecated('Use updateCallLogResponseDescriptor instead')
-const UpdateCallLogResponse$json = {
-  '1': 'UpdateCallLogResponse',
+@$core.Deprecated('Use listCallLogResponseDescriptor instead')
+const ListCallLogResponse$json = {
+  '1': 'ListCallLogResponse',
   '2': [
-    {'1': 'call_log', '3': 1, '4': 1, '5': 11, '6': '.marginpb.CallLog', '10': 'callLog'},
+    {'1': 'call_logs', '3': 1, '4': 3, '5': 11, '6': '.marginpb.CallLog', '10': 'callLogs'},
+    {'1': 'summary', '3': 2, '4': 1, '5': 11, '6': '.marginpb.ListCallLogSummary', '10': 'summary'},
   ],
 };
 
-/// Descriptor for `UpdateCallLogResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateCallLogResponseDescriptor = $convert.base64Decode(
-    'ChVVcGRhdGVDYWxsTG9nUmVzcG9uc2USLAoIY2FsbF9sb2cYASABKAsyES5tYXJnaW5wYi5DYW'
-    'xsTG9nUgdjYWxsTG9n');
-
-@$core.Deprecated('Use callNoticeRequestDescriptor instead')
-const CallNoticeRequest$json = {
-  '1': 'CallNoticeRequest',
-  '2': [
-    {'1': 'account_ids', '3': 1, '4': 3, '5': 13, '10': 'accountIds'},
-  ],
-};
-
-/// Descriptor for `CallNoticeRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List callNoticeRequestDescriptor = $convert.base64Decode(
-    'ChFDYWxsTm90aWNlUmVxdWVzdBIfCgthY2NvdW50X2lkcxgBIAMoDVIKYWNjb3VudElkcw==');
-
-@$core.Deprecated('Use emptyResponseDescriptor instead')
-const EmptyResponse$json = {
-  '1': 'EmptyResponse',
-};
-
-/// Descriptor for `EmptyResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List emptyResponseDescriptor = $convert.base64Decode(
-    'Cg1FbXB0eVJlc3BvbnNl');
+/// Descriptor for `ListCallLogResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listCallLogResponseDescriptor = $convert.base64Decode(
+    'ChNMaXN0Q2FsbExvZ1Jlc3BvbnNlEi4KCWNhbGxfbG9ncxgBIAMoCzIRLm1hcmdpbnBiLkNhbG'
+    'xMb2dSCGNhbGxMb2dzEjYKB3N1bW1hcnkYAiABKAsyHC5tYXJnaW5wYi5MaXN0Q2FsbExvZ1N1'
+    'bW1hcnlSB3N1bW1hcnk=');
 
