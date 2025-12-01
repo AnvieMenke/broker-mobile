@@ -49,6 +49,24 @@ class _LineChartWidgetState extends State<LineChartWidget> {
   double _getMaxY() =>
       widget.data.map((e) => e[widget.yValueKey] as num).reduce(max).toDouble();
 
+  _YScale _computeYScale() {
+    double minY = _getMinY();
+    double maxY = _getMaxY();
+
+    if (minY == maxY) {
+      minY = minY;
+      maxY = maxY;
+    }
+
+    final interval = (maxY - minY) == 0 ? 1.0 : (maxY - minY) / 5;
+
+    return _YScale(
+      minY,
+      maxY,
+      interval,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -96,10 +114,10 @@ class _LineChartWidgetState extends State<LineChartWidget> {
   }
 
   LineChartData _mainData() {
-    final minY = _getMinY();
-    final maxY = _getMaxY();
-
-    final yInterval = (maxY - minY) / 5;
+    final yScale = _computeYScale();
+    final minY = yScale.minY;
+    final maxY = yScale.maxY;
+    final yInterval = yScale.interval;
     final yIntervalTextBuffer = yInterval * 0.6;
 
     return LineChartData(
@@ -133,7 +151,10 @@ class _LineChartWidgetState extends State<LineChartWidget> {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 36,
-            interval: (widget.data.length / 6).ceilToDouble(),
+            interval: max(
+              1,
+              (widget.data.length / 6).ceilToDouble(),
+            ),
             getTitlesWidget: _bottomTitle,
           ),
         ),
@@ -143,7 +164,6 @@ class _LineChartWidgetState extends State<LineChartWidget> {
             reservedSize: 50,
             interval: yInterval,
             getTitlesWidget: (value, meta) {
-              // Avoid drawing min/max values too close to chart edges
               if (!(value == maxY || value == minY) &&
                   (((value - minY).abs() < yIntervalTextBuffer ||
                       (value - maxY).abs() < yIntervalTextBuffer))) {
@@ -167,7 +187,7 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       borderData: FlBorderData(show: false),
       clipData: const FlClipData.none(),
       minX: 0,
-      maxX: (widget.data.length - 1).toDouble(),
+      maxX: max(0, widget.data.length - 1).toDouble(),
       minY: minY,
       maxY: maxY,
       lineBarsData: [
@@ -192,4 +212,12 @@ class _LineChartWidgetState extends State<LineChartWidget> {
       ],
     );
   }
+}
+
+class _YScale {
+  final double minY;
+  final double maxY;
+  final double interval;
+
+  _YScale(this.minY, this.maxY, this.interval);
 }
