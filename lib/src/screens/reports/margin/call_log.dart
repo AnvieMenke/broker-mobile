@@ -250,7 +250,7 @@ class CallLogPageState extends State<CallLogPage> {
                     body = AppTheme.buildLoadingIndicator();
                   } else {
                     body = GridWithPagination(
-                      items: snapshot.data!,
+                      items: snapshot.data ?? [],
                       pagination: pagination,
                       onPageChange: _onPageChange,
                       onRefresh: _refresh,

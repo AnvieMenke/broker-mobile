@@ -43,26 +43,10 @@ class UserServiceClient extends $grpc.Client {
       '/usrpb.UserService/ChangePassword',
       ($0.ChangePasswordRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ChangePasswordResponse.fromBuffer(value));
-  static final _$acceptClientNotice = $grpc.ClientMethod<$1.Empty, $1.Empty>(
-      '/usrpb.UserService/AcceptClientNotice',
-      ($1.Empty value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $1.Empty.fromBuffer(value));
   static final _$listAdministrator = $grpc.ClientMethod<$0.ListAdministratorRequest, $0.ListAdministratorResponse>(
       '/usrpb.UserService/ListAdministrator',
       ($0.ListAdministratorRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ListAdministratorResponse.fromBuffer(value));
-  static final _$createAccess = $grpc.ClientMethod<$0.Access, $0.CreateAccessResponse>(
-      '/usrpb.UserService/CreateAccess',
-      ($0.Access value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.CreateAccessResponse.fromBuffer(value));
-  static final _$deleteAccess = $grpc.ClientMethod<$0.DeleteAccessRequest, $0.EmptyRequest>(
-      '/usrpb.UserService/DeleteAccess',
-      ($0.DeleteAccessRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.EmptyRequest.fromBuffer(value));
-  static final _$listAccountAccess = $grpc.ClientMethod<$0.ListAccountAccessRequest, $0.ListAccountAccessResponse>(
-      '/usrpb.UserService/ListAccountAccess',
-      ($0.ListAccountAccessRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ListAccountAccessResponse.fromBuffer(value));
   static final _$forgotPasswordCheckEmail = $grpc.ClientMethod<$0.ForgotPasswordCheckEmailRequest, $0.ForgotPasswordCheckEmailResponse>(
       '/usrpb.UserService/ForgotPasswordCheckEmail',
       ($0.ForgotPasswordCheckEmailRequest value) => value.writeToBuffer(),
@@ -118,24 +102,8 @@ class UserServiceClient extends $grpc.Client {
     return $createUnaryCall(_$changePassword, request, options: options);
   }
 
-  $grpc.ResponseFuture<$1.Empty> acceptClientNotice($1.Empty request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$acceptClientNotice, request, options: options);
-  }
-
   $grpc.ResponseFuture<$0.ListAdministratorResponse> listAdministrator($0.ListAdministratorRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$listAdministrator, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.CreateAccessResponse> createAccess($0.Access request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$createAccess, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.EmptyRequest> deleteAccess($0.DeleteAccessRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$deleteAccess, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.ListAccountAccessResponse> listAccountAccess($0.ListAccountAccessRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$listAccountAccess, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.ForgotPasswordCheckEmailResponse> forgotPasswordCheckEmail($0.ForgotPasswordCheckEmailRequest request, {$grpc.CallOptions? options}) {
@@ -205,13 +173,6 @@ abstract class UserServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.ChangePasswordRequest.fromBuffer(value),
         ($0.ChangePasswordResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$1.Empty, $1.Empty>(
-        'AcceptClientNotice',
-        acceptClientNotice_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $1.Empty.fromBuffer(value),
-        ($1.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.ListAdministratorRequest, $0.ListAdministratorResponse>(
         'ListAdministrator',
         listAdministrator_Pre,
@@ -219,27 +180,6 @@ abstract class UserServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.ListAdministratorRequest.fromBuffer(value),
         ($0.ListAdministratorResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.Access, $0.CreateAccessResponse>(
-        'CreateAccess',
-        createAccess_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.Access.fromBuffer(value),
-        ($0.CreateAccessResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.DeleteAccessRequest, $0.EmptyRequest>(
-        'DeleteAccess',
-        deleteAccess_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.DeleteAccessRequest.fromBuffer(value),
-        ($0.EmptyRequest value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ListAccountAccessRequest, $0.ListAccountAccessResponse>(
-        'ListAccountAccess',
-        listAccountAccess_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.ListAccountAccessRequest.fromBuffer(value),
-        ($0.ListAccountAccessResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.ForgotPasswordCheckEmailRequest, $0.ForgotPasswordCheckEmailResponse>(
         'ForgotPasswordCheckEmail',
         forgotPasswordCheckEmail_Pre,
@@ -324,24 +264,8 @@ abstract class UserServiceBase extends $grpc.Service {
     return changePassword($call, await $request);
   }
 
-  $async.Future<$1.Empty> acceptClientNotice_Pre($grpc.ServiceCall $call, $async.Future<$1.Empty> $request) async {
-    return acceptClientNotice($call, await $request);
-  }
-
   $async.Future<$0.ListAdministratorResponse> listAdministrator_Pre($grpc.ServiceCall $call, $async.Future<$0.ListAdministratorRequest> $request) async {
     return listAdministrator($call, await $request);
-  }
-
-  $async.Future<$0.CreateAccessResponse> createAccess_Pre($grpc.ServiceCall $call, $async.Future<$0.Access> $request) async {
-    return createAccess($call, await $request);
-  }
-
-  $async.Future<$0.EmptyRequest> deleteAccess_Pre($grpc.ServiceCall $call, $async.Future<$0.DeleteAccessRequest> $request) async {
-    return deleteAccess($call, await $request);
-  }
-
-  $async.Future<$0.ListAccountAccessResponse> listAccountAccess_Pre($grpc.ServiceCall $call, $async.Future<$0.ListAccountAccessRequest> $request) async {
-    return listAccountAccess($call, await $request);
   }
 
   $async.Future<$0.ForgotPasswordCheckEmailResponse> forgotPasswordCheckEmail_Pre($grpc.ServiceCall $call, $async.Future<$0.ForgotPasswordCheckEmailRequest> $request) async {
@@ -387,11 +311,7 @@ abstract class UserServiceBase extends $grpc.Service {
   $async.Future<$0.CreateAdministratorResponse> createAdministrator($grpc.ServiceCall call, $0.Administrator request);
   $async.Future<$0.UpdateAdministratorResponse> updateAdministrator($grpc.ServiceCall call, $0.Administrator request);
   $async.Future<$0.ChangePasswordResponse> changePassword($grpc.ServiceCall call, $0.ChangePasswordRequest request);
-  $async.Future<$1.Empty> acceptClientNotice($grpc.ServiceCall call, $1.Empty request);
   $async.Future<$0.ListAdministratorResponse> listAdministrator($grpc.ServiceCall call, $0.ListAdministratorRequest request);
-  $async.Future<$0.CreateAccessResponse> createAccess($grpc.ServiceCall call, $0.Access request);
-  $async.Future<$0.EmptyRequest> deleteAccess($grpc.ServiceCall call, $0.DeleteAccessRequest request);
-  $async.Future<$0.ListAccountAccessResponse> listAccountAccess($grpc.ServiceCall call, $0.ListAccountAccessRequest request);
   $async.Future<$0.ForgotPasswordCheckEmailResponse> forgotPasswordCheckEmail($grpc.ServiceCall call, $0.ForgotPasswordCheckEmailRequest request);
   $async.Future<$1.Empty> forgotPassword($grpc.ServiceCall call, $0.ForgotPasswordRequest request);
   $async.Future<$0.UpdateUserSettingsResponse> updateUserSettings($grpc.ServiceCall call, $0.UpdateUserSettingsRequest request);

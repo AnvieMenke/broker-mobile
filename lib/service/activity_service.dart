@@ -27,23 +27,20 @@ class ActivityService {
       ..branch = param['branch'] ?? ""
       ..assetType = param['assetType'] ?? ""
       ..symbol = param['symbol'] ?? ""
-      ..entryType = (() {
-        final entryTypeParam = param['entryType'];
-        if (entryTypeParam == null) return "";
-
-        if (entryTypeParam is List && entryTypeParam.isNotEmpty) {
-          return "'${entryTypeParam.join("','")}'";
-        }
-
-        if (entryTypeParam is String && entryTypeParam.isNotEmpty) {
-          final parts = entryTypeParam.split(",").map((e) => e.trim()).toList();
-          return "'${parts.join("','")}'";
-        }
-
-        return "";
-      })()
       ..description = param['description'] ?? "";
-
+    final entryTypeParam = param['entryType'];
+    if (entryTypeParam != null) {
+      if (entryTypeParam is Iterable<String>) {
+        req.entryTypes.addAll(entryTypeParam);
+      } else if (entryTypeParam is Iterable) {
+        req.entryTypes.addAll(entryTypeParam.map((e) => e.toString()));
+      } else if (entryTypeParam is String && entryTypeParam.trim().isNotEmpty) {
+        req.entryTypes.addAll(entryTypeParam
+            .split(',')
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty));
+      }
+    }
     if (paging != null && paging.isNotEmpty) {
       var paginationReq = Pagination()
         ..pageNo = paging["pageNo"] ?? 0
