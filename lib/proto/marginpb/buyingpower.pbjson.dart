@@ -92,6 +92,19 @@ final $typed_data.Uint8List listBuyingPowerRequestDescriptor = $convert.base64De
     'JvGAcgASgIUghoaWRlWmVybxIzCgpwYWdpbmF0aW9uGAggASgLMhMudXRpbHNwYi5QYWdpbmF0'
     'aW9uUgpwYWdpbmF0aW9u');
 
+@$core.Deprecated('Use listBuyingPowerSummaryDescriptor instead')
+const ListBuyingPowerSummary$json = {
+  '1': 'ListBuyingPowerSummary',
+  '2': [
+    {'1': 'total_rows', '3': 1, '4': 1, '5': 13, '10': 'totalRows'},
+  ],
+};
+
+/// Descriptor for `ListBuyingPowerSummary`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listBuyingPowerSummaryDescriptor = $convert.base64Decode(
+    'ChZMaXN0QnV5aW5nUG93ZXJTdW1tYXJ5Eh0KCnRvdGFsX3Jvd3MYASABKA1SCXRvdGFsUm93cw'
+    '==');
+
 @$core.Deprecated('Use listBuyingPowerResponseDescriptor instead')
 const ListBuyingPowerResponse$json = {
   '1': 'ListBuyingPowerResponse',
@@ -106,17 +119,4 @@ final $typed_data.Uint8List listBuyingPowerResponseDescriptor = $convert.base64D
     'ChdMaXN0QnV5aW5nUG93ZXJSZXNwb25zZRI6Cg1idXlpbmdfcG93ZXJzGAEgAygLMhUubWFyZ2'
     'lucGIuQnV5aW5nUG93ZXJSDGJ1eWluZ1Bvd2VycxI6CgdzdW1tYXJ5GAIgASgLMiAubWFyZ2lu'
     'cGIuTGlzdEJ1eWluZ1Bvd2VyU3VtbWFyeVIHc3VtbWFyeQ==');
-
-@$core.Deprecated('Use listBuyingPowerSummaryDescriptor instead')
-const ListBuyingPowerSummary$json = {
-  '1': 'ListBuyingPowerSummary',
-  '2': [
-    {'1': 'total_rows', '3': 1, '4': 1, '5': 13, '10': 'totalRows'},
-  ],
-};
-
-/// Descriptor for `ListBuyingPowerSummary`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listBuyingPowerSummaryDescriptor = $convert.base64Decode(
-    'ChZMaXN0QnV5aW5nUG93ZXJTdW1tYXJ5Eh0KCnRvdGFsX3Jvd3MYASABKA1SCXRvdGFsUm93cw'
-    '==');
 

@@ -20,8 +20,8 @@ import 'account.pb.dart' as $0;
 
 export 'account.pb.dart';
 
-@$pb.GrpcServiceName('bankpb.AccountService')
-class AccountServiceClient extends $grpc.Client {
+@$pb.GrpcServiceName('bankpb.BankAccountService')
+class BankAccountServiceClient extends $grpc.Client {
   /// The hostname for this service.
   static const $core.String defaultHost = '';
 
@@ -31,27 +31,27 @@ class AccountServiceClient extends $grpc.Client {
   ];
 
   static final _$createAccount = $grpc.ClientMethod<$0.Account, $0.CreateAccountResponse>(
-      '/bankpb.AccountService/CreateAccount',
+      '/bankpb.BankAccountService/CreateAccount',
       ($0.Account value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.CreateAccountResponse.fromBuffer(value));
   static final _$updateAccount = $grpc.ClientMethod<$0.Account, $0.UpdateAccountResponse>(
-      '/bankpb.AccountService/UpdateAccount',
+      '/bankpb.BankAccountService/UpdateAccount',
       ($0.Account value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.UpdateAccountResponse.fromBuffer(value));
   static final _$readAccount = $grpc.ClientMethod<$0.ReadAccountRequest, $0.ReadAccountResponse>(
-      '/bankpb.AccountService/ReadAccount',
+      '/bankpb.BankAccountService/ReadAccount',
       ($0.ReadAccountRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ReadAccountResponse.fromBuffer(value));
   static final _$listAccount = $grpc.ClientMethod<$0.ListAccountRequest, $0.ListAccountResponse>(
-      '/bankpb.AccountService/ListAccount',
+      '/bankpb.BankAccountService/ListAccount',
       ($0.ListAccountRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ListAccountResponse.fromBuffer(value));
   static final _$deleteAccount = $grpc.ClientMethod<$0.DeleteAccountRequest, $0.DeleteAccountResponse>(
-      '/bankpb.AccountService/DeleteAccount',
+      '/bankpb.BankAccountService/DeleteAccount',
       ($0.DeleteAccountRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.DeleteAccountResponse.fromBuffer(value));
 
-  AccountServiceClient(super.channel, {super.options, super.interceptors});
+  BankAccountServiceClient(super.channel, {super.options, super.interceptors});
 
   $grpc.ResponseFuture<$0.CreateAccountResponse> createAccount($0.Account request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createAccount, request, options: options);
@@ -74,11 +74,11 @@ class AccountServiceClient extends $grpc.Client {
   }
 }
 
-@$pb.GrpcServiceName('bankpb.AccountService')
-abstract class AccountServiceBase extends $grpc.Service {
-  $core.String get $name => 'bankpb.AccountService';
+@$pb.GrpcServiceName('bankpb.BankAccountService')
+abstract class BankAccountServiceBase extends $grpc.Service {
+  $core.String get $name => 'bankpb.BankAccountService';
 
-  AccountServiceBase() {
+  BankAccountServiceBase() {
     $addMethod($grpc.ServiceMethod<$0.Account, $0.CreateAccountResponse>(
         'CreateAccount',
         createAccount_Pre,

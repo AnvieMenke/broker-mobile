@@ -230,24 +230,6 @@ final $typed_data.Uint8List changePasswordResponseDescriptor = $convert.base64De
     'ChZDaGFuZ2VQYXNzd29yZFJlc3BvbnNlEhYKBnN0YXR1cxgBIAEoCVIGc3RhdHVzEhAKA21zZx'
     'gCIAEoCVIDbXNn');
 
-@$core.Deprecated('Use accessDescriptor instead')
-const Access$json = {
-  '1': 'Access',
-  '2': [
-    {'1': 'access_id', '3': 1, '4': 1, '5': 13, '10': 'accessId'},
-    {'1': 'usr_id', '3': 2, '4': 1, '5': 13, '10': 'usrId'},
-    {'1': 'access', '3': 3, '4': 1, '5': 9, '10': 'access'},
-    {'1': 'sub_access', '3': 4, '4': 1, '5': 9, '10': 'subAccess'},
-    {'1': 'role_id', '3': 5, '4': 1, '5': 13, '10': 'roleId'},
-  ],
-};
-
-/// Descriptor for `Access`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List accessDescriptor = $convert.base64Decode(
-    'CgZBY2Nlc3MSGwoJYWNjZXNzX2lkGAEgASgNUghhY2Nlc3NJZBIVCgZ1c3JfaWQYAiABKA1SBX'
-    'VzcklkEhYKBmFjY2VzcxgDIAEoCVIGYWNjZXNzEh0KCnN1Yl9hY2Nlc3MYBCABKAlSCXN1YkFj'
-    'Y2VzcxIXCgdyb2xlX2lkGAUgASgNUgZyb2xlSWQ=');
-
 @$core.Deprecated('Use userAccountAccessDescriptor instead')
 const UserAccountAccess$json = {
   '1': 'UserAccountAccess',
@@ -262,18 +244,6 @@ final $typed_data.Uint8List userAccountAccessDescriptor = $convert.base64Decode(
     'ChFVc2VyQWNjb3VudEFjY2VzcxIkCg1jb3JyZXNwb25kZW50GAEgASgJUg1jb3JyZXNwb25kZW'
     '50Eh0KCmFjY291bnRfbm8YAiABKAlSCWFjY291bnRObw==');
 
-@$core.Deprecated('Use acceptClientNoticeRequestDescriptor instead')
-const AcceptClientNoticeRequest$json = {
-  '1': 'AcceptClientNoticeRequest',
-  '2': [
-    {'1': 'usr_id', '3': 1, '4': 1, '5': 13, '10': 'usrId'},
-  ],
-};
-
-/// Descriptor for `AcceptClientNoticeRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List acceptClientNoticeRequestDescriptor = $convert.base64Decode(
-    'ChlBY2NlcHRDbGllbnROb3RpY2VSZXF1ZXN0EhUKBnVzcl9pZBgBIAEoDVIFdXNySWQ=');
-
 @$core.Deprecated('Use emptyRequestDescriptor instead')
 const EmptyRequest$json = {
   '1': 'EmptyRequest',
@@ -282,31 +252,6 @@ const EmptyRequest$json = {
 /// Descriptor for `EmptyRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List emptyRequestDescriptor = $convert.base64Decode(
     'CgxFbXB0eVJlcXVlc3Q=');
-
-@$core.Deprecated('Use createAccessResponseDescriptor instead')
-const CreateAccessResponse$json = {
-  '1': 'CreateAccessResponse',
-  '2': [
-    {'1': 'access', '3': 1, '4': 1, '5': 11, '6': '.usrpb.Access', '10': 'access'},
-  ],
-};
-
-/// Descriptor for `CreateAccessResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createAccessResponseDescriptor = $convert.base64Decode(
-    'ChRDcmVhdGVBY2Nlc3NSZXNwb25zZRIlCgZhY2Nlc3MYASABKAsyDS51c3JwYi5BY2Nlc3NSBm'
-    'FjY2Vzcw==');
-
-@$core.Deprecated('Use deleteAccessRequestDescriptor instead')
-const DeleteAccessRequest$json = {
-  '1': 'DeleteAccessRequest',
-  '2': [
-    {'1': 'access_id', '3': 1, '4': 1, '5': 13, '10': 'accessId'},
-  ],
-};
-
-/// Descriptor for `DeleteAccessRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List deleteAccessRequestDescriptor = $convert.base64Decode(
-    'ChNEZWxldGVBY2Nlc3NSZXF1ZXN0EhsKCWFjY2Vzc19pZBgBIAEoDVIIYWNjZXNzSWQ=');
 
 @$core.Deprecated('Use deleteAccessResponseDescriptor instead')
 const DeleteAccessResponse$json = {
@@ -319,56 +264,6 @@ const DeleteAccessResponse$json = {
 /// Descriptor for `DeleteAccessResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List deleteAccessResponseDescriptor = $convert.base64Decode(
     'ChREZWxldGVBY2Nlc3NSZXNwb25zZRIbCglhY2Nlc3NfaWQYASABKA1SCGFjY2Vzc0lk');
-
-@$core.Deprecated('Use accountAccessDescriptor instead')
-const AccountAccess$json = {
-  '1': 'AccountAccess',
-  '2': [
-    {'1': 'account_access_id', '3': 1, '4': 1, '5': 13, '10': 'accountAccessId'},
-    {'1': 'usr_id', '3': 2, '4': 1, '5': 13, '10': 'usrId'},
-    {'1': 'correspondent', '3': 3, '4': 1, '5': 9, '10': 'correspondent'},
-    {'1': 'rep', '3': 4, '4': 1, '5': 9, '10': 'rep'},
-    {'1': 'branch', '3': 5, '4': 1, '5': 9, '10': 'branch'},
-    {'1': 'account_no', '3': 6, '4': 1, '5': 9, '10': 'accountNo'},
-    {'1': 'master_account_no', '3': 7, '4': 1, '5': 9, '10': 'masterAccountNo'},
-    {'1': 'role_id', '3': 8, '4': 1, '5': 13, '10': 'roleId'},
-    {'1': 'account_id', '3': 9, '4': 1, '5': 13, '10': 'accountId'},
-  ],
-};
-
-/// Descriptor for `AccountAccess`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List accountAccessDescriptor = $convert.base64Decode(
-    'Cg1BY2NvdW50QWNjZXNzEioKEWFjY291bnRfYWNjZXNzX2lkGAEgASgNUg9hY2NvdW50QWNjZX'
-    'NzSWQSFQoGdXNyX2lkGAIgASgNUgV1c3JJZBIkCg1jb3JyZXNwb25kZW50GAMgASgJUg1jb3Jy'
-    'ZXNwb25kZW50EhAKA3JlcBgEIAEoCVIDcmVwEhYKBmJyYW5jaBgFIAEoCVIGYnJhbmNoEh0KCm'
-    'FjY291bnRfbm8YBiABKAlSCWFjY291bnRObxIqChFtYXN0ZXJfYWNjb3VudF9ubxgHIAEoCVIP'
-    'bWFzdGVyQWNjb3VudE5vEhcKB3JvbGVfaWQYCCABKA1SBnJvbGVJZBIdCgphY2NvdW50X2lkGA'
-    'kgASgNUglhY2NvdW50SWQ=');
-
-@$core.Deprecated('Use listAccountAccessRequestDescriptor instead')
-const ListAccountAccessRequest$json = {
-  '1': 'ListAccountAccessRequest',
-  '2': [
-    {'1': 'usr_id', '3': 1, '4': 1, '5': 13, '10': 'usrId'},
-  ],
-};
-
-/// Descriptor for `ListAccountAccessRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listAccountAccessRequestDescriptor = $convert.base64Decode(
-    'ChhMaXN0QWNjb3VudEFjY2Vzc1JlcXVlc3QSFQoGdXNyX2lkGAEgASgNUgV1c3JJZA==');
-
-@$core.Deprecated('Use listAccountAccessResponseDescriptor instead')
-const ListAccountAccessResponse$json = {
-  '1': 'ListAccountAccessResponse',
-  '2': [
-    {'1': 'account_access', '3': 1, '4': 3, '5': 11, '6': '.usrpb.AccountAccess', '10': 'accountAccess'},
-  ],
-};
-
-/// Descriptor for `ListAccountAccessResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listAccountAccessResponseDescriptor = $convert.base64Decode(
-    'ChlMaXN0QWNjb3VudEFjY2Vzc1Jlc3BvbnNlEjsKDmFjY291bnRfYWNjZXNzGAEgAygLMhQudX'
-    'NycGIuQWNjb3VudEFjY2Vzc1INYWNjb3VudEFjY2Vzcw==');
 
 @$core.Deprecated('Use forgotPasswordCheckEmailRequestDescriptor instead')
 const ForgotPasswordCheckEmailRequest$json = {

@@ -1392,13 +1392,13 @@ class ListActivityRequest extends $pb.GeneratedMessage {
     $core.String? accountNo,
     $core.String? masterAccountNo,
     $core.String? symbol,
-    $core.String? status,
+    $core.Iterable<$core.String>? statuses,
     $1.Date? fromDate,
     $1.Date? toDate,
-    $core.String? entryType,
+    $core.Iterable<$core.String>? entryTypes,
     $core.String? branch,
     $core.String? rep,
-    $core.String? side,
+    $core.Iterable<$core.String>? sides,
     $core.String? accountName,
     $core.int? usrId,
     $core.bool? compress,
@@ -1427,13 +1427,13 @@ class ListActivityRequest extends $pb.GeneratedMessage {
     if (accountNo != null) result.accountNo = accountNo;
     if (masterAccountNo != null) result.masterAccountNo = masterAccountNo;
     if (symbol != null) result.symbol = symbol;
-    if (status != null) result.status = status;
+    if (statuses != null) result.statuses.addAll(statuses);
     if (fromDate != null) result.fromDate = fromDate;
     if (toDate != null) result.toDate = toDate;
-    if (entryType != null) result.entryType = entryType;
+    if (entryTypes != null) result.entryTypes.addAll(entryTypes);
     if (branch != null) result.branch = branch;
     if (rep != null) result.rep = rep;
-    if (side != null) result.side = side;
+    if (sides != null) result.sides.addAll(sides);
     if (accountName != null) result.accountName = accountName;
     if (usrId != null) result.usrId = usrId;
     if (compress != null) result.compress = compress;
@@ -1469,13 +1469,13 @@ class ListActivityRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'accountNo')
     ..aOS(2, _omitFieldNames ? '' : 'masterAccountNo')
     ..aOS(3, _omitFieldNames ? '' : 'symbol')
-    ..aOS(4, _omitFieldNames ? '' : 'status')
+    ..pPS(4, _omitFieldNames ? '' : 'statuses')
     ..aOM<$1.Date>(5, _omitFieldNames ? '' : 'fromDate', subBuilder: $1.Date.create)
     ..aOM<$1.Date>(6, _omitFieldNames ? '' : 'toDate', subBuilder: $1.Date.create)
-    ..aOS(7, _omitFieldNames ? '' : 'entryType')
+    ..pPS(7, _omitFieldNames ? '' : 'entryTypes')
     ..aOS(8, _omitFieldNames ? '' : 'branch')
     ..aOS(9, _omitFieldNames ? '' : 'rep')
-    ..aOS(10, _omitFieldNames ? '' : 'side')
+    ..pPS(10, _omitFieldNames ? '' : 'sides')
     ..aOS(11, _omitFieldNames ? '' : 'accountName')
     ..a<$core.int>(12, _omitFieldNames ? '' : 'usrId', $pb.PbFieldType.OU3)
     ..aOB(13, _omitFieldNames ? '' : 'compress')
@@ -1547,13 +1547,7 @@ class ListActivityRequest extends $pb.GeneratedMessage {
   void clearSymbol() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get status => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set status($core.String value) => $_setString(3, value);
-  @$pb.TagNumber(4)
-  $core.bool hasStatus() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearStatus() => $_clearField(4);
+  $pb.PbList<$core.String> get statuses => $_getList(3);
 
   @$pb.TagNumber(5)
   $1.Date get fromDate => $_getN(4);
@@ -1578,13 +1572,7 @@ class ListActivityRequest extends $pb.GeneratedMessage {
   $1.Date ensureToDate() => $_ensure(5);
 
   @$pb.TagNumber(7)
-  $core.String get entryType => $_getSZ(6);
-  @$pb.TagNumber(7)
-  set entryType($core.String value) => $_setString(6, value);
-  @$pb.TagNumber(7)
-  $core.bool hasEntryType() => $_has(6);
-  @$pb.TagNumber(7)
-  void clearEntryType() => $_clearField(7);
+  $pb.PbList<$core.String> get entryTypes => $_getList(6);
 
   @$pb.TagNumber(8)
   $core.String get branch => $_getSZ(7);
@@ -1605,13 +1593,7 @@ class ListActivityRequest extends $pb.GeneratedMessage {
   void clearRep() => $_clearField(9);
 
   @$pb.TagNumber(10)
-  $core.String get side => $_getSZ(9);
-  @$pb.TagNumber(10)
-  set side($core.String value) => $_setString(9, value);
-  @$pb.TagNumber(10)
-  $core.bool hasSide() => $_has(9);
-  @$pb.TagNumber(10)
-  void clearSide() => $_clearField(10);
+  $pb.PbList<$core.String> get sides => $_getList(9);
 
   @$pb.TagNumber(11)
   $core.String get accountName => $_getSZ(10);

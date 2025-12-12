@@ -513,6 +513,52 @@ class ListBuyingPowerRequest extends $pb.GeneratedMessage {
   $2.Pagination ensurePagination() => $_ensure(7);
 }
 
+class ListBuyingPowerSummary extends $pb.GeneratedMessage {
+  factory ListBuyingPowerSummary({
+    $core.int? totalRows,
+  }) {
+    final result = create();
+    if (totalRows != null) result.totalRows = totalRows;
+    return result;
+  }
+
+  ListBuyingPowerSummary._();
+
+  factory ListBuyingPowerSummary.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory ListBuyingPowerSummary.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListBuyingPowerSummary', package: const $pb.PackageName(_omitMessageNames ? '' : 'marginpb'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'totalRows', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListBuyingPowerSummary clone() => ListBuyingPowerSummary()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListBuyingPowerSummary copyWith(void Function(ListBuyingPowerSummary) updates) => super.copyWith((message) => updates(message as ListBuyingPowerSummary)) as ListBuyingPowerSummary;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ListBuyingPowerSummary create() => ListBuyingPowerSummary._();
+  @$core.override
+  ListBuyingPowerSummary createEmptyInstance() => create();
+  static $pb.PbList<ListBuyingPowerSummary> createRepeated() => $pb.PbList<ListBuyingPowerSummary>();
+  @$core.pragma('dart2js:noInline')
+  static ListBuyingPowerSummary getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListBuyingPowerSummary>(create);
+  static ListBuyingPowerSummary? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get totalRows => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set totalRows($core.int value) => $_setUnsignedInt32(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasTotalRows() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearTotalRows() => $_clearField(1);
+}
+
 class ListBuyingPowerResponse extends $pb.GeneratedMessage {
   factory ListBuyingPowerResponse({
     $core.Iterable<BuyingPower>? buyingPowers,
@@ -565,52 +611,6 @@ class ListBuyingPowerResponse extends $pb.GeneratedMessage {
   void clearSummary() => $_clearField(2);
   @$pb.TagNumber(2)
   ListBuyingPowerSummary ensureSummary() => $_ensure(1);
-}
-
-class ListBuyingPowerSummary extends $pb.GeneratedMessage {
-  factory ListBuyingPowerSummary({
-    $core.int? totalRows,
-  }) {
-    final result = create();
-    if (totalRows != null) result.totalRows = totalRows;
-    return result;
-  }
-
-  ListBuyingPowerSummary._();
-
-  factory ListBuyingPowerSummary.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
-  factory ListBuyingPowerSummary.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListBuyingPowerSummary', package: const $pb.PackageName(_omitMessageNames ? '' : 'marginpb'), createEmptyInstance: create)
-    ..a<$core.int>(1, _omitFieldNames ? '' : 'totalRows', $pb.PbFieldType.OU3)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListBuyingPowerSummary clone() => ListBuyingPowerSummary()..mergeFromMessage(this);
-  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListBuyingPowerSummary copyWith(void Function(ListBuyingPowerSummary) updates) => super.copyWith((message) => updates(message as ListBuyingPowerSummary)) as ListBuyingPowerSummary;
-
-  @$core.override
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static ListBuyingPowerSummary create() => ListBuyingPowerSummary._();
-  @$core.override
-  ListBuyingPowerSummary createEmptyInstance() => create();
-  static $pb.PbList<ListBuyingPowerSummary> createRepeated() => $pb.PbList<ListBuyingPowerSummary>();
-  @$core.pragma('dart2js:noInline')
-  static ListBuyingPowerSummary getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListBuyingPowerSummary>(create);
-  static ListBuyingPowerSummary? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.int get totalRows => $_getIZ(0);
-  @$pb.TagNumber(1)
-  set totalRows($core.int value) => $_setUnsignedInt32(0, value);
-  @$pb.TagNumber(1)
-  $core.bool hasTotalRows() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearTotalRows() => $_clearField(1);
 }
 
 

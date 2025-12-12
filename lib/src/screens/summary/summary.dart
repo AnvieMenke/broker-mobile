@@ -270,7 +270,9 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                       body = AppTheme.buildLoadingIndicator();
                     } else {
                       body = GridWithPagination(
-                        items: _buildGridItems(snapshot.data!),
+                        items: _buildGridItems(
+                          snapshot.data ?? [],
+                        ),
                         pagination: pagination,
                         onPageChange: _onPageChange,
                         onRefresh: _refreshData,
