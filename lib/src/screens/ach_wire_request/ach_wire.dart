@@ -137,16 +137,24 @@ class _AchWirePageState extends State<AchWirePage> {
   }
 
   Future<void> getFee() async {
+    if (!mounted) return;
+
     setState(() => isGettingFee = true);
+
     try {
       final resp = await _achWireService.getFee(formData);
+      if (!mounted) return;
       setState(() {
         formData["fee"] = double.tryParse(resp.fee.toString()) ?? 0.0;
       });
     } catch (err) {
-      Notify.error(FormatUtils.cleanErrorMessage(err));
+      if (mounted) {
+        Notify.error(FormatUtils.cleanErrorMessage(err));
+      }
     } finally {
-      setState(() => isGettingFee = false);
+      if (mounted) {
+        setState(() => isGettingFee = false);
+      }
     }
   }
 
