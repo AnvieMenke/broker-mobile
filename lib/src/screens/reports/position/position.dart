@@ -70,6 +70,10 @@ class PositionPageState extends State<PositionPage> {
   }
 
   void _updateQueryData() {
+    pagination = pagination.copyWith(
+      pageNo: 0,
+      reload: true,
+    );
     queryDataNotifier.value++;
   }
 

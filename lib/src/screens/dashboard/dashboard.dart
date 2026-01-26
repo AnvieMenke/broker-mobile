@@ -28,7 +28,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Decimal totalBalance = Decimal.zero;
   Decimal totalTdLongMarketValue = Decimal.zero;
-  Decimal totalSdShortMarketValue = Decimal.zero;
+  Decimal totalTdShortMarketValue = Decimal.zero;
   Decimal totalUnrealizedPlValue = Decimal.zero;
   String unrealizedPlPercent = "";
   String accountValuePercent = "";
@@ -96,8 +96,8 @@ class _DashboardPageState extends State<DashboardPage> {
       totalBalance = Decimal.parse(resp.summary.tdCashBalance.toString());
       totalTdLongMarketValue =
           Decimal.parse(resp.summary.tdLongMarketValue.toString());
-      totalSdShortMarketValue =
-          Decimal.parse(resp.summary.sdShortMarketValue.toString());
+      totalTdShortMarketValue =
+          Decimal.parse(resp.summary.tdShortMarketValue.toString());
       totalUnrealizedPlValue =
           Decimal.parse(resp.summary.unrealizedPlValue.toString());
       unrealizedPlPercent = resp.summary.unrealizedPlPercent.toString();
@@ -108,7 +108,7 @@ class _DashboardPageState extends State<DashboardPage> {
     } catch (_) {
       totalBalance = Decimal.zero;
       totalTdLongMarketValue = Decimal.zero;
-      totalSdShortMarketValue = Decimal.zero;
+      totalTdShortMarketValue = Decimal.zero;
       totalYtdPl = Decimal.zero;
       totalUnrealizedPlValue = Decimal.zero;
       unrealizedPlPercent = "";
@@ -249,7 +249,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   icon: FontAwesomeIcons.arrowTrendDown,
                   color: Colors.red,
                   label: "Short Market Value",
-                  value: totalSdShortMarketValue,
+                  value: totalTdShortMarketValue,
                   alignRight: true,
                 ),
               ],
