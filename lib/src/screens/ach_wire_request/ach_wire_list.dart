@@ -62,6 +62,10 @@ class _AchWireListState extends State<AchWireList> {
   }
 
   void _updateQueryData() {
+    pagination = pagination.copyWith(
+      pageNo: 0,
+      reload: true,
+    );
     queryDataNotifier.value++;
   }
 

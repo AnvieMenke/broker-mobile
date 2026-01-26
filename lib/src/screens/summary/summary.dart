@@ -163,7 +163,7 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                               size: 14, color: Colors.red),
                           const SizedBox(width: 4),
                           Text(
-                            "Short Market Value\n${FormatUtils.formatCurrency(acct.sdShortMarketValue)}",
+                            "Short Market Value\n${FormatUtils.formatCurrency(acct.tdShortMarketValue)}",
                             textAlign: TextAlign.right,
                             style: const TextStyle(fontSize: 12),
                           ),
@@ -302,11 +302,19 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                                               as String? ??
                                           '',
                                     };
+                                    pagination = pagination.copyWith(
+                                      pageNo: 0,
+                                      reload: true,
+                                    );
                                     _futureBalances = _listBalance();
                                   }
                                 }),
                                 onClear: (map) => setState(() {
                                   queryData["accountNo"] = "";
+                                  pagination = pagination.copyWith(
+                                    pageNo: 0,
+                                    reload: true,
+                                  );
                                   _futureBalances = _listBalance();
                                 }),
                               ),
