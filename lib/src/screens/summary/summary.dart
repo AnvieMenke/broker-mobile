@@ -285,38 +285,41 @@ class AccountSummaryState extends State<AccountSummaryPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 2),
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 400),
-                              child: AutoCompleteAccountNo(
-                                name: "accountNo",
-                                value: queryData["accountNo"],
-                                isAllStatus: true,
-                                type: "Client",
-                                isMainFilter: true,
-                                onChange: (map) => setState(() {
-                                  if (map['data'] != null &&
-                                      map['data']['accountNo'] != null) {
-                                    queryData = {
-                                      ...queryData,
-                                      "accountNo": map['data']?['accountNo']
-                                              as String? ??
-                                          '',
-                                    };
+                            child: Center(
+                              child: ConstrainedBox(
+                                constraints:
+                                    const BoxConstraints(maxWidth: 400),
+                                child: AutoCompleteAccountNo(
+                                  name: "accountNo",
+                                  value: queryData["accountNo"],
+                                  isAllStatus: true,
+                                  type: "Client",
+                                  isMainFilter: true,
+                                  onChange: (map) => setState(() {
+                                    if (map['data'] != null &&
+                                        map['data']['accountNo'] != null) {
+                                      queryData = {
+                                        ...queryData,
+                                        "accountNo": map['data']?['accountNo']
+                                                as String? ??
+                                            '',
+                                      };
+                                      pagination = pagination.copyWith(
+                                        pageNo: 0,
+                                        reload: true,
+                                      );
+                                      _futureBalances = _listBalance();
+                                    }
+                                  }),
+                                  onClear: (map) => setState(() {
+                                    queryData["accountNo"] = "";
                                     pagination = pagination.copyWith(
                                       pageNo: 0,
                                       reload: true,
                                     );
                                     _futureBalances = _listBalance();
-                                  }
-                                }),
-                                onClear: (map) => setState(() {
-                                  queryData["accountNo"] = "";
-                                  pagination = pagination.copyWith(
-                                    pageNo: 0,
-                                    reload: true,
-                                  );
-                                  _futureBalances = _listBalance();
-                                }),
+                                  }),
+                                ),
                               ),
                             ),
                           ),
