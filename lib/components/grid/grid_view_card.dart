@@ -110,17 +110,22 @@ class GridField {
         return Text(text);
 
       case 'note':
-        return Html(
-          data: strValue,
-          style: {
-            "p": Style(
-              margin: Margins.all(0),
-              fontSize: FontSize(12),
-            ),
-            "b": Style(
-              fontWeight: FontWeight.bold,
-            ),
-          },
+        return Container(
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: Html(
+            data: strValue,
+            style: {
+              "p": Style(
+                margin: Margins.all(0),
+                fontSize: FontSize(12),
+                maxLines: 1,
+                textOverflow: TextOverflow.ellipsis,
+              ),
+              "b": Style(
+                fontWeight: FontWeight.bold,
+              ),
+            },
+          ),
         );
 
       default:

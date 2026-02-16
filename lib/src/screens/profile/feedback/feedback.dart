@@ -180,7 +180,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
                 return Scaffold(
                   body: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 12),
                       Padding(

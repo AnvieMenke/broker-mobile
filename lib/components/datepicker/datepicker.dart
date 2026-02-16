@@ -69,13 +69,16 @@ class _CustomDatePickerState extends State<CustomDatePicker>
     DateTime? tempToDate,
     void Function(DateTime?, DateTime?) onChange,
   ) async {
+    final currentDate = DateTime.now();
+    DateTime initial = isFromDate ? (tempFromDate ?? currentDate) : (tempToDate ?? currentDate);
+    if (initial.isAfter(currentDate)) {
+      initial = currentDate;
+    }
     final picked = await showDatePicker(
       context: context,
-      initialDate: isFromDate
-          ? (tempFromDate ?? DateTime.now())
-          : (tempToDate ?? DateTime.now()),
-      firstDate: DateTime(DateTime.now().year - 5),
-      lastDate: DateTime.now(),
+      initialDate: initial,
+      firstDate: DateTime(currentDate.year - 5),
+      lastDate: currentDate,
     );
 
     if (picked != null) {

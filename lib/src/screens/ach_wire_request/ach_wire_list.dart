@@ -356,7 +356,6 @@ class _AchWireListState extends State<AchWireList> {
                                   const SizedBox(height: 6),
                                   TextField(
                                     decoration: const InputDecoration(
-                                      labelText: "Amount",
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.only(
                                           topRight: AppTheme.defaultRadius,
