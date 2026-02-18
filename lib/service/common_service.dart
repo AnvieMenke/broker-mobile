@@ -62,7 +62,7 @@ class CommonService {
       ) async {
     final req = LazyAccountRequest()
       ..key = key
-      ..limit = 50
+      ..limit = 1000
       ..orderBy = orderBy
       ..colType = type
       ..isActive = isActive
