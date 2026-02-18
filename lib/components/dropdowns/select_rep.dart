@@ -40,18 +40,22 @@ class AutoCompleteRepAdvisor extends StatefulWidget {
 class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
   final TextEditingController _controller = TextEditingController();
   late final CommonService _service;
+
   List<Map<String, dynamic>> _options = [];
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _controller.text = widget.value;
     _service = CommonService();
+    _loadOptions();
   }
 
   @override
   void didUpdateWidget(covariant AutoCompleteRepAdvisor oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (widget.value != oldWidget.value) {
       if (!(widget.freeSolo &&
           _controller.text != oldWidget.value &&
@@ -59,32 +63,61 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
         _controller.text = widget.value;
       }
     }
+
     if (widget.reset) {
       _controller.clear();
       widget.onChange({'name': widget.name, 'value': ''});
     }
+
     if (widget.correspondent != oldWidget.correspondent) {
       _options.clear();
-      _getOptions('');
-      setState(() {});
+      _loadOptions();
     }
   }
 
-  Future<List<Map<String, dynamic>>> _getOptions(String input) async {
+  Future<void> _loadOptions() async {
     try {
+      setState(() => _isLoading = true);
+
       final data = await _service.lazyRepAdvisor(
-        input,
+        '',
         'rep',
         'rep',
         widget.isActive,
         widget.correspondent,
       );
-      _options = data.repAdvisors.map((rep) => {'rep': rep.repCode, 'firstName': rep.firstName, 'lastName': rep.lastName}).toList();
-      return _options;
+
+      _options = data.repAdvisors
+          .map((rep) => {
+                'rep': rep.repCode,
+                'firstName': rep.firstName,
+                'lastName': rep.lastName
+              })
+          .toList();
     } catch (e) {
       debugPrint('Error fetching rep advisor options: $e');
-      return [];
+      _options = [];
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
+  }
+
+  List<Map<String, dynamic>> _filterOptions(String pattern) {
+    if (pattern.isEmpty) return _options;
+
+    final input = pattern.toLowerCase();
+
+    return _options.where((option) {
+      final rep = (option['rep'] ?? '').toString().toLowerCase();
+      final firstName = (option['firstName'] ?? '').toString().toLowerCase();
+      final lastName = (option['lastName'] ?? '').toString().toLowerCase();
+
+      return rep.contains(input) ||
+          firstName.contains(input) ||
+          lastName.contains(input);
+    }).toList();
   }
 
   void _handleOnBlur(String value) {
@@ -126,12 +159,15 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
     final user = sessionManager.user!;
     final isNotVisible = (!user.isMultipleAccount ||
         (widget.isActive && !user.isMultipleActiveAccount));
+
     if (isNotVisible) return const SizedBox.shrink();
 
     return TypeAheadField<Map<String, dynamic>>(
       key: ValueKey('${widget.correspondent}-${widget.value}'),
       controller: _controller,
-      suggestionsCallback: (pattern) async => await _getOptions(pattern),
+      suggestionsCallback: (pattern) async {
+        return _filterOptions(pattern);
+      },
       itemBuilder: (context, suggestion) {
         return ListTile(
           title: Text(
@@ -139,9 +175,9 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
             style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
           ),
           subtitle: Text(
-            '${suggestion['firstName'] ?? ''} ${suggestion['lastName'] ?? ''}'.trim(),
+            '${suggestion['firstName'] ?? ''} ${suggestion['lastName'] ?? ''}'
+                .trim(),
           ),
-
         );
       },
       onSelected: (suggestion) {
@@ -155,44 +191,56 @@ class _AutoCompleteRepAdvisorState extends State<AutoCompleteRepAdvisor> {
           onFocusChange: (hasFocus) {
             if (!hasFocus) _handleOnBlur(_controller.text);
           },
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text(
-              'Rep/Advisor',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(height: 6),
-            TextField(
-              controller: controller,
-              focusNode: focusNode,
-              enabled: !widget.disabled,
-              decoration: InputDecoration(
-                hintText: 'Rep/Advisor',
-                errorText: widget.error ? 'Invalid input' : null,
-                suffixIcon: controller.text.isNotEmpty && !widget.disabled
-                    ? IconButton(
-                        icon: const Icon(Icons.clear, size: 20),
-                        onPressed: _clearField,
-                      )
-                    : null,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Rep/Advisor',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
-              onChanged: (value) {
-                controller.text = value;
-                setState(() {});
-                if (value.trim().isEmpty) {
-                  if (_controller.text.isEmpty) return;
-                  _setPropsValue('', {});
-                  widget.onChange({});
-                  return;
-                }
+              const SizedBox(height: 6),
+              TextField(
+                controller: controller,
+                focusNode: focusNode,
+                enabled: !widget.disabled,
+                decoration: InputDecoration(
+                  hintText: 'Rep/Advisor',
+                  errorText: widget.error ? 'Invalid input' : null,
+                  suffixIcon: controller.text.isNotEmpty && !widget.disabled
+                      ? IconButton(
+                          icon: const Icon(Icons.clear, size: 20),
+                          onPressed: _clearField,
+                        )
+                      : _isLoading
+                          ? const Padding(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            )
+                          : null,
+                ),
+                onChanged: (value) {
+                  setState(() {});
 
-                if (widget.freeSolo) {
-                  _setPropsValue(value, {});
-                }
-              },
-              onEditingComplete: () => _handleOnBlur(_controller.text),
-            ),
-          ]),
+                  if (widget.freeSolo) {
+                    _setPropsValue(controller.text, {});
+                    return;
+                  }
+
+                  if (value.isEmpty) {
+                    _setPropsValue('', {});
+                    widget.onChange({});
+                  }
+                },
+                onEditingComplete: () => _handleOnBlur(_controller.text),
+              ),
+            ],
+          ),
         );
       },
     );
