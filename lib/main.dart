@@ -57,6 +57,7 @@ class _MyAppState extends State<MyApp> {
     return ActivityListener(
       onActivity: sessionManager.userActivityDetected,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Broker App',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
