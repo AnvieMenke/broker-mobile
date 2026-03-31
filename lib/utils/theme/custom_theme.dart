@@ -46,26 +46,24 @@ class AppTheme {
   );
 
   static void setSystemUIOverlayStyle() {
+    // Enable edge-to-edge mode (Android only, ignored on iOS)
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
     final Brightness platformBrightness =
         WidgetsBinding.instance.platformDispatcher.platformBrightness;
 
-    if (platformBrightness == Brightness.dark) {
-      SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-          statusBarColor: Colors.black,
-          statusBarIconBrightness: Brightness.light,
-          systemNavigationBarColor: Colors.black,
-        ),
-      );
-    } else {
-      SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-          statusBarColor: Colors.white,
-          statusBarIconBrightness: Brightness.light,
-          systemNavigationBarColor: Colors.white,
-        ),
-      );
-    }
+    // Set system overlay style with safe contrast and transparent bars
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      statusBarIconBrightness: platformBrightness == Brightness.dark
+          ? Brightness.light
+          : Brightness.dark,
+      systemNavigationBarIconBrightness: platformBrightness == Brightness.dark
+          ? Brightness.light
+          : Brightness.dark,
+    ));
   }
 
   static Widget buildLoadingIndicator() {
