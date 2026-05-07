@@ -42,20 +42,23 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
   @override
   void didUpdateWidget(covariant SelectBankAccount oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (widget.correspondent != oldWidget.correspondent ||
-        widget.accountNo != oldWidget.accountNo) {
+        widget.accountNo != oldWidget.accountNo ||
+        widget.value != oldWidget.value) {
       _getBankAccounts(widget.value);
     }
   }
 
   Future<void> _getBankAccounts(String value) async {
     if (widget.correspondent == null || widget.accountNo == null) {
-      if (mounted) {
-        setState(() {
-          options = [];
-          selectedValue = null;
-        });
-      }
+      if (!mounted) return;
+
+      setState(() {
+        options = [];
+        selectedValue = null;
+      });
+
       return;
     }
 
@@ -70,96 +73,195 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
 
       setState(() {
         options = bankAccountsList;
-        if (options.isEmpty) {
-          selectedValue = null;
-        }
 
-        final matches =
-            options.where((account) => account.bankId == widget.value).toList();
-
-        selectedValue = matches.isNotEmpty ? matches.first : null;
+        selectedValue = options.any((a) => a.bankId == value)
+            ? options.firstWhere((a) => a.bankId == value)
+            : null;
       });
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          options = [];
-          selectedValue = null;
-        });
-      }
+      if (!mounted) return;
+
+      setState(() {
+        options = [];
+        selectedValue = null;
+      });
+
       debugPrint("Error fetching bank accounts: $e");
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
-        widget.label,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-      ),
-      const SizedBox(height: 6),
-      DropdownButtonFormField<BankAccount>(
-        initialValue: selectedValue,
-        hint: const Text("Select Bank Account"),
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
-        decoration: InputDecoration(
-          fillColor: widget.disabled
-              ? Theme.of(context)
-              .disabledColor
-              .withValues(alpha: 0.12)
-              : null,
-          filled: true,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  void _openBottomSheet() {
+    if (widget.disabled || options.isEmpty) return;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16),
         ),
-        items: options.isNotEmpty
-            ? options.map((account) {
-                return DropdownMenuItem<BankAccount>(
-                  value: account,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    child: Text(
-                      "${account.bankName}: ${account.bankAccountNo}",
-                      softWrap: true,
-                      overflow: TextOverflow.visible,
-                      maxLines: null,
-                      style: const TextStyle(fontSize: 14),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Select Bank Account",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Flexible(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: options.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      final account = options[index];
+
+                      final isActive = account.status.toLowerCase() == 'active';
+
+                      final isSelected =
+                          selectedValue?.bankId == account.bankId;
+
+                      return InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: !isActive
+                            ? null
+                            : () {
+                                setState(() {
+                                  selectedValue = account;
+                                });
+
+                                widget.onChange?.call({
+                                  'data': {
+                                    'bankId': account.bankId,
+                                    'bankName': account.bankName,
+                                    'bankAccountNo': account.bankAccountNo,
+                                  }
+                                });
+
+                                Navigator.pop(context);
+                              },
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isSelected
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.grey.shade300,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 18,
+                                child: Text(
+                                  account.bankName.isNotEmpty
+                                      ? account.bankName[0]
+                                      : "?",
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      account.bankName,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      account.bankAccountNo,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: isActive
+                                            ? Colors.grey
+                                            : Colors.redAccent,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (!isActive)
+                                const Padding(
+                                  padding: EdgeInsets.only(right: 8),
+                                  child: Text(
+                                    "Inactive",
+                                    style: TextStyle(
+                                      color: Colors.redAccent,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              if (isSelected && isActive)
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              }).toList()
-            : [
-                const DropdownMenuItem<BankAccount>(
-                  value: null,
-                  child: Text("Bank Account"),
                 ),
               ],
-        onChanged: widget.disabled
-            ? null
-            : (account) {
-                setState(() {
-                  selectedValue = account;
-                });
+            ),
+          ),
+        );
+      },
+    );
+  }
 
-                if (account != null && widget.onChange != null) {
-                  widget.onChange!(
-                    {
-                      'data': {
-                        'bankId': account.bankId,
-                        'bankName': account.bankName,
-                        'bankAccountNo': account.bankAccountNo,
-                      }
-                    },
-                  );
-                }
-              },
-        validator: widget.requiredField
-            ? (value) => value == null ? 'Required' : null
-            : null,
-      ),
-    ]);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.label,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(height: 6),
+        GestureDetector(
+          onTap: widget.disabled ? null : _openBottomSheet,
+          child: AbsorbPointer(
+            child: InputDecorator(
+              isEmpty: selectedValue == null,
+              decoration: InputDecoration(
+                filled: true,
+                enabled: !widget.disabled,
+              ),
+              child: Text(
+                selectedValue != null
+                    ? "${selectedValue!.bankName}: ${selectedValue!.bankAccountNo}"
+                    : "Select Bank Account",
+                style: const TextStyle(fontSize: 14),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

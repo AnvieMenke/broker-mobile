@@ -39,6 +39,7 @@ const ListSystemCodeRequest$json = {
     {'1': 'type', '3': 1, '4': 1, '5': 9, '8': {}, '10': 'type'},
     {'1': 'sub_type', '3': 2, '4': 1, '5': 9, '8': {}, '10': 'subType'},
     {'1': 'order_by', '3': 3, '4': 1, '5': 9, '8': {}, '10': 'orderBy'},
+    {'1': 'sub_code', '3': 4, '4': 1, '5': 9, '8': {}, '10': 'subCode'},
   ],
 };
 
@@ -46,7 +47,8 @@ const ListSystemCodeRequest$json = {
 final $typed_data.Uint8List listSystemCodeRequestDescriptor = $convert.base64Decode(
     'ChVMaXN0U3lzdGVtQ29kZVJlcXVlc3QSKgoEdHlwZRgBIAEoCUIWkkETSggiU3RhdHVzInhk0g'
     'EEdHlwZVIEdHlwZRIvCghzdWJfdHlwZRgCIAEoCUIUkkERSgwiVXNlciBTZXR1cCJ4rAJSB3N1'
-    'YlR5cGUSHgoIb3JkZXJfYnkYAyABKAlCA+BBA1IHb3JkZXJCeQ==');
+    'YlR5cGUSHgoIb3JkZXJfYnkYAyABKAlCA+BBA1IHb3JkZXJCeRImCghzdWJfY29kZRgEIAEoCU'
+    'ILkkEISgMiRSJ4rAJSB3N1YkNvZGU=');
 
 @$core.Deprecated('Use systemCodeResponseDescriptor instead')
 const SystemCodeResponse$json = {

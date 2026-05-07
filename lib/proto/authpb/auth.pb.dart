@@ -105,6 +105,7 @@ class LoginWebRequest extends $pb.GeneratedMessage {
     $core.String? authenticationMode,
     $core.String? clientId,
     $core.String? correspondent,
+    $core.String? ipAddress,
   }) {
     final result = create();
     if (email != null) result.email = email;
@@ -112,6 +113,7 @@ class LoginWebRequest extends $pb.GeneratedMessage {
     if (authenticationMode != null) result.authenticationMode = authenticationMode;
     if (clientId != null) result.clientId = clientId;
     if (correspondent != null) result.correspondent = correspondent;
+    if (ipAddress != null) result.ipAddress = ipAddress;
     return result;
   }
 
@@ -126,6 +128,7 @@ class LoginWebRequest extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'authenticationMode')
     ..aOS(4, _omitFieldNames ? '' : 'clientId')
     ..aOS(5, _omitFieldNames ? '' : 'correspondent')
+    ..aOS(6, _omitFieldNames ? '' : 'ipAddress')
     ..hasRequiredFields = false
   ;
 
@@ -190,6 +193,15 @@ class LoginWebRequest extends $pb.GeneratedMessage {
   $core.bool hasCorrespondent() => $_has(4);
   @$pb.TagNumber(5)
   void clearCorrespondent() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get ipAddress => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set ipAddress($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasIpAddress() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearIpAddress() => $_clearField(6);
 }
 
 class LoginWebResponse extends $pb.GeneratedMessage {
@@ -482,10 +494,12 @@ class AccountEmailAuthRequest extends $pb.GeneratedMessage {
   factory AccountEmailAuthRequest({
     $core.String? email,
     $core.int? accountId,
+    $core.String? ipAddress,
   }) {
     final result = create();
     if (email != null) result.email = email;
     if (accountId != null) result.accountId = accountId;
+    if (ipAddress != null) result.ipAddress = ipAddress;
     return result;
   }
 
@@ -497,6 +511,7 @@ class AccountEmailAuthRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AccountEmailAuthRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'authpb'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'email')
     ..a<$core.int>(2, _omitFieldNames ? '' : 'accountId', $pb.PbFieldType.OU3)
+    ..aOS(3, _omitFieldNames ? '' : 'ipAddress')
     ..hasRequiredFields = false
   ;
 
@@ -534,6 +549,15 @@ class AccountEmailAuthRequest extends $pb.GeneratedMessage {
   $core.bool hasAccountId() => $_has(1);
   @$pb.TagNumber(2)
   void clearAccountId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get ipAddress => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set ipAddress($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasIpAddress() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearIpAddress() => $_clearField(3);
 }
 
 class AccountEmailAuthResponse extends $pb.GeneratedMessage {
@@ -586,10 +610,12 @@ class EmailAuthCodeRequest extends $pb.GeneratedMessage {
   factory EmailAuthCodeRequest({
     $core.String? email,
     $core.String? correspondent,
+    $core.String? ipAddress,
   }) {
     final result = create();
     if (email != null) result.email = email;
     if (correspondent != null) result.correspondent = correspondent;
+    if (ipAddress != null) result.ipAddress = ipAddress;
     return result;
   }
 
@@ -601,6 +627,7 @@ class EmailAuthCodeRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'EmailAuthCodeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'authpb'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'email')
     ..aOS(2, _omitFieldNames ? '' : 'correspondent')
+    ..aOS(3, _omitFieldNames ? '' : 'ipAddress')
     ..hasRequiredFields = false
   ;
 
@@ -638,6 +665,15 @@ class EmailAuthCodeRequest extends $pb.GeneratedMessage {
   $core.bool hasCorrespondent() => $_has(1);
   @$pb.TagNumber(2)
   void clearCorrespondent() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get ipAddress => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set ipAddress($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasIpAddress() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearIpAddress() => $_clearField(3);
 }
 
 class EmailAuthCodeResponse extends $pb.GeneratedMessage {

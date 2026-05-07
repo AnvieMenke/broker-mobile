@@ -87,6 +87,10 @@ class UserServiceClient extends $grpc.Client {
       '/usrpb.UserService/ChangeRole',
       ($0.ChangeRoleRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $1.Empty.fromBuffer(value));
+  static final _$lazyAdministratorEmail = $grpc.ClientMethod<$0.LazyAdministratorEmailRequest, $0.LazyAdministratorEmailResponse>(
+      '/usrpb.UserService/LazyAdministratorEmail',
+      ($0.LazyAdministratorEmailRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.LazyAdministratorEmailResponse.fromBuffer(value));
 
   UserServiceClient(super.channel, {super.options, super.interceptors});
 
@@ -144,6 +148,10 @@ class UserServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$1.Empty> changeRole($0.ChangeRoleRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$changeRole, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.LazyAdministratorEmailResponse> lazyAdministratorEmail($0.LazyAdministratorEmailRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$lazyAdministratorEmail, request, options: options);
   }
 }
 
@@ -250,6 +258,13 @@ abstract class UserServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.ChangeRoleRequest.fromBuffer(value),
         ($1.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.LazyAdministratorEmailRequest, $0.LazyAdministratorEmailResponse>(
+        'LazyAdministratorEmail',
+        lazyAdministratorEmail_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.LazyAdministratorEmailRequest.fromBuffer(value),
+        ($0.LazyAdministratorEmailResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.CreateAdministratorResponse> createAdministrator_Pre($grpc.ServiceCall $call, $async.Future<$0.Administrator> $request) async {
@@ -308,6 +323,10 @@ abstract class UserServiceBase extends $grpc.Service {
     return changeRole($call, await $request);
   }
 
+  $async.Future<$0.LazyAdministratorEmailResponse> lazyAdministratorEmail_Pre($grpc.ServiceCall $call, $async.Future<$0.LazyAdministratorEmailRequest> $request) async {
+    return lazyAdministratorEmail($call, await $request);
+  }
+
   $async.Future<$0.CreateAdministratorResponse> createAdministrator($grpc.ServiceCall call, $0.Administrator request);
   $async.Future<$0.UpdateAdministratorResponse> updateAdministrator($grpc.ServiceCall call, $0.Administrator request);
   $async.Future<$0.ChangePasswordResponse> changePassword($grpc.ServiceCall call, $0.ChangePasswordRequest request);
@@ -322,4 +341,5 @@ abstract class UserServiceBase extends $grpc.Service {
   $async.Future<$0.EmptyRequest> removeUserOtpAuth($grpc.ServiceCall call, $0.EmptyRequest request);
   $async.Future<$0.EmptyRequest> updateLanguage($grpc.ServiceCall call, $0.UpdateLanguageRequest request);
   $async.Future<$1.Empty> changeRole($grpc.ServiceCall call, $0.ChangeRoleRequest request);
+  $async.Future<$0.LazyAdministratorEmailResponse> lazyAdministratorEmail($grpc.ServiceCall call, $0.LazyAdministratorEmailRequest request);
 }

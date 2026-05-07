@@ -1679,6 +1679,104 @@ class ChangeRoleRequest extends $pb.GeneratedMessage {
   void clearRoleId() => $_clearField(2);
 }
 
+class LazyAdministratorEmailRequest extends $pb.GeneratedMessage {
+  factory LazyAdministratorEmailRequest({
+    $core.String? key,
+    $core.int? limit,
+  }) {
+    final result = create();
+    if (key != null) result.key = key;
+    if (limit != null) result.limit = limit;
+    return result;
+  }
+
+  LazyAdministratorEmailRequest._();
+
+  factory LazyAdministratorEmailRequest.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory LazyAdministratorEmailRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LazyAdministratorEmailRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'usrpb'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'key')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'limit', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LazyAdministratorEmailRequest clone() => LazyAdministratorEmailRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LazyAdministratorEmailRequest copyWith(void Function(LazyAdministratorEmailRequest) updates) => super.copyWith((message) => updates(message as LazyAdministratorEmailRequest)) as LazyAdministratorEmailRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LazyAdministratorEmailRequest create() => LazyAdministratorEmailRequest._();
+  @$core.override
+  LazyAdministratorEmailRequest createEmptyInstance() => create();
+  static $pb.PbList<LazyAdministratorEmailRequest> createRepeated() => $pb.PbList<LazyAdministratorEmailRequest>();
+  @$core.pragma('dart2js:noInline')
+  static LazyAdministratorEmailRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LazyAdministratorEmailRequest>(create);
+  static LazyAdministratorEmailRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get key => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set key($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasKey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKey() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get limit => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set limit($core.int value) => $_setUnsignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasLimit() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearLimit() => $_clearField(2);
+}
+
+class LazyAdministratorEmailResponse extends $pb.GeneratedMessage {
+  factory LazyAdministratorEmailResponse({
+    $core.Iterable<$core.String>? administratorEmails,
+  }) {
+    final result = create();
+    if (administratorEmails != null) result.administratorEmails.addAll(administratorEmails);
+    return result;
+  }
+
+  LazyAdministratorEmailResponse._();
+
+  factory LazyAdministratorEmailResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory LazyAdministratorEmailResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LazyAdministratorEmailResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'usrpb'), createEmptyInstance: create)
+    ..pPS(1, _omitFieldNames ? '' : 'administratorEmails')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LazyAdministratorEmailResponse clone() => LazyAdministratorEmailResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LazyAdministratorEmailResponse copyWith(void Function(LazyAdministratorEmailResponse) updates) => super.copyWith((message) => updates(message as LazyAdministratorEmailResponse)) as LazyAdministratorEmailResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LazyAdministratorEmailResponse create() => LazyAdministratorEmailResponse._();
+  @$core.override
+  LazyAdministratorEmailResponse createEmptyInstance() => create();
+  static $pb.PbList<LazyAdministratorEmailResponse> createRepeated() => $pb.PbList<LazyAdministratorEmailResponse>();
+  @$core.pragma('dart2js:noInline')
+  static LazyAdministratorEmailResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LazyAdministratorEmailResponse>(create);
+  static LazyAdministratorEmailResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<$core.String> get administratorEmails => $_getList(0);
+}
+
 
 const $core.bool _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const $core.bool _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

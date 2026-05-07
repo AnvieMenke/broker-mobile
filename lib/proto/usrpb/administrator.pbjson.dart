@@ -431,3 +431,30 @@ final $typed_data.Uint8List changeRoleRequestDescriptor = $convert.base64Decode(
     'ChFDaGFuZ2VSb2xlUmVxdWVzdBIVCgZ1c3JfaWQYASABKA1SBXVzcklkEhcKB3JvbGVfaWQYAi'
     'ABKA1SBnJvbGVJZA==');
 
+@$core.Deprecated('Use lazyAdministratorEmailRequestDescriptor instead')
+const LazyAdministratorEmailRequest$json = {
+  '1': 'LazyAdministratorEmailRequest',
+  '2': [
+    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    {'1': 'limit', '3': 2, '4': 1, '5': 13, '10': 'limit'},
+  ],
+};
+
+/// Descriptor for `LazyAdministratorEmailRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List lazyAdministratorEmailRequestDescriptor = $convert.base64Decode(
+    'Ch1MYXp5QWRtaW5pc3RyYXRvckVtYWlsUmVxdWVzdBIQCgNrZXkYASABKAlSA2tleRIUCgVsaW'
+    '1pdBgCIAEoDVIFbGltaXQ=');
+
+@$core.Deprecated('Use lazyAdministratorEmailResponseDescriptor instead')
+const LazyAdministratorEmailResponse$json = {
+  '1': 'LazyAdministratorEmailResponse',
+  '2': [
+    {'1': 'administrator_emails', '3': 1, '4': 3, '5': 9, '10': 'administratorEmails'},
+  ],
+};
+
+/// Descriptor for `LazyAdministratorEmailResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List lazyAdministratorEmailResponseDescriptor = $convert.base64Decode(
+    'Ch5MYXp5QWRtaW5pc3RyYXRvckVtYWlsUmVzcG9uc2USMQoUYWRtaW5pc3RyYXRvcl9lbWFpbH'
+    'MYASADKAlSE2FkbWluaXN0cmF0b3JFbWFpbHM=');
+

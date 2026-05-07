@@ -36,11 +36,19 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
   }
 
   Future<void> _loadData() async {
-    final data = await UserService().getUserOtpAuthUrl();
-    setState(() {
-      _qrCodeUrl = data.url;
-      _hasAuthenticator = data.hasAuthenticator;
-    });
+    try {
+      final data = await UserService().getUserOtpAuthUrl();
+      setState(() {
+        _qrCodeUrl = data.url;
+        _hasAuthenticator = data.hasAuthenticator;
+      });
+    } catch (err) {
+      setState(() {
+        _errorMessage = FormatUtils.cleanErrorMessage(err);
+      });
+    } finally {
+      setState(() => _isSubmitting = false);
+    }
   }
 
   Future<void> _navigateBack() async {
@@ -114,7 +122,8 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
                 backgroundColor: Colors.white,
                 data: _qrCodeUrl,
                 version: QrVersions.auto,
-                size: 200.0, // adjust as needed
+                size: 200.0,
+                // adjust as needed
                 gapless: true,
               ),
             ),
