@@ -46,8 +46,6 @@ class _AuthenticatorPageState extends State<AuthenticatorPage> {
       setState(() {
         _errorMessage = FormatUtils.cleanErrorMessage(err);
       });
-    } finally {
-      setState(() => _isSubmitting = false);
     }
   }
 
