@@ -86,6 +86,7 @@ const Activity$json = {
     {'1': 'report_activity_id', '3': 70, '4': 1, '5': 13, '10': 'reportActivityId'},
     {'1': 'currency', '3': 71, '4': 1, '5': 9, '10': 'currency'},
     {'1': 'is_solicited', '3': 72, '4': 1, '5': 8, '10': 'isSolicited'},
+    {'1': 'is_syndicate', '3': 73, '4': 1, '5': 8, '10': 'isSyndicate'},
   ],
 };
 
@@ -134,7 +135,8 @@ final $typed_data.Uint8List activityDescriptor = $convert.base64Decode(
     'GEMgASgJUg1vdGhlckZlZXNMaXN0EiQKDmR2cF9jb25maXJtX25vGEQgASgNUgxkdnBDb25maX'
     'JtTm8SMQoVY29udHJhX3N1Yl9hY2NvdW50X25vGEUgASgJUhJjb250cmFTdWJBY2NvdW50Tm8S'
     'LAoScmVwb3J0X2FjdGl2aXR5X2lkGEYgASgNUhByZXBvcnRBY3Rpdml0eUlkEhoKCGN1cnJlbm'
-    'N5GEcgASgJUghjdXJyZW5jeRIhCgxpc19zb2xpY2l0ZWQYSCABKAhSC2lzU29saWNpdGVk');
+    'N5GEcgASgJUghjdXJyZW5jeRIhCgxpc19zb2xpY2l0ZWQYSCABKAhSC2lzU29saWNpdGVkEiEK'
+    'DGlzX3N5bmRpY2F0ZRhJIAEoCFILaXNTeW5kaWNhdGU=');
 
 @$core.Deprecated('Use activityReportDetailsDescriptor instead')
 const ActivityReportDetails$json = {
@@ -179,6 +181,7 @@ const ActivityReportDetails$json = {
     {'1': 'system_date', '3': 37, '4': 1, '5': 11, '6': '.google.type.Date', '10': 'systemDate'},
     {'1': 'batch_no', '3': 38, '4': 1, '5': 9, '10': 'batchNo'},
     {'1': 'report_activity_id', '3': 39, '4': 1, '5': 13, '10': 'reportActivityId'},
+    {'1': 'is_syndicate', '3': 40, '4': 1, '5': 8, '10': 'isSyndicate'},
   ],
 };
 
@@ -207,7 +210,7 @@ final $typed_data.Uint8List activityReportDetailsDescriptor = $convert.base64Dec
     'X2lzc3VlGCIgASgIUgl3aGVuSXNzdWUSEAoDeXRjGCMgASgJUgN5dGMSEAoDeXRtGCQgASgJUg'
     'N5dG0SMgoLc3lzdGVtX2RhdGUYJSABKAsyES5nb29nbGUudHlwZS5EYXRlUgpzeXN0ZW1EYXRl'
     'EhkKCGJhdGNoX25vGCYgASgJUgdiYXRjaE5vEiwKEnJlcG9ydF9hY3Rpdml0eV9pZBgnIAEoDV'
-    'IQcmVwb3J0QWN0aXZpdHlJZA==');
+    'IQcmVwb3J0QWN0aXZpdHlJZBIhCgxpc19zeW5kaWNhdGUYKCABKAhSC2lzU3luZGljYXRl');
 
 @$core.Deprecated('Use listActivityRequestDescriptor instead')
 const ListActivityRequest$json = {

@@ -103,11 +103,13 @@ class ListSystemCodeRequest extends $pb.GeneratedMessage {
     $core.String? type,
     $core.String? subType,
     $core.String? orderBy,
+    $core.String? subCode,
   }) {
     final result = create();
     if (type != null) result.type = type;
     if (subType != null) result.subType = subType;
     if (orderBy != null) result.orderBy = orderBy;
+    if (subCode != null) result.subCode = subCode;
     return result;
   }
 
@@ -120,6 +122,7 @@ class ListSystemCodeRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'type')
     ..aOS(2, _omitFieldNames ? '' : 'subType')
     ..aOS(3, _omitFieldNames ? '' : 'orderBy')
+    ..aOS(4, _omitFieldNames ? '' : 'subCode')
     ..hasRequiredFields = false
   ;
 
@@ -166,6 +169,15 @@ class ListSystemCodeRequest extends $pb.GeneratedMessage {
   $core.bool hasOrderBy() => $_has(2);
   @$pb.TagNumber(3)
   void clearOrderBy() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get subCode => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set subCode($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasSubCode() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSubCode() => $_clearField(4);
 }
 
 class SystemCodeResponse extends $pb.GeneratedMessage {

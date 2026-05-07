@@ -496,6 +496,7 @@ class BankAccount extends $pb.GeneratedMessage {
     $core.bool? ach,
     $core.bool? wire,
     $core.bool? check_10,
+    $core.String? status,
   }) {
     final result = create();
     if (bankId != null) result.bankId = bankId;
@@ -508,6 +509,7 @@ class BankAccount extends $pb.GeneratedMessage {
     if (ach != null) result.ach = ach;
     if (wire != null) result.wire = wire;
     if (check_10 != null) result.check_10 = check_10;
+    if (status != null) result.status = status;
     return result;
   }
 
@@ -527,6 +529,7 @@ class BankAccount extends $pb.GeneratedMessage {
     ..aOB(8, _omitFieldNames ? '' : 'ach')
     ..aOB(9, _omitFieldNames ? '' : 'wire')
     ..aOB(10, _omitFieldNames ? '' : 'check')
+    ..aOS(11, _omitFieldNames ? '' : 'status')
     ..hasRequiredFields = false
   ;
 
@@ -636,6 +639,15 @@ class BankAccount extends $pb.GeneratedMessage {
   $core.bool hasCheck_10() => $_has(9);
   @$pb.TagNumber(10)
   void clearCheck_10() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.String get status => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set status($core.String value) => $_setString(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasStatus() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearStatus() => $_clearField(11);
 }
 
 class ListBankAccountResponse extends $pb.GeneratedMessage {

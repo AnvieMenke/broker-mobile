@@ -47,6 +47,7 @@ const LoginWebRequest$json = {
     {'1': 'authentication_mode', '3': 3, '4': 1, '5': 9, '10': 'authenticationMode'},
     {'1': 'client_id', '3': 4, '4': 1, '5': 9, '10': 'clientId'},
     {'1': 'correspondent', '3': 5, '4': 1, '5': 9, '10': 'correspondent'},
+    {'1': 'ip_address', '3': 6, '4': 1, '5': 9, '10': 'ipAddress'},
   ],
 };
 
@@ -55,7 +56,7 @@ final $typed_data.Uint8List loginWebRequestDescriptor = $convert.base64Decode(
     'Cg9Mb2dpbldlYlJlcXVlc3QSFAoFZW1haWwYASABKAlSBWVtYWlsEhoKCHBhc3N3b3JkGAIgAS'
     'gJUghwYXNzd29yZBIvChNhdXRoZW50aWNhdGlvbl9tb2RlGAMgASgJUhJhdXRoZW50aWNhdGlv'
     'bk1vZGUSGwoJY2xpZW50X2lkGAQgASgJUghjbGllbnRJZBIkCg1jb3JyZXNwb25kZW50GAUgAS'
-    'gJUg1jb3JyZXNwb25kZW50');
+    'gJUg1jb3JyZXNwb25kZW50Eh0KCmlwX2FkZHJlc3MYBiABKAlSCWlwQWRkcmVzcw==');
 
 @$core.Deprecated('Use loginWebResponseDescriptor instead')
 const LoginWebResponse$json = {
@@ -137,13 +138,14 @@ const AccountEmailAuthRequest$json = {
   '2': [
     {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
     {'1': 'account_id', '3': 2, '4': 1, '5': 13, '10': 'accountId'},
+    {'1': 'ip_address', '3': 3, '4': 1, '5': 9, '10': 'ipAddress'},
   ],
 };
 
 /// Descriptor for `AccountEmailAuthRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List accountEmailAuthRequestDescriptor = $convert.base64Decode(
     'ChdBY2NvdW50RW1haWxBdXRoUmVxdWVzdBIUCgVlbWFpbBgBIAEoCVIFZW1haWwSHQoKYWNjb3'
-    'VudF9pZBgCIAEoDVIJYWNjb3VudElk');
+    'VudF9pZBgCIAEoDVIJYWNjb3VudElkEh0KCmlwX2FkZHJlc3MYAyABKAlSCWlwQWRkcmVzcw==');
 
 @$core.Deprecated('Use accountEmailAuthResponseDescriptor instead')
 const AccountEmailAuthResponse$json = {
@@ -164,13 +166,15 @@ const EmailAuthCodeRequest$json = {
   '2': [
     {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
     {'1': 'correspondent', '3': 2, '4': 1, '5': 9, '10': 'correspondent'},
+    {'1': 'ip_address', '3': 3, '4': 1, '5': 9, '10': 'ipAddress'},
   ],
 };
 
 /// Descriptor for `EmailAuthCodeRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List emailAuthCodeRequestDescriptor = $convert.base64Decode(
     'ChRFbWFpbEF1dGhDb2RlUmVxdWVzdBIUCgVlbWFpbBgBIAEoCVIFZW1haWwSJAoNY29ycmVzcG'
-    '9uZGVudBgCIAEoCVINY29ycmVzcG9uZGVudA==');
+    '9uZGVudBgCIAEoCVINY29ycmVzcG9uZGVudBIdCgppcF9hZGRyZXNzGAMgASgJUglpcEFkZHJl'
+    'c3M=');
 
 @$core.Deprecated('Use emailAuthCodeResponseDescriptor instead')
 const EmailAuthCodeResponse$json = {

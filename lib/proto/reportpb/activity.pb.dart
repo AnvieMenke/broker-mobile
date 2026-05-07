@@ -90,6 +90,7 @@ class Activity extends $pb.GeneratedMessage {
     $core.int? reportActivityId,
     $core.String? currency,
     $core.bool? isSolicited,
+    $core.bool? isSyndicate,
   }) {
     final result = create();
     if (correspondent != null) result.correspondent = correspondent;
@@ -160,6 +161,7 @@ class Activity extends $pb.GeneratedMessage {
     if (reportActivityId != null) result.reportActivityId = reportActivityId;
     if (currency != null) result.currency = currency;
     if (isSolicited != null) result.isSolicited = isSolicited;
+    if (isSyndicate != null) result.isSyndicate = isSyndicate;
     return result;
   }
 
@@ -237,6 +239,7 @@ class Activity extends $pb.GeneratedMessage {
     ..a<$core.int>(70, _omitFieldNames ? '' : 'reportActivityId', $pb.PbFieldType.OU3)
     ..aOS(71, _omitFieldNames ? '' : 'currency')
     ..aOB(72, _omitFieldNames ? '' : 'isSolicited')
+    ..aOB(73, _omitFieldNames ? '' : 'isSyndicate')
     ..hasRequiredFields = false
   ;
 
@@ -879,6 +882,15 @@ class Activity extends $pb.GeneratedMessage {
   $core.bool hasIsSolicited() => $_has(67);
   @$pb.TagNumber(72)
   void clearIsSolicited() => $_clearField(72);
+
+  @$pb.TagNumber(73)
+  $core.bool get isSyndicate => $_getBF(68);
+  @$pb.TagNumber(73)
+  set isSyndicate($core.bool value) => $_setBool(68, value);
+  @$pb.TagNumber(73)
+  $core.bool hasIsSyndicate() => $_has(68);
+  @$pb.TagNumber(73)
+  void clearIsSyndicate() => $_clearField(73);
 }
 
 class ActivityReportDetails extends $pb.GeneratedMessage {
@@ -922,6 +934,7 @@ class ActivityReportDetails extends $pb.GeneratedMessage {
     $1.Date? systemDate,
     $core.String? batchNo,
     $core.int? reportActivityId,
+    $core.bool? isSyndicate,
   }) {
     final result = create();
     if (accrual != null) result.accrual = accrual;
@@ -963,6 +976,7 @@ class ActivityReportDetails extends $pb.GeneratedMessage {
     if (systemDate != null) result.systemDate = systemDate;
     if (batchNo != null) result.batchNo = batchNo;
     if (reportActivityId != null) result.reportActivityId = reportActivityId;
+    if (isSyndicate != null) result.isSyndicate = isSyndicate;
     return result;
   }
 
@@ -1011,6 +1025,7 @@ class ActivityReportDetails extends $pb.GeneratedMessage {
     ..aOM<$1.Date>(37, _omitFieldNames ? '' : 'systemDate', subBuilder: $1.Date.create)
     ..aOS(38, _omitFieldNames ? '' : 'batchNo')
     ..a<$core.int>(39, _omitFieldNames ? '' : 'reportActivityId', $pb.PbFieldType.OU3)
+    ..aOB(40, _omitFieldNames ? '' : 'isSyndicate')
     ..hasRequiredFields = false
   ;
 
@@ -1385,6 +1400,15 @@ class ActivityReportDetails extends $pb.GeneratedMessage {
   $core.bool hasReportActivityId() => $_has(38);
   @$pb.TagNumber(39)
   void clearReportActivityId() => $_clearField(39);
+
+  @$pb.TagNumber(40)
+  $core.bool get isSyndicate => $_getBF(39);
+  @$pb.TagNumber(40)
+  set isSyndicate($core.bool value) => $_setBool(39, value);
+  @$pb.TagNumber(40)
+  $core.bool hasIsSyndicate() => $_has(39);
+  @$pb.TagNumber(40)
+  void clearIsSyndicate() => $_clearField(40);
 }
 
 class ListActivityRequest extends $pb.GeneratedMessage {

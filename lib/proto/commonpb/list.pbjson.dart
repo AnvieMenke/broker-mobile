@@ -130,6 +130,7 @@ const BankAccount$json = {
     {'1': 'ach', '3': 8, '4': 1, '5': 8, '10': 'ach'},
     {'1': 'wire', '3': 9, '4': 1, '5': 8, '10': 'wire'},
     {'1': 'check', '3': 10, '4': 1, '5': 8, '10': 'check'},
+    {'1': 'status', '3': 11, '4': 1, '5': 9, '10': 'status'},
   ],
 };
 
@@ -140,7 +141,8 @@ final $typed_data.Uint8List bankAccountDescriptor = $convert.base64Decode(
     'cmVfcm91dGluZ19ubxgEIAEoCVINd2lyZVJvdXRpbmdObxImCg9iYW5rX2FjY291bnRfbm8YBS'
     'ABKAlSDWJhbmtBY2NvdW50Tm8SKgoRYmFua19hY2NvdW50X3R5cGUYBiABKAlSD2JhbmtBY2Nv'
     'dW50VHlwZRIpChBpc19pbnRlcm5hdGlvbmFsGAcgASgIUg9pc0ludGVybmF0aW9uYWwSEAoDYW'
-    'NoGAggASgIUgNhY2gSEgoEd2lyZRgJIAEoCFIEd2lyZRIUCgVjaGVjaxgKIAEoCFIFY2hlY2s=');
+    'NoGAggASgIUgNhY2gSEgoEd2lyZRgJIAEoCFIEd2lyZRIUCgVjaGVjaxgKIAEoCFIFY2hlY2sS'
+    'FgoGc3RhdHVzGAsgASgJUgZzdGF0dXM=');
 
 @$core.Deprecated('Use listBankAccountResponseDescriptor instead')
 const ListBankAccountResponse$json = {

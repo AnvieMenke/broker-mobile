@@ -38,10 +38,6 @@ class LazyListServiceClient extends $grpc.Client {
       '/commonpb.LazyListService/LazySecurity',
       ($0.LazyLoadSecurityRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.LazyLoadSecurityResponse.fromBuffer(value));
-  static final _$lazyAdministratorEmail = $grpc.ClientMethod<$0.LazyAccountRequest, $0.LazyAdministratorEmailResponse>(
-      '/commonpb.LazyListService/LazyAdministratorEmail',
-      ($0.LazyAccountRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.LazyAdministratorEmailResponse.fromBuffer(value));
   static final _$accessibleCorrespondent = $grpc.ClientMethod<$0.AccessibleRequest, $0.AccessibleCorrespondentResponse>(
       '/commonpb.LazyListService/AccessibleCorrespondent',
       ($0.AccessibleRequest value) => value.writeToBuffer(),
@@ -59,10 +55,6 @@ class LazyListServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.LazyLoadSecurityResponse> lazySecurity($0.LazyLoadSecurityRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$lazySecurity, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.LazyAdministratorEmailResponse> lazyAdministratorEmail($0.LazyAccountRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$lazyAdministratorEmail, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.AccessibleCorrespondentResponse> accessibleCorrespondent($0.AccessibleRequest request, {$grpc.CallOptions? options}) {
@@ -93,13 +85,6 @@ abstract class LazyListServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.LazyLoadSecurityRequest.fromBuffer(value),
         ($0.LazyLoadSecurityResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.LazyAccountRequest, $0.LazyAdministratorEmailResponse>(
-        'LazyAdministratorEmail',
-        lazyAdministratorEmail_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.LazyAccountRequest.fromBuffer(value),
-        ($0.LazyAdministratorEmailResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.AccessibleRequest, $0.AccessibleCorrespondentResponse>(
         'AccessibleCorrespondent',
         accessibleCorrespondent_Pre,
@@ -124,10 +109,6 @@ abstract class LazyListServiceBase extends $grpc.Service {
     return lazySecurity($call, await $request);
   }
 
-  $async.Future<$0.LazyAdministratorEmailResponse> lazyAdministratorEmail_Pre($grpc.ServiceCall $call, $async.Future<$0.LazyAccountRequest> $request) async {
-    return lazyAdministratorEmail($call, await $request);
-  }
-
   $async.Future<$0.AccessibleCorrespondentResponse> accessibleCorrespondent_Pre($grpc.ServiceCall $call, $async.Future<$0.AccessibleRequest> $request) async {
     return accessibleCorrespondent($call, await $request);
   }
@@ -138,7 +119,6 @@ abstract class LazyListServiceBase extends $grpc.Service {
 
   $async.Future<$0.LazyAccountResponse> lazyAccount($grpc.ServiceCall call, $0.LazyAccountRequest request);
   $async.Future<$0.LazyLoadSecurityResponse> lazySecurity($grpc.ServiceCall call, $0.LazyLoadSecurityRequest request);
-  $async.Future<$0.LazyAdministratorEmailResponse> lazyAdministratorEmail($grpc.ServiceCall call, $0.LazyAccountRequest request);
   $async.Future<$0.AccessibleCorrespondentResponse> accessibleCorrespondent($grpc.ServiceCall call, $0.AccessibleRequest request);
   $async.Future<$0.LazyRepAdvisorResponse> lazyRepAdvisor($grpc.ServiceCall call, $0.LazyAccountRequest request);
 }

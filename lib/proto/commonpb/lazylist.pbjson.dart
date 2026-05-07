@@ -176,16 +176,3 @@ final $typed_data.Uint8List accessibleCorrespondentResponseDescriptor = $convert
     'Ch9BY2Nlc3NpYmxlQ29ycmVzcG9uZGVudFJlc3BvbnNlEiYKDmNvcnJlc3BvbmRlbnRzGAEgAy'
     'gJUg5jb3JyZXNwb25kZW50cw==');
 
-@$core.Deprecated('Use lazyAdministratorEmailResponseDescriptor instead')
-const LazyAdministratorEmailResponse$json = {
-  '1': 'LazyAdministratorEmailResponse',
-  '2': [
-    {'1': 'administrator_emails', '3': 1, '4': 3, '5': 9, '10': 'administratorEmails'},
-  ],
-};
-
-/// Descriptor for `LazyAdministratorEmailResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List lazyAdministratorEmailResponseDescriptor = $convert.base64Decode(
-    'Ch5MYXp5QWRtaW5pc3RyYXRvckVtYWlsUmVzcG9uc2USMQoUYWRtaW5pc3RyYXRvcl9lbWFpbH'
-    'MYASADKAlSE2FkbWluaXN0cmF0b3JFbWFpbHM=');
-
