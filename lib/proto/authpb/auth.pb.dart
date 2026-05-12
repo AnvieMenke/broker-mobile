@@ -106,6 +106,8 @@ class LoginWebRequest extends $pb.GeneratedMessage {
     $core.String? clientId,
     $core.String? correspondent,
     $core.String? ipAddress,
+    $core.String? platform,
+    $core.String? mobileVersion,
   }) {
     final result = create();
     if (email != null) result.email = email;
@@ -114,6 +116,8 @@ class LoginWebRequest extends $pb.GeneratedMessage {
     if (clientId != null) result.clientId = clientId;
     if (correspondent != null) result.correspondent = correspondent;
     if (ipAddress != null) result.ipAddress = ipAddress;
+    if (platform != null) result.platform = platform;
+    if (mobileVersion != null) result.mobileVersion = mobileVersion;
     return result;
   }
 
@@ -129,6 +133,8 @@ class LoginWebRequest extends $pb.GeneratedMessage {
     ..aOS(4, _omitFieldNames ? '' : 'clientId')
     ..aOS(5, _omitFieldNames ? '' : 'correspondent')
     ..aOS(6, _omitFieldNames ? '' : 'ipAddress')
+    ..aOS(7, _omitFieldNames ? '' : 'platform')
+    ..aOS(8, _omitFieldNames ? '' : 'mobileVersion')
     ..hasRequiredFields = false
   ;
 
@@ -202,6 +208,24 @@ class LoginWebRequest extends $pb.GeneratedMessage {
   $core.bool hasIpAddress() => $_has(5);
   @$pb.TagNumber(6)
   void clearIpAddress() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get platform => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set platform($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasPlatform() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearPlatform() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get mobileVersion => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set mobileVersion($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasMobileVersion() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearMobileVersion() => $_clearField(8);
 }
 
 class LoginWebResponse extends $pb.GeneratedMessage {

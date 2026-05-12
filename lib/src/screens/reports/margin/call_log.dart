@@ -171,7 +171,7 @@ class CallLogPageState extends State<CallLogPage> {
                         name: "masterAccountNo",
                         value: selectedMasterAccountNo,
                         isAllStatus: true,
-                        correspondent: queryData["correspondent"],
+                        correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
                           selectedMasterAccountNo =
                               map['data']?['masterAccountNo'] as String? ?? '';
@@ -182,7 +182,7 @@ class CallLogPageState extends State<CallLogPage> {
                         name: "accountName",
                         value: selectedAccountName,
                         isAllStatus: true,
-                        correspondent: queryData["correspondent"],
+                        correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
                           selectedAccountName =
                               map['data']?['accountName'] as String? ?? '';

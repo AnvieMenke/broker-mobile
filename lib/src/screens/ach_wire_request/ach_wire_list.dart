@@ -271,7 +271,7 @@ class _AchWireListState extends State<AchWireList> {
                         name: "accountNo",
                         value: selectedAccountNo,
                         isAllStatus: true,
-                        correspondent: queryData["correspondent"],
+                        correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
                           selectedAccountNo =
                               map['data']?['accountNo'] as String? ?? '';
@@ -281,7 +281,7 @@ class _AchWireListState extends State<AchWireList> {
                         name: "masterAccountNo",
                         value: selectedMasterAccountNo,
                         isAllStatus: true,
-                        correspondent: queryData["correspondent"],
+                        correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
                           selectedMasterAccountNo =
                               map['data']?['masterAccountNo'] as String? ?? '';

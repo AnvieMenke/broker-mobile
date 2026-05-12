@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 class AppTheme {
   static const Radius defaultRadius = Radius.circular(10);
   static const BorderRadius defaultBorderRadius =
-      BorderRadius.all(defaultRadius);
+  BorderRadius.all(defaultRadius);
 
   static const InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
     hintStyle: TextStyle(color: Colors.grey),

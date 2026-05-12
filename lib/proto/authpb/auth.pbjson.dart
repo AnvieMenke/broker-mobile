@@ -48,6 +48,8 @@ const LoginWebRequest$json = {
     {'1': 'client_id', '3': 4, '4': 1, '5': 9, '10': 'clientId'},
     {'1': 'correspondent', '3': 5, '4': 1, '5': 9, '10': 'correspondent'},
     {'1': 'ip_address', '3': 6, '4': 1, '5': 9, '10': 'ipAddress'},
+    {'1': 'platform', '3': 7, '4': 1, '5': 9, '10': 'platform'},
+    {'1': 'mobile_version', '3': 8, '4': 1, '5': 9, '10': 'mobileVersion'},
   ],
 };
 
@@ -56,7 +58,9 @@ final $typed_data.Uint8List loginWebRequestDescriptor = $convert.base64Decode(
     'Cg9Mb2dpbldlYlJlcXVlc3QSFAoFZW1haWwYASABKAlSBWVtYWlsEhoKCHBhc3N3b3JkGAIgAS'
     'gJUghwYXNzd29yZBIvChNhdXRoZW50aWNhdGlvbl9tb2RlGAMgASgJUhJhdXRoZW50aWNhdGlv'
     'bk1vZGUSGwoJY2xpZW50X2lkGAQgASgJUghjbGllbnRJZBIkCg1jb3JyZXNwb25kZW50GAUgAS'
-    'gJUg1jb3JyZXNwb25kZW50Eh0KCmlwX2FkZHJlc3MYBiABKAlSCWlwQWRkcmVzcw==');
+    'gJUg1jb3JyZXNwb25kZW50Eh0KCmlwX2FkZHJlc3MYBiABKAlSCWlwQWRkcmVzcxIaCghwbGF0'
+    'Zm9ybRgHIAEoCVIIcGxhdGZvcm0SJQoObW9iaWxlX3ZlcnNpb24YCCABKAlSDW1vYmlsZVZlcn'
+    'Npb24=');
 
 @$core.Deprecated('Use loginWebResponseDescriptor instead')
 const LoginWebResponse$json = {
