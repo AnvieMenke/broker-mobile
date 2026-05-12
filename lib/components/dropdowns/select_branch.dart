@@ -79,7 +79,10 @@ class _AutoCompleteBranchState extends State<AutoCompleteBranch> {
         widget.isActive,
         widget.correspondent,
       );
+      final uniqueBranches = <String>{};
       _options = data.accounts
+          .where((acc) => acc.branch.trim().isNotEmpty)
+          .where((acc) => uniqueBranches.add(acc.branch))
           .map((acc) => {
                 'branch': acc.branch,
               })

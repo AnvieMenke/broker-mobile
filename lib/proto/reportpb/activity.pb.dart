@@ -1655,6 +1655,15 @@ class ListActivityRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(14)
   void clearCorrespondent() => $_clearField(14);
 
+  ///  Date Type
+  ///
+  /// VALUES
+  ///
+  ///  * Effective Settle Date
+  ///  * Effective Trade Date
+  ///  * Settle Date
+  ///  * System Date
+  ///  * Trade Date
   @$pb.TagNumber(15)
   $core.String get dateType => $_getSZ(14);
   @$pb.TagNumber(15)

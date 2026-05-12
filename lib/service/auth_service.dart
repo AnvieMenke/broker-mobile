@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:broker_mobile/server/grpc_client_factory.dart';
 import 'package:broker_mobile/session/session.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,7 +40,9 @@ Future<LoginWebResponse> loginWeb(String email, String password,
       ..password = password
       ..authenticationMode = authenticationMode
       ..clientId = AppEnv.grpcClientId
-      ..correspondent = correspondent;
+      ..correspondent = correspondent
+      ..platform = Platform.isIOS ? 'ios' : 'android'
+      ..mobileVersion = AppEnv.mobileVersion;
 
     final response = _service.loginWeb(req);
     return response;
@@ -77,7 +81,8 @@ Future<void> validateAuthCode({
     final response = await _service.validateCode(req);
     final mobileAppConfigResponse =
         await _commonService.getMobileAppConfig(correspondent);
-    sessionManager.startSession(response.accessToken, response.refreshToken,mobileAppConfigResponse.mobileLogo, mobileAppConfigResponse.brokerName);
+    sessionManager.startSession(response.accessToken, response.refreshToken,
+        mobileAppConfigResponse.mobileLogo, mobileAppConfigResponse.brokerName);
   } catch (error) {
     rethrow;
   }

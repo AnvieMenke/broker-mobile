@@ -581,7 +581,7 @@ class PositionPageState extends State<PositionPage> {
                         name: "masterAccountNo",
                         value: selectedMasterAccountNo,
                         isAllStatus: true,
-                        correspondent: queryData["correspondent"],
+                        correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
                           selectedMasterAccountNo =
                               map['data']?['masterAccountNo'] as String? ?? '';

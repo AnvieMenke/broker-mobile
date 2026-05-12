@@ -10,6 +10,7 @@ class AppEnv {
   static String get grpcEndpoint => dotenv.env['BROKER_GRPC_ENDPOINT'] ?? '';
   static String get grpcClientId => dotenv.env['BROKER_GRPC_CLIENT_ID'] ?? '';
   static String get environment => dotenv.env['ENVIRONMENT'] ?? 'development';
+  static String get mobileVersion => dotenv.env['BROKER_MOBILE_VERSION'] ?? '';
   static int get idleTimeOutMinutes {
     final value = dotenv.env['IDLE_TIME_OUT_MINUTES'];
     if (value == null || value.trim().isEmpty) return 5;

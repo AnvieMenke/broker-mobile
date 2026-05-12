@@ -453,6 +453,7 @@ class ListBalanceRequest extends $pb.GeneratedMessage {
     $core.String? rep,
     $core.String? rollUp,
     $core.bool? hideZero,
+    $1.Date? date,
   }) {
     final result = create();
     if (pagination != null) result.pagination = pagination;
@@ -467,6 +468,7 @@ class ListBalanceRequest extends $pb.GeneratedMessage {
     if (rep != null) result.rep = rep;
     if (rollUp != null) result.rollUp = rollUp;
     if (hideZero != null) result.hideZero = hideZero;
+    if (date != null) result.date = date;
     return result;
   }
 
@@ -488,6 +490,7 @@ class ListBalanceRequest extends $pb.GeneratedMessage {
     ..aOS(10, _omitFieldNames ? '' : 'rep')
     ..aOS(11, _omitFieldNames ? '' : 'rollUp')
     ..aOB(12, _omitFieldNames ? '' : 'hideZero')
+    ..aOM<$1.Date>(13, _omitFieldNames ? '' : 'date', subBuilder: $1.Date.create)
     ..hasRequiredFields = false
   ;
 
@@ -621,6 +624,17 @@ class ListBalanceRequest extends $pb.GeneratedMessage {
   $core.bool hasHideZero() => $_has(11);
   @$pb.TagNumber(12)
   void clearHideZero() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $1.Date get date => $_getN(12);
+  @$pb.TagNumber(13)
+  set date($1.Date value) => $_setField(13, value);
+  @$pb.TagNumber(13)
+  $core.bool hasDate() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearDate() => $_clearField(13);
+  @$pb.TagNumber(13)
+  $1.Date ensureDate() => $_ensure(12);
 }
 
 class ListBalanceResponse extends $pb.GeneratedMessage {
@@ -698,6 +712,10 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
     $core.String? ytdPlValue,
     $core.String? ytdPlPercent,
     $core.String? accountValuePercent,
+    $core.String? cashBalance,
+    $core.String? shortMarketValue,
+    $core.String? longMarketValue,
+    $core.String? equity,
   }) {
     final result = create();
     if (totalRows != null) result.totalRows = totalRows;
@@ -719,6 +737,10 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
     if (ytdPlValue != null) result.ytdPlValue = ytdPlValue;
     if (ytdPlPercent != null) result.ytdPlPercent = ytdPlPercent;
     if (accountValuePercent != null) result.accountValuePercent = accountValuePercent;
+    if (cashBalance != null) result.cashBalance = cashBalance;
+    if (shortMarketValue != null) result.shortMarketValue = shortMarketValue;
+    if (longMarketValue != null) result.longMarketValue = longMarketValue;
+    if (equity != null) result.equity = equity;
     return result;
   }
 
@@ -747,6 +769,10 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
     ..aOS(17, _omitFieldNames ? '' : 'ytdPlValue')
     ..aOS(18, _omitFieldNames ? '' : 'ytdPlPercent')
     ..aOS(19, _omitFieldNames ? '' : 'accountValuePercent')
+    ..aOS(20, _omitFieldNames ? '' : 'cashBalance')
+    ..aOS(21, _omitFieldNames ? '' : 'shortMarketValue')
+    ..aOS(22, _omitFieldNames ? '' : 'longMarketValue')
+    ..aOS(23, _omitFieldNames ? '' : 'equity')
     ..hasRequiredFields = false
   ;
 
@@ -937,6 +963,42 @@ class ListBalanceSummary extends $pb.GeneratedMessage {
   $core.bool hasAccountValuePercent() => $_has(18);
   @$pb.TagNumber(19)
   void clearAccountValuePercent() => $_clearField(19);
+
+  @$pb.TagNumber(20)
+  $core.String get cashBalance => $_getSZ(19);
+  @$pb.TagNumber(20)
+  set cashBalance($core.String value) => $_setString(19, value);
+  @$pb.TagNumber(20)
+  $core.bool hasCashBalance() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearCashBalance() => $_clearField(20);
+
+  @$pb.TagNumber(21)
+  $core.String get shortMarketValue => $_getSZ(20);
+  @$pb.TagNumber(21)
+  set shortMarketValue($core.String value) => $_setString(20, value);
+  @$pb.TagNumber(21)
+  $core.bool hasShortMarketValue() => $_has(20);
+  @$pb.TagNumber(21)
+  void clearShortMarketValue() => $_clearField(21);
+
+  @$pb.TagNumber(22)
+  $core.String get longMarketValue => $_getSZ(21);
+  @$pb.TagNumber(22)
+  set longMarketValue($core.String value) => $_setString(21, value);
+  @$pb.TagNumber(22)
+  $core.bool hasLongMarketValue() => $_has(21);
+  @$pb.TagNumber(22)
+  void clearLongMarketValue() => $_clearField(22);
+
+  @$pb.TagNumber(23)
+  $core.String get equity => $_getSZ(22);
+  @$pb.TagNumber(23)
+  set equity($core.String value) => $_setString(22, value);
+  @$pb.TagNumber(23)
+  $core.bool hasEquity() => $_has(22);
+  @$pb.TagNumber(23)
+  void clearEquity() => $_clearField(23);
 }
 
 class DashboardBalance extends $pb.GeneratedMessage {
@@ -1095,6 +1157,680 @@ class ListDashboardBalanceResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $pb.PbList<DashboardBalance> get dashboardBalances => $_getList(0);
+}
+
+class SubAccountBalance extends $pb.GeneratedMessage {
+  factory SubAccountBalance({
+    $core.String? masterAccountNo,
+    $core.String? accountNo,
+    $core.String? subAccountNo,
+    $core.String? cashBalance,
+    $core.String? shortMarketValue,
+    $core.String? longMarketValue,
+    $core.String? equity,
+    $core.String? cashMarketValue,
+    $core.String? cashQty,
+  }) {
+    final result = create();
+    if (masterAccountNo != null) result.masterAccountNo = masterAccountNo;
+    if (accountNo != null) result.accountNo = accountNo;
+    if (subAccountNo != null) result.subAccountNo = subAccountNo;
+    if (cashBalance != null) result.cashBalance = cashBalance;
+    if (shortMarketValue != null) result.shortMarketValue = shortMarketValue;
+    if (longMarketValue != null) result.longMarketValue = longMarketValue;
+    if (equity != null) result.equity = equity;
+    if (cashMarketValue != null) result.cashMarketValue = cashMarketValue;
+    if (cashQty != null) result.cashQty = cashQty;
+    return result;
+  }
+
+  SubAccountBalance._();
+
+  factory SubAccountBalance.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory SubAccountBalance.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SubAccountBalance', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'masterAccountNo')
+    ..aOS(2, _omitFieldNames ? '' : 'accountNo')
+    ..aOS(3, _omitFieldNames ? '' : 'subAccountNo')
+    ..aOS(4, _omitFieldNames ? '' : 'cashBalance')
+    ..aOS(5, _omitFieldNames ? '' : 'shortMarketValue')
+    ..aOS(6, _omitFieldNames ? '' : 'longMarketValue')
+    ..aOS(7, _omitFieldNames ? '' : 'equity')
+    ..aOS(8, _omitFieldNames ? '' : 'cashMarketValue')
+    ..aOS(9, _omitFieldNames ? '' : 'cashQty')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SubAccountBalance clone() => SubAccountBalance()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SubAccountBalance copyWith(void Function(SubAccountBalance) updates) => super.copyWith((message) => updates(message as SubAccountBalance)) as SubAccountBalance;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static SubAccountBalance create() => SubAccountBalance._();
+  @$core.override
+  SubAccountBalance createEmptyInstance() => create();
+  static $pb.PbList<SubAccountBalance> createRepeated() => $pb.PbList<SubAccountBalance>();
+  @$core.pragma('dart2js:noInline')
+  static SubAccountBalance getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SubAccountBalance>(create);
+  static SubAccountBalance? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get masterAccountNo => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set masterAccountNo($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasMasterAccountNo() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMasterAccountNo() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get accountNo => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set accountNo($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAccountNo() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAccountNo() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get subAccountNo => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set subAccountNo($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasSubAccountNo() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSubAccountNo() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get cashBalance => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set cashBalance($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasCashBalance() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearCashBalance() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get shortMarketValue => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set shortMarketValue($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasShortMarketValue() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearShortMarketValue() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get longMarketValue => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set longMarketValue($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasLongMarketValue() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearLongMarketValue() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get equity => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set equity($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasEquity() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearEquity() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get cashMarketValue => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set cashMarketValue($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasCashMarketValue() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCashMarketValue() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get cashQty => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set cashQty($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasCashQty() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearCashQty() => $_clearField(9);
+}
+
+class AccountBalance extends $pb.GeneratedMessage {
+  factory AccountBalance({
+    $core.String? masterAccountNo,
+    $core.String? correspondent,
+    $core.String? accountNo,
+    $core.String? accountName,
+    $core.String? cashBalance,
+    $core.String? shortMarketValue,
+    $core.String? longMarketValue,
+    $core.String? equity,
+    $core.Iterable<SubAccountBalance>? subAccountBalances,
+    $core.int? balanceSummaryReportIndex,
+    $core.int? accountBalanceIndex,
+    $core.String? rep,
+    $core.String? branch,
+    $core.String? cashMarketValue,
+    $core.String? cashQty,
+  }) {
+    final result = create();
+    if (masterAccountNo != null) result.masterAccountNo = masterAccountNo;
+    if (correspondent != null) result.correspondent = correspondent;
+    if (accountNo != null) result.accountNo = accountNo;
+    if (accountName != null) result.accountName = accountName;
+    if (cashBalance != null) result.cashBalance = cashBalance;
+    if (shortMarketValue != null) result.shortMarketValue = shortMarketValue;
+    if (longMarketValue != null) result.longMarketValue = longMarketValue;
+    if (equity != null) result.equity = equity;
+    if (subAccountBalances != null) result.subAccountBalances.addAll(subAccountBalances);
+    if (balanceSummaryReportIndex != null) result.balanceSummaryReportIndex = balanceSummaryReportIndex;
+    if (accountBalanceIndex != null) result.accountBalanceIndex = accountBalanceIndex;
+    if (rep != null) result.rep = rep;
+    if (branch != null) result.branch = branch;
+    if (cashMarketValue != null) result.cashMarketValue = cashMarketValue;
+    if (cashQty != null) result.cashQty = cashQty;
+    return result;
+  }
+
+  AccountBalance._();
+
+  factory AccountBalance.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory AccountBalance.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AccountBalance', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'masterAccountNo')
+    ..aOS(2, _omitFieldNames ? '' : 'correspondent')
+    ..aOS(3, _omitFieldNames ? '' : 'accountNo')
+    ..aOS(4, _omitFieldNames ? '' : 'accountName')
+    ..aOS(5, _omitFieldNames ? '' : 'cashBalance')
+    ..aOS(6, _omitFieldNames ? '' : 'shortMarketValue')
+    ..aOS(7, _omitFieldNames ? '' : 'longMarketValue')
+    ..aOS(8, _omitFieldNames ? '' : 'equity')
+    ..pc<SubAccountBalance>(9, _omitFieldNames ? '' : 'subAccountBalances', $pb.PbFieldType.PM, subBuilder: SubAccountBalance.create)
+    ..a<$core.int>(10, _omitFieldNames ? '' : 'balanceSummaryReportIndex', $pb.PbFieldType.OU3)
+    ..a<$core.int>(11, _omitFieldNames ? '' : 'accountBalanceIndex', $pb.PbFieldType.OU3)
+    ..aOS(12, _omitFieldNames ? '' : 'rep')
+    ..aOS(13, _omitFieldNames ? '' : 'branch')
+    ..aOS(14, _omitFieldNames ? '' : 'cashMarketValue')
+    ..aOS(15, _omitFieldNames ? '' : 'cashQty')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AccountBalance clone() => AccountBalance()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AccountBalance copyWith(void Function(AccountBalance) updates) => super.copyWith((message) => updates(message as AccountBalance)) as AccountBalance;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static AccountBalance create() => AccountBalance._();
+  @$core.override
+  AccountBalance createEmptyInstance() => create();
+  static $pb.PbList<AccountBalance> createRepeated() => $pb.PbList<AccountBalance>();
+  @$core.pragma('dart2js:noInline')
+  static AccountBalance getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AccountBalance>(create);
+  static AccountBalance? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get masterAccountNo => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set masterAccountNo($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasMasterAccountNo() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMasterAccountNo() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get correspondent => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set correspondent($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasCorrespondent() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCorrespondent() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get accountNo => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set accountNo($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasAccountNo() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAccountNo() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get accountName => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set accountName($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasAccountName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearAccountName() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get cashBalance => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set cashBalance($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasCashBalance() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearCashBalance() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get shortMarketValue => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set shortMarketValue($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasShortMarketValue() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearShortMarketValue() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get longMarketValue => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set longMarketValue($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasLongMarketValue() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearLongMarketValue() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get equity => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set equity($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasEquity() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearEquity() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $pb.PbList<SubAccountBalance> get subAccountBalances => $_getList(8);
+
+  @$pb.TagNumber(10)
+  $core.int get balanceSummaryReportIndex => $_getIZ(9);
+  @$pb.TagNumber(10)
+  set balanceSummaryReportIndex($core.int value) => $_setUnsignedInt32(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasBalanceSummaryReportIndex() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearBalanceSummaryReportIndex() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.int get accountBalanceIndex => $_getIZ(10);
+  @$pb.TagNumber(11)
+  set accountBalanceIndex($core.int value) => $_setUnsignedInt32(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasAccountBalanceIndex() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearAccountBalanceIndex() => $_clearField(11);
+
+  @$pb.TagNumber(12)
+  $core.String get rep => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set rep($core.String value) => $_setString(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasRep() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearRep() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.String get branch => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set branch($core.String value) => $_setString(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasBranch() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearBranch() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get cashMarketValue => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set cashMarketValue($core.String value) => $_setString(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasCashMarketValue() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearCashMarketValue() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.String get cashQty => $_getSZ(14);
+  @$pb.TagNumber(15)
+  set cashQty($core.String value) => $_setString(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasCashQty() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearCashQty() => $_clearField(15);
+}
+
+class BalanceSummaryReport extends $pb.GeneratedMessage {
+  factory BalanceSummaryReport({
+    $core.int? accountId,
+    $core.String? correspondent,
+    $core.String? accountNo,
+    $core.String? subAccountNo,
+    $core.String? accountName,
+    $core.String? masterAccountNo,
+    $core.Iterable<AccountBalance>? accountBalances,
+    $core.String? broker,
+    $core.String? type,
+    $core.String? dateType,
+    $1.Date? date,
+    $core.String? cashBalance,
+    $core.String? shortMarketValue,
+    $core.String? longMarketValue,
+    $core.String? equity,
+    $core.String? adjustedBalance,
+    $core.int? balanceSummaryReportIndex,
+    $core.String? accountCurrency,
+    $core.String? cashMarketValue,
+    $core.String? cashQty,
+  }) {
+    final result = create();
+    if (accountId != null) result.accountId = accountId;
+    if (correspondent != null) result.correspondent = correspondent;
+    if (accountNo != null) result.accountNo = accountNo;
+    if (subAccountNo != null) result.subAccountNo = subAccountNo;
+    if (accountName != null) result.accountName = accountName;
+    if (masterAccountNo != null) result.masterAccountNo = masterAccountNo;
+    if (accountBalances != null) result.accountBalances.addAll(accountBalances);
+    if (broker != null) result.broker = broker;
+    if (type != null) result.type = type;
+    if (dateType != null) result.dateType = dateType;
+    if (date != null) result.date = date;
+    if (cashBalance != null) result.cashBalance = cashBalance;
+    if (shortMarketValue != null) result.shortMarketValue = shortMarketValue;
+    if (longMarketValue != null) result.longMarketValue = longMarketValue;
+    if (equity != null) result.equity = equity;
+    if (adjustedBalance != null) result.adjustedBalance = adjustedBalance;
+    if (balanceSummaryReportIndex != null) result.balanceSummaryReportIndex = balanceSummaryReportIndex;
+    if (accountCurrency != null) result.accountCurrency = accountCurrency;
+    if (cashMarketValue != null) result.cashMarketValue = cashMarketValue;
+    if (cashQty != null) result.cashQty = cashQty;
+    return result;
+  }
+
+  BalanceSummaryReport._();
+
+  factory BalanceSummaryReport.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory BalanceSummaryReport.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BalanceSummaryReport', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'accountId', $pb.PbFieldType.OU3)
+    ..aOS(2, _omitFieldNames ? '' : 'correspondent')
+    ..aOS(3, _omitFieldNames ? '' : 'accountNo')
+    ..aOS(4, _omitFieldNames ? '' : 'subAccountNo')
+    ..aOS(5, _omitFieldNames ? '' : 'accountName')
+    ..aOS(6, _omitFieldNames ? '' : 'masterAccountNo')
+    ..pc<AccountBalance>(7, _omitFieldNames ? '' : 'accountBalances', $pb.PbFieldType.PM, subBuilder: AccountBalance.create)
+    ..aOS(8, _omitFieldNames ? '' : 'broker')
+    ..aOS(9, _omitFieldNames ? '' : 'type')
+    ..aOS(10, _omitFieldNames ? '' : 'dateType')
+    ..aOM<$1.Date>(11, _omitFieldNames ? '' : 'date', subBuilder: $1.Date.create)
+    ..aOS(12, _omitFieldNames ? '' : 'cashBalance')
+    ..aOS(13, _omitFieldNames ? '' : 'shortMarketValue')
+    ..aOS(14, _omitFieldNames ? '' : 'longMarketValue')
+    ..aOS(15, _omitFieldNames ? '' : 'equity')
+    ..aOS(16, _omitFieldNames ? '' : 'adjustedBalance')
+    ..a<$core.int>(17, _omitFieldNames ? '' : 'balanceSummaryReportIndex', $pb.PbFieldType.OU3)
+    ..aOS(18, _omitFieldNames ? '' : 'accountCurrency')
+    ..aOS(19, _omitFieldNames ? '' : 'cashMarketValue')
+    ..aOS(20, _omitFieldNames ? '' : 'cashQty')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BalanceSummaryReport clone() => BalanceSummaryReport()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  BalanceSummaryReport copyWith(void Function(BalanceSummaryReport) updates) => super.copyWith((message) => updates(message as BalanceSummaryReport)) as BalanceSummaryReport;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static BalanceSummaryReport create() => BalanceSummaryReport._();
+  @$core.override
+  BalanceSummaryReport createEmptyInstance() => create();
+  static $pb.PbList<BalanceSummaryReport> createRepeated() => $pb.PbList<BalanceSummaryReport>();
+  @$core.pragma('dart2js:noInline')
+  static BalanceSummaryReport getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BalanceSummaryReport>(create);
+  static BalanceSummaryReport? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get accountId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set accountId($core.int value) => $_setUnsignedInt32(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasAccountId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAccountId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get correspondent => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set correspondent($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasCorrespondent() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCorrespondent() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get accountNo => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set accountNo($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasAccountNo() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAccountNo() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get subAccountNo => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set subAccountNo($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasSubAccountNo() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSubAccountNo() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get accountName => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set accountName($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasAccountName() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearAccountName() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get masterAccountNo => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set masterAccountNo($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasMasterAccountNo() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearMasterAccountNo() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $pb.PbList<AccountBalance> get accountBalances => $_getList(6);
+
+  @$pb.TagNumber(8)
+  $core.String get broker => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set broker($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasBroker() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearBroker() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get type => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set type($core.String value) => $_setString(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasType() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearType() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get dateType => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set dateType($core.String value) => $_setString(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasDateType() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearDateType() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $1.Date get date => $_getN(10);
+  @$pb.TagNumber(11)
+  set date($1.Date value) => $_setField(11, value);
+  @$pb.TagNumber(11)
+  $core.bool hasDate() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearDate() => $_clearField(11);
+  @$pb.TagNumber(11)
+  $1.Date ensureDate() => $_ensure(10);
+
+  @$pb.TagNumber(12)
+  $core.String get cashBalance => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set cashBalance($core.String value) => $_setString(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasCashBalance() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearCashBalance() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.String get shortMarketValue => $_getSZ(12);
+  @$pb.TagNumber(13)
+  set shortMarketValue($core.String value) => $_setString(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasShortMarketValue() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearShortMarketValue() => $_clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.String get longMarketValue => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set longMarketValue($core.String value) => $_setString(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasLongMarketValue() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearLongMarketValue() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.String get equity => $_getSZ(14);
+  @$pb.TagNumber(15)
+  set equity($core.String value) => $_setString(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasEquity() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearEquity() => $_clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.String get adjustedBalance => $_getSZ(15);
+  @$pb.TagNumber(16)
+  set adjustedBalance($core.String value) => $_setString(15, value);
+  @$pb.TagNumber(16)
+  $core.bool hasAdjustedBalance() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearAdjustedBalance() => $_clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.int get balanceSummaryReportIndex => $_getIZ(16);
+  @$pb.TagNumber(17)
+  set balanceSummaryReportIndex($core.int value) => $_setUnsignedInt32(16, value);
+  @$pb.TagNumber(17)
+  $core.bool hasBalanceSummaryReportIndex() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearBalanceSummaryReportIndex() => $_clearField(17);
+
+  @$pb.TagNumber(18)
+  $core.String get accountCurrency => $_getSZ(17);
+  @$pb.TagNumber(18)
+  set accountCurrency($core.String value) => $_setString(17, value);
+  @$pb.TagNumber(18)
+  $core.bool hasAccountCurrency() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearAccountCurrency() => $_clearField(18);
+
+  @$pb.TagNumber(19)
+  $core.String get cashMarketValue => $_getSZ(18);
+  @$pb.TagNumber(19)
+  set cashMarketValue($core.String value) => $_setString(18, value);
+  @$pb.TagNumber(19)
+  $core.bool hasCashMarketValue() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearCashMarketValue() => $_clearField(19);
+
+  @$pb.TagNumber(20)
+  $core.String get cashQty => $_getSZ(19);
+  @$pb.TagNumber(20)
+  set cashQty($core.String value) => $_setString(19, value);
+  @$pb.TagNumber(20)
+  $core.bool hasCashQty() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearCashQty() => $_clearField(20);
+}
+
+class ListBalanceSummaryReportResponse extends $pb.GeneratedMessage {
+  factory ListBalanceSummaryReportResponse({
+    $core.Iterable<BalanceSummaryReport>? balanceSummaryReports,
+    ListBalanceSummary? summary,
+  }) {
+    final result = create();
+    if (balanceSummaryReports != null) result.balanceSummaryReports.addAll(balanceSummaryReports);
+    if (summary != null) result.summary = summary;
+    return result;
+  }
+
+  ListBalanceSummaryReportResponse._();
+
+  factory ListBalanceSummaryReportResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory ListBalanceSummaryReportResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ListBalanceSummaryReportResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'reportpb'), createEmptyInstance: create)
+    ..pc<BalanceSummaryReport>(1, _omitFieldNames ? '' : 'balanceSummaryReports', $pb.PbFieldType.PM, subBuilder: BalanceSummaryReport.create)
+    ..aOM<ListBalanceSummary>(2, _omitFieldNames ? '' : 'summary', subBuilder: ListBalanceSummary.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListBalanceSummaryReportResponse clone() => ListBalanceSummaryReportResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  ListBalanceSummaryReportResponse copyWith(void Function(ListBalanceSummaryReportResponse) updates) => super.copyWith((message) => updates(message as ListBalanceSummaryReportResponse)) as ListBalanceSummaryReportResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ListBalanceSummaryReportResponse create() => ListBalanceSummaryReportResponse._();
+  @$core.override
+  ListBalanceSummaryReportResponse createEmptyInstance() => create();
+  static $pb.PbList<ListBalanceSummaryReportResponse> createRepeated() => $pb.PbList<ListBalanceSummaryReportResponse>();
+  @$core.pragma('dart2js:noInline')
+  static ListBalanceSummaryReportResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListBalanceSummaryReportResponse>(create);
+  static ListBalanceSummaryReportResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<BalanceSummaryReport> get balanceSummaryReports => $_getList(0);
+
+  @$pb.TagNumber(2)
+  ListBalanceSummary get summary => $_getN(1);
+  @$pb.TagNumber(2)
+  set summary(ListBalanceSummary value) => $_setField(2, value);
+  @$pb.TagNumber(2)
+  $core.bool hasSummary() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearSummary() => $_clearField(2);
+  @$pb.TagNumber(2)
+  ListBalanceSummary ensureSummary() => $_ensure(1);
 }
 
 

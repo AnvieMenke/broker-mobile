@@ -38,6 +38,10 @@ class BalanceServiceClient extends $grpc.Client {
       '/reportpb.BalanceService/ListDashboardBalance',
       ($0.ListDashboardBalanceRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ListDashboardBalanceResponse.fromBuffer(value));
+  static final _$listBalanceSummaryReport = $grpc.ClientMethod<$0.ListBalanceRequest, $0.ListBalanceSummaryReportResponse>(
+      '/reportpb.BalanceService/ListBalanceSummaryReport',
+      ($0.ListBalanceRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.ListBalanceSummaryReportResponse.fromBuffer(value));
 
   BalanceServiceClient(super.channel, {super.options, super.interceptors});
 
@@ -47,6 +51,10 @@ class BalanceServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.ListDashboardBalanceResponse> listDashboardBalance($0.ListDashboardBalanceRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$listDashboardBalance, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ListBalanceSummaryReportResponse> listBalanceSummaryReport($0.ListBalanceRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$listBalanceSummaryReport, request, options: options);
   }
 }
 
@@ -69,6 +77,13 @@ abstract class BalanceServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.ListDashboardBalanceRequest.fromBuffer(value),
         ($0.ListDashboardBalanceResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.ListBalanceRequest, $0.ListBalanceSummaryReportResponse>(
+        'ListBalanceSummaryReport',
+        listBalanceSummaryReport_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.ListBalanceRequest.fromBuffer(value),
+        ($0.ListBalanceSummaryReportResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.ListBalanceResponse> listBalance_Pre($grpc.ServiceCall $call, $async.Future<$0.ListBalanceRequest> $request) async {
@@ -79,6 +94,11 @@ abstract class BalanceServiceBase extends $grpc.Service {
     return listDashboardBalance($call, await $request);
   }
 
+  $async.Future<$0.ListBalanceSummaryReportResponse> listBalanceSummaryReport_Pre($grpc.ServiceCall $call, $async.Future<$0.ListBalanceRequest> $request) async {
+    return listBalanceSummaryReport($call, await $request);
+  }
+
   $async.Future<$0.ListBalanceResponse> listBalance($grpc.ServiceCall call, $0.ListBalanceRequest request);
   $async.Future<$0.ListDashboardBalanceResponse> listDashboardBalance($grpc.ServiceCall call, $0.ListDashboardBalanceRequest request);
+  $async.Future<$0.ListBalanceSummaryReportResponse> listBalanceSummaryReport($grpc.ServiceCall call, $0.ListBalanceRequest request);
 }

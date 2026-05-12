@@ -170,7 +170,7 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
                         name: "masterAccountNo",
                         value: selectedMasterAccountNo,
                         isAllStatus: true,
-                        correspondent: queryData["correspondent"],
+                        correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
                           selectedMasterAccountNo =
                               map['data']?['masterAccountNo'] as String? ?? '';
@@ -181,7 +181,7 @@ class BuyingPowerPageState extends State<BuyingPowerPage> {
                         name: "accountName",
                         value: selectedAccountName,
                         isAllStatus: true,
-                        correspondent: queryData["correspondent"],
+                        correspondent: selectedCorrespondent,
                         onChange: (map) => setState(() {
                           selectedAccountName =
                               map['data']?['accountName'] as String? ?? '';
