@@ -1,8 +1,8 @@
 name: broker_mobile
-description: "SAS Broker App"
+description: "SAS Wealth Management"
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.2
 
 environment:
   sdk: ^3.6.2
@@ -35,6 +35,10 @@ dependencies:
   http: ^1.2.2
   flutter_svg: ^2.1.1
   url_launcher: ^6.3.0
+  flutter_markdown: ^0.7.7
+  markdown_widget: ^2.3.2+6
+  speech_to_text: ^7.0.0
+  flutter_tts: ^4.2.2
 
 dev_dependencies:
   flutter_test:

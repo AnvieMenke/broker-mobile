@@ -119,3 +119,9 @@ Example command:
 ```bash
 flutter pub run flutter_launcher_icons
 ```
+
+for chat pb
+```bash
+    rm -rf ./lib/proto/support
+	buf generate ../sas-proto --path ../sas-proto/support/ai/chat/v1
+```

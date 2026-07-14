@@ -4,7 +4,11 @@ import 'package:broker_mobile/session/session.dart';
 import 'package:flutter/material.dart';
 
 const List<Map<String, dynamic>> _options = [
-  {"title": "Logout", "icon": Icons.logout, "route": "/"},
+  {
+    "title": "Assistant",
+    "icon": Icons.support_agent,
+    "route": "/profile/chat"
+  },
   {
     "title": "User Settings",
     "icon": Icons.manage_accounts,
@@ -25,11 +29,8 @@ const List<Map<String, dynamic>> _options = [
     "icon": Icons.key,
     "route": "/profile/authenticator"
   },
-  {
-    "title": "Feedback",
-    "icon": Icons.feedback,
-    "route": "/profile/feedback"
-  },
+  {"title": "Feedback", "icon": Icons.feedback, "route": "/profile/feedback"},
+  {"title": "Logout", "icon": Icons.logout, "route": "/"},
 ];
 
 class ProfilePage extends StatelessWidget {

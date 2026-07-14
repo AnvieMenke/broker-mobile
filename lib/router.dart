@@ -1,3 +1,5 @@
+import 'package:broker_mobile/src/screens/profile/chat/chat_page.dart';
+
 import 'maintenance_screen.dart';
 import 'package:broker_mobile/src/screens/core/splash_screen.dart';
 import 'package:broker_mobile/src/screens/profile/feedback/feedback.dart';
@@ -30,6 +32,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     '/profile/change-password': (_) => const ChangePasswordPage(),
     '/profile/authenticator': (_) => const AuthenticatorPage(),
     '/profile/feedback': (_) => const FeedbackPage(),
+    '/profile/chat': (_) => const ChatPage(),
   };
 
   if (settings.name == '/splash') {
