@@ -33,7 +33,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           'Change Password',
           'App Settings',
           'Authenticator Setup',
-          'Feedback'
+          'Feedback',
+          'WM Assistant'
         ].contains(title))
           IconButton(
             icon: const Icon(Icons.person),

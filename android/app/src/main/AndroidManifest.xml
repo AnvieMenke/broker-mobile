@@ -2,8 +2,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
-        android:label="Broker"
+        android:label="SAS Wealth Management"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

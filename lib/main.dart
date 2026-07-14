@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
       onActivity: sessionManager.userActivityDetected,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Broker App',
+        title: 'SAS Wealth Management',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: themeManager.themeMode,
