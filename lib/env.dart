@@ -13,6 +13,7 @@ class AppEnv {
   static String get mobileVersion => dotenv.env['BROKER_MOBILE_VERSION'] ?? '';
   static String get supportAddress => dotenv.env['SUPPORT_ADDRESS'] ?? '';
   static String get supportClientId => dotenv.env['SUPPORT_CLIENT_ID'] ?? '';
+  static String get supportImagesLink => dotenv.env['SUPPORT_IMAGES_LINK'] ?? '';
   static int get idleTimeOutMinutes {
     final value = dotenv.env['IDLE_TIME_OUT_MINUTES'];
     if (value == null || value.trim().isEmpty) return 5;

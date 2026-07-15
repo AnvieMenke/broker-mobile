@@ -148,6 +148,7 @@ class _ChatPageState extends State<ChatPage> {
                     ChatInput(
                       controller: chat.controller,
                       onSend: () async {
+                        chat.useVoiceResponse = false;
                         await chat.sendMessage(() {
                           if (mounted) {
                             setState(() {});

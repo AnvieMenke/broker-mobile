@@ -9,12 +9,13 @@ class ChatService {
   Future<SendMessageResponse> sendMessage({
     required String content,
     required String mode,
+    int? sessionId,
     String pageComponent = "",
   }) async {
     final user = sessionManager.user!;
 
     final request = SendMessageRequest()
-      ..application = "Wealth Management"
+      ..application = "Clearing"
       ..content = content
       ..mode = mode
       ..userId = user.userId
@@ -23,6 +24,9 @@ class ChatService {
       ..pageComponent = pageComponent
       ..includeSystemDetails = false;
 
+    if (sessionId != null) {
+      request.sessionId = sessionId;
+    }
     try {
       final response = await _service.sendMessage(request);
       return response;
