@@ -12,6 +12,7 @@ class AppEnv {
   static String get environment => dotenv.env['ENVIRONMENT'] ?? 'development';
   static String get mobileVersion => dotenv.env['BROKER_MOBILE_VERSION'] ?? '';
   static String get supportAddress => dotenv.env['SUPPORT_ADDRESS'] ?? '';
+  static String get supportWebAddress => dotenv.env['SUPPORT_WEB_ADDRESS'] ?? '';
   static String get supportClientId => dotenv.env['SUPPORT_CLIENT_ID'] ?? '';
   static String get supportImagesLink => dotenv.env['SUPPORT_IMAGES_LINK'] ?? '';
   static int get idleTimeOutMinutes {

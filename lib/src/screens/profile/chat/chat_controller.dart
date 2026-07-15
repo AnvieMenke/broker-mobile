@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:flutter/material.dart';
 import '../../../../service/chat_service.dart';
 import '../../../../utils/speech/speech_to_text.dart';
@@ -139,8 +140,10 @@ class ChatController {
         sessionId = response.sessionId;
       }
 
+      final responseContent = FormatUtils.rewriteContentLinks(content: response.content);
+
       messages[messages.length - 1] = ChatMessage(
-        text: response.content,
+        text: responseContent,
         isUser: false,
         timestamp: DateTime.now(),
       );

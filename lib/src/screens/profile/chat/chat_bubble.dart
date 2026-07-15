@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'chat_message.dart';
 
@@ -10,6 +11,17 @@ class ChatBubble extends StatelessWidget {
     super.key,
     required this.message,
   });
+
+  Future<void> _openLink(String url) async {
+    final uri = Uri.parse(url);
+
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +70,11 @@ class ChatBubble extends StatelessWidget {
               data: message.text,
               selectable: true,
               shrinkWrap: true,
+              onTapLink: (text, href, title) {
+                if (href != null) {
+                  _openLink(href);
+                }
+              },
             ),
           ),
         )
@@ -65,6 +82,11 @@ class ChatBubble extends StatelessWidget {
           data: message.text,
           selectable: true,
           shrinkWrap: true,
+          onTapLink: (text, href, title) {
+            if (href != null) {
+              _openLink(href);
+            }
+          },
         ),
       ),
 

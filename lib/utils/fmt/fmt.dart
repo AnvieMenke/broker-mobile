@@ -241,7 +241,7 @@ class FormatUtils {
     required String content,
   }) {
     String imagesBase = AppEnv.supportImagesLink;
-    String webBase = AppEnv.supportAddress;
+    String webBase = AppEnv.supportWebAddress;
 
     imagesBase = imagesBase.replaceFirst(RegExp(r'/$'), '');
     webBase = webBase.replaceFirst(RegExp(r'/$'), '');
