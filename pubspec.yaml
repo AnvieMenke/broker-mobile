@@ -39,6 +39,7 @@ dependencies:
   markdown_widget: ^2.3.2+6
   speech_to_text: ^7.0.0
   flutter_tts: ^4.2.2
+  photo_view: ^0.15.0
 
 dev_dependencies:
   flutter_test:

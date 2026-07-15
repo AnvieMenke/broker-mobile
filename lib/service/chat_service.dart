@@ -15,7 +15,7 @@ class ChatService {
     final user = sessionManager.user!;
 
     final request = SendMessageRequest()
-      ..application = "Clearing"
+      ..application = "Wealth Management"
       ..content = content
       ..mode = mode
       ..userId = user.userId

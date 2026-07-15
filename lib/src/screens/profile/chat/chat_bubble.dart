@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'chat_message.dart';
@@ -23,14 +24,54 @@ class ChatBubble extends StatelessWidget {
     }
   }
 
+  void _showImage(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        insetPadding: EdgeInsets.zero,
+        backgroundColor: Colors.black,
+        child: PhotoView(
+          imageProvider: NetworkImage(imageUrl),
+          backgroundDecoration: const BoxDecoration(
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark =
-        Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final hasTable =
-        message.text.contains("|") &&
-            message.text.contains("---");
+    final hasTable = message.text.contains("|") && message.text.contains("---");
+
+    final markdown = MarkdownBody(
+      data: message.text,
+      selectable: true,
+      shrinkWrap: true,
+      sizedImageBuilder: (MarkdownImageConfig config) {
+        final imageUrl = config.uri.toString();
+
+        return GestureDetector(
+          onTap: () => _showImage(context, imageUrl),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(
+              imageUrl,
+              width: config.width,
+              height: config.height,
+              fit: BoxFit.contain,
+            ),
+          ),
+        );
+      },
+      onTapLink: (text, href, title) {
+        if (href != null) {
+          _openLink(href);
+        }
+      },
+    );
 
     return Align(
       alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
@@ -39,8 +80,8 @@ class ChatBubble extends StatelessWidget {
           maxWidth: message.isUser
               ? MediaQuery.of(context).size.width * .80
               : hasTable
-              ? MediaQuery.of(context).size.width * .95
-              : MediaQuery.of(context).size.width * .80,
+                  ? MediaQuery.of(context).size.width * .95
+                  : MediaQuery.of(context).size.width * .80,
         ),
         margin: const EdgeInsets.symmetric(vertical: 6),
         padding: const EdgeInsets.symmetric(
@@ -55,41 +96,22 @@ class ChatBubble extends StatelessWidget {
         ),
         child: message.isUser
             ? Text(
-          message.text,
-          style: TextStyle(
-            color: isDark ? Colors.black : Colors.white,
-            fontSize: 15,
-          ),
-        )
+                message.text,
+                style: TextStyle(
+                  color: isDark ? Colors.black : Colors.white,
+                  fontSize: 15,
+                ),
+              )
             : hasTable
-            ? SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(
-            width: 2000,
-            child: MarkdownBody(
-              data: message.text,
-              selectable: true,
-              shrinkWrap: true,
-              onTapLink: (text, href, title) {
-                if (href != null) {
-                  _openLink(href);
-                }
-              },
-            ),
-          ),
-        )
-            : MarkdownBody(
-          data: message.text,
-          selectable: true,
-          shrinkWrap: true,
-          onTapLink: (text, href, title) {
-            if (href != null) {
-              _openLink(href);
-            }
-          },
-        ),
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SizedBox(
+                      width: 2000,
+                      child: markdown,
+                    ),
+                  )
+                : markdown,
       ),
-
     );
   }
 }
