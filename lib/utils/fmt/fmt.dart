@@ -1,6 +1,8 @@
 import 'package:decimal/decimal.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:grpc/grpc.dart';
 import 'package:intl/intl.dart';
+import 'package:broker_mobile/env.dart';
 
 class FormatUtils {
   static String cleanErrorMessage(Object err) {
@@ -50,8 +52,7 @@ class FormatUtils {
     }
   }
 
-  static String formatCurrency(
-    dynamic amount, {
+  static String formatCurrency(dynamic amount, {
     int decimalCount = 2,
     String decimal = '.',
     String thousands = ',',
@@ -77,8 +78,7 @@ class FormatUtils {
     return formatted;
   }
 
-  static String formatCurrencySymbol(
-    dynamic amount, {
+  static String formatCurrencySymbol(dynamic amount, {
     String currency = 'USD',
     int decimalCount = 6,
   }) {
@@ -96,7 +96,11 @@ class FormatUtils {
   }
 
   static String formatQty(dynamic num) {
-    if (num == null || num.toString().isEmpty) return '0';
+    if (num == null || num
+        .toString()
+        .isEmpty) {
+      return '0';
+    }
     final d = Decimal.tryParse(num.toString());
     if (d == null) return '0';
 
@@ -148,7 +152,6 @@ class FormatUtils {
 
     return '${isNegative ? '-' : ''}\$$formattedValue$suffix';
   }
-
 
   static String formatMonthAbbreviation(int month) {
     const months = [
@@ -232,5 +235,38 @@ class FormatUtils {
     } catch (_) {
       return dateStr;
     }
+  }
+
+  static String rewriteContentLinks({
+    required String content,
+  }) {
+    String imagesBase = AppEnv.supportImagesLink;
+    String webBase = AppEnv.supportAddress;
+
+    imagesBase = imagesBase.replaceFirst(RegExp(r'/$'), '');
+    webBase = webBase.replaceFirst(RegExp(r'/$'), '');
+
+    // Markdown images: /user-guide/images/*
+    content = content.replaceAllMapped(
+      RegExp(r'!\[([^\]]*)\]\(\s*/?user-guide/images/([^)]+)\)',
+          caseSensitive: false),
+          (match) {
+        final alt = match.group(1) ?? '';
+        final file = match.group(2) ?? '';
+        return '![$alt]($imagesBase/$file)';
+      },
+    );
+
+    // Markdown download links: /download/*
+    content = content.replaceAllMapped(
+      RegExp(r'\[([^\]]+)\]\(\s*/?download/([^)]+)\)', caseSensitive: false),
+          (match) {
+        final text = match.group(1) ?? '';
+        final path = match.group(2) ?? '';
+        return '[$text]($webBase/download/$path)';
+      },
+    );
+    debugPrint(content);
+    return content;
   }
 }

@@ -16,8 +16,10 @@ class ChatController {
   Timer? silenceTimer;
   VoidCallback? onStateChanged;
 
+  int? sessionId;
   bool isListening = false;
   bool isSpeaking = false;
+  bool useVoiceResponse = false;
 
   final chatService = ChatService();
 
@@ -50,7 +52,7 @@ class ChatController {
 
   Future startVoiceTyping(VoidCallback refresh) async {
     if (isListening) return;
-
+    useVoiceResponse = true;
     await tts.stop();
     isSpeaking = false;
 
@@ -95,6 +97,7 @@ class ChatController {
   }
 
   Future<void> sendMessage(VoidCallback refresh) async {
+    final shouldSpeak = useVoiceResponse;
     if (isListening) {
       await stopVoiceTyping(refresh);
     }
@@ -129,7 +132,12 @@ class ChatController {
       final response = await chatService.sendMessage(
         content: text,
         mode: selectedMode,
+        sessionId: sessionId,
       );
+
+      if (response.sessionId != 0) {
+        sessionId = response.sessionId;
+      }
 
       messages[messages.length - 1] = ChatMessage(
         text: response.content,
@@ -137,18 +145,36 @@ class ChatController {
         timestamp: DateTime.now(),
       );
 
+// If the response contains requirements,
+// populate the input with them.
+      if (response.requirements.isNotEmpty) {
+        controller.text =
+            response.requirements.keys.map((key) => '- $key: ').join('\n');
+
+        controller.selection = TextSelection.fromPosition(
+          TextPosition(offset: controller.text.length),
+        );
+      }
+
       refresh();
 
       scrollToBottom();
-      isSpeaking = true;
-      refresh();
+      if (shouldSpeak) {
+        isSpeaking = true;
+        refresh();
 
-      await tts.speak(
-        cleanMarkdownForTts(response.content),
-      );
+        await tts.speak(
+          cleanMarkdownForTts(response.content),
+        );
 
-      isSpeaking = false;
-      await startVoiceTyping(refresh);
+        isSpeaking = false;
+        refresh();
+
+        // Continue listening for the next voice question
+        await startVoiceTyping(refresh);
+      } else {
+        useVoiceResponse = false;
+      }
     } catch (_) {
       messages[messages.length - 1] = ChatMessage(
         text: "Something went wrong.",
