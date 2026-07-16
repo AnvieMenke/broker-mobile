@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../components/containers/page_container.dart';
 import '../../../../utils/speech/voice_option.dart';
+import 'attachment_preview.dart';
+import 'attchment_picker.dart';
 import 'chat_bubble.dart';
 import 'chat_controller.dart';
 import 'chat_input.dart';
@@ -44,10 +46,8 @@ class _ChatPageState extends State<ChatPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: PageContainer(
         title: "WM Assistant",
-
         scrollable: false,
         padding: false,
-
         page: Column(
           children: [
             Expanded(
@@ -70,6 +70,17 @@ class _ChatPageState extends State<ChatPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    if (chat.selectedFile != null) ...[
+                      AttachmentPreview(
+                        file: chat.selectedFile!,
+                        onRemove: () {
+                          setState(() {
+                            chat.selectedFile = null;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                    ],
                     Row(
                       children: [
                         ModeSelector(
@@ -81,6 +92,20 @@ class _ChatPageState extends State<ChatPage> {
                           },
                         ),
                         const Spacer(),
+                        if (chat.selectedMode == "Account Attachment")
+                          IconButton(
+                            tooltip: "Attach File",
+                            icon: const Icon(Icons.attach_file),
+                            onPressed: () async {
+                              final file = await AttachmentPicker.pick();
+
+                              if (file == null) return;
+
+                              setState(() {
+                                chat.selectedFile = file;
+                              });
+                            },
+                          ),
                         IconButton(
                           tooltip: "Voice Settings",
                           icon: const Icon(Icons.record_voice_over),
@@ -100,9 +125,10 @@ class _ChatPageState extends State<ChatPage> {
                         IconButton(
                           tooltip: "Voice",
                           style: IconButton.styleFrom(
-                            backgroundColor: (chat.isListening || chat.isSpeaking)
-                                ? Colors.red.withValues(alpha: 0.15)
-                                : Colors.transparent,
+                            backgroundColor:
+                                (chat.isListening || chat.isSpeaking)
+                                    ? Colors.red.withValues(alpha: 0.15)
+                                    : Colors.transparent,
                           ),
                           icon: Icon(
                             chat.isListening || chat.isSpeaking

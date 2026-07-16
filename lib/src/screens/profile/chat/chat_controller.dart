@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:broker_mobile/utils/fmt/fmt.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import '../../../../service/chat_service.dart';
 import '../../../../utils/speech/speech_to_text.dart';
@@ -16,6 +17,7 @@ class ChatController {
   VoiceOption? selectedVoice;
   Timer? silenceTimer;
   VoidCallback? onStateChanged;
+  PlatformFile? selectedFile;
 
   int? sessionId;
   bool isListening = false;
