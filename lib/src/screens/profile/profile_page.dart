@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 const List<Map<String, dynamic>> _options = [
   {
     "title": "Assistant",
-    "icon": Icons.support_agent,
-    "route": "/profile/chat"
+    "icon": Icons.assistant,
+    "route": "/profile/chat",
   },
   {
     "title": "User Settings",
