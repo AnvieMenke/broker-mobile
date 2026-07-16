@@ -55,6 +55,23 @@ class ChatController {
     }
   }
 
+  void onFileAttached(PlatformFile file) {
+    selectedFile = file;
+
+    final text = controller.text.trimLeft();
+
+    if (!text.startsWith('- account_no:')) {
+      controller
+        ..clear()
+        ..text = '- account_no: '
+        ..selection = TextSelection.fromPosition(
+          TextPosition(offset: controller.text.length),
+        );
+    }
+
+    onStateChanged?.call();
+  }
+
   Future initialize() async {
     await speech.initialize();
     await tts.initialize();
@@ -119,6 +136,97 @@ class ChatController {
     refresh();
   }
 
+  String _getRequirementValue(String key) {
+    final regex = RegExp(
+      '^\\s*-\\s*$key\\s*:\\s*(.+)\$',
+      multiLine: true,
+      caseSensitive: false,
+    );
+
+    final match = regex.firstMatch(controller.text);
+
+    return match?.group(1)?.trim() ?? '';
+  }
+
+  Future<void> uploadAttachment(VoidCallback refresh) async {
+    final accountNo = _getRequirementValue("account_no");
+
+    if (accountNo.isEmpty) {
+      messages.add(
+        ChatMessage(
+          text: "Please enter the account number.",
+          isUser: false,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      refresh();
+      scrollToBottom();
+      return;
+    }
+
+    if (selectedAttachmentTag == null) {
+      messages.add(
+        ChatMessage(
+          text: "Please select an attachment tag.",
+          isUser: false,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      refresh();
+      scrollToBottom();
+      return;
+    }
+
+    try {
+      messages.add(
+        ChatMessage(
+          text: controller.text.trim(),
+          isUser: true,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      messages.add(
+        ChatMessage(
+          text: "Uploading...",
+          isUser: false,
+          timestamp: DateTime.now(),
+        ),
+      );
+
+      refresh();
+      scrollToBottom();
+
+      final response = await chatService.uploadClientAccount(
+        accountNo: accountNo,
+        tag: selectedAttachmentTag!,
+        pickedFile: selectedFile!,
+      );
+
+      messages[messages.length - 1] = ChatMessage(
+        text: "✅ ${response.fileName} uploaded successfully.",
+        isUser: false,
+        timestamp: DateTime.now(),
+      );
+
+      controller.clear();
+      selectedFile = null;
+      selectedAttachmentTag = null;
+
+      refresh();
+    } catch (e) {
+      messages[messages.length - 1] = ChatMessage(
+        text: FormatUtils.cleanErrorMessage(e),
+        isUser: false,
+        timestamp: DateTime.now(),
+      );
+
+      refresh();
+    }
+  }
+
   Future<void> sendMessage(VoidCallback refresh) async {
     final shouldSpeak = useVoiceResponse;
     if (isListening) {
@@ -126,6 +234,14 @@ class ChatController {
     }
 
     final text = controller.text.trim();
+
+    if (text.isEmpty) return;
+
+// Account attachment mode
+    if (selectedMode == "Account Attachment" && selectedFile != null) {
+      await uploadAttachment(refresh);
+      return;
+    }
 
     if (text.isEmpty) return;
 

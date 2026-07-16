@@ -45,6 +45,8 @@ const Account$json = {
     {'1': 'bank_address_id', '3': 25, '4': 1, '5': 13, '8': {}, '10': 'bankAddressId'},
     {'1': 'error_message', '3': 26, '4': 1, '5': 9, '8': {}, '10': 'errorMessage'},
     {'1': 'internal_status', '3': 27, '4': 1, '5': 9, '8': {}, '10': 'internalStatus'},
+    {'1': 'is_tokenized_account_no', '3': 28, '4': 1, '5': 8, '8': {}, '10': 'isTokenizedAccountNo'},
+    {'1': 'bank_account_no_2', '3': 29, '4': 1, '5': 9, '8': {}, '10': 'bankAccountNo2'},
   ],
 };
 
@@ -138,7 +140,11 @@ final $typed_data.Uint8List accountDescriptor = $convert.base64Decode(
     'EyjAFSZXByZXNlbnRzIHRoZSBpbnRlcm5hbCBwcm9jZXNzaW5nIHN0YXRlIG9mIHRoZSByZWNv'
     'cmQuIFRoaXMgZmllbGQgaXMgdHlwaWNhbGx5IHBvcHVsYXRlZCB3aGVuIGFuIGVycm9yIG9jY3'
     'VycyBhbmQgZXJyb3JfbWVzc2FnZSBpcyBwcmVzZW50LkABSgwiRm9yIFJldmlldyJSDmludGVy'
-    'bmFsU3RhdHVz');
+    'bmFsU3RhdHVzEngKF2lzX3Rva2VuaXplZF9hY2NvdW50X25vGBwgASgIQkGSQT4yPEFuIGluZG'
+    'ljYXRvciBpZiB0aGUgYmFuayBhY2NvdW50IG5vIGZyb20gcGxhaWQgaXMgdG9rZW5pemVkLlIU'
+    'aXNUb2tlbml6ZWRBY2NvdW50Tm8ShgEKEWJhbmtfYWNjb3VudF9ub18yGB0gASgJQluSQVgyQm'
+    'ZpZWxkIGZvciByZWFsIGJhbmsgYWNjb3VudCBubyBpZiB0aGUgYmFuayBhY2NvdW50IG5vIGlz'
+    'IHRva2VuaXplZEoSIjExMTEyMjIyMzMzMzExMTEiUg5iYW5rQWNjb3VudE5vMg==');
 
 @$core.Deprecated('Use createAccountResponseDescriptor instead')
 const CreateAccountResponse$json = {
@@ -297,4 +303,40 @@ const DeleteAccountResponse$json = {
 final $typed_data.Uint8List deleteAccountResponseDescriptor = $convert.base64Decode(
     'ChVEZWxldGVBY2NvdW50UmVzcG9uc2USMgoMYmFua19hY2NvdW50GAEgASgLMg8uYmFua3BiLk'
     'FjY291bnRSC2JhbmtBY2NvdW50');
+
+@$core.Deprecated('Use getBankOwnerNameRequestDescriptor instead')
+const GetBankOwnerNameRequest$json = {
+  '1': 'GetBankOwnerNameRequest',
+  '2': [
+    {'1': 'correspondent', '3': 1, '4': 1, '5': 9, '8': {}, '10': 'correspondent'},
+    {'1': 'account_no', '3': 2, '4': 1, '5': 9, '8': {}, '10': 'accountNo'},
+  ],
+};
+
+/// Descriptor for `GetBankOwnerNameRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getBankOwnerNameRequestDescriptor = $convert.base64Decode(
+    'ChdHZXRCYW5rT3duZXJOYW1lUmVxdWVzdBK1AgoNY29ycmVzcG9uZGVudBgBIAEoCUKOApJBig'
+    'Iy6gFUaGUgbmFtZSBnaXZlbiB0byBhIGJhbmssIGJyb2tlciwgZGVhbGVyLCBvciBmaW5hbmNp'
+    'YWwgaW5zdGl0dXRpb24gdGhhdCBhY3RzIG9uIGJlaGFsZiBvZiBhbm90aGVyIGZpbmFuY2lhbC'
+    'BpbnN0aXR1dGlvbi4gRm91ciBBbHBoYSBudW1lcmljIGNoYXJhY3Rlci4gRm9yIGNyZWF0ZSBv'
+    'bmx5LCB2YWx1ZSBpcyBkaXNyZWdhcmRlZCBvbiB1cGRhdGUuIFJlcXVpcmVkIGlmIEFjY291bn'
+    'QgSUQgaXMgbm90IHNldC5KBiJTQVNTIngEgAEE0gENY29ycmVzcG9uZGVudFINY29ycmVzcG9u'
+    'ZGVudBLDAQoKYWNjb3VudF9ubxgCIAEoCUKjAZJBnwEyf1RoZSBhbHBoYW51bWVyaWMgaWRlbn'
+    'RpZmllciBvZiB0aGUgYWNjb3VudC4gRm9yIGNyZWF0ZSBvbmx5LCB2YWx1ZSBpcyBkaXNyZWdh'
+    'cmRlZCBvbiB1cGRhdGUuIFJlcXVpcmVkIGlmIEFjY291bnQgSUQgaXMgbm90IHNldC5KDyJURV'
+    'NUQUNDT1VOVE5PItIBCmFjY291bnRfbm9SCWFjY291bnRObw==');
+
+@$core.Deprecated('Use getBankOwnerNameResponseDescriptor instead')
+const GetBankOwnerNameResponse$json = {
+  '1': 'GetBankOwnerNameResponse',
+  '2': [
+    {'1': 'bank_owner_name', '3': 1, '4': 1, '5': 9, '8': {}, '10': 'bankOwnerName'},
+  ],
+};
+
+/// Descriptor for `GetBankOwnerNameResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getBankOwnerNameResponseDescriptor = $convert.base64Decode(
+    'ChhHZXRCYW5rT3duZXJOYW1lUmVzcG9uc2USbQoPYmFua19vd25lcl9uYW1lGAEgASgJQkWSQU'
+    'IyNFRoZSBuYW1lIG9mIHRoZSBvd25lciBvZiB0aGUgc3BlY2lmaWVkIGJhbmsgYWNjb3VudC5K'
+    'CiJKb2huIERvZSJSDWJhbmtPd25lck5hbWU=');
 

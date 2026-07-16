@@ -50,6 +50,10 @@ class BankAccountServiceClient extends $grpc.Client {
       '/bankpb.BankAccountService/DeleteAccount',
       ($0.DeleteAccountRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.DeleteAccountResponse.fromBuffer(value));
+  static final _$getBankOwnerName = $grpc.ClientMethod<$0.GetBankOwnerNameRequest, $0.GetBankOwnerNameResponse>(
+      '/bankpb.BankAccountService/GetBankOwnerName',
+      ($0.GetBankOwnerNameRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.GetBankOwnerNameResponse.fromBuffer(value));
 
   BankAccountServiceClient(super.channel, {super.options, super.interceptors});
 
@@ -71,6 +75,10 @@ class BankAccountServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.DeleteAccountResponse> deleteAccount($0.DeleteAccountRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteAccount, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetBankOwnerNameResponse> getBankOwnerName($0.GetBankOwnerNameRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getBankOwnerName, request, options: options);
   }
 }
 
@@ -114,6 +122,13 @@ abstract class BankAccountServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.DeleteAccountRequest.fromBuffer(value),
         ($0.DeleteAccountResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetBankOwnerNameRequest, $0.GetBankOwnerNameResponse>(
+        'GetBankOwnerName',
+        getBankOwnerName_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetBankOwnerNameRequest.fromBuffer(value),
+        ($0.GetBankOwnerNameResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.CreateAccountResponse> createAccount_Pre($grpc.ServiceCall $call, $async.Future<$0.Account> $request) async {
@@ -136,9 +151,14 @@ abstract class BankAccountServiceBase extends $grpc.Service {
     return deleteAccount($call, await $request);
   }
 
+  $async.Future<$0.GetBankOwnerNameResponse> getBankOwnerName_Pre($grpc.ServiceCall $call, $async.Future<$0.GetBankOwnerNameRequest> $request) async {
+    return getBankOwnerName($call, await $request);
+  }
+
   $async.Future<$0.CreateAccountResponse> createAccount($grpc.ServiceCall call, $0.Account request);
   $async.Future<$0.UpdateAccountResponse> updateAccount($grpc.ServiceCall call, $0.Account request);
   $async.Future<$0.ReadAccountResponse> readAccount($grpc.ServiceCall call, $0.ReadAccountRequest request);
   $async.Future<$0.ListAccountResponse> listAccount($grpc.ServiceCall call, $0.ListAccountRequest request);
   $async.Future<$0.DeleteAccountResponse> deleteAccount($grpc.ServiceCall call, $0.DeleteAccountRequest request);
+  $async.Future<$0.GetBankOwnerNameResponse> getBankOwnerName($grpc.ServiceCall call, $0.GetBankOwnerNameRequest request);
 }

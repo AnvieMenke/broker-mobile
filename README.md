@@ -122,6 +122,6 @@ flutter pub run flutter_launcher_icons
 
 for chat pb
 ```bash
-    rm -rf ./lib/proto/support
+    rm -rf ./lib/proto_support/support
 	buf generate ../sas-proto --path ../sas-proto/support/ai/chat/v1
 ```
