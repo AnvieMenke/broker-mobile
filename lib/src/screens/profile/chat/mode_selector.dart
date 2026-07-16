@@ -32,6 +32,7 @@ class ModeSelector extends StatelessWidget {
         menu("Ask AI"),
       ],
       child: Container(
+        width: 180,
         padding: const EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 7,
@@ -43,17 +44,20 @@ class ModeSelector extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(
               Icons.tune,
               size: 18,
             ),
             const SizedBox(width: 6),
-            Text(
-              value,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
+            Expanded(
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             const SizedBox(width: 2),
