@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:broker_mobile/service/common_service.dart';
 import 'package:broker_mobile/utils/fmt/fmt.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,9 @@ class ChatController {
   bool isSpeaking = false;
   bool useVoiceResponse = false;
 
+  String? selectedAttachmentTag;
+
+  final List<String> attachmentTags = [];
   final chatService = ChatService();
 
   String selectedMode = "All";
@@ -35,6 +39,21 @@ class ChatController {
       timestamp: DateTime.now(),
     ),
   ];
+
+  Future<void> getAttachmentTags() async {
+    try {
+      final tags = await CommonService().listSystemCode(
+        "Attachment",
+        "Tag",
+        "",
+      );
+      attachmentTags
+        ..clear()
+        ..addAll(tags.map((e) => e.code).toSet());
+    } catch (e) {
+      debugPrint("Failed to load attachment tags: $e");
+    }
+  }
 
   Future initialize() async {
     await speech.initialize();
@@ -51,6 +70,7 @@ class ChatController {
     tts.onCancel = () {
       isSpeaking = false;
     };
+    getAttachmentTags();
   }
 
   Future startVoiceTyping(VoidCallback refresh) async {
@@ -142,7 +162,8 @@ class ChatController {
         sessionId = response.sessionId;
       }
 
-      final responseContent = FormatUtils.rewriteContentLinks(content: response.content);
+      final responseContent =
+          FormatUtils.rewriteContentLinks(content: response.content);
 
       messages[messages.length - 1] = ChatMessage(
         text: responseContent,
@@ -150,8 +171,6 @@ class ChatController {
         timestamp: DateTime.now(),
       );
 
-// If the response contains requirements,
-// populate the input with them.
       if (response.requirements.isNotEmpty) {
         controller.text =
             response.requirements.keys.map((key) => '- $key: ').join('\n');
@@ -175,7 +194,6 @@ class ChatController {
         isSpeaking = false;
         refresh();
 
-        // Continue listening for the next voice question
         await startVoiceTyping(refresh);
       } else {
         useVoiceResponse = false;

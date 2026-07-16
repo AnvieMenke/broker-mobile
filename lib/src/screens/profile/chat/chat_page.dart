@@ -1,3 +1,4 @@
+import 'package:broker_mobile/src/screens/profile/chat/attachment_tag_selector.dart';
 import 'package:broker_mobile/src/screens/profile/chat/voice_settings_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -76,10 +77,23 @@ class _ChatPageState extends State<ChatPage> {
                         onRemove: () {
                           setState(() {
                             chat.selectedFile = null;
+                            chat.selectedAttachmentTag = null;
                           });
                         },
                       ),
-                      const SizedBox(height: 8),
+
+                      const SizedBox(height: 10),
+                      AttachmentTagSelector(
+                        tags: chat.attachmentTags,
+                        selectedTag: chat.selectedAttachmentTag,
+                        onSelected: (tag) {
+                          setState(() {
+                            chat.selectedAttachmentTag = tag;
+                          });
+                        },
+                      ),
+
+                      const SizedBox(height: 12),
                     ],
                     Row(
                       children: [
