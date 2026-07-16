@@ -48,6 +48,8 @@ class Account extends $pb.GeneratedMessage {
     $core.int? bankAddressId,
     $core.String? errorMessage,
     $core.String? internalStatus,
+    $core.bool? isTokenizedAccountNo,
+    $core.String? bankAccountNo2,
   }) {
     final result = create();
     if (bankId != null) result.bankId = bankId;
@@ -77,6 +79,8 @@ class Account extends $pb.GeneratedMessage {
     if (bankAddressId != null) result.bankAddressId = bankAddressId;
     if (errorMessage != null) result.errorMessage = errorMessage;
     if (internalStatus != null) result.internalStatus = internalStatus;
+    if (isTokenizedAccountNo != null) result.isTokenizedAccountNo = isTokenizedAccountNo;
+    if (bankAccountNo2 != null) result.bankAccountNo2 = bankAccountNo2;
     return result;
   }
 
@@ -113,6 +117,8 @@ class Account extends $pb.GeneratedMessage {
     ..a<$core.int>(25, _omitFieldNames ? '' : 'bankAddressId', $pb.PbFieldType.OU3)
     ..aOS(26, _omitFieldNames ? '' : 'errorMessage')
     ..aOS(27, _omitFieldNames ? '' : 'internalStatus')
+    ..aOB(28, _omitFieldNames ? '' : 'isTokenizedAccountNo')
+    ..aOS(29, _omitFieldNames ? '' : 'bankAccountNo2', protoName: 'bank_account_no_2')
     ..hasRequiredFields = false
   ;
 
@@ -379,6 +385,24 @@ class Account extends $pb.GeneratedMessage {
   $core.bool hasInternalStatus() => $_has(26);
   @$pb.TagNumber(27)
   void clearInternalStatus() => $_clearField(27);
+
+  @$pb.TagNumber(28)
+  $core.bool get isTokenizedAccountNo => $_getBF(27);
+  @$pb.TagNumber(28)
+  set isTokenizedAccountNo($core.bool value) => $_setBool(27, value);
+  @$pb.TagNumber(28)
+  $core.bool hasIsTokenizedAccountNo() => $_has(27);
+  @$pb.TagNumber(28)
+  void clearIsTokenizedAccountNo() => $_clearField(28);
+
+  @$pb.TagNumber(29)
+  $core.String get bankAccountNo2 => $_getSZ(28);
+  @$pb.TagNumber(29)
+  set bankAccountNo2($core.String value) => $_setString(28, value);
+  @$pb.TagNumber(29)
+  $core.bool hasBankAccountNo2() => $_has(28);
+  @$pb.TagNumber(29)
+  void clearBankAccountNo2() => $_clearField(29);
 }
 
 class CreateAccountResponse extends $pb.GeneratedMessage {
@@ -919,6 +943,110 @@ class DeleteAccountResponse extends $pb.GeneratedMessage {
   void clearBankAccount() => $_clearField(1);
   @$pb.TagNumber(1)
   Account ensureBankAccount() => $_ensure(0);
+}
+
+class GetBankOwnerNameRequest extends $pb.GeneratedMessage {
+  factory GetBankOwnerNameRequest({
+    $core.String? correspondent,
+    $core.String? accountNo,
+  }) {
+    final result = create();
+    if (correspondent != null) result.correspondent = correspondent;
+    if (accountNo != null) result.accountNo = accountNo;
+    return result;
+  }
+
+  GetBankOwnerNameRequest._();
+
+  factory GetBankOwnerNameRequest.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory GetBankOwnerNameRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBankOwnerNameRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'bankpb'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'correspondent')
+    ..aOS(2, _omitFieldNames ? '' : 'accountNo')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetBankOwnerNameRequest clone() => GetBankOwnerNameRequest()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetBankOwnerNameRequest copyWith(void Function(GetBankOwnerNameRequest) updates) => super.copyWith((message) => updates(message as GetBankOwnerNameRequest)) as GetBankOwnerNameRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetBankOwnerNameRequest create() => GetBankOwnerNameRequest._();
+  @$core.override
+  GetBankOwnerNameRequest createEmptyInstance() => create();
+  static $pb.PbList<GetBankOwnerNameRequest> createRepeated() => $pb.PbList<GetBankOwnerNameRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetBankOwnerNameRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetBankOwnerNameRequest>(create);
+  static GetBankOwnerNameRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get correspondent => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set correspondent($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasCorrespondent() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearCorrespondent() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get accountNo => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set accountNo($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAccountNo() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAccountNo() => $_clearField(2);
+}
+
+class GetBankOwnerNameResponse extends $pb.GeneratedMessage {
+  factory GetBankOwnerNameResponse({
+    $core.String? bankOwnerName,
+  }) {
+    final result = create();
+    if (bankOwnerName != null) result.bankOwnerName = bankOwnerName;
+    return result;
+  }
+
+  GetBankOwnerNameResponse._();
+
+  factory GetBankOwnerNameResponse.fromBuffer($core.List<$core.int> data, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(data, registry);
+  factory GetBankOwnerNameResponse.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBankOwnerNameResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'bankpb'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'bankOwnerName')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetBankOwnerNameResponse clone() => GetBankOwnerNameResponse()..mergeFromMessage(this);
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  GetBankOwnerNameResponse copyWith(void Function(GetBankOwnerNameResponse) updates) => super.copyWith((message) => updates(message as GetBankOwnerNameResponse)) as GetBankOwnerNameResponse;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetBankOwnerNameResponse create() => GetBankOwnerNameResponse._();
+  @$core.override
+  GetBankOwnerNameResponse createEmptyInstance() => create();
+  static $pb.PbList<GetBankOwnerNameResponse> createRepeated() => $pb.PbList<GetBankOwnerNameResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetBankOwnerNameResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetBankOwnerNameResponse>(create);
+  static GetBankOwnerNameResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get bankOwnerName => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set bankOwnerName($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasBankOwnerName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBankOwnerName() => $_clearField(1);
 }
 
 

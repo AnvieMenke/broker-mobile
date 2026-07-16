@@ -29,7 +29,7 @@ class BuyingPower extends $pb.GeneratedMessage {
     $core.String? buyingPowerUsed,
     $core.String? buyingPowerPercent,
     $core.int? accountId,
-    $core.String? equity,
+    $core.String? marginEquity,
     $core.String? exchangeReq,
     $core.String? multiplier,
     $core.String? percentDeduction,
@@ -57,7 +57,7 @@ class BuyingPower extends $pb.GeneratedMessage {
     if (buyingPowerUsed != null) result.buyingPowerUsed = buyingPowerUsed;
     if (buyingPowerPercent != null) result.buyingPowerPercent = buyingPowerPercent;
     if (accountId != null) result.accountId = accountId;
-    if (equity != null) result.equity = equity;
+    if (marginEquity != null) result.marginEquity = marginEquity;
     if (exchangeReq != null) result.exchangeReq = exchangeReq;
     if (multiplier != null) result.multiplier = multiplier;
     if (percentDeduction != null) result.percentDeduction = percentDeduction;
@@ -92,7 +92,7 @@ class BuyingPower extends $pb.GeneratedMessage {
     ..aOS(6, _omitFieldNames ? '' : 'buyingPowerUsed')
     ..aOS(7, _omitFieldNames ? '' : 'buyingPowerPercent')
     ..a<$core.int>(8, _omitFieldNames ? '' : 'accountId', $pb.PbFieldType.OU3)
-    ..aOS(9, _omitFieldNames ? '' : 'equity')
+    ..aOS(9, _omitFieldNames ? '' : 'marginEquity')
     ..aOS(10, _omitFieldNames ? '' : 'exchangeReq')
     ..aOS(11, _omitFieldNames ? '' : 'multiplier')
     ..aOS(12, _omitFieldNames ? '' : 'percentDeduction')
@@ -205,13 +205,13 @@ class BuyingPower extends $pb.GeneratedMessage {
   void clearAccountId() => $_clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get equity => $_getSZ(8);
+  $core.String get marginEquity => $_getSZ(8);
   @$pb.TagNumber(9)
-  set equity($core.String value) => $_setString(8, value);
+  set marginEquity($core.String value) => $_setString(8, value);
   @$pb.TagNumber(9)
-  $core.bool hasEquity() => $_has(8);
+  $core.bool hasMarginEquity() => $_has(8);
   @$pb.TagNumber(9)
-  void clearEquity() => $_clearField(9);
+  void clearMarginEquity() => $_clearField(9);
 
   @$pb.TagNumber(10)
   $core.String get exchangeReq => $_getSZ(9);

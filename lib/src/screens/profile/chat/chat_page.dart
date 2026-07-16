@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../components/containers/page_container.dart';
 import '../../../../utils/speech/voice_option.dart';
 import 'attachment_preview.dart';
-import 'attchment_picker.dart';
+import 'attachment_picker.dart';
 import 'chat_bubble.dart';
 import 'chat_controller.dart';
 import 'chat_input.dart';
@@ -116,7 +116,7 @@ class _ChatPageState extends State<ChatPage> {
                               if (file == null) return;
 
                               setState(() {
-                                chat.selectedFile = file;
+                                chat.onFileAttached(file);
                               });
                             },
                           ),

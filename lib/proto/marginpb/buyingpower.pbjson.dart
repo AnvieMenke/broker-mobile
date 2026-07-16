@@ -26,7 +26,7 @@ const BuyingPower$json = {
     {'1': 'buying_power_used', '3': 6, '4': 1, '5': 9, '10': 'buyingPowerUsed'},
     {'1': 'buying_power_percent', '3': 7, '4': 1, '5': 9, '10': 'buyingPowerPercent'},
     {'1': 'account_id', '3': 8, '4': 1, '5': 13, '10': 'accountId'},
-    {'1': 'equity', '3': 9, '4': 1, '5': 9, '10': 'equity'},
+    {'1': 'margin_equity', '3': 9, '4': 1, '5': 9, '10': 'marginEquity'},
     {'1': 'exchange_req', '3': 10, '4': 1, '5': 9, '10': 'exchangeReq'},
     {'1': 'multiplier', '3': 11, '4': 1, '5': 9, '10': 'multiplier'},
     {'1': 'percent_deduction', '3': 12, '4': 1, '5': 9, '10': 'percentDeduction'},
@@ -55,17 +55,17 @@ final $typed_data.Uint8List buyingPowerDescriptor = $convert.base64Decode(
     'lSC2FjY291bnROYW1lEiEKDGJ1eWluZ19wb3dlchgFIAEoCVILYnV5aW5nUG93ZXISKgoRYnV5'
     'aW5nX3Bvd2VyX3VzZWQYBiABKAlSD2J1eWluZ1Bvd2VyVXNlZBIwChRidXlpbmdfcG93ZXJfcG'
     'VyY2VudBgHIAEoCVISYnV5aW5nUG93ZXJQZXJjZW50Eh0KCmFjY291bnRfaWQYCCABKA1SCWFj'
-    'Y291bnRJZBIWCgZlcXVpdHkYCSABKAlSBmVxdWl0eRIhCgxleGNoYW5nZV9yZXEYCiABKAlSC2'
-    'V4Y2hhbmdlUmVxEh4KCm11bHRpcGxpZXIYCyABKAlSCm11bHRpcGxpZXISKwoRcGVyY2VudF9k'
-    'ZWR1Y3Rpb24YDCABKAlSEHBlcmNlbnREZWR1Y3Rpb24SMAoUb3BlbmluZ19idXlpbmdfcG93ZX'
-    'IYDSABKAlSEm9wZW5pbmdCdXlpbmdQb3dlchIYCgdkZXBvc2l0GA4gASgJUgdkZXBvc2l0EioK'
-    'EWJ1eWluZ19wb3dlcl9jYWxsGA8gASgJUg9idXlpbmdQb3dlckNhbGwSEAoDb21zGBAgASgIUg'
-    'NvbXMSFgoGY2xpZW50GBEgASgIUgZjbGllbnQSFwoHdHJuc19pZBgSIAEoDVIGdHJuc0lkEhsK'
-    'CWhvdXNlX3JlcRgTIAEoCVIIaG91c2VSZXESHwoLbWFyZ2luX3R5cGUYFCABKAlSCm1hcmdpbl'
-    'R5cGUSIQoMY2FzaF9iYWxhbmNlGBUgASgJUgtjYXNoQmFsYW5jZRIQCgNzbWEYFiABKAlSA3Nt'
-    'YRIhCgxob3VzZV9leGNlc3MYFyABKAlSC2hvdXNlRXhjZXNzEicKD2V4Y2hhbmdlX2V4Y2Vzcx'
-    'gYIAEoCVIOZXhjaGFuZ2VFeGNlc3MSEgoEbm90ZRgZIAEoCVIEbm90ZRIzCgpwYWdpbmF0aW9u'
-    'GBogASgLMhMudXRpbHNwYi5QYWdpbmF0aW9uUgpwYWdpbmF0aW9u');
+    'Y291bnRJZBIjCg1tYXJnaW5fZXF1aXR5GAkgASgJUgxtYXJnaW5FcXVpdHkSIQoMZXhjaGFuZ2'
+    'VfcmVxGAogASgJUgtleGNoYW5nZVJlcRIeCgptdWx0aXBsaWVyGAsgASgJUgptdWx0aXBsaWVy'
+    'EisKEXBlcmNlbnRfZGVkdWN0aW9uGAwgASgJUhBwZXJjZW50RGVkdWN0aW9uEjAKFG9wZW5pbm'
+    'dfYnV5aW5nX3Bvd2VyGA0gASgJUhJvcGVuaW5nQnV5aW5nUG93ZXISGAoHZGVwb3NpdBgOIAEo'
+    'CVIHZGVwb3NpdBIqChFidXlpbmdfcG93ZXJfY2FsbBgPIAEoCVIPYnV5aW5nUG93ZXJDYWxsEh'
+    'AKA29tcxgQIAEoCFIDb21zEhYKBmNsaWVudBgRIAEoCFIGY2xpZW50EhcKB3RybnNfaWQYEiAB'
+    'KA1SBnRybnNJZBIbCglob3VzZV9yZXEYEyABKAlSCGhvdXNlUmVxEh8KC21hcmdpbl90eXBlGB'
+    'QgASgJUgptYXJnaW5UeXBlEiEKDGNhc2hfYmFsYW5jZRgVIAEoCVILY2FzaEJhbGFuY2USEAoD'
+    'c21hGBYgASgJUgNzbWESIQoMaG91c2VfZXhjZXNzGBcgASgJUgtob3VzZUV4Y2VzcxInCg9leG'
+    'NoYW5nZV9leGNlc3MYGCABKAlSDmV4Y2hhbmdlRXhjZXNzEhIKBG5vdGUYGSABKAlSBG5vdGUS'
+    'MwoKcGFnaW5hdGlvbhgaIAEoCzITLnV0aWxzcGIuUGFnaW5hdGlvblIKcGFnaW5hdGlvbg==');
 
 @$core.Deprecated('Use listBuyingPowerRequestDescriptor instead')
 const ListBuyingPowerRequest$json = {
