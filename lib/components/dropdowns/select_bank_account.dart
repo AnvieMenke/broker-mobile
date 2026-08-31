@@ -94,6 +94,7 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
     if (widget.disabled || options.isEmpty) return;
     showModalBottomSheet(
       context: context,
+      useSafeArea: true,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -102,8 +103,15 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
       ),
       builder: (context) {
         return SafeArea(
+          top: false,
+          bottom: true,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(
+              16,
+              16,
+              16,
+              16,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -127,6 +135,7 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
                 Flexible(
                   child: ListView.separated(
                     shrinkWrap: true,
+                    physics: const AlwaysScrollableScrollPhysics(),
                     itemCount: options.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 10),
                     itemBuilder: (context, index) {
@@ -151,7 +160,7 @@ class _SelectBankAccountState extends State<SelectBankAccount> {
                                     'bankId': account.bankId,
                                     'bankName': account.bankName,
                                     'bankAccountNo': account.bankAccountNo,
-                                  }
+                                  },
                                 });
 
                                 Navigator.pop(context);

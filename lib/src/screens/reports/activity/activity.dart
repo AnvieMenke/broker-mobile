@@ -153,272 +153,228 @@ class ActivityPageState extends State<ActivityPage> {
                                         onTap: () {
                                           showModalBottomSheet(
                                             context: context,
+                                            useSafeArea: true,
+                                            isScrollControlled: true,
                                             shape: const RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.vertical(
                                                 top: Radius.circular(16),
                                               ),
                                             ),
-                                            builder: (context) => Padding(
-                                              padding: const EdgeInsets.all(16),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "$entryType $entryTypeDesc",
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 12),
-                                                  Text(
-                                                    "Date: ${FormatUtils.formatPbDate(date)}",
-                                                    style: const TextStyle(
-                                                        fontSize: 14),
-                                                  ),
-                                                  if (symbol.isNotEmpty) ...[
+                                            builder: (context) {
+                                              final bottomInset =
+                                                  MediaQuery.of(context)
+                                                      .viewPadding
+                                                      .bottom;
+
+                                              return Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                  16,
+                                                  16,
+                                                  16,
+                                                  16 + bottomInset,
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
                                                     Text(
-                                                      "Symbol: $symbol",
+                                                      "$entryType $entryTypeDesc",
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 12),
+                                                    Text(
+                                                      "Date: ${FormatUtils.formatPbDate(date)}",
                                                       style: const TextStyle(
                                                           fontSize: 14),
                                                     ),
-                                                    Text(
-                                                      "Symbol Description: $symbolDescription",
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                  ],
-                                                  if (ConvertService.safeDouble(
-                                                          qty) !=
-                                                      0) ...[
+                                                    if (symbol.isNotEmpty) ...[
+                                                      Text(
+                                                        "Symbol: $symbol",
+                                                        style: const TextStyle(
+                                                            fontSize: 14),
+                                                      ),
+                                                      Text(
+                                                        "Symbol Description: $symbolDescription",
+                                                        style: const TextStyle(
+                                                            fontSize: 14),
+                                                      ),
+                                                    ],
+                                                    if (ConvertService
+                                                            .safeDouble(qty) !=
+                                                        0) ...[
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium
+                                                                  ?.copyWith(
+                                                                    fontSize:
+                                                                        14,
+                                                                  ),
+                                                          children: [
+                                                            const TextSpan(
+                                                                text: 'Qty: '),
+                                                            TextSpan(
+                                                              text: FormatUtils
+                                                                  .formatQty(
+                                                                      qty),
+                                                              style: TextStyle(
+                                                                color: ConvertService.safeDouble(
+                                                                            qty) >
+                                                                        0
+                                                                    ? Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyMedium
+                                                                        ?.color
+                                                                    : Colors
+                                                                        .redAccent,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                    if (ConvertService
+                                                            .safeDouble(
+                                                                price) !=
+                                                        0) ...[
+                                                      Text(
+                                                        "Price: ${FormatUtils.formatCurrencySymbol(price)}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                                fontSize: 14),
+                                                      ),
+                                                    ],
                                                     RichText(
                                                       text: TextSpan(
                                                         style: Theme.of(context)
                                                             .textTheme
                                                             .bodyMedium
                                                             ?.copyWith(
-                                                              fontSize: 14,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodyMedium
-                                                                  ?.color,
-                                                            ),
+                                                                fontSize: 14),
                                                         children: [
                                                           const TextSpan(
-                                                              text: 'Qty: '),
+                                                              text:
+                                                                  'Gross Amount: '),
                                                           TextSpan(
                                                             text: FormatUtils
-                                                                .formatQty(qty),
+                                                                .formatCurrency(
+                                                                    grossAmt),
                                                             style: TextStyle(
                                                               color: ConvertService
                                                                           .safeDouble(
-                                                                              qty) >
+                                                                              grossAmt) <
                                                                       0
-                                                                  ? Theme.of(
+                                                                  ? Colors
+                                                                      .redAccent
+                                                                  : Theme.of(
                                                                           context)
                                                                       .textTheme
                                                                       .bodyMedium
-                                                                      ?.color
-                                                                  : ConvertService.safeDouble(
-                                                                              qty) <
-                                                                          0
-                                                                      ? Colors
-                                                                          .redAccent
-                                                                      : Theme.of(
-                                                                              context)
-                                                                          .textTheme
-                                                                          .bodyMedium
-                                                                          ?.color,
+                                                                      ?.color,
                                                             ),
                                                           ),
                                                         ],
                                                       ),
                                                     ),
-                                                  ],
-                                                  if (ConvertService.safeDouble(
-                                                          price) !=
-                                                      0) ...[
-                                                    Text(
-                                                      "Price: ${FormatUtils.formatCurrencySymbol(price)}",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium
-                                                          ?.copyWith(
-                                                            fontSize: 14,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyMedium
-                                                                ?.color,
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                                fontSize: 14),
+                                                        children: [
+                                                          const TextSpan(
+                                                              text: 'Fees: '),
+                                                          TextSpan(
+                                                            text: FormatUtils
+                                                                .formatCurrency(
+                                                                    fees),
+                                                            style: TextStyle(
+                                                              color: ConvertService
+                                                                          .safeDouble(
+                                                                              fees) <
+                                                                      0
+                                                                  ? Colors
+                                                                      .redAccent
+                                                                  : Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyMedium
+                                                                      ?.color,
+                                                            ),
                                                           ),
-                                                    )
-                                                  ],
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium
-                                                          ?.copyWith(
-                                                            fontSize: 14,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyMedium
-                                                                ?.color,
-                                                          ),
-                                                      children: [
-                                                        const TextSpan(
-                                                          text:
-                                                              'Gross Amount: ',
-                                                        ),
-                                                        TextSpan(
-                                                          text: FormatUtils
-                                                              .formatCurrency(
-                                                                  grossAmt),
-                                                          style: TextStyle(
-                                                            color: ConvertService
-                                                                        .safeDouble(
-                                                                            grossAmt) >
-                                                                    0
-                                                                ? Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyMedium
-                                                                    ?.color
-                                                                : ConvertService.safeDouble(
-                                                                            grossAmt) <
-                                                                        0
-                                                                    ? Colors
-                                                                        .redAccent
-                                                                    : Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .bodyMedium
-                                                                        ?.color,
-                                                          ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium
-                                                          ?.copyWith(
-                                                            fontSize: 14,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyMedium
-                                                                ?.color,
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                                fontSize: 14),
+                                                        children: [
+                                                          const TextSpan(
+                                                              text:
+                                                                  'Net Amount: '),
+                                                          TextSpan(
+                                                            text: FormatUtils
+                                                                .formatCurrency(
+                                                                    netAmt),
+                                                            style: TextStyle(
+                                                              color: ConvertService
+                                                                          .safeDouble(
+                                                                              netAmt) <
+                                                                      0
+                                                                  ? Colors
+                                                                      .redAccent
+                                                                  : Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyMedium
+                                                                      ?.color,
+                                                            ),
                                                           ),
-                                                      children: [
-                                                        const TextSpan(
-                                                            text: 'Fees: '),
-                                                        TextSpan(
-                                                          text: FormatUtils
-                                                              .formatCurrency(
-                                                                  fees),
-                                                          style: TextStyle(
-                                                            color: ConvertService
-                                                                        .safeDouble(
-                                                                            fees) >
-                                                                    0
-                                                                ? Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyMedium
-                                                                    ?.color
-                                                                : ConvertService.safeDouble(
-                                                                            fees) <
-                                                                        0
-                                                                    ? Colors
-                                                                        .redAccent
-                                                                    : Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .bodyMedium
-                                                                        ?.color,
-                                                          ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium
-                                                          ?.copyWith(
-                                                            fontSize: 14,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyMedium
-                                                                ?.color,
-                                                          ),
-                                                      children: [
-                                                        const TextSpan(
-                                                            text:
-                                                                'Net Amount: '),
-                                                        TextSpan(
-                                                          text: FormatUtils
-                                                              .formatCurrency(
-                                                                  netAmt),
-                                                          style: TextStyle(
-                                                            color: ConvertService
-                                                                        .safeDouble(
-                                                                            netAmt) >
-                                                                    0
-                                                                ? Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyMedium
-                                                                    ?.color
-                                                                : ConvertService.safeDouble(
-                                                                            netAmt) <
-                                                                        0
-                                                                    ? Colors
-                                                                        .redAccent
-                                                                    : Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .bodyMedium
-                                                                        ?.color,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  if (description
-                                                      .isNotEmpty) ...[
-                                                    Text(
-                                                      "Description: $description",
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
+                                                    if (description
+                                                        .isNotEmpty) ...[
+                                                      Text(
+                                                        "Description: $description",
+                                                        style: const TextStyle(
+                                                            fontSize: 14),
+                                                      ),
+                                                    ],
+                                                    const SizedBox(height: 12),
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      child: TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        child:
+                                                            const Text("Close"),
+                                                      ),
                                                     ),
                                                   ],
-                                                  const SizedBox(height: 12),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    child: TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                      child:
-                                                          const Text("Close"),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                                ),
+                                              );
+                                            },
                                           );
                                         },
                                         child: Container(

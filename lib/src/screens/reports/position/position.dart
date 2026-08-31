@@ -155,57 +155,63 @@ class PositionPageState extends State<PositionPage> {
                                         onTap: () {
                                           showModalBottomSheet(
                                             context: context,
+                                            useSafeArea: true,
+                                            isScrollControlled: true,
                                             shape: const RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.vertical(
-                                                      top: Radius.circular(16)),
+                                                top: Radius.circular(16),
+                                              ),
                                             ),
-                                            builder: (context) => Padding(
-                                              padding: const EdgeInsets.all(16),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    symbol,
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
-                                                    ),
+                                            builder: (context) {
+                                              return SafeArea(
+                                                top: false,
+                                                bottom: true,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                    16,
+                                                    16,
+                                                    16,
+                                                    16,
                                                   ),
-                                                  const SizedBox(height: 12),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium
-                                                          ?.copyWith(
-                                                            fontSize: 14,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyMedium
-                                                                ?.color,
-                                                          ),
-                                                      children: [
-                                                        const TextSpan(
-                                                            text: 'TD Qty: '),
-                                                        TextSpan(
-                                                          text: FormatUtils
-                                                              .formatQty(tdQty),
-                                                          style: TextStyle(
-                                                            color: ConvertService
-                                                                        .safeDouble(
-                                                                            tdQty) >
-                                                                    0
-                                                                ? Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyMedium
-                                                                    ?.color
-                                                                : ConvertService.safeDouble(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        symbol,
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 12),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium
+                                                                  ?.copyWith(
+                                                                    fontSize:
+                                                                        14,
+                                                                  ),
+                                                          children: [
+                                                            const TextSpan(
+                                                              text: 'TD Qty: ',
+                                                            ),
+                                                            TextSpan(
+                                                              text: FormatUtils
+                                                                  .formatQty(
+                                                                      tdQty),
+                                                              style: TextStyle(
+                                                                color: ConvertService.safeDouble(
                                                                             tdQty) <
                                                                         0
                                                                     ? Colors
@@ -215,43 +221,32 @@ class PositionPageState extends State<PositionPage> {
                                                                         .textTheme
                                                                         .bodyMedium
                                                                         ?.color,
-                                                          ),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium
-                                                          ?.copyWith(
-                                                            fontSize: 14,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyMedium
-                                                                ?.color,
-                                                          ),
-                                                      children: [
-                                                        const TextSpan(
-                                                            text:
-                                                                'Market Value: '),
-                                                        TextSpan(
-                                                          text: FormatUtils
-                                                              .formatCurrency(
-                                                                  tdMarketValue),
-                                                          style: TextStyle(
-                                                            color: ConvertService
-                                                                        .safeDouble(
-                                                                            tdMarketValue) >
-                                                                    0
-                                                                ? Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyMedium
-                                                                    ?.color
-                                                                : ConvertService.safeDouble(
+                                                      ),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium
+                                                                  ?.copyWith(
+                                                                    fontSize:
+                                                                        14,
+                                                                  ),
+                                                          children: [
+                                                            const TextSpan(
+                                                              text:
+                                                                  'Market Value: ',
+                                                            ),
+                                                            TextSpan(
+                                                              text: FormatUtils
+                                                                  .formatCurrency(
+                                                                      tdMarketValue),
+                                                              style: TextStyle(
+                                                                color: ConvertService.safeDouble(
                                                                             tdMarketValue) <
                                                                         0
                                                                     ? Colors
@@ -261,43 +256,32 @@ class PositionPageState extends State<PositionPage> {
                                                                         .textTheme
                                                                         .bodyMedium
                                                                         ?.color,
-                                                          ),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium
-                                                          ?.copyWith(
-                                                            fontSize: 14,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyMedium
-                                                                ?.color,
-                                                          ),
-                                                      children: [
-                                                        const TextSpan(
-                                                            text:
-                                                                'Unrealized P/L: '),
-                                                        TextSpan(
-                                                          text: FormatUtils
-                                                              .formatCurrency(
-                                                                  plValue),
-                                                          style: TextStyle(
-                                                            color: ConvertService
-                                                                        .safeDouble(
-                                                                            plValue) >
-                                                                    0
-                                                                ? Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyMedium
-                                                                    ?.color
-                                                                : ConvertService.safeDouble(
+                                                      ),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium
+                                                                  ?.copyWith(
+                                                                    fontSize:
+                                                                        14,
+                                                                  ),
+                                                          children: [
+                                                            const TextSpan(
+                                                              text:
+                                                                  'Unrealized P/L: ',
+                                                            ),
+                                                            TextSpan(
+                                                              text: FormatUtils
+                                                                  .formatCurrency(
+                                                                      plValue),
+                                                              style: TextStyle(
+                                                                color: ConvertService.safeDouble(
                                                                             plValue) <
                                                                         0
                                                                     ? Colors
@@ -307,42 +291,31 @@ class PositionPageState extends State<PositionPage> {
                                                                         .textTheme
                                                                         .bodyMedium
                                                                         ?.color,
-                                                          ),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium
-                                                          ?.copyWith(
-                                                            fontSize: 14,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyMedium
-                                                                ?.color,
-                                                          ),
-                                                      children: [
-                                                        const TextSpan(
-                                                            text: 'P/L: '),
-                                                        TextSpan(
-                                                          text: FormatUtils
-                                                              .formatPercentage(
-                                                                  plPercent),
-                                                          style: TextStyle(
-                                                            color: ConvertService
-                                                                        .safeDouble(
-                                                                            plPercent) >
-                                                                    0
-                                                                ? Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyMedium
-                                                                    ?.color
-                                                                : ConvertService.safeDouble(
+                                                      ),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium
+                                                                  ?.copyWith(
+                                                                    fontSize:
+                                                                        14,
+                                                                  ),
+                                                          children: [
+                                                            const TextSpan(
+                                                              text: 'P/L: ',
+                                                            ),
+                                                            TextSpan(
+                                                              text: FormatUtils
+                                                                  .formatPercentage(
+                                                                      plPercent),
+                                                              style: TextStyle(
+                                                                color: ConvertService.safeDouble(
                                                                             plPercent) <
                                                                         0
                                                                     ? Colors
@@ -352,26 +325,29 @@ class PositionPageState extends State<PositionPage> {
                                                                         .textTheme
                                                                         .bodyMedium
                                                                         ?.color,
-                                                          ),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 12),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerRight,
+                                                        child: TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          child: const Text(
+                                                              "Close"),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  const SizedBox(height: 12),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    child: TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                      child:
-                                                          const Text("Close"),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                                ),
+                                              );
+                                            },
                                           );
                                         },
                                         child: Container(
