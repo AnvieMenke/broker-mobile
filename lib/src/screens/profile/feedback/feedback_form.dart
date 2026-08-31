@@ -1,3 +1,4 @@
+import 'package:broker_mobile/components/containers/page_container.dart';
 import 'package:broker_mobile/components/dropdowns/select_page.dart';
 import 'package:flutter/material.dart';
 import '../../../../components/buttons/button.dart';
@@ -104,7 +105,8 @@ class _FeedbackFormState extends State<FeedbackForm> {
       if (!mounted) return;
       Navigator.of(context).pop(true);
     } catch (err) {
-      Notify.error("Failed to submit feedback. ${FormatUtils.cleanErrorMessage(err)}");
+      Notify.error(
+          "Failed to submit feedback. ${FormatUtils.cleanErrorMessage(err)}");
     } finally {
       setState(() => _isSubmitting = false);
     }
@@ -112,93 +114,100 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Send us feedback")),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Subject',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 6),
-                TextField(
-                  enabled: !isEdit,
-                  controller: _subjectController,
-                  decoration: const InputDecoration(hintText: "Subject"),
-                ),
-                const SizedBox(height: 16),
-                SelectPage(
-                  label: "Page",
-                  placeholder: "Select Page",
-                  value: formData["pageName"],
-                  onChange: (map) => setState(() {
-                    debugPrint(map.toString());
-                    formData["pageName"] = map?["data"]["pageName"] ?? '';
-                    formData["pageComponent"] =
-                        map?["data"]["pageComponent"] ?? '';
-                  }),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Feedback',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 6),
-                TextField(
-                  maxLines: 15,
-                  controller: _feedbackController,
-                  keyboardType: TextInputType.multiline,
-                  decoration: const InputDecoration(
-                    hintText: 'Write your feedback...',
-                    alignLabelWithHint: true,
-                  ),
-                ),
-                if (isEdit) ...[
-                  const SizedBox(height: 16),
-                  DropdownButtonFormField<String>(
-                    initialValue: formData["status"],
-                    items: const [
-                      DropdownMenuItem(
-                        value: "Pending",
-                        child: Text("Pending"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Cancelled",
-                        child: Text("Cancelled"),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        formData["status"] = value;
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      labelText: "Status",
-                    ),
-                  )
-                ],
-                const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.center,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxWidth: 200,
-                    ),
-                    child: Button(
-                      label: 'Submit',
-                      onPressed: _handleSubmit,
-                      isLoading: _isSubmitting,
-                    ),
-                  ),
-                ),
-              ],
+    return PageContainer(
+      title: "Send us feedback",
+      showBack: true,
+      scrollable: true,
+      padding: true,
+      page: Form(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Subject',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
+            const SizedBox(height: 6),
+            TextField(
+              enabled: !isEdit,
+              controller: _subjectController,
+              decoration: const InputDecoration(
+                hintText: "Subject",
+              ),
+            ),
+            const SizedBox(height: 16),
+            SelectPage(
+              label: "Page",
+              placeholder: "Select Page",
+              value: formData["pageName"],
+              onChange: (map) => setState(() {
+                debugPrint(map.toString());
+
+                formData["pageName"] = map?["data"]["pageName"] ?? '';
+
+                formData["pageComponent"] = map?["data"]["pageComponent"] ?? '';
+              }),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Feedback',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 6),
+            TextField(
+              maxLines: 15,
+              controller: _feedbackController,
+              keyboardType: TextInputType.multiline,
+              decoration: const InputDecoration(
+                hintText: 'Write your feedback...',
+                alignLabelWithHint: true,
+              ),
+            ),
+            if (isEdit) ...[
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                initialValue: formData["status"],
+                items: const [
+                  DropdownMenuItem(
+                    value: "Pending",
+                    child: Text("Pending"),
+                  ),
+                  DropdownMenuItem(
+                    value: "Cancelled",
+                    child: Text("Cancelled"),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    formData["status"] = value;
+                  });
+                },
+                decoration: const InputDecoration(
+                  labelText: "Status",
+                ),
+              ),
+            ],
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.center,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 200,
+                ),
+                child: Button(
+                  label: 'Submit',
+                  onPressed: _handleSubmit,
+                  isLoading: _isSubmitting,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

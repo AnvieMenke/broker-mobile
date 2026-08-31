@@ -36,6 +36,9 @@ class PageListContainer extends StatelessWidget {
           builder: (context, constraints) {
             return SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewPadding.bottom,
+              ),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: constraints.maxHeight,
@@ -49,21 +52,26 @@ class PageListContainer extends StatelessWidget {
         ),
       );
     } else {
-      bodyContent = content;
+      bodyContent = SafeArea(
+        top: false,
+        bottom: true,
+        child: content,
+      );
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: CustomAppBar(
         title: title,
         showBack: showBack,
         onBack: onBack,
         actions: openFilterDialog != null
             ? [
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: openFilterDialog,
-          ),
-        ]
+                IconButton(
+                  icon: const Icon(Icons.filter_list),
+                  onPressed: openFilterDialog,
+                ),
+              ]
             : null,
       ),
       body: bodyContent,

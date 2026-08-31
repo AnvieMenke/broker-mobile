@@ -44,7 +44,11 @@ class PageContainer extends StatelessWidget {
         showBack: showBack,
         onBack: onBack,
       ),
-      body: body,
+      body: SafeArea(
+        top: false,
+        bottom: true,
+        child: body,
+      ),
     );
   }
 }
